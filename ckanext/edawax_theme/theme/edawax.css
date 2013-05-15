@@ -1,0 +1,28 @@
+.masthead {
+    min-height: 55px;
+    color: white;
+  /*  background: rgb(0, 93, 122) url("../../../base/images/bg.png");*/
+    background: rgb(64,64,64);
+}
+
+.account-masthead, .site-footer {
+    min-height: 30px;
+    color: white;
+    /* background: rgb(0, 54, 71) url("../../../base/images/bg.png");    */
+    background: darkred url("../../../base/images/bg.png");
+}   
+
+.header-image {
+    margin-top:7px;
+}
+
+body {
+    background: darkred;
+}
+
+.account-masthead .account ul li {
+    display: block;
+    float: left;
+    /* border-left: 1px solid rgb(0, 35, 46); */
+    border:none;
+}

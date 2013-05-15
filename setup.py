@@ -27,5 +27,6 @@ setup(
         [ckan.plugins]
 	# Add plugins here, eg
 	# myplugin=ckanext.edawax_theme:PluginClass
+    edawax_theme=ckanext.edawax_theme.plugin:EdawaxThemePlugin
 	""",
 )
