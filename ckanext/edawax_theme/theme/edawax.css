@@ -1,23 +1,41 @@
-.masthead {
-    min-height: 55px;
-    color: white;
-  /*  background: rgb(0, 93, 122) url("../../../base/images/bg.png");*/
-    background: rgb(64,64,64);
+body {
+    background:rgb(229,229,229);
 }
 
-.account-masthead, .site-footer {
-    min-height: 30px;
+body, 
+input,
+button,
+select,
+textarea {
+  font-family:'Roboto', "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+
+h1,h2,h3,h4,h5,h6 {
+    font-family: 'Roboto', "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-weight:400;
+}
+
+.masthead {
+    min-height: 50px;
+  /*  background: rgb(0, 93, 122) url("../../../base/images/bg.png");*/
+  /*  background: rgb(64,64,64); */
+  /*  background:rgb(191, 215, 222); */
+/*    background: rgb(0, 93, 122); */
+    background:rgb(229,229,229);
+/*    border-bottom:3px dotted black;*/
+}
+
+.account-masthead {
+    min-height: 20px;
     color: white;
     /* background: rgb(0, 54, 71) url("../../../base/images/bg.png");    */
-    background: darkred url("../../../base/images/bg.png");
+    background: rgb(80,80,80);
+    /*background:darkorange;*/
 }   
 
 .header-image {
-    margin-top:7px;
-}
-
-body {
-    background: darkred;
+   margin-top:-22px;
 }
 
 .account-masthead .account ul li {
@@ -26,3 +44,65 @@ body {
     /* border-left: 1px solid rgb(0, 35, 46); */
     border:none;
 }
+
+
+
+.account-masthead .account ul li a {
+    display: block;
+   /* color: rgb(191, 215, 222); */
+    color:white;
+    font-size: 13px;
+    font-weight: 400;
+    padding: 0 10px;
+    line-height: 31px;
+}
+
+
+.masthead a {
+/*    color: white;*/
+    color:rgb(80,80,80);
+}
+
+
+
+.nav-pills > li > a {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left:0px;
+  padding-right: 0px;
+  margin-top: 2px;
+  margin-bottom: 2px;
+  margin-right:14px;
+  margin-left:14px;
+  -webkit-border-radius: 0px; 
+  -moz-border-radius: 0px;
+  border-radius: 0px;
+  font-size:16px;
+}
+
+.nav-pills > li > a:hover, .nav-pills .active a {
+    border-bottom:2px solid darkred; /* evtl. green */
+    background-color:transparent !important;
+}
+
+
+
+.nav-pills > .active > a,
+.nav-pills > .active > a:hover,
+.nav-pills > .active > a:focus {
+  color: rgb(80,80,80);
+  font-weight:400;
+  background-color:transparent !important;
+}
+
+
+[role=main], .main, .hero {
+    background: rgb(229,229,229);
+}
+
+.site-footer {
+    padding:3px 0 0 0;
+    background:rgb(229,229,229);
+    color:rgb(80,80,80);
+}
+
