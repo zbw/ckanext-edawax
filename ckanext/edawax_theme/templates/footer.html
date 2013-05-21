@@ -8,8 +8,15 @@
               <li><a href="http://www.opendefinition.org/okd/"><img src="http://assets.okfn.org/images/ok_buttons/od_80x15_blue.png"></a></li>
   
               <li><a href="http://www.okfn.org/">{{ _('Open Knowledge Foundation') }}</a></li>
-#}
-<li><a href="http://zbw.eu"><img src="zbw-logo1.png" /></li>
+              #}
+<div id="partnerlogos">
+<li><a href="http://zbw.eu"><img src="{% url_for_static
+    '/base/images/logo_zbw.png' %}"  /></li>
+    {#TODO: logo ratswd nicht transparent 
+    <li><a href="http://www.ratswd.de"><img src="{% url_for_static
+        '/base/images/ratswd-logo2.png' %}"  /></li>#}
+    </div>
+
 {% endblock %}
 
 {% block footer_lang %}

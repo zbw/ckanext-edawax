@@ -6,7 +6,8 @@ body,
 input,
 button,
 select,
-textarea {
+textarea,
+#dara_ {
   font-family:'Roboto', "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 
@@ -14,6 +15,14 @@ textarea {
 h1,h2,h3,h4,h5,h6 {
     font-family: 'Roboto', "Helvetica Neue", Helvetica, Arial, sans-serif;
     font-weight:400;
+}
+
+h1 {
+    font-weight:300;
+}
+
+.media-grid {
+    margin-top:50px !important;
 }
 
 .masthead {
@@ -30,12 +39,16 @@ h1,h2,h3,h4,h5,h6 {
     min-height: 20px;
     color: white;
     /* background: rgb(0, 54, 71) url("../../../base/images/bg.png");    */
-    background: rgb(80,80,80);
+/*    background: rgb(80,80,80); */
+/*   background: rgb(128,128,128); */
+/*    background: rgb(0, 93, 122); */
+/*    background: black; */
+    background: rgb(45,45,45) /* google */
     /*background:darkorange;*/
 }   
 
 .header-image {
-   margin-top:-22px;
+   margin-top:-26px;
 }
 
 .account-masthead .account ul li {
@@ -102,7 +115,55 @@ h1,h2,h3,h4,h5,h6 {
 
 .site-footer {
     padding:3px 0 0 0;
+ /*XXX Logos sind leider nicht mit transparentem Hintergrund */
     background:rgb(229,229,229);
+/*    background-color:white;*/
     color:rgb(80,80,80);
+
 }
+
+
+.hero-secondary {
+    position: absolute;
+    top:200px;
+    right: 0;
+}
+
+.hero .module-dark .module-content {
+    -webkit-border-radius: 3px 3px 0 0;
+    -moz-border-radius: 3px 3px 0 0;
+    border-radius: 3px 3px 0 0;
+/*    background-color: rgb(0, 93, 122); */
+    background-color: darkred;
+}
+
+.hero .tags {
+    padding: 5px 10px 10px 10px;
+/*    background-color: rgb(0, 54, 71); */
+    background-color: rgb(45,45,45);
+    -webkit-border-radius: 0 0 3px 3px;
+    -moz-border-radius: 0 0 3px 3px;
+    border-radius: 0 0 3px 3px;
+}
+
+.results strong {
+    font-weight:300;
+}
+
+.context-info .nums dl dd {
+    font-size: 30px;
+    font-weight: 400;
+    line-height: 36px;
+}
+
+.module .read-more {
+    font-weight: 400;
+    color: rgb(91, 4, 4)
+}
+
+.btn, label {
+font-weight: 500;
+}
+
+
 

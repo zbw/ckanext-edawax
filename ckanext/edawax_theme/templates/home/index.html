@@ -1,0 +1,30 @@
+{% ckan_extends %}
+
+{% block home_image %}
+        <section class="featured media-overlay">
+          <h2 class="media-heading">{% block home_image_caption %}{{ _("This is a featured section") }}{% endblock %}</h2>
+          {% block home_image_content %}
+            <a class="media-image" href="#">
+              <img src="{% url_for_static "/base/images/open_data300.jpg" %}" alt="Placeholder" width="420" height="220" />
+            </a>
+          {% endblock %}
+        </section>
+      {% endblock %}
+
+{% block home_tags %}
+{% endblock %}
+
+{% block secondary_content %}
+{# TODO must rewrite for Organizations e.g. Journals 
+<div class="row group-listing">
+    {% for group in c.group_package_stuff %}
+      <div class="span6">
+        <div class="box">
+          {% snippet 'snippets/group_item.html', group=group.group_dict, truncate=100 %}
+        </div>
+      </div>
+    {% endfor %}
+</div>
+#}
+{% endblock %}
+
