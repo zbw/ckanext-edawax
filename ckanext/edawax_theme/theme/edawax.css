@@ -8,13 +8,12 @@ button,
 select,
 textarea,
 #dara_ {
-  font-family:'Roboto', "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-family:'Roboto', "Helvetica Neue", Helvetica, Arial, sans-serif !important;
 }
 
 
 h1,h2,h3,h4,h5,h6 {
-    font-family: 'Roboto', "Helvetica Neue", Helvetica, Arial, sans-serif;
-    font-weight:400;
+    font-weight:400 !important;
 }
 
 h1 {
@@ -165,5 +164,13 @@ h1 {
 font-weight: 500;
 }
 
+.ui-accordion-header {
+    font-size:18px;
+    font-weight:400;
+}
 
+#dara_additional {
+    font-weight:400 !important;
+    font-size:17.5px;
+}
 
