@@ -2,12 +2,6 @@ import ckan.plugins as plugins
 import ckan.plugins.toolkit as tk
 
 
-# Our custom template helper function.
-#def example_helper():
-#    '''An example template helper function.'''
-#
-#    # Just return some example text.
-#    return 'This is some example text.'
 
 class EdawaxThemePlugin(plugins.SingletonPlugin, ):
     '''An example that shows how to use the ITemplateHelpers plugin interface.
@@ -32,6 +26,7 @@ class EdawaxThemePlugin(plugins.SingletonPlugin, ):
     # see the ITemplateHelpers plugin interface.
     #def get_helpers(self):
     #    return {}
+    
     def before_map(self, map):
         """
         replacing all organization urls with journal
@@ -103,7 +98,6 @@ class EdawaxThemePlugin(plugins.SingletonPlugin, ):
         """
         helper method for common facet cleaning
         """
-        
         try: 
             del facets_dict['groups']
             del facets_dict['tags']
