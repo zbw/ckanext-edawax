@@ -25,7 +25,7 @@ h1 {
 }
 
 .masthead {
-    min-height: 50px;
+  /*  min-height: 50px; */
   /*  background: rgb(0, 93, 122) url("../../../base/images/bg.png");*/
   /*  background: rgb(64,64,64); */
   /*  background:rgb(191, 215, 222); */
@@ -43,11 +43,15 @@ h1 {
 /*    background: rgb(0, 93, 122); */
 /*    background: black; */
     background: rgb(45,45,45) /* google */
-    /*background:darkorange;*/
 }   
 
 .header-image {
-   margin-top:-26px;
+   /*margin-top:-26px; */
+ /* margin-top:-46px; */
+  position:absolute;
+  left:25px; 
+  top:0px; 
+  margin-top: 10px;
 }
 
 .account-masthead .account ul li {
@@ -65,8 +69,8 @@ h1 {
     color:white;
     font-size: 13px;
     font-weight: 400;
-    padding: 0 10px;
-    line-height: 31px;
+    padding: 5px 10px 5px 10px;
+   line-height: normal;
 }
 
 
@@ -74,6 +78,7 @@ h1 {
 /*    color: white;*/
     color:rgb(80,80,80);
 }
+
 
 
 
