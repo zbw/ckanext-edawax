@@ -9,7 +9,7 @@ class EdawaxThemePlugin(plugins.SingletonPlugin, ):
     '''
     plugins.implements(plugins.IConfigurer)
     #plugins.implements(plugins.ITemplateHelpers)
-    #plugins.implements(plugins.IPackageController, inherit=True)
+    plugins.implements(plugins.IPackageController, inherit=True)
     plugins.implements(plugins.IFacets, inherit=True)
     plugins.implements(plugins.IRoutes, inherit=True)
 
@@ -26,6 +26,18 @@ class EdawaxThemePlugin(plugins.SingletonPlugin, ):
     # see the ITemplateHelpers plugin interface.
     #def get_helpers(self):
     #    return {}
+
+    #XXX debugging methods
+
+    # def after_update(self,context, pkg_dict):
+    #     """
+    #     test
+    #     """
+    #     import ipdb; ipdb.set_trace()
+
+    #def before_view(self, pkg_dict):
+    #    import ipdb; ipdb.set_trace()
+
     
     def before_map(self, map):
         """

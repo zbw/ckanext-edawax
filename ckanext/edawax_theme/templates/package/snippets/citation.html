@@ -1,4 +1,7 @@
 {% set dmd = h.dara_extras() %}
+{% set journal = pkg_dict['organization']['title'] or pkg_dict['organization']['name'] %}
+
+
 <section class="module-content package-citation">
 
 <h3>Citation</h3>
@@ -16,8 +19,11 @@
 {% if dmd.dara_currentVersion %}
 Version {{ dmd.dara_currentVersion }}. 
 {% endif %}
-ZBW - Leibniz Information Centre Economics.
+
+<em>{{journal}}</em>.
+
 doi:10.5432/fake.DOI.
+
 <a
     href="http://dx.doi.org/105432/fake.DOI">http://dx.doi.org/105432/fake.DOI</a>
 
