@@ -41,7 +41,7 @@ class EdawaxThemePlugin(plugins.SingletonPlugin, ):
     
     def before_map(self, map):
         """
-        replacing all organization urls with journal
+        replacing all organization urls with 'journal'
         """
 
         map.connect('organizations_index', '/journals', action='index',
@@ -69,13 +69,15 @@ class EdawaxThemePlugin(plugins.SingletonPlugin, ):
                   action='about', ckan_icon='info-sign', controller="organization")
         map.connect('organization_read', '/journals/{id}', action='read',
                   ckan_icon='sitemap', controller="organization")
-        
+        map.connect('user_dashboard_organizations', '/dashboard/journals',
+                  action='dashboard_organizations', ckan_icon='building', controller="user")
+
         #TODO redirects are just temporary, since there are still some routes
         #and links with 'organizations' in ckan. It even might be easier, to
         #simply redirect any organization url and leave the above maps out...
         map.redirect('/organization', '/journals')
         map.redirect('/organization/{url:.*}', '/journals/{url}')
-
+        map.redirect('/dashboard/organizations', '/dashboard/journals')
 
         return map
 
