@@ -194,5 +194,6 @@ background-image: none;
 font-weight: 500;
 }
 
-
-
+.active:hover {
+  background-color: darkred !important
+}
