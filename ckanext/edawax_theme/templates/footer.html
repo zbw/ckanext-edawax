@@ -9,8 +9,12 @@
     <li><a href="http://www.ratswd.de"><img src="{% url_for_static
         '/base/images/ratswd-logo2.png' %}"  /></li>#}
     </div>
+{#
+{{ super() }}
+#}
 
 {% endblock %}
+
 
 {% block footer_lang %}
 {% endblock %}
@@ -19,4 +23,7 @@
 {% endblock %}
 
 {% block footer_debug %}
+{% endblock %}
+
+{% block footer_links_ckan %}
 {% endblock %}

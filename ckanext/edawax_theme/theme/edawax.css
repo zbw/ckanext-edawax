@@ -1,5 +1,5 @@
 body {
-    background:rgb(229,229,229);
+  background-color: rgb(229,229,229);
 }
 
 body, 
@@ -139,12 +139,13 @@ background-image: none;
 }
 
 [role=main], .main, .hero {
-    background: rgb(229,229,229);
+     background: rgb(229,229,229); 
+
 }
 
 .site-footer {
     padding:3px 0 0 0;
- /*XXX Logos sind leider nicht mit transparentem Hintergrund */
+ /* XXX Logos sind leider nicht mit transparentem Hintergrund */
     background:rgb(229,229,229);
 /*    background-color:white;*/
     color:rgb(80,80,80);
