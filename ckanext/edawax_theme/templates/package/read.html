@@ -1,5 +1,6 @@
 {% ckan_extends %}
-
+{% set extras = h.package_extras() %}
+{% set article_url = extras['edawax_article_url'] %}
 
 
 {% block primary_content_inner %}
@@ -13,7 +14,11 @@
   {% endblock %}
    
   {% snippet "package/snippets/citation.html", pkg_dict=pkg %}
-  {% snippet "package/snippets/related_publication.html", pkg_dict=pkg %}
+  
+  
+  {% if article_url %}
+    {% snippet "package/snippets/related_publication.html", pkg_dict=pkg %}
+  {% endif %}
 
 
 {% block package_tags %}
