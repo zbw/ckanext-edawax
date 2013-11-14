@@ -1,0 +1,11 @@
+{% set extras = h.package_extras() %}
+{% set article_url = extras['edawax_article_url'] %}
+
+<section class="related_publication">
+
+<h3>Related Publication</h3>
+<a href=" {{ article_url }} "> 
+    {{ article_url }}
+</a>
+
+</section>
