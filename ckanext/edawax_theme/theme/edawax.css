@@ -51,8 +51,6 @@ h2 {
 }   
 
 .header-image {
-   /*margin-top:-26px; */
- /* margin-top:-46px; */
   position:absolute;
   left:25px; 
   top:0px; 
@@ -123,7 +121,7 @@ color: #ffffff;
 /*background-color: #8ca0a6; */
 background-color:rgb(45,45,45);
 }
-/* evtl. die beiden hintergrundfarben auch andersrum */'
+/* evtl. die beiden hintergrundfarben auch andersrum */
 .nav-item.active > a:hover, .nav-aside li.active a:hover {
   background:darkred;
 }
@@ -153,10 +151,10 @@ background-image: none;
 }
 
 
-.hero-secondary {
-    position: absolute;
+.homepage.layout-1 .row1 .col2 {
+    position:absolute;
     top:200px;
-    right: 0;
+    right:0px;
 }
 
 .hero .module-dark .module-content {
@@ -198,3 +196,4 @@ font-weight: 500;
 .active:hover {
   background-color: darkred !important
 }
+
