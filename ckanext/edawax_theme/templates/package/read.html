@@ -1,10 +1,17 @@
 {% ckan_extends %}
-{% set extras = h.package_extras() %}
-{% set article_url = extras['edawax_article_url'] %}
+{% set pkg = h.dara_pkg() %}
+{% set article_url = pkg['edawax_article_url'] %}
 
+
+{#
+{% set dara_debug = h.dara_debug() %}
+#}
 
 {% block primary_content_inner %}
-   
+
+
+<p>DOI Proposal: {{ pkg['dara_DOI_Proposal'] }} </p>
+
   {% block package_description %}
   {{ super() }}
   {% endblock %}

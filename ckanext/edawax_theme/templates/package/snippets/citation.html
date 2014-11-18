@@ -1,7 +1,7 @@
-{% set dmd = h.dara_extras() %}
 {% set dara_authors = h.dara_authors() %}
 {% set journal = pkg_dict['organization']['title'] or pkg_dict['organization']['name'] %}
 
+{% set DOI = pkg_dict['dara_DOI'] or pkg_dict['dara_DOI_Proposal'] %}
 
 <section class="package-citation">
 
@@ -19,22 +19,22 @@
 
 
 {# this is just for demo. PublicationDate will be the final key! #}
-{% if dmd.dara_PublicationDate %}
-    ({{ dmd.dara_PublicationDate }}):
+{% if pkg_dict.dara_PublicationDate %}
+    ({{ pkg_dict.dara_PublicationDate }}):
 {% else %}
-    ({{ dmd.dara_year }}):
+    ({{ pkg_dict.dara_year }}):
 {% endif %}
 
 {{ pkg_dict.title }}. 
-{% if dmd.dara_currentVersion %}
-Version {{ dmd.dara_currentVersion }}. 
+{% if pkg_dict.dara_currentVersion %}
+Version {{ pkg_dict.dara_currentVersion }}. 
 {% endif %}
 
 <em>{{journal}}</em>.
 
-doi:10.5432/fake.DOI.
+doi:{{ DOI }}.
 
 <a
-    href="http://dx.doi.org/105432/fake.DOI">http://dx.doi.org/105432/fake.DOI</a>
+         href="http://dx.doi.org/{{ DOI }}">http://dx.doi.org/{{ DOI }}</a>
 
 </section>
