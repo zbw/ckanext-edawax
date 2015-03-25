@@ -1,7 +1,7 @@
 {% set dara_authors = h.dara_authors() %}
 {% set journal = pkg_dict['organization']['title'] or pkg_dict['organization']['name'] %}
 
-{% set DOI = pkg_dict['dara_DOI'] or pkg_dict['dara_DOI_Proposal'] %}
+{% set DOI = pkg_dict['dara_DOI'] %}
 
 <section class="package-citation">
 
@@ -32,9 +32,13 @@ Version {{ pkg_dict.dara_currentVersion }}.
 
 <em>{{journal}}</em>.
 
-doi:{{ DOI }}.
 
-<a
-         href="http://dx.doi.org/{{ DOI }}">http://dx.doi.org/{{ DOI }}</a>
+{% if DOI %}
+doi:{{ DOI }}.
+<a href="http://dx.doi.org/{{ DOI }}">http://dx.doi.org/{{ DOI }}</a>
+{% else %}
+<span style="color:darkred">No DOI yet</span>
+{% endif %}
+
 
 </section>
