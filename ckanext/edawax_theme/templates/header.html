@@ -29,10 +29,10 @@
 
         </hgroup>
         #}
-
-        <div class="content">
-            
-            {% block header_site_navigation %}
+        
+        <!-- <div class="content"> -->
+        <div id="edawax_nav_search" style="float:right;">    
+        {% block header_site_navigation %}
                 <nav class="section navigation">
                 <ul class="nav nav-pills">
                     {% block header_site_navigation_tabs %}
@@ -44,15 +44,17 @@
                     {% endblock %}
                 </ul>
                 </nav>
-            {% endblock %}
+         {% endblock %}
         
 
         {% block header_site_search %}
             {{ super() }}
         {% endblock %}
-
         </div>
+        <div />
+
     </div>
+        <!--</div> -->
     </header>
 
 {% endblock %}

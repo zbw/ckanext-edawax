@@ -79,11 +79,12 @@ h2 {
 
 .masthead a {
 /*    color: white;*/
-    color:rgb(80,80,80);
+    color:rgb(80,80,80) !important;
 }
 
-
-
+.navigation {
+    margin-left:100px;
+}
 
 .nav-pills > li > a {
   padding-top: 8px;
@@ -98,6 +99,8 @@ h2 {
   -moz-border-radius: 0px;
   border-radius: 0px;
   font-size:16px;
+  float:right;
+  
 }
 
 .nav-pills > li > a:hover, .nav-pills .active a {
