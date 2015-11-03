@@ -18,7 +18,8 @@ h2,h3,h4,h5,h6 {
 
 h1 {
     font-weight:300;
-    font-size: 36px
+    font-size: 36px;
+    line-height:1.25em;
 }
 
 h2 {
@@ -200,3 +201,18 @@ font-weight: 500;
   background-color: darkred !important
 }
 
+.authors_title {
+    margin-bottom:0px; 
+    font-style: italic;
+    color:grey;
+}
+
+.authors_title a {
+    color:grey;
+  /*  border-bottom:1px dotted; */
+}
+
+.authors_title a:hover {
+    text-decoration:none;
+    color:darkred;
+}

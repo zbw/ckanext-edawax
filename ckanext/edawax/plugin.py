@@ -124,7 +124,7 @@ class EdawaxPlugin(plugins.SingletonPlugin, ):
         we might need several functions in case of modifications, so this one
         just calls them
         """
-        # only send mails for Packages, and only for active ones (no drafts)
+        # only send mails for Packages, and only for active ones (= no drafts)
         if isinstance(entity, model.package.Package) and entity.state == 'active':
             self._send_mail_to_editors(entity, operation)
 
