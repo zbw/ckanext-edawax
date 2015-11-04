@@ -11,7 +11,7 @@ import ckan.plugins.toolkit as tk
 log = logging.getLogger(__name__)
 
 
-def mail_notification(to, author, entity, operation):
+def notification(to, author, entity, operation):
     """
     notify admins on new or modified entities in their organization
     """
@@ -37,7 +37,6 @@ best regards from EDaWaX
     msg['To'] = Header(to, 'utf-8')
     msg['Date'] = Utils.formatdate(time())
     msg['X-Mailer'] = "CKAN {} [Plugin edawax]".format(ckan.__version__)
-
     
     # for now just try to send an email. If that fails pass and go on
     # TODO: log entry, raise error

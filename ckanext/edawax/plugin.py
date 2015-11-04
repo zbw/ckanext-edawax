@@ -1,8 +1,45 @@
+# Hendrik Bunke
+# ZBW - Leibniz Information Centre for Economics
+
 import ckan.plugins as plugins
 import ckan.plugins.toolkit as tk
 import ckan.model as model
 from ckan.authz import get_group_or_org_admin_ids
-from ckanext.edawax import mail, helpers
+from ckanext.edawax import helpers
+from ckanext.mail import notification
+
+
+def edawax_facets(facets_dict):
+    """
+    helper method for common facet cleaning. We remove groups, tags and rename
+    Organizations
+    """
+    try:
+        del facets_dict['groups']
+        del facets_dict['tags']
+        facets_dict.update({'organization': 'Journals'})
+    except:
+        pass
+    return facets_dict
+
+
+def send_mail_to_editors(entity, operation):
+    """
+    submit notification to mailer
+    """
+    user_id, user_name = tk.c.userobj.id, tk.c.userobj.fullname
+    ops = {'new': 'created', 'changed': 'updated', 'deleted': 'deleted'}
+    op = ops[operation]
+
+    # get list of journal editors. Current user will not be notified
+    org_admins = filter(lambda x: x != user_id,
+                        get_group_or_org_admin_ids(entity.owner_org))
+
+    # get email address of journal editors
+    addresses = map(lambda admin_id: model.User.get(admin_id).email, org_admins)
+    
+    # send notification to all addresses
+    map(lambda a: notification(a, user_name, entity.id, op), addresses)
 
 
 class EdawaxPlugin(plugins.SingletonPlugin, ):
@@ -29,7 +66,6 @@ class EdawaxPlugin(plugins.SingletonPlugin, ):
         """
         replacing all organization urls with 'journal'
         """
-
         map.connect('organizations_index', '/journals', action='index',
                 controller='organization')
         map.connect('/journals/list', action='list',
@@ -67,39 +103,11 @@ class EdawaxPlugin(plugins.SingletonPlugin, ):
 
         return map
 
-
-       #map.connect('stats', '/stats',
-       #    controller='ckanext.stats.controller:StatsController',
-       #    action='index')
-       #map.connect('stats_action', '/stats/{action}',
-       #    controller='ckanext.stats.controller:StatsController')
-       #return map
-
     def organization_facets(self, facets_dict, organization_type, package_type):
-        """
-        modify facets. We remove groups, tags and rename 'organizations'
-        'Journals'
-        """
-        return self.__edawax_facets(facets_dict)
+        return edawax_facets(facets_dict)
 
     def dataset_facets(self, facets_dict, package_type):
-        ''' Update the facets_dict and return it. we remove groups, tags and
-        rename Organizations
-        '''
-        return self.__edawax_facets(facets_dict)
-
-    def __edawax_facets(self, facets_dict):
-        """
-        helper method for common facet cleaning
-        """
-        try:
-            del facets_dict['groups']
-            del facets_dict['tags']
-            facets_dict['organization'] = 'Journals'
-        except:
-            pass
-
-        return facets_dict
+        return edawax_facets(facets_dict)
 
     def notify(self, entity, operation):
         """
@@ -108,25 +116,6 @@ class EdawaxPlugin(plugins.SingletonPlugin, ):
         """
         # only send mails for Packages, and only for active ones (= no drafts)
         if isinstance(entity, model.package.Package) and entity.state == 'active':
-            self._send_mail_to_editors(entity, operation)
+            send_mail_to_editors(entity, operation)
 
-    def _send_mail_to_editors(self, entity, operation):
-        """
-        submit notification to mailer
-        """
-        user_id = tk.c.userobj.id
-        user_name = tk.c.userobj.fullname
-        ops = {'new': 'created', 'changed': 'updated', 'deleted': 'deleted'}
-        op = ops[operation]
-
-        # get list of journal editors. Current user will not be notified
-        org_admins = filter(lambda x: x != user_id,
-                            get_group_or_org_admin_ids(entity.owner_org))
-
-        # get email address of journal editors
-        mail_addresses = map(lambda admin_id: model.User.get(admin_id).email,
-                             org_admins)
-
-        for a in mail_addresses:
-            mail.mail_notification(a, user_name, entity.id, op)
-
+    
