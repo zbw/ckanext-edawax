@@ -2,47 +2,29 @@ import ckan.plugins as plugins
 import ckan.plugins.toolkit as tk
 import ckan.model as model
 from ckan.authz import get_group_or_org_admin_ids
-from ckanext.edawax import mail
+from ckanext.edawax import mail, helpers
+
 
 class EdawaxPlugin(plugins.SingletonPlugin, ):
     '''
     edawax specific layout and workflow
     '''
     plugins.implements(plugins.IConfigurer)
-    # plugins.implements(plugins.ITemplateHelpers)
+    plugins.implements(plugins.ITemplateHelpers, inherit=True)
     plugins.implements(plugins.IPackageController, inherit=True)
     plugins.implements(plugins.IFacets, inherit=True)
     plugins.implements(plugins.IRoutes, inherit=True)
-    plugins.implements(plugins.interfaces.IDomainObjectModification,
-                       inherit=True)
+    plugins.implements(plugins.interfaces.IDomainObjectModification, inherit=True)
 
 
-    # Update CKAN's config settings, see the IConfigurer plugin interface.
     def update_config(self, config):
-        """
-        """
         tk.add_template_directory(config, 'templates')
         tk.add_public_directory(config, 'public')
         tk.add_resource('theme', 'edawax')
 
+    def get_helpers(self):
+        return {'get_user_id': helpers.get_user_id}
 
-    # Tell CKAN what custom template helper functions this plugin provides,
-    # see the ITemplateHelpers plugin interface.
-    #def get_helpers(self):
-    #    return {}
-
-    #XXX debugging methods
-
-    # def after_update(self,context, pkg_dict):
-    #     """
-    #     test
-    #     """
-    #     import ipdb; ipdb.set_trace()
-
-    #def before_view(self, pkg_dict):
-    #    import ipdb; ipdb.set_trace()
-
-    
     def before_map(self, map):
         """
         replacing all organization urls with 'journal'
@@ -76,9 +58,9 @@ class EdawaxPlugin(plugins.SingletonPlugin, ):
         map.connect('user_dashboard_organizations', '/dashboard/journals',
                   action='dashboard_organizations', ckan_icon='building', controller="user")
 
-        #TODO redirects are just temporary, since there are still some routes
-        #and links with 'organizations' in ckan. It even might be easier, to
-        #simply redirect any organization url and leave the above maps out...
+        # TODO redirects are just temporary, since there are still some routes
+        # and links with 'organizations' in ckan. It even might be easier, to
+        # simply redirect any organization url and leave the above maps out...
         map.redirect('/organization', '/journals')
         map.redirect('/organization/{url:.*}', '/journals/{url}')
         map.redirect('/dashboard/organizations', '/dashboard/journals')
