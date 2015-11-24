@@ -6,7 +6,7 @@ import ckan.plugins.toolkit as tk
 import ckan.model as model
 from ckan.authz import get_group_or_org_admin_ids
 from ckanext.edawax import helpers
-from ckanext.mail import notification
+from ckanext.edawax.mail import notification
 
 
 def edawax_facets(facets_dict):
@@ -28,6 +28,10 @@ def send_mail_to_editors(entity, operation):
     submit notification to mailer
     """
     user_id, user_name = tk.c.userobj.id, tk.c.userobj.fullname
+    
+    if not user_name:
+        user_name = tk.c.userobj.email  # otherwise None
+
     ops = {'new': 'created', 'changed': 'updated', 'deleted': 'deleted'}
     op = ops[operation]
 
