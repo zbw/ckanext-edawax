@@ -41,7 +41,7 @@ best regards from EDaWaX
     # for now just try to send an email. If that fails pass and go on
     # TODO: log entry, raise error
     try:
-        smtp_server = config['smtp.test_server']
+        smtp_server = config['smtp.server']
         smtp_connection = smtplib.SMTP(smtp_server)
         smtp_connection.sendmail(mail_from, [to], msg.as_string())
         log.info("Sent email to {0}".format(to))
