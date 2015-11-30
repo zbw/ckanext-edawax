@@ -1,0 +1,28 @@
+{% ckan_extends %}
+{% set pkg = h.dara_pkg() %}
+
+
+{% block content_action %}
+    
+{#
+    {% if h.check_access('package_update', {'id':pkg.id }) and not
+    pkg['dara_edawax_status'] %}
+    #}
+    {% if h.get_user_id() == pkg.creator_user_id  and not
+        pkg['dara_edawax_status'] %}
+    
+        <a class="btn" href="/dataset/{{pkg.id}}/review">
+            <i class="icon-envelope"></i>Send to Review</a>
+    
+    {% endif %}
+    
+    {{ super() }}
+{% endblock %}
+
+{% block content_primary_nav %}
+  {{ h.build_nav_icon('dataset_read', _('Dataset'), id=pkg.name) }}
+  {#  {{ h.build_nav_icon('dataset_groups', _('Groups'), id=pkg.name) }} #}
+  {{ h.build_nav_icon('dataset_activity', _('Activity Stream'), id=pkg.name) }}
+  {{ h.build_nav_icon('related_list', _('Related'), id=pkg.name) }}
+{% endblock %}
+

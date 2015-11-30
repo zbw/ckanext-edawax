@@ -39,7 +39,7 @@ best regards from EDaWaX
     msg['X-Mailer'] = "CKAN {} [Plugin edawax]".format(ckan.__version__)
     
     # for now just try to send an email. If that fails pass and go on
-    # TODO: log entry, raise error
+    # TODO: log entry, raise error, check for smtp.test_server TODO
     try:
         smtp_server = config['smtp.server']
         smtp_connection = smtplib.SMTP(smtp_server)

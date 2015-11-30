@@ -64,7 +64,8 @@ class EdawaxPlugin(plugins.SingletonPlugin, ):
         tk.add_resource('theme', 'edawax')
 
     def get_helpers(self):
-        return {'get_user_id': helpers.get_user_id}
+        return {'get_user_id': helpers.get_user_id,
+                }
 
     def before_map(self, map):
         """
@@ -104,6 +105,14 @@ class EdawaxPlugin(plugins.SingletonPlugin, ):
         map.redirect('/organization', '/journals')
         map.redirect('/organization/{url:.*}', '/journals/{url}')
         map.redirect('/dashboard/organizations', '/dashboard/journals')
+
+        # review mail to editor
+        map.connect('/dataset/{id}/review',
+                controller="ckanext.edawax.controller:EdawaxController",
+                action="review_mail",
+              #  template="package/doi.html",
+                ckan_icon="envelope")
+
 
         return map
 
