@@ -2,7 +2,7 @@
 
 {# displaying creator names in package list #}
 {% block notes %}
- {% if h.check_journal_role(package, 'admin')
+ {% if h.check_journal_role(pkg, 'admin')
     or h.get_user_id() == package.creator_user_id
 
  %}
@@ -16,3 +16,20 @@
     <p class="empty">{{ _("This dataset has no description") }}</p>
   {% endif %}
 {% endblock %}
+
+{% block heading_private %}
+{% if h.in_review(package) == 'true' %}
+    <span class="dataset-private label label-review">
+      <i class="icon-lock"></i>
+      {{ 'Review' }}
+    </span>
+
+{% elif package.private %}
+      <span class="dataset-private label label-inverse">
+      <i class="icon-lock"></i>
+      {{ _('Private') }}
+      </span>
+{% endif %}
+   
+ {% endblock %}
+

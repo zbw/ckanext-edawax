@@ -19,7 +19,7 @@ Example:
     <ul class="{{ list_class or 'dataset-list unstyled' }}">
     	{% block package_list_inner %}
 	      {% for package in packages %}
-            {% set is_admin = h.check_journal_role(package, 'admin') %}
+            {% set is_admin = h.check_journal_role(package, 'admin') or h.check_access('sysadmin') %}
             {% if not package.private or
                 (package.private and is_admin) or
                 (package.private and h.get_user_id() == package.creator_user_id)

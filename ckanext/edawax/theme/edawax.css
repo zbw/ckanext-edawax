@@ -216,3 +216,7 @@ font-weight: 500;
     text-decoration:none;
     color:darkred;
 }
+
+.label-review {
+    background-color:darkorange;
+}

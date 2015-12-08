@@ -15,66 +15,108 @@ from email.mime.text import MIMEText
 import logging
 from time import time
 from ckan.authz import get_group_or_org_admin_ids
-
+from ckanext.dara import helpers as dara_helpers
+from functools import wraps
 
 
 log = logging.getLogger(__name__)
 
 
-class EdawaxController(PackageController):
+def admin_req(func):
+    @wraps(func)
+    def check(*args, **kwargs):
+        id = kwargs['id']
+        controller = args[0]
+        pkg = tk.get_action('package_show')(None, {'id': id})
+        if not dara_helpers.check_journal_role(pkg, 'admin') and not h.check_access('sysadmin'):
+            tk.abort(403, 'Unauthorized')
+        return func(controller, id)
+    return check
+
+
+class WorkflowController(PackageController):
     """
     """
-    # TODO more functional
 
     def _context(self):
         return {'model': model, 'session': model.Session,
                 'user': c.user or c.author, 'for_view': True,
                 'auth_user_obj': c.userobj}
-    
-    def _check_access(self, id):
+
+    def review_mail(self, id):
+        """
+        sends review notification to all journal admins
+        """
+        
         context = self._context()
+        
         try:
             tk.check_access('package_update', context, {'id': id})
         except tk.NotAuthorized:
-            tk.abort(401, 'Unauthorized')
-    
-    def _redirect(self, id):
-        tk.redirect_to(controller='package', action='read', id=id)
+            tk.abort(403, 'Unauthorized')
 
-    def review_mail(self, id):
-        context = self._context()
-        self._check_access(id)
         c.pkg_dict = tk.get_action('package_show')(context, {'id': id})
         
-        if c.pkg_dict['dara_edawax_status']:
+        # avoid multiple notifications (eg. when someone calls review directly)
+        if c.pkg_dict.get('dara_edawax_review', 'false') == 'true':
             h.flash_error("Package has already been sent to review")
-            self._redirect(id)
-
-        user_id, user_name = tk.c.userobj.id, tk.c.userobj.fullname
-        if not user_name:
-            user_name = tk.c.userobj.email  # otherwise None
-
-        org_admins = filter(lambda x: x != user_id,
-                            get_group_or_org_admin_ids(c.pkg_dict['owner_org']))
+            redirect(id)
+        
+        user_name = tk.c.userobj.fullname or tk.c.userobj.email
+        org_admins = get_group_or_org_admin_ids(c.pkg_dict['owner_org'])
         addresses = map(lambda admin_id: model.User.get(admin_id).email, org_admins)
-        map(lambda a: notification(a, user_name, id), addresses)
+        note = notification(addresses, user_name, id)
         
-        # set and store review status
-        c.pkg_dict['dara_edawax_status'] = 'review'
+        if note:
+            c.pkg_dict['dara_edawax_review'] = True
+            tk.get_action('package_update')(context, c.pkg_dict)
+            h.flash_success('Notification to Editors sent.')
+        else:
+            h.flash_error('ERROR: Mail could not be sent. Please try again\
+                    later or contact the {}\
+                    admin.'.format(config.get('ckan.site_title', '')))
+
+        redirect(id)
+
+    @admin_req
+    def publish(self, id):
+        """
+        publish dataset
+        """
+        context = self._context()
+        c.pkg_dict = tk.get_action('package_show')(context, {'id': id})
+        c.pkg_dict.update({'private': False, 'dara_edawax_review': 'reviewed'})
         tk.get_action('package_update')(context, c.pkg_dict)
-        
-        # TODO alert window/dialog; jquery has dialog
+        h.flash_success('Dataset published')
+        redirect(id)
 
-        h.flash_success('Mail to Editors sent')
-        self._redirect(id)
-       
+    @admin_req
+    def retract(self, id):
+        """
+        set dataset private
+        """
+        context = self._context()
+        c.pkg_dict = tk.get_action('package_show')(context, {'id': id})
+        c.pkg_dict.update({'private': True})
+        tk.get_action('package_update')(context, c.pkg_dict)
+        h.flash_success('Dataset set private')
+        redirect(id)
 
-def notification(to, author, dataset):
+
+def redirect(id):
+        tk.redirect_to(controller='package', action='read', id=id)
+
+
+def notification(addresses, author, dataset):
     """
     notify admins on new or modified entities in their organization
     """
     
-    body = """
+    mail_from = config.get('smtp.mail_from')
+    
+    def message(address):
+        
+        body = """
 Dear Editor,
 
 the author {user} has uploaded a dataset to your journal's data archive.\n
@@ -82,30 +124,39 @@ You can review it here:\n\n\t {url}
 
 best regards from EDaWaX
 """
-    url = u"{}{}".format(config.get('ckan.site_url'),
-                         tk.url_for(controller='package', action='read',
-                         id=dataset))
-    
-    d = {'user': author, 'url': url}
-    body = body.format(**d)
-    mail_from = config.get('smtp.mail_from')
-    msg = MIMEText(body.encode('utf-8'), 'plain', 'utf-8')
-    msg['Subject'] = Header(u"EDaWaX Notification")
-    msg['From'] = mail_from
-    msg['To'] = Header(to, 'utf-8')
-    msg['Date'] = Utils.formatdate(time())
-    msg['X-Mailer'] = "CKAN {} [Plugin edawax]".format(ckan.__version__)
-    
-    # for now just try to send an email. If that fails pass and go on
-    # TODO: log entry, raise error, check for smtp.test_server TODO
-    try:
-        smtp_server = config['smtp.server']
-        smtp_connection = smtplib.SMTP(smtp_server)
-        smtp_connection.sendmail(mail_from, [to], msg.as_string())
-        log.info("Sent email to {0}".format(to))
-        smtp_connection.quit()
-    except:
-        pass
+        url = u"{}{}".format(config.get('ckan.site_url'),
+                            tk.url_for(controller='package', action='read',
+                            id=dataset))
+        d = {'user': author, 'url': url}
+        body = body.format(**d)
+        msg = MIMEText(body.encode('utf-8'), 'plain', 'utf-8')
+        msg['Subject'] = Header(u"EDaWaX Notification")
+        msg['From'] = mail_from
+        msg['To'] = Header(address, 'utf-8')
+        msg['Date'] = Utils.formatdate(time())
+        msg['X-Mailer'] = "CKAN {} [Plugin edawax]".format(ckan.__version__)
+        return msg
+        
+    def send(address, msg):
+        try:
+            smtp_server = config.get('smtp.test_server', config.get('smtp.server'))
+            smtp_connection = smtplib.SMTP(smtp_server)
+            smtp_connection.sendmail(mail_from, [address], msg.as_string())
+            log.info("Sent review notification to {0}".format(address))
+            smtp_connection.quit()
+            return True
+        except:
+            log.error("Mail to {} could not be sent".format(address))
+            # raise Exception  # TODO raise more detailed exception with error description
+            return False
 
+    t = map(lambda a: send(a, message(a)), addresses)
+    
+    # success if we have at least one successful send
+    if True in t:
+        return True
+    return False
+
+    
 
 

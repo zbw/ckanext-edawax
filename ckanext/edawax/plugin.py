@@ -9,6 +9,9 @@ from ckanext.edawax import helpers
 from ckanext.edawax.mail import notification
 
 
+
+# XXX implement IAuthFunctions for controller actions
+
 def edawax_facets(facets_dict):
     """
     helper method for common facet cleaning. We remove groups, tags and rename
@@ -46,17 +49,17 @@ def send_mail_to_editors(entity, operation):
     map(lambda a: notification(a, user_name, entity.id, op), addresses)
 
 
-class EdawaxPlugin(plugins.SingletonPlugin, ):
+class EdawaxPlugin(plugins.SingletonPlugin,):
     '''
     edawax specific layout and workflow
     '''
-    plugins.implements(plugins.IConfigurer)
+    plugins.implements(plugins.IConfigurer, inherit=False)
+    # plugins.implements(plugins.IDatasetForm, inherit=True)
     plugins.implements(plugins.ITemplateHelpers, inherit=True)
     plugins.implements(plugins.IPackageController, inherit=True)
     plugins.implements(plugins.IFacets, inherit=True)
     plugins.implements(plugins.IRoutes, inherit=True)
     plugins.implements(plugins.interfaces.IDomainObjectModification, inherit=True)
-
 
     def update_config(self, config):
         tk.add_template_directory(config, 'templates')
@@ -65,6 +68,11 @@ class EdawaxPlugin(plugins.SingletonPlugin, ):
 
     def get_helpers(self):
         return {'get_user_id': helpers.get_user_id,
+                'show_review_button': helpers.show_review_button,
+                'in_review': helpers.in_review,
+                'is_private': helpers.is_private,
+                'show_publish_button': helpers.show_publish_button,
+                'show_retract_button': helpers.show_retract_button,
                 }
 
     def before_map(self, map):
@@ -78,15 +86,15 @@ class EdawaxPlugin(plugins.SingletonPlugin, ):
         map.connect('/journals/new', action='new', controller="organization")
         map.connect('/journals/{action}/{id}',
           requirements=dict(action='|'.join([
-          'edit',
-          'delete',
-          'admins',
-          'members',
-          'member_new',
-          'member_delete',
-          'history',
-          'bulk_process',
-          'about',
+            'edit',
+            'delete',
+            'admins',
+            'members',
+            'member_new',
+            'member_delete',
+            'history',
+            'bulk_process',
+            'about',
           ])), controller="organization"
           )
         map.connect('organization_activity', '/journals/activity/{id}',
@@ -108,11 +116,18 @@ class EdawaxPlugin(plugins.SingletonPlugin, ):
 
         # review mail to editor
         map.connect('/dataset/{id}/review',
-                controller="ckanext.edawax.controller:EdawaxController",
-                action="review_mail",
-              #  template="package/doi.html",
-                ckan_icon="envelope")
+                controller="ckanext.edawax.controller:WorkflowController",
+                action="review_mail",)
 
+        # publish dataset
+        map.connect('/dataset/{id}/publish',
+                controller="ckanext.edawax.controller:WorkflowController",
+                action="publish",)
+
+        # retract dataset
+        map.connect('/dataset/{id}/retract',
+                controller="ckanext.edawax.controller:WorkflowController",
+                action="retract",)
 
         return map
 
@@ -122,13 +137,15 @@ class EdawaxPlugin(plugins.SingletonPlugin, ):
     def dataset_facets(self, facets_dict, package_type):
         return edawax_facets(facets_dict)
 
-    def notify(self, entity, operation):
-        """
-        we might need several functions in case of modifications, so this one
-        just calls them
-        """
-        # only send mails for Packages, and only for active ones (= no drafts)
-        if isinstance(entity, model.package.Package) and entity.state == 'active':
-            send_mail_to_editors(entity, operation)
-
     
+    # obsolete
+    #def notify(self, entity, operation):
+    #   """
+    #   we might need several functions in case of modifications, so this one
+    #   just calls them
+    #   """
+    #   # only send mails for Packages, and only for active ones (= no drafts)
+    #   if isinstance(entity, model.package.Package) and entity.state == 'active':
+    #       send_mail_to_editors(entity, operation)
+
+
