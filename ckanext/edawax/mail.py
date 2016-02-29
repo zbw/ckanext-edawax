@@ -19,10 +19,10 @@ def notification(to, author, entity, operation):
     body = """
 Dear Editor,
 
-the EDaWaX user {user} has {operation} a dataset in your journal's data
+the user {user} has {operation} a dataset in your journal's data
 archive. You can review it here:\n\n\t {url}
 
-best regards from EDaWaX
+best regards from ZBW -- Journal Data Archive
 """
     url = u"{}{}".format(config.get('ckan.site_url'),
                          tk.url_for(controller='package', action='read',
@@ -32,7 +32,7 @@ best regards from EDaWaX
     body = body.format(**d)
     mail_from = config.get('smtp.mail_from')
     msg = MIMEText(body.encode('utf-8'), 'plain', 'utf-8')
-    msg['Subject'] = Header(u"EDaWaX Notification")
+    msg['Subject'] = Header(u"ZBW Journal Data Archive: Notification")
     msg['From'] = mail_from
     msg['To'] = Header(to, 'utf-8')
     msg['Date'] = Utils.formatdate(time())
