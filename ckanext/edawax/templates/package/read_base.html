@@ -2,13 +2,37 @@
 {#{% set pkg = h.dara_pkg() %} #}
 
 {% block content_action %}
-    {% resource 'edawax/edawax.js' %}
+    {% resource 'edawax_fs/edawax-confirm.js' %}
     
     {% if h.show_review_button(pkg) %} 
-        <a id="review_button" title="sends notification to journal admins" 
-            class="btn" href="#" data-url="/dataset/{{pkg.id}}/review">
-        <i class="icon-envelope"></i>Send to Review</a>
+    
+    {% set confirm = h.dump_json({'content': '
+    <p>This stores your dataset and 
+    sends an email to the journal editors,
+    notifying them that your dataset is ready to be reviewed.</p>
+
+    <p><strong>By clicking \'OK\' you also confirm that you have read and
+        accept the <br /> 
+        <a href="http://www.edawax.de/zbw-journal-data-archive-nutzungsvereinbarung-deposit-license/"
+            target="_blank">deposit 
+            licensing conditions</a>.</strong></p>',
+    'confirm': 'OK',
+    'heading': 'Please Confirm Submission',
+    }) %}
+
+       <a title="Sends notification to journal editors. You will be asked for confirmation and license acceptance."
+          class="btn" href="/dataset/{{pkg.id}}/review"
+                      data-module="edawax-confirm"
+                      data-module-i18n="{{ confirm }}">
+
+       <i class="icon-envelope"></i>Send to Review
+       </a>
+       
+        
     {% endif %} 
+    
+   
+    
     
     {% if h.show_publish_button(pkg) %}
     <a class="btn btn-success" title="sets dataset public" href="/dataset/{{ pkg.id }}/publish">

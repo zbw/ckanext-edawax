@@ -4,7 +4,7 @@
 
 "use strict";
 
-// TODO use jquery-ui.dialogue for confirmation
+// XXX obsolete using data-module now
 
 $('#review_button' ).click(function () {
     var url = $(this).data('url'); // easier to receive the URL from Jinja

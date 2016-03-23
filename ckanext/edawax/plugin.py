@@ -65,6 +65,7 @@ class EdawaxPlugin(plugins.SingletonPlugin,):
         tk.add_template_directory(config, 'templates')
         tk.add_public_directory(config, 'public')
         tk.add_resource('theme', 'edawax')
+        tk.add_resource('fanstatic', 'edawax_fs')
 
     def get_helpers(self):
         return {'get_user_id': helpers.get_user_id,
