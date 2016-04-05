@@ -7,6 +7,9 @@ import ckan.model as model
 from ckan.authz import get_group_or_org_admin_ids
 from ckanext.edawax import helpers
 from ckanext.edawax.mail import notification
+from ckan.new_authz import users_role_for_group_or_org
+from ckan.logic.auth import get_package_object
+from ckan.logic.auth.update import package_update as ckan_pkgupdate
 
 
 
@@ -49,6 +52,18 @@ def send_mail_to_editors(entity, operation):
     map(lambda a: notification(a, user_name, entity.id, op), addresses)
 
 
+def journal_package_update(context, data_dict):
+    """override ckan package_update"""
+    user = context.get('auth_user_obj')
+    package = get_package_object(context, data_dict)
+    
+    # always allow creator to update package, even if she is not allowed by
+    # default org member permissions. 'create_dataset' permission must be set
+    if package.creator_user_id and user.id == package.creator_user_id:
+        return {'success': True}
+    return ckan_pkgupdate(context, data_dict)  
+
+
 class EdawaxPlugin(plugins.SingletonPlugin,):
     '''
     edawax specific layout and workflow
@@ -59,7 +74,9 @@ class EdawaxPlugin(plugins.SingletonPlugin,):
     plugins.implements(plugins.IPackageController, inherit=True)
     plugins.implements(plugins.IFacets, inherit=True)
     plugins.implements(plugins.IRoutes, inherit=True)
-    plugins.implements(plugins.interfaces.IDomainObjectModification, inherit=True)
+    # plugins.implements(plugins.interfaces.IDomainObjectModification,
+    #        inherit=True)  # XXX necessary?
+    plugins.implements(plugins.IAuthFunctions)
 
     def update_config(self, config):
         tk.add_template_directory(config, 'templates')
@@ -67,6 +84,10 @@ class EdawaxPlugin(plugins.SingletonPlugin,):
         tk.add_resource('theme', 'edawax')
         tk.add_resource('fanstatic', 'edawax_fs')
 
+    def get_auth_functions(self):
+        return {'package_update': journal_package_update}
+
+    
     def get_helpers(self):
         return {'get_user_id': helpers.get_user_id,
                 'show_review_button': helpers.show_review_button,
