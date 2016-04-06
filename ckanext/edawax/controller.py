@@ -122,7 +122,8 @@ Dear Editor,
 the author {user} has uploaded a dataset to your journal's data archive.\n
 You can review it here:\n\n\t {url}
 
-best regards from EDaWaX
+best regards from ZBW--Journal Data Archive
+
 """
         url = u"{}{}".format(config.get('ckan.site_url'),
                             tk.url_for(controller='package', action='read',
@@ -130,7 +131,7 @@ best regards from EDaWaX
         d = {'user': author, 'url': url}
         body = body.format(**d)
         msg = MIMEText(body.encode('utf-8'), 'plain', 'utf-8')
-        msg['Subject'] = Header(u"EDaWaX Notification")
+        msg['Subject'] = Header(u"ZBW Journal Data Archive: Review Notification")
         msg['From'] = mail_from
         msg['To'] = Header(address, 'utf-8')
         msg['Date'] = Utils.formatdate(time())
