@@ -27,9 +27,7 @@ def get_user_id():
 
 
 def show_review_button(pkg):
-    if get_user_id() == pkg['creator_user_id'] and in_review(pkg) == 'false':
-        return True
-    return False
+    return get_user_id() == pkg['creator_user_id'] and in_review(pkg) == 'false'
 
 
 def in_review(pkg):
@@ -47,18 +45,13 @@ def is_private(pkg):
 def show_publish_button(pkg):
     if not isinstance(pkg, dict):
         return False
-    if dara_helpers.check_journal_role(pkg, 'admin') and pkg.get('private', True):
-        return True
-    return False
+    return dara_helpers.check_journal_role(pkg, 'admin') and pkg.get('private', True)
 
 
 def show_retract_button(pkg):
     if not isinstance(pkg, dict):
         return False
-    private = pkg.get('private', True)
-    if dara_helpers.check_journal_role(pkg, 'admin') and not private:
-        return True
-    return False
+    return dara_helpers.check_journal_role(pkg, 'admin') and not pkg.get('private', True)
 
 
 
