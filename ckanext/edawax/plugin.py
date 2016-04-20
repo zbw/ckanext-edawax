@@ -23,6 +23,7 @@ def edawax_facets(facets_dict):
     try:
         del facets_dict['groups']
         del facets_dict['tags']
+        del facets_dict['license_id']
         facets_dict.update({'organization': 'Journals'})
     except:
         pass
