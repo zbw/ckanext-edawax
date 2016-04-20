@@ -1,8 +1,28 @@
 <section class="related_publication" style="margin-bottom:2em;">
 
 <h3>Related Publication</h3>
-<a href=" {{ article_url }} "> 
-    {{ article_url }}
+
+
+{% if pid_type == 'URL' %}
+<a href=" {{ pid }} ">
+    {{ pid }}
 </a>
+
+{% elif pid_type == 'DOI' %}
+<a href="http://dx.doi.org/{{ pid }}">
+    doi:{{ pid }}
+</a>
+
+{% elif pid_type == "Handle" %}
+<a href="http://hdl.handle.net/{{ pid }}">
+ hdl:{{ pid }}
+</a>
+
+{% else %}
+{{ pid }}
+
+
+{% endif %}
+
 
 </section>
