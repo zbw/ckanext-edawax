@@ -1,17 +1,15 @@
+{#
 {% ckan_extends %}
+
 
 {% block footer_links %}
 
-<div id="partnerlogos">
-<li><a href="http://zbw.eu"><img src="{% url_for_static
-    '/base/images/logo_zbw.png' %}"  /></li>
-    {#TODO: logo ratswd nicht transparent 
-    <li><a href="http://www.ratswd.de"><img src="{% url_for_static
-        '/base/images/ratswd-logo2.png' %}"  /></li>#}
-    </div>
-{#
-{{ super() }}
-#}
+<div id="zbwlogo"
+<a href="http://zbw.eu"><img src="{% url_for_static
+   '/base/images/zbw-logo-trans.png' %}"  />
+</div>
+
+
 
 {% endblock %}
 
@@ -22,8 +20,18 @@
 {% block footer_attribution %}
 {% endblock %}
 
+
 {% block footer_debug %}
 {% endblock %}
 
 {% block footer_links_ckan %}
 {% endblock %}
+#}
+
+
+<div id='zbwfooter'>
+    <a href="http://zbw.eu"><img src="{% url_for_static
+    '/base/images/zbw-logo-trans.png' %}"  />
+    </a>
+</div>
+

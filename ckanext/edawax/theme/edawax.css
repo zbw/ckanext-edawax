@@ -12,10 +12,24 @@ textarea,
 }
 
 
-.homepage .module-search .module-content, .homepage .module-search .tags {
-    background: rgb(0,143,195)
+
+.homepage .module-search .module-content {
+   background: rgb(0,143,195)
 }
 
+
+.homepage .module-search .tags {
+    background-color: #005d7a;
+}
+
+
+a {
+    color: rgb(0,93,149) /* econstor color */
+}
+
+.sitefooter a {
+    color: rgb(0,93,149) !important
+}
 
 h2,h3,h4,h5,h6 {
     font-weight:400 !important;
@@ -118,7 +132,7 @@ h2 {
 }
 
 .nav-pills > li > a:hover, .nav-pills .active a {
-    border-bottom:2px solid darkred; /* evtl. green */
+    border-bottom:2px solid rgb(0,143,195); /* evtl. green */
     background-color:transparent !important;
 }
 
@@ -138,10 +152,11 @@ color: #ffffff;
 /*background-color: #8ca0a6; */
 background-color:rgb(45,45,45);
 }
-/* evtl. die beiden hintergrundfarben auch andersrum */
+/* evtl. die beiden hintergrundfarben auch andersrum 
 .nav-item.active > a:hover, .nav-aside li.active a:hover {
-  background:darkred;
+  background:transparent;
 }
+*/
 
 .nav-item.active > a:before, .nav-aside li.active a:before {
 content: ' ';
@@ -159,12 +174,10 @@ background-image: none;
 }
 
 .site-footer {
-    padding:3px 0 0 0;
- /* XXX Logos sind leider nicht mit transparentem Hintergrund */
-    background:rgb(244,244,244);
-/*    background-color:white;*/
-    color:rgb(80,80,80);
-
+    padding:10px 0 10px 0;
+   background-color:rgb(244,244,244);
+   /*background-color: rgb(0,143,195); */
+   /* background-color: #005d7a; */
 }
 
 
@@ -179,7 +192,7 @@ background-image: none;
     -moz-border-radius: 3px 3px 0 0;
     border-radius: 3px 3px 0 0;
 /*    background-color: rgb(0, 93, 122); */
-    background-color: darkred;
+/*    background-color: darkred;*/
 }
 
 .hero .tags {
@@ -210,9 +223,6 @@ background-image: none;
 font-weight: 500;
 }
 
-.active:hover {
-  background-color: darkred !important
-}
 
 .authors_title {
     margin-bottom:0px; 
@@ -237,3 +247,10 @@ font-weight: 500;
 .span6 {
     margin-top:50px !important;
 }
+
+#zbwfooter {
+    text-align:center;
+    margin: 25px 0 25px 0;
+    font-size:100%
+}
+
