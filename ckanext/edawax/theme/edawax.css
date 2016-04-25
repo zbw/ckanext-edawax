@@ -1,5 +1,5 @@
 body {
-  background-color: rgb(229,229,229);
+  background-color: rgb(244,244,244);
 }
 
 body, 
@@ -9,6 +9,11 @@ select,
 textarea,
 #dara_ {
   font-family:'Roboto', "Helvetica Neue", Helvetica, Arial, sans-serif !important;
+}
+
+
+.homepage .module-search .module-content, .homepage .module-search .tags {
+    background: rgb(0,143,195)
 }
 
 
@@ -30,13 +35,18 @@ h2 {
     margin-top:50px !important;
 }
 
+
+#content {
+    margin-top: 25px;
+}
+
 .masthead {
   /*  min-height: 50px; */
   /*  background: rgb(0, 93, 122) url("../../../base/images/bg.png");*/
   /*  background: rgb(64,64,64); */
   /*  background:rgb(191, 215, 222); */
 /*    background: rgb(0, 93, 122); */
-    background:rgb(229,229,229);
+    background:rgb(244,244,244);
 /*    border-bottom:3px dotted black;*/
 }
 
@@ -48,15 +58,18 @@ h2 {
 /*   background: rgb(128,128,128); */
 /*    background: rgb(0, 93, 122); */
 /*    background: black; */
-    background: rgb(45,45,45) /* google */
+/*    background: rgb(45,45,45) /* google */ 
+    background: rgb(0,143,195)
 }   
+
 
 .header-image {
   position:absolute;
   left:25px; 
-  top:0px; 
-  margin-top: 10px;
+  /*top:0px; */
+  top: -2px;
 }
+
 
 .account-masthead .account ul li {
     display: block;
@@ -141,14 +154,14 @@ background-image: none;
 }
 
 [role=main], .main, .hero {
-     background: rgb(229,229,229); 
+     background: rgb(244,244,244); 
 
 }
 
 .site-footer {
     padding:3px 0 0 0;
  /* XXX Logos sind leider nicht mit transparentem Hintergrund */
-    background:rgb(229,229,229);
+    background:rgb(244,244,244);
 /*    background-color:white;*/
     color:rgb(80,80,80);
 
@@ -221,3 +234,6 @@ font-weight: 500;
     background-color:darkorange;
 }
 
+.span6 {
+    margin-top:50px !important;
+}
