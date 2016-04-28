@@ -15,8 +15,9 @@ Example:
   <div class="module context-info">
     <section class="module-content">
       <div class="image">
+
         <a href="{{ url }}">
-          <img src="{{ organization.image_url or h.url_for_static('/base/images/placeholder-organization.png') }}" width="200" alt="{{ organization.name }}" />
+          <img src="{{ organization.image_display_url or h.url_for_static('/base/images/placeholder-organization.png') }}" width="200" alt="{{ organization.name }}" />
         </a>
       </div>
       <h1 class="heading">{{ organization.title or organization.name }}</h1>
