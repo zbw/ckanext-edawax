@@ -3,14 +3,9 @@
 
 import ckan.plugins as plugins
 import ckan.plugins.toolkit as tk
-import ckan.model as model
-from ckan.authz import get_group_or_org_admin_ids
 from ckanext.edawax import helpers
-from ckanext.edawax.mail import notification
-from ckan.new_authz import users_role_for_group_or_org
 from ckan.logic.auth import get_package_object
 from ckan.logic.auth.update import package_update as ckan_pkgupdate
-
 
 
 # XXX implement IAuthFunctions for controller actions
@@ -29,28 +24,28 @@ def edawax_facets(facets_dict):
         pass
     return facets_dict
 
+# XXX in controller
+# def send_mail_to_editors(entity, operation):
+#    """
+#   submit notification to mailer
+#   """
+#   user_id, user_name = tk.c.userobj.id, tk.c.userobj.fullname
+# 
+#   if not user_name:
+#       user_name = tk.c.userobj.email  # otherwise None
 
-def send_mail_to_editors(entity, operation):
-    """
-    submit notification to mailer
-    """
-    user_id, user_name = tk.c.userobj.id, tk.c.userobj.fullname
-    
-    if not user_name:
-        user_name = tk.c.userobj.email  # otherwise None
+#   ops = {'new': 'created', 'changed': 'updated', 'deleted': 'deleted'}
+#   op = ops[operation]
 
-    ops = {'new': 'created', 'changed': 'updated', 'deleted': 'deleted'}
-    op = ops[operation]
+#   # get list of journal editors. Current user will not be notified
+#   org_admins = filter(lambda x: x != user_id,
+#                       get_group_or_org_admin_ids(entity.owner_org))
 
-    # get list of journal editors. Current user will not be notified
-    org_admins = filter(lambda x: x != user_id,
-                        get_group_or_org_admin_ids(entity.owner_org))
-
-    # get email address of journal editors
-    addresses = map(lambda admin_id: model.User.get(admin_id).email, org_admins)
-    
-    # send notification to all addresses
-    map(lambda a: notification(a, user_name, entity.id, op), addresses)
+#   # get email address of journal editors
+#   addresses = map(lambda admin_id: model.User.get(admin_id).email, org_admins)
+#  
+#   # send notification to all addresses
+#   map(lambda a: notification(a, user_name, entity.id, op), addresses)
 
 
 def journal_package_update(context, data_dict):
@@ -88,7 +83,6 @@ class EdawaxPlugin(plugins.SingletonPlugin,):
     def get_auth_functions(self):
         return {'package_update': journal_package_update}
 
-    
     def get_helpers(self):
         return {'get_user_id': helpers.get_user_id,
                 'show_review_button': helpers.show_review_button,
@@ -161,14 +155,4 @@ class EdawaxPlugin(plugins.SingletonPlugin,):
         return edawax_facets(facets_dict)
 
     
-    # obsolete
-    #def notify(self, entity, operation):
-    #   """
-    #   we might need several functions in case of modifications, so this one
-    #   just calls them
-    #   """
-    #   # only send mails for Packages, and only for active ones (= no drafts)
-    #   if isinstance(entity, model.package.Package) and entity.state == 'active':
-    #       send_mail_to_editors(entity, operation)
-
 
