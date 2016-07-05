@@ -54,4 +54,5 @@ def show_retract_button(pkg):
     return dara_helpers.check_journal_role(pkg, 'admin') and not pkg.get('private', True)
 
 
-
+def res_abs_url(res):
+    return res['url'].partition('download/')[0]
