@@ -1,28 +1,29 @@
-<section class="related_publication" style="margin-bottom:2em;">
+{% if pid_type == 'URL' %}
+    {% set url = pid %}
+    {% set prefix = "" %}
+{% elif pid_type == 'DOI' %}
+    {% set url = "http://dx.doi.org/" ~ pid %}
+    {% set prefix = "doi:" %}
+{% elif pid_type == "Handle" %}
+    {% set url = "http://hdl.handle.net/" ~ pid %}
+    {% set prefix = "hdl:" %}
+{% endif %}
+
+{# XXX there's no appropriate property for relation in schema.org #}
+<section class="related_publication" style="margin-bottom:2em;"
+ typeof="schema:ScholarlyArticle" resource="{{ url }}" property="dc:relation">
 
 <h3>Related Publication</h3>
 
 
-{% if pid_type == 'URL' %}
-<a href=" {{ pid }} ">
-    {{ pid }}
-</a>
-
-{% elif pid_type == 'DOI' %}
-<a href="http://dx.doi.org/{{ pid }}">
-    doi:{{ pid }}
-</a>
-
-{% elif pid_type == "Handle" %}
-<a href="http://hdl.handle.net/{{ pid }}">
- hdl:{{ pid }}
-</a>
+{% if url %}
+    <a href="{{ url }}" property="schema:url">
+        {{ prefix ~ pid }}
+    </a>
 
 {% else %}
 {{ pid }}
 
-
 {% endif %}
-
 
 </section>
