@@ -8,8 +8,8 @@
     {% set res_doi = "http://dx.doi.org/" ~ res['dara_DOI'] %}
 {% endif %}
 
-<li class="resource-item" data-id="{{ res.id }}" property="schema:dataset schema:hasPart"
-    typeof="schema:Dataset" resource="{{ res_doi or res_url }}">
+<li class="resource-item" data-id="{{ res.id }}" property="schema:hasPart"
+    typeof="schema:CreativeWork" resource="{{ res_url }}">
 
   {% block resource_item_title %}
     <a class="heading" href="{{ res_url }}" title="{{ res.name or res.description }}">

@@ -63,3 +63,7 @@ def pkg_abs_url(pkg):
     site_url = config.get('ckan.site_url')
     pkg_url = tk.url_for(controller='package', action='read', id=pkg['name'])
     return site_url + pkg_url
+
+
+def ckan_site_url():
+    return config.get('ckan.site_url', 'http://journaldata.zbw.eu')

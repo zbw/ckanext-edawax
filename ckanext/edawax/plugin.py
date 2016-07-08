@@ -92,6 +92,7 @@ class EdawaxPlugin(plugins.SingletonPlugin,):
                 'show_retract_button': helpers.show_retract_button,
                 'res_abs_url': helpers.res_abs_url,
                 'pkg_abs_url': helpers.pkg_abs_url,
+                'ckan_site_url': helpers.ckan_site_url,
                 }
 
     def before_map(self, map):

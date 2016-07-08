@@ -1,4 +1,5 @@
 {% ckan_extends %}
+
 {# implements RDFa Lite #}
 
 {% set dara_authors = h.dara_authors('dataset', data) %}
@@ -8,24 +9,17 @@
 {# {% set debug = h.dara_debug(pkg) %} #}
 
 
-{% if pkg_DOI %}
-    {% set purl = "http://dx.doi.org/" ~ pkg_DOI  %}
-{% else %}
-    {% set purl = pkg_url %}
-{% endif %}
-
-
-
 {% block resource_content %}
 
-<div prefix="schema: http://schema.org/" typeof="schema:Dataset" resource="{{ res.url }}">
+<div prefix="schema: http://schema.org/" typeof="schema:CreativeWork" resource="{{ h.full_current_url() }}">
+    <meta property="schema:isPartOf" typeof="schema:Dataset" resource="{{ pkg_url }}" />
 
   {% block resource_read_title %}
     <h1 class="page-heading" property="schema:name">{{ h.resource_display_name(res) | truncate(50) }}</h1>
   {% endblock %}
 
   {% block resource_read_url %}
-    <div class="muted ellipsis" property="schema:distribution" typeof="schema:DataDownload">
+    <div class="muted ellipsis" property="schema:distribution" typeof="schema:DataDownload" resource="{{ res.url }}">
         {% if res.url and h.is_url(res.url) %}
             URL:
               <a href="{{ res.url }}" title="{{ res.url }}" property="schema:url">
@@ -36,8 +30,6 @@
         {% endif %}
     </div>
   {% endblock %}
-
-  <div property="schema:isPartOf schema:includedInDataCatalog" typeof="schema:DataCatalog" resource="{{ purl }}" />
 
   {% if dara_authors %}
       <div class="muted ellipsis" style="margin-bottom:1.25em;">Creators:
