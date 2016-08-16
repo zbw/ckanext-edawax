@@ -7,8 +7,10 @@
 {% resource 'dara/dara.css' %}
 {% resource 'edawax/edawax.js' %}
 {% resource 'dara/dara.js' %}
-
-
+{% set pkg_url = h.full_current_url() %}
+{% if DOI %}
+    {% set doi_url = "http://dx.doi.org/" ~ DOI  %}
+{% endif %}
 {#
 {% set dara_debug = h.dara_debug() %}
 #}
@@ -17,12 +19,16 @@
     {% if author == dara_authors[-1] %}
          {{ (author['firstname'], author['lastname']) | join(' ')}}
     {% else %}
-        {{ author['firstname'] ~ ' ' ~ author['lastname']  }}; 
+        {{ author['firstname'] ~ ' ' ~ author['lastname']  }};
     {% endif %}
 {%- endmacro %}
 
 
 {% block primary_content_inner %}
+
+<div prefix="schema: http://schema.org/" typeof="schema:Dataset" resource="{{ pkg_url }}">
+    <meta property="schema:includedInDataCatalog" resource="{{ h.ckan_site_url() }}"
+        typeof="schema:DataCatalog" />
 
   {% block package_description %}
 
@@ -34,35 +40,45 @@
       <br />
  {% endif %}
 
-  
+
   <div class="authors_title">
-  {% if dara_authors %}
+    {% if dara_authors %}
     {% for author in dara_authors %}
-        {% if author.authorID_URI or author.url %}
-            <a href="{{ author.url if author.url else author.authorID_URI }}">
-                {{ author_in_title(author) }}
-            </a>
+        {% if author.url %}
+            <div property="schema:author" style="display:inline"
+                                        typeof="schema:Person" resource="{{
+                                        author.url }}">
+                    <a href="{{ author.url }}">
+                <span property="schema:name">
+                    {{ (author['firstname'], author['lastname']) | join(' ')}}
+                </span>
+                </a>
+            </div>
+
         {% else %}
-            {{ author_in_title(author) }}
+            <div property="schema:author" style="display:inline"
+                                        typeof="schema:Person">
+            <span property="schema:name">{{ (author['firstname'], author['lastname']) | join(' ')}}</span>
+            </div>
+
+        {% endif %}
+        {% if not author == dara_authors[-1] %}
+        ;
         {% endif %}
     {% endfor %}
-    
-  {% endif %}
+    {% endif %}
   </div>
-    
-    
- 
+
   {{ super() }}
-  
+
   {% endblock %}
 
   {% block package_resources %}
     {{ super () }}
   {% endblock %}
-   
+
   {% snippet "package/snippets/citation.html", pkg_dict=pkg, data=data %}
-  
-  
+
   {% if pid %}
     {% snippet "package/snippets/related_publication.html", pkg_dict=pkg,
     pid=pid, pid_type=pid_type %}
@@ -72,15 +88,14 @@
 {% block package_tags %}
     {{ super() }}
   {% endblock %}
-   
+
   {% block package_additional_info %}
-  
+
   {#XXX off for now
     {{ super() }}
     #}
   {% endblock %}
 
+
+</div>
 {% endblock %}
-
-
-

@@ -30,7 +30,7 @@ def edawax_facets(facets_dict):
 #   submit notification to mailer
 #   """
 #   user_id, user_name = tk.c.userobj.id, tk.c.userobj.fullname
-# 
+#
 #   if not user_name:
 #       user_name = tk.c.userobj.email  # otherwise None
 
@@ -43,7 +43,7 @@ def edawax_facets(facets_dict):
 
 #   # get email address of journal editors
 #   addresses = map(lambda admin_id: model.User.get(admin_id).email, org_admins)
-#  
+#
 #   # send notification to all addresses
 #   map(lambda a: notification(a, user_name, entity.id, op), addresses)
 
@@ -52,12 +52,12 @@ def journal_package_update(context, data_dict):
     """override ckan package_update"""
     user = context.get('auth_user_obj')
     package = get_package_object(context, data_dict)
-    
+
     # always allow creator to update package, even if she is not allowed by
     # default org member permissions. 'create_dataset' permission must be set
     if package.creator_user_id and user.id == package.creator_user_id:
         return {'success': True}
-    return ckan_pkgupdate(context, data_dict)  
+    return ckan_pkgupdate(context, data_dict)
 
 
 class EdawaxPlugin(plugins.SingletonPlugin,):
@@ -90,6 +90,9 @@ class EdawaxPlugin(plugins.SingletonPlugin,):
                 'is_private': helpers.is_private,
                 'show_publish_button': helpers.show_publish_button,
                 'show_retract_button': helpers.show_retract_button,
+                'res_abs_url': helpers.res_abs_url,
+                'pkg_abs_url': helpers.pkg_abs_url,
+                'ckan_site_url': helpers.ckan_site_url,
                 }
 
     def before_map(self, map):
@@ -153,6 +156,3 @@ class EdawaxPlugin(plugins.SingletonPlugin,):
 
     def dataset_facets(self, facets_dict, package_type):
         return edawax_facets(facets_dict)
-
-    
-

@@ -1,0 +1,72 @@
+{% ckan_extends %}
+
+{# implements RDFa Lite #}
+
+{% set dara_authors = h.dara_authors('dataset', data) %}
+{% set pkg = h.dara_pkg() %}
+{% set pkg_url = h.pkg_abs_url(pkg) %}
+{% set pkg_DOI = pkg['dara_DOI_Test'] %}
+{# {% set debug = h.dara_debug(pkg) %} #}
+
+
+{% block resource_content %}
+
+<div prefix="schema: http://schema.org/" typeof="schema:CreativeWork" resource="{{ h.full_current_url() }}">
+    <meta property="schema:isPartOf" typeof="schema:Dataset" resource="{{ pkg_url }}" />
+
+  {% block resource_read_title %}
+    <h1 class="page-heading" property="schema:name">{{ h.resource_display_name(res) | truncate(50) }}</h1>
+  {% endblock %}
+
+  {% block resource_read_url %}
+    <div class="muted ellipsis" property="schema:distribution" typeof="schema:DataDownload" resource="{{ res.url }}">
+        {% if res.url and h.is_url(res.url) %}
+            URL:
+              <a href="{{ res.url }}" title="{{ res.url }}" property="schema:url">
+                  {{ res.url }}
+              </a>
+        {% elif res.url %}
+            Resource URL: {{ res.url }}
+        {% endif %}
+    </div>
+  {% endblock %}
+
+  {% if dara_authors %}
+      <div class="muted ellipsis" style="margin-bottom:1.25em;">Creators:
+            {% for author in dara_authors %}
+                <div property="schema:author" style="display:inline"
+                        typeof="schema:Person"
+                        resource="{{ author.url }}">
+                {% if author.url %}
+                    <a href="{{ author.url }}" property="schema:url">
+                        <span property="schema:name">
+                            {{ (author['firstname'], author['lastname']) | join(' ')}}
+                        </span>
+                    </a>
+                {% else %}
+                    <span property="schema:name">{{ (author['firstname'], author['lastname']) | join(' ')}}</span>
+                {% endif %}
+                {% if not author == dara_authors[-1] %}
+                ;
+                {% endif %}
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+
+
+  <div class="prose notes" property="rdfs:label schema:description">
+    {% if res.description %}
+        {{ h.render_markdown(res.description) }}
+    {% endif %}
+    {% if not res.description and c.package.notes %}
+      <h3>{{ _('From the dataset abstract') }}</h3>
+      <blockquote>{{ h.markdown_extract(c.package.get('notes')) }}</blockquote>
+      <p>{% trans dataset=c.package.title, url=h.url_for(controller='package', action='read', id=c.package['name']) %}Source: <a href="{{ url }}">{{ dataset }}</a>{% endtrans %}
+    {% endif %}
+  </div>
+
+
+
+</div>
+{% endblock %}

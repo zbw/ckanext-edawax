@@ -2,6 +2,7 @@ import ckan.plugins.toolkit as tk
 import ckan.model as model
 from ckan.common import c
 import ckanext.dara.helpers as dara_helpers
+from pylons import config
 
 # decorator might useful for future
 # def type_check(t):
@@ -54,4 +55,15 @@ def show_retract_button(pkg):
     return dara_helpers.check_journal_role(pkg, 'admin') and not pkg.get('private', True)
 
 
+def res_abs_url(res):
+    return res['url'].partition('download/')[0]
 
+
+def pkg_abs_url(pkg):
+    site_url = config.get('ckan.site_url')
+    pkg_url = tk.url_for(controller='package', action='read', id=pkg['name'])
+    return site_url + pkg_url
+
+
+def ckan_site_url():
+    return config.get('ckan.site_url', 'http://journaldata.zbw.eu')
