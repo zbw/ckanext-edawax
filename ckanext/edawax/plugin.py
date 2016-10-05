@@ -93,6 +93,7 @@ class EdawaxPlugin(plugins.SingletonPlugin,):
                 'res_abs_url': helpers.res_abs_url,
                 'pkg_abs_url': helpers.pkg_abs_url,
                 'ckan_site_url': helpers.ckan_site_url,
+                'journal_volume_sorting': helpers.journal_volume_sorting,
                 }
 
     def before_map(self, map):

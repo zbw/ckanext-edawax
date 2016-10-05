@@ -14,25 +14,44 @@ Example:
   {% snippet 'snippets/package_list.html', packages=c.datasets %}
 
 #}
+
+{% macro package_list(packages) -%}
+
+    {% for package in packages %}
+      {% set is_admin = h.check_journal_role(package, 'admin') or h.check_access('sysadmin') %}
+      {% if not package.private or
+          (package.private and is_admin) or
+          (package.private and h.get_user_id() == package.creator_user_id)
+      %}
+
+          {% snippet 'snippets/package_item.html',
+              package=package,
+              item_class=item_class,
+              hide_resources=hide_resources,
+              banner=banner,
+              truncate=truncate,
+              truncate_title=truncate_title %}
+      {% endif %}
+    {% endfor %}
+
+{%- endmacro %}
+
+
 {% block package_list %}
   {% if packages %}
     <ul class="{{ list_class or 'dataset-list unstyled' }}">
     	{% block package_list_inner %}
-	      {% for package in packages %}
-            {% set is_admin = h.check_journal_role(package, 'admin') or h.check_access('sysadmin') %}
-            {% if not package.private or
-                (package.private and is_admin) or
-                (package.private and h.get_user_id() == package.creator_user_id)
-            %}
-                {% snippet 'snippets/package_item.html', 
-                    package=package, 
-                    item_class=item_class, 
-                    hide_resources=hide_resources, 
-                    banner=banner, 
-                    truncate=truncate, 
-                    truncate_title=truncate_title %}
+
+            {% set jpackages = h.journal_volume_sorting(packages) %}
+            {% if jpackages %}
+                {% for k in jpackages.keys() %}
+                    <h2>Volume {{ k[0] }}, Issue {{ k[1] }} </h2>
+                    {{ package_list(jpackages[k]) }}
+                {% endfor %}
+                {% else %}
+                    {{ package_list(packages) }}
             {% endif %}
-          {% endfor %}
+
 	    {% endblock %}
     </ul>
   {% endif %}

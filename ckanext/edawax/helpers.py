@@ -3,6 +3,9 @@ import ckan.model as model
 from ckan.common import c
 import ckanext.dara.helpers as dara_helpers
 from pylons import config
+from toolz.itertoolz import unique
+from toolz.dicttoolz import keyfilter
+
 
 # decorator might useful for future
 # def type_check(t):
@@ -67,3 +70,24 @@ def pkg_abs_url(pkg):
 
 def ckan_site_url():
     return config.get('ckan.site_url', 'http://journaldata.zbw.eu')
+
+
+def journal_volume_sorting(packages):
+    req = tk.request
+
+    if req.params['sort'] == u'dara_Publication_Volume desc, dara_Publication_Issue desc':
+        volume_issue_list = unique(map(lambda d: (d['dara_Publication_Volume'], d['dara_Publication_Issue']), packages))
+
+        import ipdb; ipdb.set_trace()
+
+        diclist = {}
+        for t in volume_issue_list:
+            diclist[t] = [pd for pd in packages if pd['dara_Publication_Volume'] == t[0] and pd['dara_Publication_Issue'] == t[1]]
+
+
+
+        return diclist
+
+
+
+    return False
