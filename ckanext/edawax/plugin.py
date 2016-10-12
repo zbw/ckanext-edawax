@@ -6,6 +6,7 @@ import ckan.plugins.toolkit as tk
 from ckanext.edawax import helpers
 from ckan.logic.auth import get_package_object
 from ckan.logic.auth.update import package_update as ckan_pkgupdate
+from collections import OrderedDict
 
 
 # XXX implement IAuthFunctions for controller actions
@@ -153,7 +154,16 @@ class EdawaxPlugin(plugins.SingletonPlugin,):
         return map
 
     def organization_facets(self, facets_dict, organization_type, package_type):
-        return edawax_facets(facets_dict)
+        # for some reason CKAN does not accept a new OrderedDict here. So we have to
+        # modify the original facets_dict
+        edawax_facets(facets_dict)
+        del facets_dict['organization']
+        facets_dict.update({'dara_Publication_Volume': 'Volumes'})
+        facets_dict.update({'dara_Publication_Issue': 'Issues'})
+        formats = facets_dict.popitem(last=False)
+        facets_dict.update(dict([formats]))
+
+        return facets_dict
 
     def dataset_facets(self, facets_dict, package_type):
         return edawax_facets(facets_dict)
