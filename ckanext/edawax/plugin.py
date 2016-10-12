@@ -66,6 +66,9 @@ def get_facet_items_dict(facet, limit=None, exclude_active=False, sort_key='item
             facets.append(dict(active=True, **facet_item))
 
     # facets = sorted(facets, key=lambda item: item['count'], reverse=True)
+    def sort_facets(key):
+        return sorted(facets, key=lambda item: item[key], reverse=True)
+
     if sort_key == 'item_title':
         def title_to_int(title):
             """only sort with title when it is a number
@@ -74,9 +77,6 @@ def get_facet_items_dict(facet, limit=None, exclude_active=False, sort_key='item
                 return int(title)
             except:
                 return title
-
-        def sort_facets(key):
-            return sorted(facets, key=lambda item: item[key], reverse=True)
 
         title = facet_item['name']
         if isinstance(title_to_int(title), int):
