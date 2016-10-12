@@ -4,7 +4,7 @@ from ckan.common import c
 import ckanext.dara.helpers as dara_helpers
 from pylons import config
 from toolz.itertoolz import unique
-from toolz.dicttoolz import keyfilter
+from collections import namedtuple
 
 
 # decorator might useful for future
@@ -73,21 +73,21 @@ def ckan_site_url():
 
 
 def journal_volume_sorting(packages):
-    req = tk.request
+    """
+    return namedtuple for package sorting with volume/issue as key
+    """
 
-    if req.params['sort'] == u'dara_Publication_Volume desc, dara_Publication_Issue desc':
-        volume_issue_list = unique(map(lambda d: (d['dara_Publication_Volume'], d['dara_Publication_Issue']), packages))
+    v = 'dara_Publication_Volume'
+    i = 'dara_Publication_Issue'
 
-        import ipdb; ipdb.set_trace()
+    def t_construct(vi):
+        VIP = namedtuple('VIP', 'volume issue packages')
+        pf = filter(lambda d: d.get(v, '') == vi[0] and d.get(i, '') == vi[1], packages)
+        return VIP(vi[0], vi[1], pf)
 
-        diclist = {}
-        for t in volume_issue_list:
-            diclist[t] = [pd for pd in packages if pd['dara_Publication_Volume'] == t[0] and pd['dara_Publication_Issue'] == t[1]]
-
-
-
-        return diclist
-
-
+    sort = tk.request.params.get('sort', False)
+    if sort == u'{} desc, {} desc'.format(v, i):
+        vi_list = map(lambda d: (d.get(v, ''), d.get(i, '')), packages)
+        return map(t_construct, unique(vi_list))
 
     return False
