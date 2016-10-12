@@ -41,12 +41,17 @@ Example:
   {% if packages %}
     <ul class="{{ list_class or 'dataset-list unstyled' }}">
     	{% block package_list_inner %}
-
             {% set jpackages = h.journal_volume_sorting(packages) %}
             {% if jpackages %}
-                {% for k in jpackages.keys() %}
-                    <h2>Volume {{ k[0] }}, Issue {{ k[1] }} </h2>
-                    {{ package_list(jpackages[k]) }}
+                {% for jp in jpackages %}
+                    {# keep headings out for now
+                    {% if jp.volume == jp.issue == '' %}
+                        <h3>Other</h3>
+                    {% else %}
+                        <h3>Volume {{ jp.volume }}, Issue {{ jp.issue }} </h3>
+                    {% endif %}
+                    #}
+                    {{ package_list(jp.packages) }}
                 {% endfor %}
                 {% else %}
                     {{ package_list(packages) }}
