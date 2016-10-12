@@ -156,10 +156,18 @@ class EdawaxPlugin(plugins.SingletonPlugin,):
     def organization_facets(self, facets_dict, organization_type, package_type):
         # for some reason CKAN does not accept a new OrderedDict here. So we have to
         # modify the original facets_dict
+
+        key_volume = 'dara_Publication_Volume'
+        key_issues = 'dara_Publication_Issue'
+        volume_in_request = tk.request.params.get(key_volume, False)
+
         edawax_facets(facets_dict)
         del facets_dict['organization']
-        facets_dict.update({'dara_Publication_Volume': 'Volumes'})
-        facets_dict.update({'dara_Publication_Issue': 'Issues'})
+        facets_dict.update({key_volume: 'Volumes'})
+
+        if volume_in_request:
+            facets_dict.update({key_issues: 'Issues'})
+
         formats = facets_dict.popitem(last=False)
         facets_dict.update(dict([formats]))
 
