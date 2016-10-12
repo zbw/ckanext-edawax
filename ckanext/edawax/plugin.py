@@ -6,10 +6,12 @@ import ckan.plugins.toolkit as tk
 from ckanext.edawax import helpers
 from ckan.logic.auth import get_package_object
 from ckan.logic.auth.update import package_update as ckan_pkgupdate
-from collections import OrderedDict
-
+# from collections import OrderedDict
+import ckan.lib.helpers as h
+from ckan.common import c
 
 # XXX implement IAuthFunctions for controller actions
+
 
 def edawax_facets(facets_dict):
     """
@@ -24,6 +26,75 @@ def edawax_facets(facets_dict):
     except:
         pass
     return facets_dict
+
+
+def get_facet_items_dict(facet, limit=None, exclude_active=False, sort_key='item_count'):
+    '''
+    Monkey-Patch! CKANs sorting of facet items is hardcoded. See
+    https://github.com/ckan/ckan/issues/3271
+
+    Return the list of unselected facet items for the given facet, sorted
+    by count.
+
+    Returns the list of unselected facet contraints or facet items (e.g. tag
+    names like "russian" or "tolstoy") for the given search facet (e.g.
+    "tags"), sorted by facet item count (i.e. the number of search results that
+    match each facet item).
+
+    Reads the complete list of facet items for the given facet from
+    c.search_facets, and filters out the facet items that the user has already
+    selected.
+
+    Arguments:
+    facet -- the name of the facet to filter.
+    limit -- the max. number of facet items to return.
+    exclude_active -- only return unselected facets.
+
+    '''
+    request = tk.request
+    if not c.search_facets or \
+            not c.search_facets.get(facet) or \
+            not c.search_facets.get(facet).get('items'):
+        return []
+    facets = []
+    for facet_item in c.search_facets.get(facet)['items']:
+        if not len(facet_item['name'].strip()):
+            continue
+        if not (facet, facet_item['name']) in request.params.items():
+            facets.append(dict(active=False, **facet_item))
+        elif not exclude_active:
+            facets.append(dict(active=True, **facet_item))
+
+    # facets = sorted(facets, key=lambda item: item['count'], reverse=True)
+    if sort_key == 'item_title':
+        def title_to_int(title):
+            """only sort with title when it is a number
+            """
+            try:
+                return int(title)
+            except:
+                return title
+
+        def sort_facets(key):
+            return sorted(facets, key=lambda item: item[key], reverse=True)
+
+        title = facet_item['name']
+        if isinstance(title_to_int(title), int):
+            facets = sort_facets('name')
+        else:
+            facets = sort_facets('count')
+
+    else:
+        facets = sort_facets('count')
+
+    if c.search_facets_limits and limit is None:
+        limit = c.search_facets_limits.get(facet)
+    # zero treated as infinite for hysterical raisins
+    if limit is not None and limit > 0:
+        return facets[:limit]
+    return facets
+
+
 
 # XXX in controller
 # def send_mail_to_editors(entity, operation):
@@ -80,6 +151,8 @@ class EdawaxPlugin(plugins.SingletonPlugin,):
         tk.add_public_directory(config, 'public')
         tk.add_resource('theme', 'edawax')
         tk.add_resource('fanstatic', 'edawax_fs')
+        h.get_facet_items_dict = get_facet_items_dict
+
 
     def get_auth_functions(self):
         return {'package_update': journal_package_update}
