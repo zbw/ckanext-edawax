@@ -9,6 +9,8 @@ from ckan.logic.auth.update import package_update as ckan_pkgupdate
 # from collections import OrderedDict
 import ckan.lib.helpers as h
 from ckan.common import c
+from functools import partial
+from toolz.functoolz import pipe
 
 # XXX implement IAuthFunctions for controller actions
 
@@ -28,96 +30,50 @@ def edawax_facets(facets_dict):
     return facets_dict
 
 
-def get_facet_items_dict(facet, limit=None, exclude_active=False, sort_key='item_count'):
+def get_facet_items_dict(facet, limit=None, exclude_active=False, sort_key='count'):
     '''
-    Monkey-Patch! CKANs sorting of facet items is hardcoded. See
-    https://github.com/ckan/ckan/issues/3271
-
-    Return the list of unselected facet items for the given facet, sorted
-    by count.
-
-    Returns the list of unselected facet contraints or facet items (e.g. tag
-    names like "russian" or "tolstoy") for the given search facet (e.g.
-    "tags"), sorted by facet item count (i.e. the number of search results that
-    match each facet item).
-
-    Reads the complete list of facet items for the given facet from
-    c.search_facets, and filters out the facet items that the user has already
-    selected.
-
-    Arguments:
-    facet -- the name of the facet to filter.
-    limit -- the max. number of facet items to return.
-    exclude_active -- only return unselected facets.
-
+    Monkey-Patch of ckan/lib/helpers/get_facet_items_dict()
+    CKANs sorting of facet items is hardcoded (https://github.com/ckan/ckan/issues/3271)
+    Also: refactored to be a bit more functional (SCNR)
     '''
-    request = tk.request
+
     if not c.search_facets or \
             not c.search_facets.get(facet) or \
             not c.search_facets.get(facet).get('items'):
         return []
-    facets = []
-    for facet_item in c.search_facets.get(facet)['items']:
-        if not len(facet_item['name'].strip()):
-            continue
-        if not (facet, facet_item['name']) in request.params.items():
-            facets.append(dict(active=False, **facet_item))
+
+    def build_facet(facet_item):
+        if not (facet, facet_item['name']) in tk.request.params.items():
+            return dict(active=False, **facet_item)
         elif not exclude_active:
-            facets.append(dict(active=True, **facet_item))
+            return dict(active=True, **facet_item)
 
-    # facets = sorted(facets, key=lambda item: item['count'], reverse=True)
-    def sort_facets(key):
-        return sorted(facets, key=lambda item: item[key], reverse=True)
+    def sort_facet(f):
+        key = 'count'
+        names = map(lambda i: i['name'], f)
+        if sort_key == 'name' and any(map(str_to_int, names)):
+            key = 'name'
+        return sorted(f, key=lambda item: item[key], reverse=True)
 
-    if sort_key == 'item_title':
-        def title_to_int(title):
-            """only sort with title when it is a number
-            """
-            try:
-                return int(title)
-            except:
-                return title
-
-        title = facet_item['name']
-        if isinstance(title_to_int(title), int):
-            facets = sort_facets('name')
-        else:
-            facets = sort_facets('count')
-
-    else:
-        facets = sort_facets('count')
+    empty_name = lambda i: len(i['name'].strip()) > 0
+    f = map(build_facet, filter(empty_name, c.search_facets.get(facet)['items']))
+    facets = sort_facet(filter(lambda i: isinstance(i, dict), f))
 
     if c.search_facets_limits and limit is None:
         limit = c.search_facets_limits.get(facet)
     # zero treated as infinite for hysterical raisins
     if limit is not None and limit > 0:
         return facets[:limit]
+
     return facets
 
 
-
-# XXX in controller
-# def send_mail_to_editors(entity, operation):
-#    """
-#   submit notification to mailer
-#   """
-#   user_id, user_name = tk.c.userobj.id, tk.c.userobj.fullname
-#
-#   if not user_name:
-#       user_name = tk.c.userobj.email  # otherwise None
-
-#   ops = {'new': 'created', 'changed': 'updated', 'deleted': 'deleted'}
-#   op = ops[operation]
-
-#   # get list of journal editors. Current user will not be notified
-#   org_admins = filter(lambda x: x != user_id,
-#                       get_group_or_org_admin_ids(entity.owner_org))
-
-#   # get email address of journal editors
-#   addresses = map(lambda admin_id: model.User.get(admin_id).email, org_admins)
-#
-#   # send notification to all addresses
-#   map(lambda a: notification(a, user_name, entity.id, op), addresses)
+def str_to_int(string):
+    try:
+        i = int(string)
+    except:
+        i = string
+    return isinstance(i, int)
 
 
 def journal_package_update(context, data_dict):

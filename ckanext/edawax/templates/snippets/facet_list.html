@@ -59,7 +59,7 @@ within_tertiary
 
         {#     {% with items = items or h.get_facet_items_dict(name) %} #}
 
-        {% with items = items or h.get_facet_items_dict(name, sort_key="item_title") %}
+        {% with items = items or h.get_facet_items_dict(name, sort_key="name") %}
 
             {% if items %}
               <nav>
