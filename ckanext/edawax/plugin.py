@@ -9,8 +9,6 @@ from ckan.logic.auth.update import package_update as ckan_pkgupdate
 # from collections import OrderedDict
 import ckan.lib.helpers as h
 from ckan.common import c
-from functools import partial
-from toolz.functoolz import pipe
 
 # XXX implement IAuthFunctions for controller actions
 
@@ -109,7 +107,6 @@ class EdawaxPlugin(plugins.SingletonPlugin,):
         tk.add_resource('fanstatic', 'edawax_fs')
         h.get_facet_items_dict = get_facet_items_dict
 
-
     def get_auth_functions(self):
         return {'package_update': journal_package_update}
 
@@ -131,32 +128,38 @@ class EdawaxPlugin(plugins.SingletonPlugin,):
         replacing all organization urls with 'journal'
         """
         map.connect('organizations_index', '/journals', action='index',
-                controller='organization')
-        map.connect('/journals/list', action='list',
-        controller="organization")
+                    controller='organization')
+
+        map.connect('/journals/list', action='list', controller="organization")
         map.connect('/journals/new', action='new', controller="organization")
+
         map.connect('/journals/{action}/{id}',
-          requirements=dict(action='|'.join([
-            'edit',
-            'delete',
-            'admins',
-            'members',
-            'member_new',
-            'member_delete',
-            'history',
-            'bulk_process',
-            'about',
-          ])), controller="organization"
-          )
+                    requirements=dict(action='|'.join([
+                        'edit',
+                        'delete',
+                        'admins',
+                        'members',
+                        'member_new',
+                        'member_delete',
+                        'history',
+                        'bulk_process',
+                        'about']
+                    )),
+                    controller="organization")
+
         map.connect('organization_activity', '/journals/activity/{id}',
-                  action='activity', ckan_icon='time',
-                  controller="organization")
+                    action='activity', ckan_icon='time',
+                    controller="organization")
+
         map.connect('organization_about', '/journals/about/{id}',
-                  action='about', ckan_icon='info-sign', controller="organization")
+                    action='about', ckan_icon='info-sign', controller="organization")
+
         map.connect('organization_read', '/journals/{id}', action='read',
-                  ckan_icon='sitemap', controller="organization")
+                    ckan_icon='sitemap', controller="organization")
+
         map.connect('user_dashboard_organizations', '/dashboard/journals',
-                  action='dashboard_organizations', ckan_icon='building', controller="user")
+                    action='dashboard_organizations', ckan_icon='building',
+                    controller="user")
 
         # TODO redirects are just temporary, since there are still some routes
         # and links with 'organizations' in ckan. It even might be easier, to
@@ -167,18 +170,18 @@ class EdawaxPlugin(plugins.SingletonPlugin,):
 
         # review mail to editor
         map.connect('/dataset/{id}/review',
-                controller="ckanext.edawax.controller:WorkflowController",
-                action="review_mail",)
+                    controller="ckanext.edawax.controller:WorkflowController",
+                    action="review_mail",)
 
         # publish dataset
         map.connect('/dataset/{id}/publish',
-                controller="ckanext.edawax.controller:WorkflowController",
-                action="publish",)
+                    controller="ckanext.edawax.controller:WorkflowController",
+                    action="publish",)
 
         # retract dataset
         map.connect('/dataset/{id}/retract',
-                controller="ckanext.edawax.controller:WorkflowController",
-                action="retract",)
+                    controller="ckanext.edawax.controller:WorkflowController",
+                    action="retract",)
 
         return map
 
@@ -186,16 +189,15 @@ class EdawaxPlugin(plugins.SingletonPlugin,):
         # for some reason CKAN does not accept a new OrderedDict here. So we have to
         # modify the original facets_dict
 
-        key_volume = 'dara_Publication_Volume'
-        key_issues = 'dara_Publication_Issue'
-        volume_in_request = tk.request.params.get(key_volume, False)
+        KEY_VOLUME = 'dara_Publication_Volume'
+        KEY_ISSUES = 'dara_Publication_Issue'
 
         edawax_facets(facets_dict)
         del facets_dict['organization']
-        facets_dict.update({key_volume: 'Volumes'})
+        facets_dict.update({KEY_VOLUME: 'Volumes'})
 
-        if volume_in_request:
-            facets_dict.update({key_issues: 'Issues'})
+        if tk.request.params.get(KEY_VOLUME, False):
+            facets_dict.update({KEY_ISSUES: 'Issues'})
 
         formats = facets_dict.popitem(last=False)
         facets_dict.update(dict([formats]))
