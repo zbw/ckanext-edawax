@@ -35,6 +35,7 @@ def get_facet_items_dict(facet, limit=None, exclude_active=False, sort_key='coun
     Also: refactored to be a bit more functional (SCNR)
     '''
 
+    # this might be too detailed, but if CKAN thinks so...
     if not c.search_facets or \
             not c.search_facets.get(facet) or \
             not c.search_facets.get(facet).get('items'):
@@ -56,6 +57,7 @@ def get_facet_items_dict(facet, limit=None, exclude_active=False, sort_key='coun
     empty_name = lambda i: len(i['name'].strip()) > 0
     f = map(build_facet, filter(empty_name, c.search_facets.get(facet)['items']))
     facets = sort_facet(filter(lambda i: isinstance(i, dict), f))
+
 
     if c.search_facets_limits and limit is None:
         limit = c.search_facets_limits.get(facet)
@@ -186,8 +188,8 @@ class EdawaxPlugin(plugins.SingletonPlugin,):
         return map
 
     def organization_facets(self, facets_dict, organization_type, package_type):
-        # for some reason CKAN does not accept a new OrderedDict here. So we have to
-        # modify the original facets_dict
+        # for some reason CKAN does not accept a new OrderedDict here (does not happen
+        # with datasets facets!). So we have to modify the original facets_dict
 
         KEY_VOLUME = 'dara_Publication_Volume'
         KEY_ISSUES = 'dara_Publication_Issue'
@@ -199,10 +201,24 @@ class EdawaxPlugin(plugins.SingletonPlugin,):
         if tk.request.params.get(KEY_VOLUME, False):
             facets_dict.update({KEY_ISSUES: 'Issues'})
 
-        formats = facets_dict.popitem(last=False)
-        facets_dict.update(dict([formats]))
+        # move formats at the end
+        del facets_dict['res_format']
+        facets_dict.update({'res_format': 'Formats'})
 
         return facets_dict
 
     def dataset_facets(self, facets_dict, package_type):
-        return edawax_facets(facets_dict)
+        KEY_VOLUME = 'dara_Publication_Volume'
+        KEY_ISSUES = 'dara_Publication_Issue'
+        edawax_facets(facets_dict)
+
+        if tk.request.params.get('organization', False):
+            facets_dict.update({KEY_VOLUME: 'Volumes'})
+            if tk.request.params.get(KEY_VOLUME, False):
+                facets_dict.update({KEY_ISSUES: 'Issues'})
+
+            # move formats at the end
+            del facets_dict['res_format']
+            facets_dict.update({'res_format': 'Formats'})
+
+        return facets_dict
