@@ -9,6 +9,8 @@ from ckan.logic.auth.update import package_update as ckan_pkgupdate
 # from collections import OrderedDict
 import ckan.lib.helpers as h
 from ckan.common import c
+from toolz.functoolz import compose
+from functools import partial
 
 # XXX implement IAuthFunctions for controller actions
 
@@ -35,13 +37,12 @@ def get_facet_items_dict(facet, limit=None, exclude_active=False, sort_key='coun
     Also: refactored to be a bit more functional (SCNR)
     '''
 
-    # this might be too detailed, but if CKAN thinks so...
-    if not c.search_facets or \
-            not c.search_facets.get(facet) or \
-            not c.search_facets.get(facet).get('items'):
+    try:
+        f = c.search_facets.get(facet)['items']
+    except:
         return []
 
-    def build_facet(facet_item):
+    def active(facet_item):
         if not (facet, facet_item['name']) in tk.request.params.items():
             return dict(active=False, **facet_item)
         elif not exclude_active:
@@ -54,18 +55,19 @@ def get_facet_items_dict(facet, limit=None, exclude_active=False, sort_key='coun
             key = 'name'
         return sorted(f, key=lambda item: item[key], reverse=True)
 
-    empty_name = lambda i: len(i['name'].strip()) > 0
-    f = map(build_facet, filter(empty_name, c.search_facets.get(facet)['items']))
-    facets = sort_facet(filter(lambda i: isinstance(i, dict), f))
+    # for some reason limit is not in scope here, so it must be a param
+    def set_limit(facs, limit):
+        if c.search_facets_limits and limit is None:
+            limit = c.search_facets_limits.get(facet)
+        # zero treated as infinite for hysterical raisins
+        if limit is not None and limit > 0:
+            return facs[:limit]
+        return facs
 
-
-    if c.search_facets_limits and limit is None:
-        limit = c.search_facets_limits.get(facet)
-    # zero treated as infinite for hysterical raisins
-    if limit is not None and limit > 0:
-        return facets[:limit]
-
-    return facets
+    filter_empty_name = partial(filter, lambda i: len(i['name'].strip()) > 0)
+    isdict = partial(filter, lambda i: isinstance(i, dict))
+    facets = compose(sort_facet, isdict, partial(map, active), filter_empty_name)(f)
+    return set_limit(facets, limit)
 
 
 def str_to_int(string):
