@@ -15,23 +15,23 @@
         </hgroup>
 
     {% block header_debug %}
-        
+
         {# {{ super() }} #}
     {% endblock %}
     <div class="container">
         {# moved this up since positioning did not work in .container
         <hgroup class="{{ g.header_class }}">
-        
-        
+
+
         {% block header_logo %}
             {{ super() }}
         {% endblock %}
 
         </hgroup>
         #}
-        
+
         <!-- <div class="content"> -->
-        <div id="edawax_nav_search" style="float:right;">    
+        <div id="edawax_nav_search" style="float:right;">
         {% block header_site_navigation %}
                 <nav class="section navigation">
                 <ul class="nav nav-pills">
@@ -39,13 +39,14 @@
                     {{ h.build_nav_main(
                     ('search', _('Datasets')),
                     ('organizations_index', _('Journals')),
-                    ('about', _('About'))
+                    ('about', _('About')),
+                    ('info', 'Info')
                     ) }}
                     {% endblock %}
                 </ul>
                 </nav>
          {% endblock %}
-        
+
 
         {% block header_site_search %}
             {{ super() }}
