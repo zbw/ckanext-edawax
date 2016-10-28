@@ -47,26 +47,26 @@ class WorkflowController(PackageController):
         """
         sends review notification to all journal admins
         """
-        
+
         context = self._context()
-        
+
         try:
             tk.check_access('package_update', context, {'id': id})
         except tk.NotAuthorized:
             tk.abort(403, 'Unauthorized')
 
         c.pkg_dict = tk.get_action('package_show')(context, {'id': id})
-        
+
         # avoid multiple notifications (eg. when someone calls review directly)
         if c.pkg_dict.get('dara_edawax_review', 'false') == 'true':
             h.flash_error("Package has already been sent to review")
             redirect(id)
-        
+
         user_name = tk.c.userobj.fullname or tk.c.userobj.email
         org_admins = get_group_or_org_admin_ids(c.pkg_dict['owner_org'])
         addresses = map(lambda admin_id: model.User.get(admin_id).email, org_admins)
         note = notification(addresses, user_name, id)
-        
+
         if note:
             c.pkg_dict['dara_edawax_review'] = True
             tk.get_action('package_update')(context, c.pkg_dict)
@@ -111,11 +111,11 @@ def notification(addresses, author, dataset):
     """
     notify admins on new or modified entities in their organization
     """
-    
+
     mail_from = config.get('smtp.mail_from')
-    
+
     def message(address):
-        
+
         body = """
 Dear Editor,
 
@@ -137,7 +137,7 @@ best regards from ZBW--Journal Data Archive
         msg['Date'] = Utils.formatdate(time())
         msg['X-Mailer'] = "CKAN {} [Plugin edawax]".format(ckan.__version__)
         return msg
-        
+
     def send(address, msg):
         try:
             smtp_server = config.get('smtp.test_server', config.get('smtp.server'))
@@ -152,12 +152,20 @@ best regards from ZBW--Journal Data Archive
             return False
 
     t = map(lambda a: send(a, message(a)), addresses)
-    
+
     # success if we have at least one successful send
     if True in t:
         return True
     return False
 
-    
 
+class InfoController(tk.BaseController):
 
+    TEMPLATE = "info_index.html"
+
+    def index(self):
+        return tk.render(self.TEMPLATE, extra_vars={'page': 'index'})
+
+    def md_page(self):
+        plist = tk.request.path.rsplit('/', 1)
+        return tk.render(self.TEMPLATE, extra_vars={'page': plist[-1]})

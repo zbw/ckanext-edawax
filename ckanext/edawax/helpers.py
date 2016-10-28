@@ -5,7 +5,8 @@ import ckanext.dara.helpers as dara_helpers
 from pylons import config
 from toolz.itertoolz import unique
 from collections import namedtuple
-
+import os
+from ckan.lib import helpers as h
 
 # decorator might useful for future
 # def type_check(t):
@@ -91,3 +92,11 @@ def journal_volume_sorting(packages):
         return map(t_construct, unique(vi_list))
 
     return False
+
+
+def render_infopage(page):
+    template_paths = config['pylons.app_globals'].template_paths
+    for path in template_paths:
+        if os.path.exists(os.path.join(path, page.encode('utf-8'))):
+            return h.render_markdown(tk.render(page), allow_html=True)
+    tk.abort(404, "Markdown file not found")

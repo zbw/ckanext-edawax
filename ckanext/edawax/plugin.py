@@ -107,6 +107,7 @@ class EdawaxPlugin(plugins.SingletonPlugin,):
     def update_config(self, config):
         tk.add_template_directory(config, 'templates')
         tk.add_public_directory(config, 'public')
+        tk.add_template_directory(config, 'jdainfo/md')
         tk.add_resource('theme', 'edawax')
         tk.add_resource('fanstatic', 'edawax_fs')
         h.get_facet_items_dict = get_facet_items_dict
@@ -125,6 +126,7 @@ class EdawaxPlugin(plugins.SingletonPlugin,):
                 'pkg_abs_url': helpers.pkg_abs_url,
                 'ckan_site_url': helpers.ckan_site_url,
                 'journal_volume_sorting': helpers.journal_volume_sorting,
+                'render_infopage': helpers.render_infopage,
                 }
 
     def before_map(self, map):
@@ -186,6 +188,15 @@ class EdawaxPlugin(plugins.SingletonPlugin,):
         map.connect('/dataset/{id}/retract',
                     controller="ckanext.edawax.controller:WorkflowController",
                     action="retract",)
+
+        # infopages
+        controller = 'ckanext.edawax.controller:InfoController'
+        map.connect('info', '/info',
+                action="index",
+                controller=controller,)
+        map.connect('/info/{id}',
+                action="md_page",
+                controller=controller,)
 
         return map
 

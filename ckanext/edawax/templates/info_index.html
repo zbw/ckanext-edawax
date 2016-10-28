@@ -1,0 +1,29 @@
+{% extends "page.html" %}
+
+{% block subtitle %}{{ _('Info Pages') }}{% endblock %}
+
+{% block breadcrumb_content %}
+{#
+ {% if page == 'index' %}
+    <li class="active">Info</li>
+ {% else %}
+    <li><a href="/info">Info</a></li>
+    <li class="active">{{ page.capitalize() }}</li>
+    </li>
+  {% endif %}
+  #}
+{% endblock %}
+
+{% block primary %}
+{% set markdown_file = page~'.md' %}
+  <article class="module">
+    <div class="module-content">
+         {{ h.render_infopage(markdown_file) }}
+    </div>
+  </article>
+{% endblock %}
+
+{% block secondary %}
+{# could be used for infopages navigation #}
+
+{% endblock %}
