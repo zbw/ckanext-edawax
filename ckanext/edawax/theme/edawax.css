@@ -181,5 +181,19 @@ label {
 }
 #zbwfooter {
   text-align: center;
-  margin: 25px 0 25px 0;
+  padding: 10px;
+  background-color: #008fc3;
+}
+#sitelinks {
+  margin-bottom: 2em;
+  color: #f4f4f4;
+}
+#sitelinks a {
+  color: #c8c8c8;
+}
+#sitelinks a:hover {
+  color: #f4f4f4;
+}
+#sitelinks li {
+  padding: 0 10px 0 10px;
 }

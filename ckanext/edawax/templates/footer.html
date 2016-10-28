@@ -1,14 +1,19 @@
 {#
 {% ckan_extends %}
 
-
 {% block footer_links %}
-
-<div id="zbwlogo"
-<a href="http://zbw.eu"><img src="{% url_for_static
-   '/base/images/zbw-logo-trans.png' %}"  />
+<div>
+    <a href="http://zbw.eu"><img src="{% url_for_static
+    '/base/images/zbw-logo-trans.png' %}"  />
+    </a>
 </div>
-
+<div id="footerlinks" style="float:right;">
+    <ul class="inline" id="sitelinks">
+        <li><a href="/info/imprint">Imprint</a></li>
+        <li><a href="/info/data">Data Protection</a></li>
+        <li><a href="/info/contact">Contact</a></li>
+    </ul>
+</div>
 
 
 {% endblock %}
@@ -29,9 +34,18 @@
 #}
 
 
+
 <div id='zbwfooter'>
+    <ul class="inline" id="sitelinks">
+        <li><a href="/about">About</a></li>
+        <li><a href="/info/imprint">Imprint</a></li>
+        <li><a href="/info/data">Data Protection</a></li>
+        <li><a href="/info/contact">Contact</a></li>
+    </ul>
+<div>
     <a href="http://zbw.eu"><img src="{% url_for_static
     '/base/images/zbw-logo-trans.png' %}"  />
     </a>
 </div>
 
+</div>
