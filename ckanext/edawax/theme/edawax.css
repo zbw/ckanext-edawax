@@ -47,7 +47,7 @@ h2 {
 }
 .account-masthead {
   min-height: 20px;
-  color: #ffffff;
+  color: white;
   background: #008fc3;
 }
 .account-masthead .account ul li {
@@ -58,7 +58,7 @@ h2 {
 .account-masthead .account ul li a {
   display: block;
   /* color: rgb(191, 215, 222); */
-  color: #ffffff;
+  color: white;
   font-size: 13px;
   font-weight: 400;
   padding: 5px 10px 5px 10px;
@@ -105,7 +105,7 @@ h2 {
 .nav-item.active > a,
 .nav-aside li.active a {
   position: relative;
-  color: #ffffff;
+  color: white;
   background-color: #2d2d2d;
 }
 .nav-item.active > a:before,
