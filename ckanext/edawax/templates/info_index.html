@@ -14,7 +14,7 @@
   #}
 {% endblock %}
 
-{% block primary %}
+{% block primary_content %}
 {% set markdown_file = page~'.md' %}
   <article class="module">
     <div class="module-content">
@@ -23,7 +23,26 @@
   </article>
 {% endblock %}
 
-{% block secondary %}
+{% block secondary_content %}
 {# could be used for infopages navigation #}
+<div class="module module-narrow module-shallow">
+    <h2 class="module-heading">
+      <i class="icon-info-sign"></i>
+      Info
+    </h2>
+    <div class="module-content">
+        <ul class="nav nav-tabs nav-stacked">
+            <li class="active"><a href="about">About</a></li>
+            <li><a href="contact">Contact</a></li>
+            <li class="nav-header">Legal</li>
+            <li><a href="#">Impress</a></li>
+            <li><a href="a">Data Protection</a></li>
+            <li class="nav-header">Help</li>
+            <li><a href="#">Manual (PDF)</a></li>
+            <li><a href="#">Manual (german, PDF)</a></li>
+        </ul>
+    </div>
+ </div>
+
 
 {% endblock %}
