@@ -15,3 +15,7 @@ $('#review_button' ).click(function () {
 });
 
 
+$('.infonav li a').filter(function() {
+    var url = window.location.href;
+    return this.href == url;
+}).parent().addClass('active');
