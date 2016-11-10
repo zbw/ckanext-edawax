@@ -107,6 +107,7 @@ class EdawaxPlugin(plugins.SingletonPlugin,):
     def update_config(self, config):
         tk.add_template_directory(config, 'templates')
         tk.add_public_directory(config, 'public')
+        tk.add_public_directory(config, 'jdainfo/static')
         tk.add_template_directory(config, 'jdainfo/md')
         tk.add_resource('theme', 'edawax')
         tk.add_resource('fanstatic', 'edawax_fs')
@@ -192,11 +193,11 @@ class EdawaxPlugin(plugins.SingletonPlugin,):
         # infopages
         controller = 'ckanext.edawax.controller:InfoController'
         map.connect('info', '/info',
-                action="index",
-                controller=controller,)
+                    action="index",
+                    controller=controller,)
         map.connect('/info/{id}',
-                action="md_page",
-                controller=controller,)
+                    action="md_page",
+                    controller=controller,)
 
         return map
 
