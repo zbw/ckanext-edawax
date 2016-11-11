@@ -1,6 +1,6 @@
 # Imprint
 
-###Name and address
+### Name and address
 ZBW – German National Library of Economics | Leibniz Information Centre for Economics  
 Düsternbrooker Weg 120  
 24105 Kiel
