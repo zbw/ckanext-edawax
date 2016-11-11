@@ -9,7 +9,7 @@ Neuer Jungfernstieg 21
 [t] +49(0).40. 42 834-415  
 
 
-**Technical Lead**  
+**Technical Management**  
 Dr. Hendrik Bunke  
 ZBW | German National Library of Economics | Leibniz Information Center for Economics  
 Neuer Jungfernstieg 21  
