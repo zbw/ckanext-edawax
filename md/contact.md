@@ -1,6 +1,10 @@
 # Contact
 
-**Project Management**  
+**ZBW Journal Data Archive**
+[@] journaldata[at]zbw[dot]eu   
+
+
+**Product Management**  
 Sven Vlaeminck  
 ZBW | German National Library of Economics | Leibniz Information Center for Economics  
 Neuer Jungfernstieg 21  
