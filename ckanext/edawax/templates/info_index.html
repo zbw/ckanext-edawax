@@ -1,18 +1,9 @@
 {% extends "page.html" %}
 
 
-{% block subtitle %}{{ _('Info Pages') }}{% endblock %}
+{% block subtitle %}{{ 'Info Pages' }}{% endblock %}
 
 {% block breadcrumb_content %}
-{#
- {% if page == 'index' %}
-    <li class="active">Info</li>
- {% else %}
-    <li><a href="/info">Info</a></li>
-    <li class="active">{{ page.capitalize() }}</li>
-    </li>
-  {% endif %}
-  #}
 {% endblock %}
 
 {% block primary_content %}
@@ -41,7 +32,7 @@
             <li><a href="/info/data">Data Protection</a></li>
             <li><a href="/Deposit-License_ZBW_JDA_EN-2016-07-21-final-1.pdf">
                 Deposit License (PDF)</a></li>
-            <li class="nav-header">Help</li>
+            <li class="nav-header">Support</li>
             <li><a href="/User-Manual-EN-2016-07-25.pdf">User Manual (PDF, en)</a>
             </li>
             <li><a href="/User-Manual-DE-25-07-2016.pdf">User Manual
