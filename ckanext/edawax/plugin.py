@@ -81,12 +81,15 @@ def str_to_int(string):
 def journal_package_update(context, data_dict):
     """override ckan package_update"""
     user = context.get('auth_user_obj')
-    package = get_package_object(context, data_dict)
+    pkg_obj = get_package_object(context, data_dict)
+    pkg_dict = tk.get_action('package_show')(None, {'id': pkg_obj.id})
 
-    # always allow creator to update package, even if she is not allowed by
-    # default org member permissions. 'create_dataset' permission must be set
-    if package.creator_user_id and user.id == package.creator_user_id:
-        return {'success': True}
+    # allow creator to update package if package is private and not in review.
+    # 'create_dataset' permission must be set
+    if pkg_obj.creator_user_id and user.id == pkg_obj.creator_user_id:
+        ir = {'true': False, 'false': True}.get(helpers.in_review(pkg_dict))
+        private = helpers.is_private(pkg_dict)
+        return {'success': all((ir, private))}
     return ckan_pkgupdate(context, data_dict)
 
 
