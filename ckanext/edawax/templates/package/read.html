@@ -1,9 +1,11 @@
 {% ckan_extends %}
 {% set pkg = h.dara_pkg() %}
 {% set pid = pkg['dara_Publication_PID'] %}
+{% set submission_id = pkg['dara_jda_submission_id'] %}
 {% set pid_type = pkg['dara_Publication_PIDType'] %}
 {% set DOI = pkg['dara_DOI'] %}
 {% set dara_authors = h.dara_authors('dataset', data) %}
+{% set is_admin = h.check_journal_role(pkg, 'admin') or h.check_access('sysadmin') %}
 {% resource 'dara/dara.css' %}
 {% resource 'edawax/edawax.js' %}
 {% resource 'dara/dara.js' %}
@@ -45,6 +47,10 @@
 
  {% if DOI %}
     {% snippet 'package/snippets/doi.html', DOI=DOI %}
+ {% endif %}
+
+ {% if submission_id and is_admin %}
+   <p style="color:grey; text-decoration: underline">Article Submission ID: {{ submission_id }} </p>
  {% endif %}
 
  {% snippet 'package/snippets/authors.html', dara_authors=dara_authors %}
@@ -100,6 +106,9 @@
 {% block package_tags %}
     {{ super() }}
   {% endblock %}
+
+
+
 
   {% block package_additional_info %}
 
