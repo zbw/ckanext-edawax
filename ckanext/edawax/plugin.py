@@ -175,6 +175,9 @@ class EdawaxPlugin(plugins.SingletonPlugin,):
         map.redirect('/organization/{url:.*}', '/journals/{url}')
         map.redirect('/dashboard/organizations', '/dashboard/journals')
 
+        map.redirect('/manual_en', '/User-Manual-EN-2016-07-25.pdf')
+        map.redirect('/manual_de', '/User-Manual-DE-25-07-2016.pdf')
+
         # review mail to editor
         map.connect('/dataset/{id}/review',
                     controller="ckanext.edawax.controller:WorkflowController",
