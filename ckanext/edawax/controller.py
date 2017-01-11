@@ -114,12 +114,20 @@ def notification(addresses, author, dataset):
 
     mail_from = config.get('smtp.mail_from')
 
+    def subid():
+        pkg = tk.get_action('package_show')(None, {'id': dataset})
+        submission_id = pkg.get('dara_jda_submission_id', None)
+        if submission_id:
+            return u"Article Submission ID: {}\n".format(submission_id)
+        return u""
+
     def message(address):
 
         body = """
 Dear Editor,
 
 the author {user} has uploaded a dataset to your journal's data archive.\n
+{submission_id}
 You can review it here:\n\n\t {url}
 
 best regards from ZBW--Journal Data Archive
@@ -128,7 +136,7 @@ best regards from ZBW--Journal Data Archive
         url = u"{}{}".format(config.get('ckan.site_url'),
                             tk.url_for(controller='package', action='read',
                             id=dataset))
-        d = {'user': author, 'url': url}
+        d = {'user': author, 'url': url, 'submission_id': subid()}
         body = body.format(**d)
         msg = MIMEText(body.encode('utf-8'), 'plain', 'utf-8')
         msg['Subject'] = Header(u"ZBW Journal Data Archive: Review Notification")
