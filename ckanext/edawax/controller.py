@@ -85,7 +85,7 @@ class WorkflowController(PackageController):
         """
         context = self._context()
         c.pkg_dict = tk.get_action('package_show')(context, {'id': id})
-        c.pkg_dict.update({'private': False, 'dara_edawax_review': 'reviewed'})
+        c.pkg_dict.update({'private': False, 'dara_edawax_review': 'false'})
         tk.get_action('package_update')(context, c.pkg_dict)
         h.flash_success('Dataset published')
         redirect(id)
@@ -93,13 +93,25 @@ class WorkflowController(PackageController):
     @admin_req
     def retract(self, id):
         """
-        set dataset private
+        set dataset private and back to review state
         """
         context = self._context()
         c.pkg_dict = tk.get_action('package_show')(context, {'id': id})
-        c.pkg_dict.update({'private': True})
+        c.pkg_dict.update({'private': True, 'dara_edawax_review': 'true'})
         tk.get_action('package_update')(context, c.pkg_dict)
         h.flash_success('Dataset set private')
+        redirect(id)
+
+    @admin_req
+    def reauthor(self, id):
+        """reset dataset to private and leave review state.
+        Should also send email to author
+        """
+        context = self._context()
+        c.pkg_dict = tk.get_action('package_show')(context, {'id': id})
+        c.pkg_dict.update({'private': True, 'dara_edawax_review': 'false'})
+        tk.get_action('package_update')(context, c.pkg_dict)
+        h.flash_success('Dataset can now be re-edited by author')
         redirect(id)
 
 

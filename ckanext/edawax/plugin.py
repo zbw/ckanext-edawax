@@ -89,6 +89,8 @@ def journal_package_update(context, data_dict):
         if pkg_obj.state == 'draft':
             return False
         pkg_dict = tk.get_action('package_show')(None, {'id': pkg_obj.id})
+
+        # 'reviewed' is for backward compatibility only!
         return {'true': True, 'false': False, 'reviewed': False
                 }.get(helpers.in_review(pkg_dict))
 
@@ -132,6 +134,7 @@ class EdawaxPlugin(plugins.SingletonPlugin,):
                 'is_private': helpers.is_private,
                 'show_publish_button': helpers.show_publish_button,
                 'show_retract_button': helpers.show_retract_button,
+                'show_reauthor_button': helpers.show_reauthor_button,
                 'res_abs_url': helpers.res_abs_url,
                 'pkg_abs_url': helpers.pkg_abs_url,
                 'ckan_site_url': helpers.ckan_site_url,
@@ -201,6 +204,11 @@ class EdawaxPlugin(plugins.SingletonPlugin,):
         map.connect('/dataset/{id}/retract',
                     controller="ckanext.edawax.controller:WorkflowController",
                     action="retract",)
+
+        # reauthor dataset
+        map.connect('/dataset/{id}/reauthor',
+                    controller="ckanext.edawax.controller:WorkflowController",
+                    action="reauthor",)
 
         # infopages
         controller = 'ckanext.edawax.controller:InfoController'

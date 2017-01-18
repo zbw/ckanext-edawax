@@ -10,7 +10,7 @@
     <p>This stores your dataset and
     sends an email to the journal editors,
     notifying them that your dataset is ready to be reviewed.
-    You will not be able to edit the dataset afterwards. 
+    You will not be able to edit the dataset afterwards.
     </p>
     <p><strong>By clicking \'OK\' you also confirm that you have read and
         accept the <br />
@@ -33,17 +33,24 @@
     {% endif %}
 
 
-
+    {% if h.show_reauthor_button(pkg) %}
+    <a class="btn btn-warning" title="send dataset back to author" href="/dataset/{{ pkg.id }}/reauthor">
+        <i class="icon-reply"></i>Back to author</a>
+    {% endif %}
 
     {% if h.show_publish_button(pkg) %}
     <a class="btn btn-success" title="sets dataset public" href="/dataset/{{ pkg.id }}/publish">
         <i class="icon-ok"></i>Publish</a>
     {% endif %}
 
+
     {% if h.show_retract_button(pkg) %}
     <a class="btn btn-primary" title="sets dataset private" href="/dataset/{{ pkg.id }}/retract">
         <i class="icon-remove"></i>Retract</a>
     {% endif %}
+
+
+
 
 {{ super() }}
 {% endblock %}

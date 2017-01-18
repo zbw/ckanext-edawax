@@ -7,16 +7,18 @@ from toolz.itertoolz import unique
 from collections import namedtuple
 import os
 from ckan.lib import helpers as h
+# from functools import wraps
 
-# decorator might useful for future
-# def type_check(t):
-#   def decorator(func):
-#       def wrapper(*args):
-#           if isinstance(args[0], t):
-#               return func(*args)
-#           return False
-#       return wrapper
-#   return decorator
+
+def type_check(t):
+    def decorator(func):
+        def wrapper(*args):
+            if isinstance(args[0], t):
+                return func(*args)
+            return False
+        return wrapper
+    return decorator
+
 
 
 def get_user_id():
@@ -41,22 +43,24 @@ def in_review(pkg):
     return pkg.get('dara_edawax_review', 'false')
 
 
+@type_check(dict)
 def is_private(pkg):
-    if not isinstance(pkg, dict):
-        return True
     return pkg.get('private', True)
 
 
+@type_check(dict)
 def show_publish_button(pkg):
-    if not isinstance(pkg, dict):
-        return False
     return dara_helpers.check_journal_role(pkg, 'admin') and pkg.get('private', True)
 
 
+@type_check(dict)
 def show_retract_button(pkg):
-    if not isinstance(pkg, dict):
-        return False
     return dara_helpers.check_journal_role(pkg, 'admin') and not pkg.get('private', True)
+
+
+@type_check(dict)
+def show_reauthor_button(pkg):
+    return dara_helpers.check_journal_role(pkg, 'admin') and in_review(pkg) == 'true'
 
 
 def res_abs_url(res):
