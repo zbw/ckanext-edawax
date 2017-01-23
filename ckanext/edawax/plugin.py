@@ -85,14 +85,18 @@ def journal_package_update(context, data_dict):
     user = context.get('auth_user_obj')
     pkg_obj = get_package_object(context, data_dict)
 
+    review_state_map = {
+        'true': True,
+        'false': False,
+        'reauthor': False,
+        'reviewed': False
+    }
+
     def inreview():
         if pkg_obj.state == 'draft':
             return False
         pkg_dict = tk.get_action('package_show')(None, {'id': pkg_obj.id})
-
-        # 'reviewed' is for backward compatibility only!
-        return {'true': True, 'false': False, 'reviewed': False
-                }.get(helpers.in_review(pkg_dict))
+        return review_state_map.get(helpers.in_review(pkg_dict))
 
     if user.id == getattr(pkg_obj, 'creator_user_id', False):
         private = getattr(pkg_obj, 'private', False)
@@ -193,7 +197,7 @@ class EdawaxPlugin(plugins.SingletonPlugin,):
         # review mail to editor
         map.connect('/dataset/{id}/review',
                     controller="ckanext.edawax.controller:WorkflowController",
-                    action="review_mail",)
+                    action="review",)
 
         # publish dataset
         map.connect('/dataset/{id}/publish',

@@ -3,57 +3,53 @@
 
 {% block content_action %}
     {% resource 'edawax_fs/edawax-confirm.js' %}
-
     {% if h.show_review_button(pkg) %}
+        {% set confirm = h.dump_json({'content': '
+        <p>This stores your dataset and
+        sends an email to the journal editors,
+        notifying them that your dataset is ready to be reviewed.
+        You will not be able to edit the dataset afterwards.
+        </p>
+        <p><strong>By clicking \'OK\' you also confirm that you have read and
+            accept the <br />
+            <a href="/Deposit-License_ZBW_JDA_EN-2016-07-21-final-1.pdf"
+                target="_blank">deposit
+                licensing conditions</a>.</strong></p>',
+        'confirm': 'OK',
+        'heading': 'Please Confirm Submission',
+        }) %}
 
-    {% set confirm = h.dump_json({'content': '
-    <p>This stores your dataset and
-    sends an email to the journal editors,
-    notifying them that your dataset is ready to be reviewed.
-    You will not be able to edit the dataset afterwards.
-    </p>
-    <p><strong>By clicking \'OK\' you also confirm that you have read and
-        accept the <br />
-        <a href="/Deposit-License_ZBW_JDA_EN-2016-07-21-final-1.pdf"
-            target="_blank">deposit
-            licensing conditions</a>.</strong></p>',
-    'confirm': 'OK',
-    'heading': 'Please Confirm Submission',
-    }) %}
-
-       <a title="Sends notification to journal editors. You will be asked for confirmation and license acceptance."
-          class="btn" href="/dataset/{{pkg.id}}/review"
-                      data-module="edawax-confirm"
-                      data-module-i18n="{{ confirm }}">
-
-       <i class="icon-envelope"></i>Send to Review
-       </a>
-
-
+         <a title="Sends notification to journal editors. You will be asked for confirmation and license acceptance."
+              class="btn btn-warning" href="/dataset/{{pkg.id}}/review"
+                          data-module="edawax-confirm"
+                          data-module-i18n="{{ confirm }}">
+           <i class="icon-envelope"></i>Send to Review
+         </a>
     {% endif %}
 
 
     {% if h.show_reauthor_button(pkg) %}
-    <a class="btn btn-warning" title="send dataset back to author" href="/dataset/{{ pkg.id }}/reauthor">
-        <i class="icon-reply"></i>Back to author</a>
+        <a class="btn btn-warning" title="Send dataset back to author"  data-toggle="modal" data-target="#reauthor_confirm">
+            <i class="icon-reply"></i>Back to Author</a>
+        {% snippet 'package/snippets/reauthor_confirmation.html', pkg=pkg %}
     {% endif %}
 
+
     {% if h.show_publish_button(pkg) %}
-    <a class="btn btn-success" title="sets dataset public" href="/dataset/{{ pkg.id }}/publish">
+    <a class="btn btn-success" title="Make dataset public" href="/dataset/{{ pkg.id }}/publish">
         <i class="icon-ok"></i>Publish</a>
     {% endif %}
 
 
     {% if h.show_retract_button(pkg) %}
-    <a class="btn btn-primary" title="sets dataset private" href="/dataset/{{ pkg.id }}/retract">
-        <i class="icon-remove"></i>Retract</a>
+    <a class="btn btn-danger" title="make dataset private" href="/dataset/{{ pkg.id }}/retract">
+        <i class="icon-undo"></i>Retract</a>
     {% endif %}
-
-
 
 
 {{ super() }}
 {% endblock %}
+
 
 {% block content_primary_nav %}
   {{ h.build_nav_icon('dataset_read', _('Dataset'), id=pkg.name) }}

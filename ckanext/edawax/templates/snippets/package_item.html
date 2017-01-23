@@ -1,18 +1,18 @@
 {% ckan_extends %}
 
-{# displaying creator names in package list 
-    
+{# displaying creator names in package list
+
 
 #}
 {% block notes %}
-  {% if h.check_journal_role(package, 'admin') 
+  {% if h.check_journal_role(package, 'admin')
     or h.get_user_id() == package.creator_user_id
   %}
-  <p> 
+  <p>
         {{ h.linked_user(package.creator_user_id, maxlength=20) }}
     </p>
   {% endif %}
-  
+
   {% if notes %}
     <div>{{ notes|urlize }}</div>
   {% else %}
@@ -27,12 +27,18 @@
       {{ 'Review' }}
     </span>
 
+{% elif h.in_review(package) == 'reauthor' %}
+    <span class="dataset-private label label-reautho">
+      <i class="icon-lock"></i>
+      {{ 'Re-Author' }}
+    </span>
+
+
 {% elif package.private %}
       <span class="dataset-private label label-inverse">
       <i class="icon-lock"></i>
       {{ _('Private') }}
       </span>
 {% endif %}
-   
- {% endblock %}
 
+ {% endblock %}

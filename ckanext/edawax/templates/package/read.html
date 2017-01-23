@@ -45,6 +45,16 @@
       <br />
  {% endif %}
 
+{% if h.in_review(pkg) == 'reauthor' %}
+    <span class="dataset-private label pull-right label-reauthor"
+        title="Dataset has been resend to author"
+        >
+      <i class="icon-lock"></i>
+      {{ 'Re-Author' }}
+    </span>
+    <br />
+    {% endif %}
+
  {% if DOI %}
     {% snippet 'package/snippets/doi.html', DOI=DOI %}
  {% endif %}
