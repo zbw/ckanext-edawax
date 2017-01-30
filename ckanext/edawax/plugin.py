@@ -77,37 +77,31 @@ def str_to_int(string):
         i = string
     return isinstance(i, int)
 
-# XXX  new design, activated later
-# def journal_package_update(context, data_dict):
-#     """override ckan package_update. allow creator to update package if
-#     package is private and not in review. 'create_dataset' permission must be
-#     set in  CKAN """
-#     user = context.get('auth_user_obj')
-#     pkg_obj = get_package_object(context, data_dict)
-#
-#     def inreview():
-#         if pkg_obj.state == 'draft':
-#             return False
-#         pkg_dict = tk.get_action('package_show')(None, {'id': pkg_obj.id})
-#         return {'true': True, 'false': False, 'reviewed': False
-#                 }.get(helpers.in_review(pkg_dict))
-#
-#     if user.id == getattr(pkg_obj, 'creator_user_id', False):
-#         private = getattr(pkg_obj, 'private', False)
-#         return {'success': private and not inreview()}
-#
-#     return ckan_pkgupdate(context, data_dict)
 
-# XXX old design
 def journal_package_update(context, data_dict):
-    """override ckan package_update"""
+    """override ckan package_update. allow creator to update package if
+    package is private and not in review. 'create_dataset' permission must be
+    set in  CKAN """
     user = context.get('auth_user_obj')
-    package = get_package_object(context, data_dict)
+    pkg_obj = get_package_object(context, data_dict)
 
-    # always allow creator to update package, even if she is not allowed by
-    # default org member permissions. 'create_dataset' permission must be set
-    if package.creator_user_id and user.id == package.creator_user_id:
-        return {'success': True}
+    review_state_map = {
+        'true': True,
+        'false': False,
+        'reauthor': False,
+        'reviewed': False
+    }
+
+    def inreview():
+        if pkg_obj.state == 'draft':
+            return False
+        pkg_dict = tk.get_action('package_show')(None, {'id': pkg_obj.id})
+        return review_state_map.get(helpers.in_review(pkg_dict))
+
+    if user.id == getattr(pkg_obj, 'creator_user_id', False):
+        private = getattr(pkg_obj, 'private', False)
+        return {'success': private and not inreview()}
+
     return ckan_pkgupdate(context, data_dict)
 
 
@@ -144,6 +138,7 @@ class EdawaxPlugin(plugins.SingletonPlugin,):
                 'is_private': helpers.is_private,
                 'show_publish_button': helpers.show_publish_button,
                 'show_retract_button': helpers.show_retract_button,
+                'show_reauthor_button': helpers.show_reauthor_button,
                 'res_abs_url': helpers.res_abs_url,
                 'pkg_abs_url': helpers.pkg_abs_url,
                 'ckan_site_url': helpers.ckan_site_url,
@@ -202,7 +197,7 @@ class EdawaxPlugin(plugins.SingletonPlugin,):
         # review mail to editor
         map.connect('/dataset/{id}/review',
                     controller="ckanext.edawax.controller:WorkflowController",
-                    action="review_mail",)
+                    action="review",)
 
         # publish dataset
         map.connect('/dataset/{id}/publish',
@@ -213,6 +208,11 @@ class EdawaxPlugin(plugins.SingletonPlugin,):
         map.connect('/dataset/{id}/retract',
                     controller="ckanext.edawax.controller:WorkflowController",
                     action="retract",)
+
+        # reauthor dataset
+        map.connect('/dataset/{id}/reauthor',
+                    controller="ckanext.edawax.controller:WorkflowController",
+                    action="reauthor",)
 
         # infopages
         controller = 'ckanext.edawax.controller:InfoController'

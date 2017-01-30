@@ -176,6 +176,9 @@ label {
 .label-review {
   background-color: darkorange;
 }
+.label-reauthor {
+  background-color: #808096;
+}
 .span6 {
   margin-top: 50px !important;
 }

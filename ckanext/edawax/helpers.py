@@ -1,22 +1,13 @@
 import ckan.plugins.toolkit as tk
 import ckan.model as model
 from ckan.common import c
-import ckanext.dara.helpers as dara_helpers
+from ckanext.dara.helpers import check_journal_role
 from pylons import config
 from toolz.itertoolz import unique
 from collections import namedtuple
 import os
 from ckan.lib import helpers as h
-
-# decorator might useful for future
-# def type_check(t):
-#   def decorator(func):
-#       def wrapper(*args):
-#           if isinstance(args[0], t):
-#               return func(*args)
-#           return False
-#       return wrapper
-#   return decorator
+# from functools import wraps
 
 
 def get_user_id():
@@ -31,10 +22,6 @@ def get_user_id():
     return converter(tk.c.user, context())
 
 
-def show_review_button(pkg):
-    return get_user_id() == pkg['creator_user_id'] and in_review(pkg) == 'false'
-
-
 def in_review(pkg):
     if not isinstance(pkg, dict):
         return 'false'
@@ -47,16 +34,26 @@ def is_private(pkg):
     return pkg.get('private', True)
 
 
+def show_review_button(pkg):
+    return get_user_id() == pkg['creator_user_id'] and in_review(pkg) in ('false', 'reauthor')
+
+
 def show_publish_button(pkg):
     if not isinstance(pkg, dict):
         return False
-    return dara_helpers.check_journal_role(pkg, 'admin') and pkg.get('private', True)
+    return check_journal_role(pkg, 'admin') and in_review(pkg) == 'true'
 
 
 def show_retract_button(pkg):
     if not isinstance(pkg, dict):
         return False
-    return dara_helpers.check_journal_role(pkg, 'admin') and not pkg.get('private', True)
+    return check_journal_role(pkg, 'admin') and not pkg.get('private', True)
+
+
+def show_reauthor_button(pkg):
+    if not isinstance(pkg, dict):
+        return False
+    return check_journal_role(pkg, 'admin') and in_review(pkg) == 'true'
 
 
 def res_abs_url(res):
