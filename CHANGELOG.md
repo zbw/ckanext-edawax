@@ -4,6 +4,13 @@ Changelog
 started with version 1.1.1
 
 
+v1.2.1
+------
+**2017-02-02**
+
+-   Update user manuals
+
+
 v1.2.0
 ------
 **2017-02-02**
