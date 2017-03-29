@@ -1,4 +1,4 @@
-# Hendrik Bunke
+# Hendrik Bunke <h.bunke@zbw.eu>
 # ZBW - Leibniz Information Centre for Economics
 
 import ckan.plugins as plugins
@@ -6,14 +6,17 @@ import ckan.plugins.toolkit as tk
 from ckanext.edawax import helpers
 from ckan.logic.auth import get_package_object
 from ckan.logic.auth.update import package_update as ckan_pkgupdate
+from ckan.logic.auth.delete import package_delete as ckan_pkgdelete
+from ckan.logic.auth.delete import resource_delete as ckan_resourcedelete
 # from collections import OrderedDict
 import ckan.lib.helpers as h
 from ckan.common import c
 from toolz.functoolz import compose
 from functools import partial
+from pylons import config
+
 
 # XXX implement IAuthFunctions for controller actions
-
 
 def edawax_facets(facets_dict):
     """
@@ -30,10 +33,12 @@ def edawax_facets(facets_dict):
     return facets_dict
 
 
-def get_facet_items_dict(facet, limit=None, exclude_active=False, sort_key='count'):
+def get_facet_items_dict(facet, limit=None, exclude_active=False,
+                         sort_key='count'):
     '''
     Monkey-Patch of ckan/lib/helpers/get_facet_items_dict()
-    CKANs sorting of facet items is hardcoded (https://github.com/ckan/ckan/issues/3271)
+    CKANs sorting of facet items is hardcoded
+    (https://github.com/ckan/ckan/issues/3271)
     Also: refactored to be a bit more functional (SCNR)
     '''
 
@@ -105,6 +110,42 @@ def journal_package_update(context, data_dict):
     return ckan_pkgupdate(context, data_dict)
 
 
+def _ctest(item):
+    """
+    check for test DOI and testserver
+    """
+    testserver = tk.asbool(config.get('ckanext.dara.use_testserver', False))
+    doi = item.get('dara_DOI_Test', False)
+    if testserver and doi:
+        return True
+    return False
+
+
+def journal_package_delete(context, data_dict):
+    """
+    don't allow package delete if it has a DOI
+    """
+    pkg_dict = tk.get_action('package_show')(context, data_dict)
+    if pkg_dict.get('dara_DOI', False) or _ctest(pkg_dict):
+        return {'success': False, 'msg': "Package can not be deleted because\
+                it has a DOI assigned"}
+
+    return ckan_pkgdelete(context, data_dict)
+
+
+def journal_resource_delete(context, data_dict):
+    """
+    don't allow resource delete if it has a DOI
+    """
+    # resource = c.resource  # would this be reliable?
+    resource = tk.get_action('resource_show')(context, data_dict)
+
+    if resource.get('dara_DOI', False) or _ctest(resource):
+        return {'success': False, 'msg': "Resource can not be deleted because\
+                it has a DOI assigned"}
+    return ckan_resourcedelete(context, data_dict)
+
+
 class EdawaxPlugin(plugins.SingletonPlugin,):
     '''
     edawax specific layout and workflow
@@ -129,7 +170,10 @@ class EdawaxPlugin(plugins.SingletonPlugin,):
         h.get_facet_items_dict = get_facet_items_dict
 
     def get_auth_functions(self):
-        return {'package_update': journal_package_update}
+        return {'package_update': journal_package_update,
+                'package_delete': journal_package_delete,
+                'resource_delete': journal_resource_delete,
+                }
 
     def get_helpers(self):
         return {'get_user_id': helpers.get_user_id,
@@ -175,7 +219,8 @@ class EdawaxPlugin(plugins.SingletonPlugin,):
                     controller="organization")
 
         map.connect('organization_about', '/journals/about/{id}',
-                    action='about', ckan_icon='info-sign', controller="organization")
+                    action='about', ckan_icon='info-sign',
+                    controller="organization")
 
         map.connect('organization_read', '/journals/{id}', action='read',
                     ckan_icon='sitemap', controller="organization")
@@ -226,8 +271,9 @@ class EdawaxPlugin(plugins.SingletonPlugin,):
         return map
 
     def organization_facets(self, facets_dict, organization_type, package_type):
-        # for some reason CKAN does not accept a new OrderedDict here (does not happen
-        # with datasets facets!). So we have to modify the original facets_dict
+        # for some reason CKAN does not accept a new OrderedDict here (does
+        # not happen with datasets facets!). So we have to modify the original
+        # facets_dict
 
         KEY_VOLUME = 'dara_Publication_Volume'
         KEY_ISSUES = 'dara_Publication_Issue'

@@ -3,6 +3,11 @@ Changelog
 
 started with version 1.1.1
 
+v1.3.0
+------
+[not yet released]
+
+-   Packages and Resources cannot be deleted if they have a DOI assigned
 
 v1.2.1
 ------
