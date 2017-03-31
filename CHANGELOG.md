@@ -8,6 +8,7 @@ v1.3.0
 [not yet released]
 
 -   Packages and Resources cannot be deleted if they have a DOI assigned
+-   Favicon
 
 v1.2.1
 ------
