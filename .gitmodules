@@ -1,0 +1,3 @@
+[submodule "ckanext/edawax/jdainfo"]
+	path = ckanext/edawax/jdainfo
+	url = https://github.com/zbw/jdainfo.git
