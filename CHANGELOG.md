@@ -9,6 +9,7 @@ v1.3.0
 
 -   Packages and Resources cannot be deleted if they have a DOI assigned
 -   Favicon
+-   implement /jdainfo as git-submodule (and remove old git-subtree)
 
 v1.2.1
 ------
