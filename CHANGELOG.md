@@ -7,9 +7,15 @@ v1.3.0
 ------
 [not yet released]
 
--   Packages and Resources cannot be deleted if they have a DOI assigned
--   Favicon
+-   Packages and resources cannot be deleted if they have a DOI assigned
+-   Package cannot be retracted if DOI assigned
+-   All above features also go for DOI_Test. In that case only sysadmins still can
+    delete or retract.
+-   add favicon
 -   implement /jdainfo as git-submodule (and remove old git-subtree)
+-   also display DOI in package view if it is just a DOI_Test
+
+
 
 v1.2.1
 ------

@@ -89,9 +89,15 @@ class WorkflowController(PackageController):
         """
         context = self._context()
         c.pkg_dict = tk.get_action('package_show')(context, {'id': id})
+        
+        if c.pkg_dict.get('dara_DOI_Test', False) and not h.check_access('sysadmin'):
+            h.flash_error("ERROR: DOI (Test) already assigned, dataset can't be retracted")
+            redirect(id)
+    
         if c.pkg_dict.get('dara_DOI', False):
             h.flash_error("ERROR: DOI already assigned, dataset can't be retracted")
             redirect(id)
+        
         c.pkg_dict.update({'private': True, 'dara_edawax_review': 'true'})
         tk.get_action('package_update')(context, c.pkg_dict)
         h.flash_success('Dataset retracted')
