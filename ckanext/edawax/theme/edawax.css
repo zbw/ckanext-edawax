@@ -185,17 +185,14 @@ label {
 #zbwfooter {
   text-align: center;
   padding: 10px;
-  background-color: #008fc3;
+  margin-top: 100px;
 }
 #sitelinks {
   margin-bottom: 2em;
   color: #f4f4f4;
 }
 #sitelinks a {
-  color: #c8c8c8;
-}
-#sitelinks a:hover {
-  color: #f4f4f4;
+  font-size: 0.9em;
 }
 #sitelinks li {
   padding: 0 10px 0 10px;

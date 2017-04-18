@@ -13,7 +13,9 @@ v1.3.0
     delete or retract.
 -   add favicon
 -   implement /jdainfo as git-submodule (and remove old git-subtree)
--   also display DOI in package view if it is just a DOI_Test
+-   Display DOI in package view even if it is just a DOI_Test
+-   Implement DIW/SOEP logo in footer
+-   change background of footer, and color of footer sitelinks
 
 
 

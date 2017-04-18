@@ -34,7 +34,6 @@
 #}
 
 
-
 <div id='zbwfooter'>
     <ul class="inline" id="sitelinks">
         <li><a href="/info">About</a></li>
@@ -42,16 +41,17 @@
         <li><a href="/info/data">Data Protection</a></li>
         <li><a href="/info/contact">Contact</a></li>
     </ul>
-<div>
-    <a href="http://zbw.eu"><img src="{% url_for_static
-    '/base/images/zbw-logo-trans.png' %}"  />
-    </a>
+
+    <ul class="inline">
+        <li><a href="http://zbw.eu"><img src="{% url_for_static
+        '/base/images/zbw-logo-trans.png' %}"  />
+            </a></li>
+               
+            <li style="font-size: 0.8em; padding-left:33px;">in cooperation with <br />
+            <a href="https://www.diw.de/soep"><img src="{% url_for_static
+            '/diw_soep_logo_sw.jpg' %}" /></a></li>
+    </ul>
 </div>
 
-<div style="margin-top: 25px; font-size:0.8em; margin-bottom:-7px">
-    in cooperation with <br />
-    <a href="https://www.diw.de/soep"><img src="{% url_for_static
-    '/diw_soep_logo.jpg' %}" /></a>
-</div>
 
-</div>
+
