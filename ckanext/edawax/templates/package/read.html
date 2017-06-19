@@ -7,6 +7,7 @@
 {% set DOI_Test = pkg['dara_DOI_Test'] %}
 {% set dara_authors = h.dara_authors('dataset', data) %}
 {% set is_admin = h.check_journal_role(pkg, 'admin') or h.check_access('sysadmin') %}
+{% set use_testserver = h.dara_use_testserver() %}
 {% resource 'dara/dara.css' %}
 {% resource 'edawax/edawax.js' %}
 {% resource 'dara/dara.js' %}
@@ -61,7 +62,7 @@
     {% snippet 'package/snippets/doi.html', DOI=DOI, test='false' %}
 {% endif %}
 
-{% if DOI_Test and not DOI %}
+{% if DOI_Test and not DOI and use_testserver %}
     {% snippet 'package/snippets/doi.html', DOI=DOI_Test, test='true' %}
 {% endif %}
 
