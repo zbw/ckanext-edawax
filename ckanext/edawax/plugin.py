@@ -14,6 +14,7 @@ from ckan.common import c
 from toolz.functoolz import compose
 from functools import partial
 from pylons import config
+from ckanext.dara.helpers import check_journal_role
 
 
 # XXX implement IAuthFunctions for controller actions
@@ -87,27 +88,20 @@ def journal_package_update(context, data_dict):
     """override ckan package_update. allow creator to update package if
     package is private and not in review. 'create_dataset' permission must be
     set in  CKAN """
-    user = context.get('auth_user_obj')
-    pkg_obj = get_package_object(context, data_dict)
-
-    review_state_map = {
-        'true': True,
-        'false': False,
-        'reauthor': False,
-        'reviewed': False
-    }
-
-    def inreview():
+    
+    def ir():
         if pkg_obj.state == 'draft':
             return False
         pkg_dict = tk.get_action('package_show')(None, {'id': pkg_obj.id})
-        return review_state_map.get(helpers.in_review(pkg_dict))
+        return helpers.in_review(pkg_dict) == "true"
 
-    if user.id == getattr(pkg_obj, 'creator_user_id', False):
-        private = getattr(pkg_obj, 'private', False)
-        return {'success': private and not inreview()}
-
-    return ckan_pkgupdate(context, data_dict)
+    user = context.get('auth_user_obj')
+    pkg_obj = get_package_object(context, data_dict)
+    is_private = getattr(pkg_obj, 'private', False)
+    is_admin = check_journal_role({'owner_org': pkg_obj.owner_org}, 'admin')
+    is_owner = user.id == getattr(pkg_obj, 'creator_user_id', False)
+    granted = (is_owner and not is_admin) and {'success': is_private and not ir()}
+    return granted or ckan_pkgupdate(context, data_dict)
 
 
 def _ctest(item):
