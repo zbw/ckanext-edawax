@@ -1,4 +1,4 @@
-#!/nix/store/84wyqwk60fi1vrypwz4z6plj0nfjpwn5-nodejs-4.3.1/bin/node
+#!/nix/store/rjgp9i1vylrj6j1zvy54padc2nvgi7qg-nodejs-6.11.1/bin/node
 
 var path = require('path'),
     nodeWatch = require('nodewatch'),
