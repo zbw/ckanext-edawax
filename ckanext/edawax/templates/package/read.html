@@ -33,6 +33,11 @@
 
 {% block primary_content_inner %}
 
+
+{# XXX show package for debugging #}
+{#   {{ pkg }}  #}
+
+
 <div prefix="schema: http://schema.org/" typeof="schema:Dataset" resource="{{ pkg_url }}">
     <meta property="schema:includedInDataCatalog" resource="{{ h.ckan_site_url() }}"
         typeof="schema:DataCatalog" />
