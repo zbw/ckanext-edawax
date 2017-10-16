@@ -3,9 +3,18 @@ Changelog
 
 started with version 1.1.1
 
+v1.3.1
+------
+
+-   add re3data.org badge
+-   new manuals
+-   integrate jdainfo
+-   FIX: journaladmin could not publish if she's owner
+-   FIX: only show TEST DOI when config has use_testserver
+
+
 v1.3.0
 ------
-[not yet released]
 
 -   Packages and resources cannot be deleted if they have a DOI assigned
 -   Package cannot be retracted if DOI assigned
