@@ -21,8 +21,9 @@ def sendmail(address, msg):
         log.info("Sent notification to {0}".format(address))
         smtp_connection.quit()
         return True
-    except:
+    except Exception as e:
         log.error("Mail to {} could not be sent".format(address))
+        log.error(e)
         # raise Exception  # TODO raise more detailed exception
         return False
 

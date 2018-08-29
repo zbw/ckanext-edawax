@@ -46,7 +46,7 @@
         <li><a href="http://zbw.eu"><img src="{% url_for_static
         '/base/images/zbw-logo-trans.png' %}"  />
             </a></li>
-               
+
             <li style="font-size: 0.8em; padding-left:33px;">in cooperation with <br />
             <a href="https://www.diw.de/soep"><img src="{% url_for_static
             '/diw_soep_logo_sw.jpg' %}" /></a></li>
@@ -55,6 +55,12 @@
         <li><a href="http://doi.org/10.17616/R3BM03"><img src="{%
         url_for_static '/base/images/re3data.png' %}" /></a></li>
     </ul>
+
+    {% block footer_debug %}
+        {% if g.debug %}
+            {% include 'snippets/debug.html' %}
+        {% endif %}
+    {% endblock %}
 </div>
 
 
