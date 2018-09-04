@@ -16,7 +16,7 @@ def sendmail(address, msg):
     mail_from = config.get('smtp.mail_from')
     try:
         smtp_server = config.get('smtp.test_server', config.get('smtp.server'))
-        smtp_connection = smtplib.SMTP(smtp_server)
+        #smtp_connection = smtplib.SMTP(smtp_server)
         smtp_connection.sendmail(mail_from, [address], msg.as_string())
         log.info("Sent notification to {0}".format(address))
         smtp_connection.quit()
