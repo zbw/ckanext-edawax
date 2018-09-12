@@ -88,7 +88,7 @@ def journal_package_update(context, data_dict):
     """override ckan package_update. allow creator to update package if
     package is private and not in review. 'create_dataset' permission must be
     set in  CKAN """
-    
+
     def ir():
         if pkg_obj.state == 'draft':
             return False
@@ -229,7 +229,6 @@ class EdawaxPlugin(plugins.SingletonPlugin,):
         map.redirect('/organization', '/journals')
         map.redirect('/organization/{url:.*}', '/journals/{url}')
         map.redirect('/dashboard/organizations', '/dashboard/journals')
-
 
         # review mail to editor
         map.connect('/dataset/{id}/review',
