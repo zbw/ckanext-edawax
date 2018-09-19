@@ -13,16 +13,21 @@ import ckan.logic.action.create as logic
 from ckan.lib.base import render_jinja2
 
 #imports for expanded mailing
-from ckan.common import _, g
-from email.mime.text import MIMEText
-from email.header import Header
-from email import Utils
-from time import time
+import os
 import smtplib
 import logging
+from time import time
+from email import Utils
+from ckan.common import _, g
+from email.header import Header
 import paste.deploy.converters
+from email.mime.text import MIMEText
+from email.mime.multipart import MIMEMultipart
+from email.mime.application import MIMEApplication
+
 
 log = logging.getLogger(__name__)
+
 
 def get_invite_body(user, data=None):
     extra_vars = {'reset_link': mailer.get_reset_link(user),
@@ -75,10 +80,11 @@ def user_invite(context, data_dict):
 # modifying CKAN's base mail function to allow sending attachments
 def _mail_recipient(recipient_name, recipient_email,
         sender_name, sender_url, subject,
-        body, headers={}):
+        body, headers={}, role=None):
     mail_from = config.get('smtp.mail_from')
     body = mailer.add_msg_niceties(recipient_name, body, sender_name, sender_url)
-    msg = MIMEText(body.encode('utf-8'), 'plain', 'utf-8')
+    msg_body = MIMEText(body.encode('utf-8'), 'plain', 'utf-8')
+    msg = MIMEMultipart()
     for k, v in headers.items(): msg[k] = v
     subject = Header(subject.encode('utf-8'), 'utf-8')
     msg['Subject'] = subject
@@ -87,6 +93,23 @@ def _mail_recipient(recipient_name, recipient_email,
     msg['To'] = Header(recipient, 'utf-8')
     msg['Date'] = Utils.formatdate(time())
     msg['X-Mailer'] = "CKAN %s" % ckan.__version__
+
+    msg.attach(msg_body)
+
+    # attach the file
+    if role is not None and role == u'member':
+        attachment_file_name= "Test File.txt"
+        directory = os.path.dirname(__file__)
+        rel_path = 'templates/emails/invite_author.txt'
+        print(directory)
+        #with open('/home/ckan/Desktop/files/do-file.do', 'rb') as file:
+        with open(os.path.join(directory, rel_path), 'rb') as file:
+            part = MIMEApplication(
+                                    file.read(),
+                                    name=attachment_file_name
+                                  )
+        part['Content-Disposition'] = 'attachment; filename={}'.format(attachment_file_name)
+        msg.attach(part)
 
     # Send the email using Python's smtplib.
     smtp_connection = smtplib.SMTP()
@@ -139,7 +162,8 @@ def _mail_recipient(recipient_name, recipient_email,
 def mail_recipient(recipient_name, recipient_email, subject,
         body, headers={}, role=None):
     if role is not None:
-        pass
+        return _mail_recipient(recipient_name, recipient_email,
+            g.site_title, g.site_url, subject, body, headers=headers, role=role)
     return _mail_recipient(recipient_name, recipient_email,
             g.site_title, g.site_url, subject, body, headers=headers)
 
