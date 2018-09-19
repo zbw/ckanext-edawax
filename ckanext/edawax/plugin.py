@@ -16,7 +16,7 @@ from functools import partial
 from pylons import config
 from ckanext.dara.helpers import check_journal_role
 
-
+import new_invites as invites
 # XXX implement IAuthFunctions for controller actions
 
 def edawax_facets(facets_dict):
@@ -153,6 +153,7 @@ class EdawaxPlugin(plugins.SingletonPlugin,):
     # plugins.implements(plugins.interfaces.IDomainObjectModification,
     #        inherit=True)  # XXX necessary?
     plugins.implements(plugins.IAuthFunctions)
+    plugins.implements(plugins.IActions)
 
     def update_config(self, config):
         tk.add_template_directory(config, 'templates')
@@ -162,6 +163,11 @@ class EdawaxPlugin(plugins.SingletonPlugin,):
         tk.add_resource('theme', 'edawax')
         tk.add_resource('fanstatic', 'edawax_fs')
         h.get_facet_items_dict = get_facet_items_dict
+
+    def get_actions(self):
+        return {
+                    "user_invite": invites.user_invite
+               }
 
     def get_auth_functions(self):
         return {'package_update': journal_package_update,
