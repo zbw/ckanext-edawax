@@ -3,4 +3,4 @@
 dist/*
 .*.swp
 *.pdf
-/ckan/edawax/theme/edawax.css
+/ckanext/edawax/theme/edawax.css
