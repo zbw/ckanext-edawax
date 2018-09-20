@@ -28,6 +28,14 @@ from email.mime.application import MIMEApplication
 
 log = logging.getLogger(__name__)
 
+def _get_user_role(user_name, org_id):
+    data_dict = {'id': org_id}
+    org_data = user_data = ckan.logic.get_action('organization_show')(data_dict=data_dict)
+    users = org_data['users']
+    for user in users:
+        if user['name'] == user_name:
+            return user['capacity']
+    return False
 
 def get_invite_body(user, data=None):
     extra_vars = {'reset_link': mailer.get_reset_link(user),
@@ -36,7 +44,8 @@ def get_invite_body(user, data=None):
        'site_url': config.get('ckan.site_url'),
        'journal_title': data['journal_title']}
 
-    if data['role'] == u'editor':
+    role = _get_user_role(user.name, data['group_id'])
+    if role in ['editor', 'admin']:
         return render_jinja2('emails/invite_editor.txt', extra_vars)
     return render_jinja2('emails/invite_author.txt', extra_vars)
 
@@ -98,11 +107,9 @@ def _mail_recipient(recipient_name, recipient_email,
 
     # attach the file
     if role is not None and role == u'member':
-        attachment_file_name= "Test File.txt"
+        attachment_file_name = "QuickManual_V1.2.3.pdf"
         directory = os.path.dirname(__file__)
-        rel_path = 'templates/emails/invite_author.txt'
-        print(directory)
-        #with open('/home/ckan/Desktop/files/do-file.do', 'rb') as file:
+        rel_path = 'public/{}'.format(attachment_file_name)
         with open(os.path.join(directory, rel_path), 'rb') as file:
             part = MIMEApplication(
                                     file.read(),
