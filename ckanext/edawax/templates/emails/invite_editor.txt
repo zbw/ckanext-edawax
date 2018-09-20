@@ -1,6 +1,6 @@
-You have been inivited by the editor of {{ journal_title }} to serve as an additional editor to review or to manage data submissions within the ZBW Journal Data Archive.
+You have been invited by the editor of {{ journal_title }} to serve as an additional editor to review or to manage data submissions within the ZBW Journal Data Archive.
 
-The ZBW Journal Data Archive is the data archive of {{ journal_title }}.
+The ZBW Journal Data Archive is the data archive for {{ journal_title }}.
 
 To accept this invitation, please reset your password by clicking the link below:
 
@@ -10,5 +10,5 @@ For advice, please consult the documentation of our service ({{ site_url }}/manu
 
 Thank you in advance,
 
-Sincerly,
+Sincerely,
 ZBW Journal Data Archive
