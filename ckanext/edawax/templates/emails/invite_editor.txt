@@ -1,4 +1,4 @@
-You have been invited by the editor of {{ journal_title }} to serve as an additional editor to review or to manage data submissions within the ZBW Journal Data Archive.
+You have been invited by the editor of the {{ journal_title }} to serve as an additional editor to review or to manage data submissions within the ZBW Journal Data Archive.
 
 The ZBW Journal Data Archive is the data archive for {{ journal_title }}.
 
