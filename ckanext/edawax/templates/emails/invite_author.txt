@@ -1,0 +1,8 @@
+You have been invited by the editor of {{ journal_title }} to deposit the replication files of your paper in ZBW's Journal Data Archive.
+
+To accept this invite, please reset your password at:
+
+{{ reset_link }}
+
+For advice, please consult the documentation of our service:
+{{ site_url }}/manual_EN.pdf
