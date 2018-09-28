@@ -6,4 +6,4 @@ dist/*
 .gitignore
 test.ini
 ckanext/edawax/tests/
-*edawax.css
+/ckan/edawax/theme/edawax.css
