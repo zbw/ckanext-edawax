@@ -188,6 +188,7 @@ class EdawaxPlugin(plugins.SingletonPlugin,):
                 'ckan_site_url': helpers.ckan_site_url,
                 'journal_volume_sorting': helpers.journal_volume_sorting,
                 'render_infopage': helpers.render_infopage,
+                'show_download_all': helpers.show_download_all
                 }
 
     def before_map(self, map):

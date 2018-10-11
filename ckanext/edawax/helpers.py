@@ -97,3 +97,9 @@ def render_infopage(page):
         if os.path.exists(os.path.join(path, page.encode('utf-8'))):
             return h.render_markdown(tk.render(page), allow_html=True)
     tk.abort(404, "Markdown file not found")
+
+
+def show_download_all(pkg):
+    if not isinstance(pkg, dict):
+        return False
+    return len(pkg['resources']) > 1

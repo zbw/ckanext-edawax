@@ -1,0 +1,11 @@
+{% ckan_extends %}
+
+{% block resource_list %}
+    {{ super() }}
+    {# TODO: only show if there's more than one resource#}
+    {% if h.show_download_all(pkg) %}
+    <button type="button" class="btn btn-success" id="download_all">
+        Download All
+    </button>
+    {% endif %}
+{% endblock %}
