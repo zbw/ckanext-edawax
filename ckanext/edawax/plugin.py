@@ -257,6 +257,11 @@ class EdawaxPlugin(plugins.SingletonPlugin,):
                     controller="ckanext.edawax.controller:WorkflowController",
                     action="reauthor",)
 
+        # download all resources
+        map.connect('/dataset/{id}/download_all',
+                    controller="ckanext.edawax.controller:WorkflowController",
+                    action="download_all", )
+
         # infopages
         controller = 'ckanext.edawax.controller:InfoController'
         map.connect('info', '/info',

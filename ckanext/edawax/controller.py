@@ -3,7 +3,7 @@
 
 from ckan.controllers.package import PackageController
 import ckan.plugins.toolkit as tk
-from ckan.common import c
+from ckan.common import c, response
 from ckan import model
 import ckan.lib.helpers as h
 import logging
@@ -11,6 +11,13 @@ from ckan.authz import get_group_or_org_admin_ids
 from ckanext.dara.helpers import check_journal_role
 from functools import wraps
 import notifications as n
+
+# for download all
+import os
+import time
+import zipfile
+import requests
+import StringIO
 
 
 log = logging.getLogger(__name__)
@@ -122,6 +129,39 @@ class WorkflowController(PackageController):
         else:
             h.flash_error('ERROR: Mail could not be sent. Please try again later or contact the site admin.')
         redirect(id)
+
+
+    def download_all(self, id):
+        data = {}
+        context = self._context()
+        c.pkg_dict = tk.get_action('package_show')(context, {'id': id})
+        zip_sub_dir = 'resources'
+        zip_name = "{}_resouces_{}.zip".format(c.pkg_dict['title'].replace(' ', '_'), time.time())
+
+        resources = c.pkg_dict['resources']
+        for resource in resources:
+            url = resource['url']
+            filename = os.path.basename(url)
+            r = requests.get(url)
+            if r.status_code != 200:
+                pass
+            else:
+                print(len(r.content))
+                data[filename] = r
+
+        if len(data) > 0:
+            s = StringIO.StringIO()
+            zf = zipfile.ZipFile(s, "w")
+            for item, content in data.items():
+                zip_path = os.path.join(zip_sub_dir, item)
+                zf.writestr(zip_path, content.content)
+            zf.close()
+            response.headers.update({"Content-Disposition": "attachment;filename={}".format(zip_name)})
+            response.content_type = "application/zip"
+            return s.getvalue()
+        return False  #make this better
+
+
 
 
 def redirect(id):
