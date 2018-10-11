@@ -200,7 +200,7 @@ label {
 #sitelinks li {
   padding: 0 10px 0 10px;
 }
-
+/*Fix word breaks in FF*/
 .media-heading {
   word-break: normal;
 }
