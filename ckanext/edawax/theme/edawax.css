@@ -200,3 +200,11 @@ label {
 #sitelinks li {
   padding: 0 10px 0 10px;
 }
+
+.media-heading {
+  word-break: normal;
+}
+
+.context-info h1.heading {
+  word-break: normal;
+}
