@@ -209,6 +209,7 @@ label {
    word-break: normal;
 }
 
+
 /*Prevent line breaks in author names*/
 .authors_title span{
   white-space:nowrap;
