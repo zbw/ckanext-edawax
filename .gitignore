@@ -4,6 +4,4 @@ dist/*
 .*.swp
 *.pdf
 .gitignore
-test.ini
-ckanext/edawax/tests/
 /ckan/edawax/theme/edawax.css
