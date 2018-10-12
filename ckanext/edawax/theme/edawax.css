@@ -208,3 +208,8 @@ label {
 .context-info h1.heading {
   word-break: normal;
 }
+
+/*Prevent line breaks in author names*/
+.authors_title span{
+  white-space: nowrap;
+}
