@@ -48,7 +48,7 @@ h2 {
 .account-masthead {
   min-height: 20px;
   color: white;
-  background: #008fc3;
+  background: #c30000; /*#008fc3;*/
 }
 .account-masthead .account ul li {
   display: block;
@@ -199,4 +199,17 @@ label {
 }
 #sitelinks li {
   padding: 0 10px 0 10px;
+}
+/*Fix word breaks in FF*/
+.media-heading {
+   word-break: normal;
+}
+
+.context-info h1.heading {
+   word-break: normal;
+}
+
+/*Prevent line breaks in author names*/
+.authors_title span{
+  white-space:nowrap;
 }
