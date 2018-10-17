@@ -190,6 +190,9 @@ class EdawaxPlugin(plugins.SingletonPlugin,):
                 'render_infopage': helpers.render_infopage,
                 'journal_total_views': helpers.journal_total_views,
                 'journal_recent_views': helpers.journal_recent_views,
+                'dataset_total_views': helpers.dataset_total_views,
+                'dataset_recent_views': helpers.dataset_recent_views,
+                'resource_downloads': helpers.resource_downloads,
                 }
 
     def before_map(self, map):

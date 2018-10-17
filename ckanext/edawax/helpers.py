@@ -10,6 +10,7 @@ from ckan.lib import helpers as h
 # from functools import wraps
 import datetime
 import collections
+from ckan.lib import cli
 
 def get_user_id():
     def context():
@@ -101,21 +102,40 @@ def render_infopage(page):
 
 def journal_total_views(org):
     url = org['name']
-    result = _total_views(engine, target=url)
+    result = _total_journal_views(engine, target=url)
     print(result)
     return result[0].count
 
 def journal_recent_views(org):
     measure_from = datetime.date.today() - datetime.timedelta(days=14)
     url = org['name']
-    result =  _recent_views(engine, measure_from=measure_from, target=url)
+    result =  _recent_journal_views(engine, measure_from=measure_from, target=url)
     return result[0].count
 
+
+def dataset_total_views(pkg):
+    result = _total_data_views(engine)
+    return result[0].count
+
+def dataset_recent_views(pkg):
+    measure_from = datetime.date.today() - datetime.timedelta(days=14)
+    result = _recent_data_views(engine, measure_from)
+    return result[0].count
+
+def resource_downloads(resource):
+    url = resource['url']
+    sql = """
+            SELECT COALESCE(SUM(ts.count), 0) as total_views
+            FROM tracking_summary as ts
+            WHERE ts.url = %(url)s;
+          """
+    results = engine.execute(sql, url=url).fetchall()
+    return results[0][0]
 
 #===========================================================
 # The following come from ckan/lib/cli.py
 # They need to be changed to work with 'url' rather than ID
-# to get the counts for JOURNAls, rather than datasets
+# to get the counts for JOURNALs, rather than datasets
 #===========================================================
 import ckan.model as model
 engine = model.meta.engine
@@ -123,7 +143,7 @@ engine = model.meta.engine
 ## Used by the Tracking class
 _ViewCount = collections.namedtuple("ViewCount", "id name count")
 
-def _total_views(engine, target):
+def _total_journal_views(engine, target):
         sql = '''
             SELECT p.id,
                    p.name,
@@ -138,7 +158,7 @@ def _total_views(engine, target):
 
         return [_ViewCount(*t) for t in engine.execute(sql, {'name': target, 'url': '/journals/' + target }).fetchall()]
 
-def _recent_views(engine, target, measure_from):
+def _recent_journal_views(engine, target, measure_from):
     sql = '''
         SELECT p.id,
                p.name,
@@ -152,3 +172,28 @@ def _recent_views(engine, target, measure_from):
            ORDER BY total_views DESC
     '''
     return [_ViewCount(*t) for t in engine.execute(sql, name=target, url='/journals/{}'.format(target), measure_from=str(measure_from)).fetchall()]
+
+def _total_data_views(engine):
+    sql = '''
+        SELECT p.id,
+               p.name,
+               COALESCE(SUM(s.count), 0) AS total_views
+           FROM package AS p
+           LEFT OUTER JOIN tracking_summary AS s ON s.package_id = p.id
+           GROUP BY p.id, p.name
+           ORDER BY total_views DESC
+    '''
+    return [_ViewCount(*t) for t in engine.execute(sql).fetchall()]
+
+def _recent_data_views(engine, measure_from):
+    sql = '''
+        SELECT p.id,
+               p.name,
+               COALESCE(SUM(s.count), 0) AS total_views
+           FROM package AS p
+           LEFT OUTER JOIN tracking_summary AS s ON s.package_id = p.id
+           WHERE s.tracking_date >= %(measure_from)s
+           GROUP BY p.id, p.name
+           ORDER BY total_views DESC
+    '''
+    return [_ViewCount(*t) for t in engine.execute(sql, measure_from=str(measure_from)).fetchall()]
