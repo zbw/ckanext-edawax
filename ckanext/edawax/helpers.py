@@ -8,7 +8,8 @@ from collections import namedtuple
 import os
 from ckan.lib import helpers as h
 # from functools import wraps
-
+import datetime
+import collections
 
 def get_user_id():
     def context():
@@ -97,3 +98,57 @@ def render_infopage(page):
         if os.path.exists(os.path.join(path, page.encode('utf-8'))):
             return h.render_markdown(tk.render(page), allow_html=True)
     tk.abort(404, "Markdown file not found")
+
+def journal_total_views(org):
+    url = org['name']
+    result = _total_views(engine, target=url)
+    print(result)
+    return result[0].count
+
+def journal_recent_views(org):
+    measure_from = datetime.date.today() - datetime.timedelta(days=14)
+    url = org['name']
+    result =  _recent_views(engine, measure_from=measure_from, target=url)
+    return result[0].count
+
+
+#===========================================================
+# The following come from ckan/lib/cli.py
+# They need to be changed to work with 'url' rather than ID
+# to get the counts for JOURNAls, rather than datasets
+#===========================================================
+import ckan.model as model
+engine = model.meta.engine
+
+## Used by the Tracking class
+_ViewCount = collections.namedtuple("ViewCount", "id name count")
+
+def _total_views(engine, target):
+        sql = '''
+            SELECT p.id,
+                   p.name,
+                   COALESCE(SUM(ts.count), 0) AS total_views
+               FROM "group" AS p
+               CROSS JOIN tracking_summary AS ts
+               WHERE p.name = %(name)s
+                    AND ts.url = %(url)s
+               GROUP BY p.id, p.name
+               ORDER BY total_views DESC
+        '''
+
+        return [_ViewCount(*t) for t in engine.execute(sql, {'name': target, 'url': '/journals/' + target }).fetchall()]
+
+def _recent_views(engine, target, measure_from):
+    sql = '''
+        SELECT p.id,
+               p.name,
+               COALESCE(SUM(ts.count), 0) AS total_views
+           FROM "group" AS p
+           CROSS JOIN tracking_summary AS ts
+           WHERE ts.tracking_date >= %(measure_from)s
+                AND p.name = %(name)s
+                    AND ts.url = %(url)s
+           GROUP BY p.id, p.name
+           ORDER BY total_views DESC
+    '''
+    return [_ViewCount(*t) for t in engine.execute(sql, name=target, url='/journals/{}'.format(target), measure_from=str(measure_from)).fetchall()]
