@@ -145,7 +145,6 @@ def resource_downloads(resource):
 import ckan.model as model
 engine = model.meta.engine
 
-## Used by the Tracking class
 _ViewCount = collections.namedtuple("ViewCount", "id name count")
 
 def _total_journal_views(engine, target):
