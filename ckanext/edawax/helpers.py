@@ -103,7 +103,6 @@ def render_infopage(page):
 def journal_total_views(org):
     url = org['name']
     result = _total_journal_views(engine, target=url)
-    print(result)
     return result[0].count
 
 def journal_recent_views(org):
@@ -115,12 +114,18 @@ def journal_recent_views(org):
 
 def dataset_total_views(pkg):
     result = _total_data_views(engine)
-    return result[0].count
+    for r in result:
+        if r.name == pkg['name']:
+            return r.count
+    return 0
 
 def dataset_recent_views(pkg):
     measure_from = datetime.date.today() - datetime.timedelta(days=14)
     result = _recent_data_views(engine, measure_from)
-    return result[0].count
+    for r in result:
+        if r.name == pkg['name']:
+            return r.count
+    return 0
 
 def resource_downloads(resource):
     url = resource['url']

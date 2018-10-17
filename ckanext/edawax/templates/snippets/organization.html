@@ -58,7 +58,7 @@ Example:
               <dt>{{ _('Recent Views') }}</dt>
               <dd>
               {% if pkg %}
-                {{ h.SI_number_span(h.dataset_recent_views(pdf)) }}
+                {{ h.SI_number_span(h.dataset_recent_views(pkg)) }}
               {% else %}
                 {{ h.SI_number_span(h.journal_recent_views(organization)) }}
               {% endif %}
