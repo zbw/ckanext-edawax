@@ -11,6 +11,19 @@ from ckan.lib import helpers as h
 import datetime
 import collections
 from ckan.lib import cli
+import ast
+
+def get_resource_name(data_string):
+    """ Return a list of dicts (name, url, package_id, resource_id) """
+    output = []
+    lst = ast.literal_eval(data_string)
+    for resource in lst['resources']:
+        output.append({'name': resource['name'],
+                       'url': resource['url'],
+                       'package_id': lst['id'],
+                       'resource_id': resource['id']})
+    return output
+
 
 def get_user_id():
     def context():

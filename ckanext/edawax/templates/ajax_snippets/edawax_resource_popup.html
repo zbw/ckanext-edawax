@@ -1,0 +1,31 @@
+{#
+    Template for the resource data popup
+
+    id - id of dataset
+    num_resources - dataset's resource count
+#}
+
+<div class="context-info">
+    <div class="nums">
+        <dl>
+            <dt>{{ _('Followers') }}</dt>
+            <dd>{{ h.get_action('dataset_follower_count', {'id': id}) }}</dd>
+
+            <dt>{{ _('Resources (Downloads)') }}</dt>
+            {% set data = h.get_resource_name(resources) %}
+            {% for resource in data %}
+                <dd><a href="/dataset/{{ resource['package_id'] }}/resource/{{ resource['resource_id'] }}">{{ resource['name'] }}</a> ({{ h.resource_downloads(resource) }})</dd>
+            {% endfor %}
+        </dl>
+    </div>
+
+    <div class="clearfix"></div>
+
+    {{ h.follow_button('dataset', id) }}
+
+    <a class="btn go-to-dataset"
+       href="{{ h.url_for(controller='package', action='read', id=id) }}">
+       <i class="icon-circle-arrow-right"></i>
+       Go to dataset
+    </a>
+</div>

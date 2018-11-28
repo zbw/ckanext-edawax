@@ -193,6 +193,7 @@ class EdawaxPlugin(plugins.SingletonPlugin,):
                 'dataset_total_views': helpers.dataset_total_views,
                 'dataset_recent_views': helpers.dataset_recent_views,
                 'resource_downloads': helpers.resource_downloads,
+                'get_resource_name': helpers.get_resource_name,
                 }
 
     def before_map(self, map):
