@@ -51,13 +51,15 @@
     {# import javascript module for popup #}
     {% resource 'edawax/edawax_download_count_popup.js' %}
     {% resource 'edawax/edawax_download_count_popup.css' %}
-    {#{ package }#}
-    <button data-module="edawax_download_count_popup"
+
+    <div data-module="edawax_download_count_popup"
             data-module-id="{{ package.id }}"
             data-module-title="{{ package.title }}"
             data-module-resources="{{ package }}"
             data-module-license="{{ package.license_title }}"
-            data-module-num_resources="{{ package.num_resources }}">
+            data-module-num_resources="{{ package.num_resources }}"
+            class="ib info_popover"
+            id="popup_thing">
         <i class="icon-info-sign"></i>
-    </button>
+    </div>
 {% endblock %}
