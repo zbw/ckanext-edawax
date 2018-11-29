@@ -10,7 +10,7 @@
  *
  * title - title of the dataset
  * num_resources - number of resources in the dataset
- *
+ * id - package's id
  */
 
 ckan.module('edawax_download_count_popup', function($, _){
@@ -18,7 +18,7 @@ ckan.module('edawax_download_count_popup', function($, _){
         initialize: function(){
             $.proxyAll(this, /_on/);
 
-            this.el.popover({title: '<span class="text-info"><strong>'+ this.options.title + '</strong></span><a type="button" class="close" style="float:right;" onclick="$(&quot;#popup_thing&quot;).popover(&quot;hide&quot;);">&times;</a>', 
+            this.el.popover({title: '<span class="text-info"><strong>'+ this.options.title + '</strong></span><a type="button" class="close" style="float:right;" onclick="$(&quot;#' + this.options.id + '_popup&quot;).popover(&quot;hide&quot;);">&times;</a>', 
                              html: true,
                              content: 'Loading...',
                              placement: 'left'});
@@ -37,7 +37,7 @@ ckan.module('edawax_download_count_popup', function($, _){
 
         _onReceiveSnippet: function(html){
             this.el.popover('destroy');
-            this.el.popover({title: '<span class="text-info"><strong>'+ this.options.title + '</strong></span><a class="close" style="float:right;" onclick="$(&quot;#popup_thing&quot;).popover(&quot;hide&quot;);">&times;</a>',
+            this.el.popover({title: '<span class="text-info"><strong>'+ this.options.title + '</strong></span><a class="close" style="float:right;" onclick="$(&quot;#' + this.options.id + '_popup&quot;).popover(&quot;hide&quot;);">&times;</a>',
                              html: true,
                              content: html, 
                              placement: 'left'});
