@@ -4,4 +4,4 @@ dist/*
 .*.swp
 *.pdf
 .gitignore
-/ckan/edawax/theme/edawax.css
+ckanext/edawax/theme/edawax.css
