@@ -45,14 +45,13 @@
 
 
 
-{% block content %}
+{% block heading_title %}
     {{ super() }}
-
-    {# import javascript module for popup #}
+    {# Imports for popup with download information#}
     {% resource 'edawax/edawax_download_count_popup.js' %}
     {% resource 'edawax/edawax_download_count_popup.css' %}
 
-    <div data-module="edawax_download_count_popup"
+    <span data-module="edawax_download_count_popup"
             data-module-id="{{ package.id }}"
             data-module-title="{{ package.title }}"
             data-module-resources="{{ package }}"
@@ -61,5 +60,6 @@
             class="ib info_popover"
             id="{{ package.id }}_popup">
         <i class="icon-info-sign"></i>
-    </div>
+    </span>
+
 {% endblock %}

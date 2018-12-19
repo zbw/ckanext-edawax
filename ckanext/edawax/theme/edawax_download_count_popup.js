@@ -1,4 +1,4 @@
-// CKAN javascript module to better display the download count for 
+// CKAN javascript module to better display the download count for
 // a given resource.
 
 "use strict";
@@ -18,10 +18,10 @@ ckan.module('edawax_download_count_popup', function($, _){
         initialize: function(){
             $.proxyAll(this, /_on/);
 
-            this.el.popover({title: '<span class="text-info"><strong>'+ this.options.title + '</strong></span><a type="button" class="close" style="float:right;" onclick="$(&quot;#' + this.options.id + '_popup&quot;).popover(&quot;hide&quot;);">&times;</a>', 
+            this.el.popover({title: '<span class="text-info"><strong>'+ this.options.title + '</strong></span><a type="button" class="close" style="float:right;" onclick="$(&quot;#' + this.options.id + '_popup&quot;).popover(&quot;hide&quot;);">&times;</a>',
                              html: true,
                              content: 'Loading...',
-                             placement: 'left'});
+                             placement: 'right'});
             this.el.on('click', this._onClick);
         },
 
@@ -39,8 +39,8 @@ ckan.module('edawax_download_count_popup', function($, _){
             this.el.popover('destroy');
             this.el.popover({title: '<span class="text-info"><strong>'+ this.options.title + '</strong></span><a class="close" style="float:right;" onclick="$(&quot;#' + this.options.id + '_popup&quot;).popover(&quot;hide&quot;);">&times;</a>',
                              html: true,
-                             content: html, 
-                             placement: 'left'});
+                             content: html,
+                             placement: 'right'});
             this.el.popover('show');
         },
 
