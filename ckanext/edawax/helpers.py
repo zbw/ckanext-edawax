@@ -13,16 +13,21 @@ import collections
 from ckan.lib import cli
 import ast
 
-def get_resource_name(data_string):
+def get_resource_name(data):
     """ Return a list of dicts (name, url, package_id, resource_id) """
     output = []
-    lst = ast.literal_eval(data_string)
-    for resource in lst['resources']:
+    #lst = ast.literal_eval(data_string)
+    for resource in data['resources']:
         output.append({'name': resource['name'],
                        'url': resource['url'],
-                       'package_id': lst['id'],
+                       'package_id': data['id'],
                        'resource_id': resource['id']})
     return output
+
+
+def transform_to_map(data):
+    lst = ast.literal_eval(data)
+    return lst
 
 
 def get_user_id():
@@ -147,7 +152,9 @@ def dataset_recent_views(pkg):
     return 0
 
 def resource_downloads(resource):
-    url = resource['url']
+    print('===============')
+    print(resource)
+    url = resource
     sql = """
             SELECT COALESCE(SUM(ts.count), 0) as total_views
             FROM tracking_summary as ts

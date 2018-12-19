@@ -91,7 +91,7 @@ this.ckan.module('edawax-confirm', function (jQuery, _) {
         '<button class="btn btn-primary"></button>',
         '</div>',
         '</div>'
-      ].join('\n')
+      ).join('\n')
     },
 
     /* Sets up the event listeners for the object. Called internally by
