@@ -14,7 +14,11 @@
                 {% for item in data %}
                     <dd>
                         <a href="/dataset/{{ item['package_id']}}/resource/{{ item['resource_id'] }}">
-                            {{ item['name'] }}
+                            {% if item['name'] == '' %}
+                                Unnamed Resource
+                            {% else %}
+                                {{ item['name'] }}
+                            {% endif %}
                         </a> ({{ h.resource_downloads(item['url']) }})
                     </dd>
                 {% endfor %}
