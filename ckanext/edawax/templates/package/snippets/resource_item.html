@@ -24,7 +24,7 @@
       {%- if res.description -%}{{ h.markdown_extract(res.description, extract_length=80) }}{%- endif -%}
 
       {# download stats here #}
-      {% set total_downloads = h.resource_downloads(res) %}
+      {% set total_downloads = h.resource_downloads(res['id']) %}
       {% if total_downloads > 0 %}
       <div>
           {{ _('Downloads') }}: {{ total_downloads }}

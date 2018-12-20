@@ -16,7 +16,6 @@ import ast
 def get_resource_name(data):
     """ Return a list of dicts (name, url, package_id, resource_id) """
     output = []
-    #lst = ast.literal_eval(data_string)
     for resource in data['resources']:
         output.append({'name': resource['name'],
                        'url': resource['url'],
@@ -26,8 +25,13 @@ def get_resource_name(data):
 
 
 def transform_to_map(data):
-    lst = ast.literal_eval(data)
-    return lst
+    try:
+        lst = ast.literal_eval(data)
+        return lst
+    except Exception:
+        pass
+
+    return 0
 
 
 def get_user_id():
@@ -152,8 +156,6 @@ def dataset_recent_views(pkg):
     return 0
 
 def resource_downloads(resource):
-    print('===============')
-    print(resource)
     url = resource
     sql = """
             SELECT COALESCE(SUM(ts.count), 0) as total_views

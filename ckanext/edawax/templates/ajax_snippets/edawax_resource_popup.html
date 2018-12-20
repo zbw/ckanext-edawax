@@ -8,17 +8,19 @@
 <div class="context-info">
     <div class="nums">
         <dl>
-            <dt>{{ _('Resources (Downloads)') }}</dt>
-
             {% set data = h.transform_to_map(resources) %}
-
-            {% for item in data %}
-                <dd>
-                    <a href="/dataset/{{ item['package_id']}}/resource/{{ item['resource_id'] }}">
-                        {{ item['name'] }}
-                    </a> ({{ h.resource_downloads(item['url']) }})
-                </dd>
-            {% endfor %}
+            {% if data > 0 %}
+                <dt>{{ _('Resources (Downloads)') }}</dt>
+                {% for item in data %}
+                    <dd>
+                        <a href="/dataset/{{ item['package_id']}}/resource/{{ item['resource_id'] }}">
+                            {{ item['name'] }}
+                        </a> ({{ h.resource_downloads(item['url']) }})
+                    </dd>
+                {% endfor %}
+            {% else %}
+                <p class="empty">{{ _('This dataset has no data') }}</p>
+            {% endif %}
         </dl>
     </div>
     <a class="btn go-to-dataset"
