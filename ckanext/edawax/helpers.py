@@ -13,6 +13,7 @@ import collections
 from ckan.lib import cli
 import ast
 
+
 def get_resource_name(data):
     """ Return a list of dicts (name, url, package_id, resource_id) """
     output = []
@@ -32,7 +33,6 @@ def transform_to_map(data):
         return lst
     except Exception:
         pass
-
     return data
 
 
@@ -178,19 +178,19 @@ engine = model.meta.engine
 _ViewCount = collections.namedtuple("ViewCount", "id name count")
 
 def _total_journal_views(engine, target):
-        sql = '''
-            SELECT p.id,
-                   p.name,
-                   COALESCE(SUM(ts.count), 0) AS total_views
-               FROM "group" AS p
-               CROSS JOIN tracking_summary AS ts
-               WHERE p.name = %(name)s
-                    AND ts.url = %(url)s
-               GROUP BY p.id, p.name
-               ORDER BY total_views DESC
-        '''
+    sql = '''
+        SELECT p.id,
+               p.name,
+               COALESCE(SUM(ts.count), 0) AS total_views
+        FROM "group" AS p
+        CROSS JOIN tracking_summary AS ts
+        WHERE p.name = %(name)s
+            AND ts.url = %(url)s
+        GROUP BY p.id, p.name
+        ORDER BY total_views DESC
+    '''
 
-        return [_ViewCount(*t) for t in engine.execute(sql, {'name': target, 'url': '/journals/' + target }).fetchall()]
+    return [_ViewCount(*t) for t in engine.execute(sql, {'name': target, 'url': '/journals/' + target }).fetchall()]
 
 def _recent_journal_views(engine, target, measure_from):
     sql = '''

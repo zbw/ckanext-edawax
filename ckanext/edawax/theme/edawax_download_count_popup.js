@@ -9,7 +9,6 @@
  * about the resources -- download count and page views.
  *
  * title - title of the dataset
- * num_resources - number of resources in the dataset
  * id - package's id
  */
 
