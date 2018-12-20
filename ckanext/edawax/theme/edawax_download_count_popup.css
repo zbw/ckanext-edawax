@@ -21,6 +21,8 @@
 
 .popover {
     max-width: 100% !important;
+    width: 305px;
+
 }
 
 .info_popover{
@@ -29,4 +31,4 @@
 
 .info_popover:hover{
     cursor: help;
-} 
+}
