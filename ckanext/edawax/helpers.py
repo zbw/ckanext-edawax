@@ -21,6 +21,8 @@ def get_resource_name(data):
                        'url': resource['url'],
                        'package_id': data['id'],
                        'resource_id': resource['id']})
+    if len(output) == 0:
+        return data['id']
     return output
 
 
@@ -31,7 +33,7 @@ def transform_to_map(data):
     except Exception:
         pass
 
-    return 0
+    return data
 
 
 def get_user_id():
