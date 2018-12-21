@@ -15,13 +15,18 @@ import ast
 
 
 def get_resource_name(data):
-    """ Return a list of dicts (name, url, package_id, resource_id) """
+    """
+        Return a list of dicts (name, url, package_id, resource_id)
+        Or the ID of the package which will be used to provide a link
+        to add a resource for instances when none exist.
+    """
     output = []
     for resource in data['resources']:
         output.append({'name': resource['name'],
                        'url': resource['url'],
                        'package_id': data['id'],
-                       'resource_id': resource['id']})
+                       'resource_id': resource['id'],
+                       'format': resource['format']})
     if len(output) == 0:
         return data['id']
     return output

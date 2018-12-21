@@ -19,7 +19,13 @@
                             {% else %}
                                 {{ item['name'] }}
                             {% endif %}
-                        </a> ({{ h.resource_downloads(item['url']) }})
+                        </a>
+                        {% if item['format'] != '' %}
+                            ({{ h.resource_downloads(item['url']) }})
+                        {% else %}
+                            <a href="{{ item['url'] }}" target="_blank">
+                            </a>
+                        {% endif %}
                     </dd>
                 {% endfor %}
             {% else %}
