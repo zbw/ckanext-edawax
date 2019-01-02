@@ -20,15 +20,14 @@
 }
 
 .popover {
-    max-width: 100% !important;
-    width: 305px;
-
+    max-width: none !important;
+    width: auto;
 }
 
 .info_popover{
     max-width: 10px;
 }
 
-.info_popover:hover{
+.info_popover:hover {
     cursor: help;
 }

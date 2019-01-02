@@ -13,23 +13,25 @@
                 <dt>{{ _('Resources (Downloads)') }}</dt>
                 {% for item in data %}
                     <dd>
-                        <a href="/dataset/{{ item['package_id']}}/resource/{{ item['resource_id'] }}">
-                            {% if item['name'] == '' %}
-                                Unnamed Resource
-                            {% else %}
-                                {{ item['name'] }}
-                            {% endif %}
-                        </a>
-                        {% if item['format'] != '' %}
-                            ({{ h.resource_downloads(item['url']) }})
-                        {% else %}
-                            <a href="{{ item['url'] }}" target="_blank">
+                        <span>
+                            <a href="/dataset/{{ item['package_id'] }}/resource/{{ item['resource_id'] }}">
+                                {% if item['name'] == '' %}
+                                    {{ item['url'] }}
+                                {% else %}
+                                    {{ item['name'] }}
+                                {% endif %}
                             </a>
-                        {% endif %}
+                            {% if item['format'] != '' %}
+                                ({{ h.resource_downloads(item['url']) }})
+                            {% else %}
+                                <a href="{{ item['url'] }}" target="_blank">
+                                </a>
+                            {% endif %}
+                        </span>
                     </dd>
                 {% endfor %}
             {% else %}
-                {% if h.check_access('resource_create', {'package_id': data}) %}
+                {% if h.check_access('resource_create',{'package_id':data}) %}
                     {% set url = h.url_for(controller='package', action='new_resource', id=data) %}
                     <p class="empty">This dataset has no data, <a href="{{ url }}">why not add some?</a></p>
                 {% else %}
