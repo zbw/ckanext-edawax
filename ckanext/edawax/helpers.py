@@ -170,6 +170,7 @@ def resource_downloads(resource):
             WHERE ts.url = %(url)s;
           """
     results = engine.execute(sql, url=url).fetchall()
+
     return results[0][0]
 
 #===========================================================
