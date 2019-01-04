@@ -22,13 +22,6 @@ def get_resource_name(data):
     """
     output = []
     for resource in data['resources']:
-        """
-        output.append({'name': resource['name'],
-                       'url': resource['url'],
-                       'package_id': data['id'],
-                       'resource_id': resource['id'],
-                       'format': resource['format']})
-        """
         output.append(resource['id'])
     if len(output) == 0:
         return data['id']
