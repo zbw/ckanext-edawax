@@ -22,23 +22,41 @@ def get_resource_name(data):
     """
     output = []
     for resource in data['resources']:
+        """
         output.append({'name': resource['name'],
                        'url': resource['url'],
                        'package_id': data['id'],
                        'resource_id': resource['id'],
                        'format': resource['format']})
+        """
+        output.append(resource['id'])
     if len(output) == 0:
         return data['id']
     return output
 
 
 def transform_to_map(data):
-    # TODO: remove format from lst items.
+    # DONE: remove format from lst items.
     # Maybe, rework so that only the IDs come through then look up the
     #   required data from the api?
+    # Changes need to happen earlier in the process
+    # need to keep 'format' so that it's possible to distinguish between
+    # links and uploads
     try:
+        final = []
         lst = ast.literal_eval(data)
-        return lst
+        for item in lst:
+            _id = item
+            resource_data = tk.get_action('resource_show')(None, {'id':_id})
+            data = {
+                       'name': resource_data['name'],
+                       'url': resource_data['url'],
+                       'package_id': resource_data['package_id'],
+                       'resource_id': resource_data['id'],
+                       'format': resource_data['format']
+                    }
+            final.append(data)
+        return final
     except Exception:
         pass
     return data
