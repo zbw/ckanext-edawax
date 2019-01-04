@@ -29,12 +29,13 @@ def get_resource_name(data):
 
 
 def transform_to_map(data):
-    # DONE: remove format from lst items.
-    # Maybe, rework so that only the IDs come through then look up the
-    #   required data from the api?
-    # Changes need to happen earlier in the process
-    # need to keep 'format' so that it's possible to distinguish between
-    # links and uploads
+    """
+        data: list of resource ids
+        returns: list of dicts with resource data
+
+        Each dict contains the information needed by the popup to provide
+        the required information.
+    """
     try:
         final = []
         lst = ast.literal_eval(data)
