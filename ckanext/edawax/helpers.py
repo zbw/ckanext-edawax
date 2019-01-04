@@ -33,6 +33,9 @@ def get_resource_name(data):
 
 
 def transform_to_map(data):
+    # TODO: remove format from lst items.
+    # Maybe, rework so that only the IDs come through then look up the
+    #   required data from the api?
     try:
         lst = ast.literal_eval(data)
         return lst

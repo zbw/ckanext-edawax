@@ -20,7 +20,12 @@ ckan.module('edawax_download_count_popup', function($, _){
             this.el.popover({title: '<span class="text-info"><strong>'+ this.options.title + '</strong></span><a type="button" class="close" style="float:right;" onclick="$(&quot;#' + this.options.id + '_popup&quot;).popover(&quot;hide&quot;);">&times;</a>',
                              html: true,
                              content: 'Loading...',
-                             placement: 'bottom'});
+                             placement: function(){
+                                if (this.options.title.length > 250){
+                                    return "left";
+                                }
+                                return "right";
+                             } });
             this.el.on('click', this._onClick);
         },
 
@@ -39,7 +44,12 @@ ckan.module('edawax_download_count_popup', function($, _){
             this.el.popover({title: '<span class="text-info"><strong>'+ this.options.title + '</strong></span><a class="close" style="float:right;" onclick="$(&quot;#' + this.options.id + '_popup&quot;).popover(&quot;hide&quot;);">&times;</a>',
                              html: true,
                              content: html,
-                             placement: 'bottom'});
+                             placement: function(){
+                                if (this.options.title.length > 250){
+                                    return "left";
+                                }
+                                return "right";
+                             } });
             this.el.popover('show');
         },
 

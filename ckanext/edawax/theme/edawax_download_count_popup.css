@@ -31,3 +31,8 @@
 .info_popover:hover {
     cursor: help;
 }
+
+.popover-content{
+    max-height: 200px;
+    overflow-y: auto;
+}
