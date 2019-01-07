@@ -14,6 +14,13 @@ from ckan.lib import cli
 import ast
 
 
+def truncate_title(name):
+    if len(name) > 45:
+        base = name[0:38]
+        ending = name[-4:]
+        return '{}...{}'.format(base, ending)
+    return name
+
 def get_resource_name(data):
     """
         Return a list of dicts (name, url, package_id, resource_id)

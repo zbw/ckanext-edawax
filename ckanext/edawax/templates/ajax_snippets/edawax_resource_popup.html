@@ -16,9 +16,9 @@
                         <span>
                             <a href="/dataset/{{ item['package_id'] }}/resource/{{ item['resource_id'] }}">
                                 {% if item['name'] == '' %}
-                                    {{ item['url'] }}
+                                    {{ h.truncate_title(item['url']) }}
                                 {% else %}
-                                    {{ item['name'] }}
+                                    {{ h.truncate_title(item['name']) }}
                                 {% endif %}
                             </a>
                             {% if item['format'] != '' %}

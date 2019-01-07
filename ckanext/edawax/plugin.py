@@ -195,6 +195,7 @@ class EdawaxPlugin(plugins.SingletonPlugin,):
                 'resource_downloads': helpers.resource_downloads,
                 'get_resource_name': helpers.get_resource_name,
                 'transform_to_map': helpers.transform_to_map,
+                'truncate_title': helpers.truncate_title,
                 }
 
     def before_map(self, map):
