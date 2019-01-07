@@ -16,12 +16,12 @@ ckan.module('edawax_download_count_popup', function($, _){
     return {
         initialize: function(){
             $.proxyAll(this, /_on/);
-
+            var len = this.options.title.length;
             this.el.popover({title: '<span class="text-info"><strong>'+ this.options.title + '</strong></span><a type="button" class="close" style="float:right;" onclick="$(&quot;#' + this.options.id + '_popup&quot;).popover(&quot;hide&quot;);">&times;</a>',
                              html: true,
                              content: 'Loading...',
                              placement: function(){
-                                if (this.options.title.length > 250){
+                                if (len > 65 && len < 107){
                                     return "left";
                                 }
                                 return "right";
@@ -41,11 +41,16 @@ ckan.module('edawax_download_count_popup', function($, _){
 
         _onReceiveSnippet: function(html){
             this.el.popover('destroy');
+            var len = this.options.title.length;
+            console.log(this.options.title);
+            console.log(len);
             this.el.popover({title: '<span class="text-info"><strong>'+ this.options.title + '</strong></span><a class="close" style="float:right;" onclick="$(&quot;#' + this.options.id + '_popup&quot;).popover(&quot;hide&quot;);">&times;</a>',
                              html: true,
                              content: html,
                              placement: function(){
-                                if (this.options.title.length > 250){
+                                console.log(this.options.title);
+                                console.log(typeof(this.options.title));
+                                if (len > 65 && len < 107){
                                     return "left";
                                 }
                                 return "right";

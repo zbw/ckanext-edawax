@@ -21,39 +21,33 @@
 {% endblock %}
 
 {% block heading_private %}
-{% if h.in_review(package) == 'true' %}
-    <span class="dataset-private label label-review">
-      <i class="icon-lock"></i>
-      {{ 'Review' }}
-    </span>
-
-{% elif h.in_review(package) == 'reauthor' %}
-    <span class="dataset-private label label-reautho">
-      <i class="icon-lock"></i>
-      {{ 'Re-Author' }}
-    </span>
-
-
-{% elif package.private %}
-      <span class="dataset-private label label-inverse">
-      <i class="icon-lock"></i>
-      {{ _('Private') }}
-      </span>
-{% endif %}
-
- {% endblock %}
-
-
+  {% if h.in_review(package) == 'true' %}
+      <span class="dataset-private label label-review">
+        <i class="icon-lock"></i>
+        {{ 'Review' }}
+      </span><br>
+  {% elif h.in_review(package) == 'reauthor' %}
+      <span class="dataset-private label label-reautho">
+        <i class="icon-lock"></i>
+        {{ 'Re-Author' }}
+      </span><br>
+  {% elif package.private %}
+        <span class="dataset-private label label-inverse">
+        <i class="icon-lock"></i>
+        {{ _('Private') }}
+        </span><br>
+  {% endif %}
+{% endblock %}
 
 {% block heading_title %}
     {{ super() }}
-    {# Imports for popup with download information#}
+    {# Imports for popup with download information #}
     {% resource 'edawax/edawax_download_count_popup.js' %}
     {% resource 'edawax/edawax_download_count_popup.css' %}
     {% set resources = h.get_resource_name(package) %}
     <span data-module="edawax_download_count_popup"
             data-module-id="{{ package.id }}"
-            data-module-title="{{ package.title }}"
+            data-module-title="{{ h.truncate(package.title, 70) }}"
             data-module-resources="{{ resources }}"
             data-module-license="{{ package.license_title }}"
             data-module-num_resources="{{ package.num_resources }}"
