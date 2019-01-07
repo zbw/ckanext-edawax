@@ -21,7 +21,7 @@ ckan.module('edawax_download_count_popup', function($, _){
                              html: true,
                              content: 'Loading...',
                              placement: function(){
-                                if (len > 60 && len < 107){
+                                if (len > 50){
                                     return "left";
                                 }
                                 return "right";
@@ -50,7 +50,7 @@ ckan.module('edawax_download_count_popup', function($, _){
                              placement: function(){
                                 console.log(this.options.title);
                                 console.log(typeof(this.options.title));
-                                if (len > 60 && len < 107){
+                                if (len > 50){
                                     return "left";
                                 }
                                 return "right";
