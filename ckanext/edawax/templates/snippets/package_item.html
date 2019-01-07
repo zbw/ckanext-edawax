@@ -8,7 +8,7 @@
   {% if h.check_journal_role(package, 'admin')
     or h.get_user_id() == package.creator_user_id
   %}
-  <p>
+    <p>
         {{ h.linked_user(package.creator_user_id, maxlength=20) }}
     </p>
   {% endif %}
