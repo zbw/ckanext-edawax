@@ -48,7 +48,7 @@
     {% set resources = h.get_resource_name(package) %}
     <span data-module="edawax_download_count_popup"
             data-module-id="{{ package.id }}"
-            data-module-title="{{ h.truncate(package.title, 70) }}"
+            data-module-title="{{ h.truncate(package.title, 40) }}"
             data-module-resources="{{ resources }}"
             data-module-license="{{ package.license_title }}"
             data-module-num_resources="{{ package.num_resources }}"
