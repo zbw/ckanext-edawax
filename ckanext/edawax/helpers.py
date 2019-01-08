@@ -17,7 +17,7 @@ import ast
 def truncate_title(name):
     if len(name) > 30:
         base = name[0:23]
-        ending = name[-4:]
+        ending = name[-3:]
         return '{}...{}'.format(base, ending)
     return name
 
@@ -128,7 +128,6 @@ def journal_volume_sorting(packages):
     """
     return namedtuple for package sorting with volume/issue as key
     """
-
     v = 'dara_Publication_Volume'
     i = 'dara_Publication_Issue'
 
