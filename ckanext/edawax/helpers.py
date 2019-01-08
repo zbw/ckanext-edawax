@@ -15,11 +15,12 @@ import ast
 
 
 def truncate_title(name):
-    if len(name) > 45:
-        base = name[0:38]
+    if len(name) > 30:
+        base = name[0:23]
         ending = name[-4:]
         return '{}...{}'.format(base, ending)
     return name
+
 
 def get_resource_name(data):
     """
@@ -151,6 +152,7 @@ def render_infopage(page):
             return h.render_markdown(tk.render(page), allow_html=True)
     tk.abort(404, "Markdown file not found")
 
+
 def journal_total_views(org):
     url = org['name']
     result = _total_journal_views(engine, target=url)
@@ -158,6 +160,7 @@ def journal_total_views(org):
         return result[0].count
     else:
         return 0
+
 
 def journal_recent_views(org):
     measure_from = datetime.date.today() - datetime.timedelta(days=14)
@@ -176,6 +179,7 @@ def dataset_total_views(pkg):
             return r.count
     return 0
 
+
 def dataset_recent_views(pkg):
     measure_from = datetime.date.today() - datetime.timedelta(days=14)
     result = _recent_data_views(engine, measure_from)
@@ -183,6 +187,7 @@ def dataset_recent_views(pkg):
         if r.name == pkg['name']:
             return r.count
     return 0
+
 
 def resource_downloads(resource):
     url = resource
@@ -195,11 +200,12 @@ def resource_downloads(resource):
 
     return results[0][0]
 
-#===========================================================
-# The following come from ckan/lib/cli.py
-# They need to be changed to work with 'url' rather than ID
-# to get the counts for JOURNALs, rather than datasets
-#===========================================================
+
+#===========================================================#
+# The following come from ckan/lib/cli.py                   #
+# They need to be changed to work with 'url' rather than ID #
+# to get the counts for JOURNALs, rather than datasets      #
+#===========================================================#
 import ckan.model as model
 engine = model.meta.engine
 
