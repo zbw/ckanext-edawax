@@ -3,8 +3,8 @@
 {% resource 'edawax/edawax.css' %}
 
     {% block header_account %}
-        !!!
         {% resource 'edawax/browser_check.js' %}
+        <span data-module="browser_check"></span>
         {{ super() }}
     {% endblock %}
 
