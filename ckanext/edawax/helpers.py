@@ -25,7 +25,7 @@ def truncate_title(name):
 def get_resource_name(data):
     """
         Return a list of dicts (name, url, package_id, resource_id)
-        Or the ID of the package which will be used to provide a link
+        or the ID of the package which will be used to provide a link
         to add a resource for instances when none exist.
     """
     output = []
