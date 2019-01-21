@@ -221,3 +221,29 @@ label {
 .breadcrumb a{
   color: #505050 !important;
 }
+
+/* There's an issue with the way select2.js is implemented.
+ * If someone pastes in list of terms in the keywords with commas
+ * and presses 'enter' and then tries to enter only part of that phrase,
+ * they user won't be able to.
+ *
+ * to reproduce: paste "one, two, three" into "keywords" field
+ *                  - press enter
+ *                  - repaste the phrase and delete everything except 'one'
+ *
+ * The javascript is adding the following class: .select2-selected
+ *      this is what causes the issue, kinda.
+ *
+ * The bug appears to be that when something with commas is pasted into
+ * the field, the term is broken apart on the commas and stored locally.
+ * The funcation has a feature that prevents words stored locally from
+ * in the drop down menu. The individual values are stored but the entire
+ * phrase is displayed. There is another function that when a value is removed
+ * from field it is removed from the local storage too. Because
+ * something with commas is split apart in the local storage but remains
+ * as one in the field, removing the value from the field doesn't make any
+ * change to the local storage and the system thinks the values are still in
+ * place.
+ *
+ */
+
