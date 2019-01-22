@@ -19,6 +19,11 @@ from ckanext.dara.helpers import check_journal_role
 import new_invites as invites
 # XXX implement IAuthFunctions for controller actions
 
+#TODO: edit middleware tracking to include a check for robots, other actions?
+# requires adding IMiddleware
+# plugins.implements(plugins.IMiddleware, inherit=True)
+# github.com/ckan/ckan/issues/4451
+
 def edawax_facets(facets_dict):
     """
     helper method for common facet cleaning. We remove groups, tags and rename

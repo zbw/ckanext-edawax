@@ -13,6 +13,19 @@ import collections
 from ckan.lib import cli
 import ast
 
+import re
+import ckanext.edawax.robot_list as _list
+
+
+def is_robot(user_agent):
+    robots = _list.robots
+    for robot in robots:
+        pattern = re.compile(robot['pattern'], flags=re.UNICODE)
+        if pattern.match(user_agent):
+            print(robot['pattern'])
+            return True
+    return False
+
 
 def truncate_title(name):
     if len(name) > 30:
