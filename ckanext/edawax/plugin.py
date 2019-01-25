@@ -8,6 +8,7 @@ from ckan.logic.auth import get_package_object
 from ckan.logic.auth.update import package_update as ckan_pkgupdate
 from ckan.logic.auth.delete import package_delete as ckan_pkgdelete
 from ckan.logic.auth.delete import resource_delete as ckan_resourcedelete
+from ckan.config.middleware import TrackingMiddleware
 # from collections import OrderedDict
 import ckan.lib.helpers as h
 from ckan.common import c
@@ -16,7 +17,10 @@ from functools import partial
 from pylons import config
 from ckanext.dara.helpers import check_journal_role
 
+import sqlalchemy as sa
 import new_invites as invites
+import urllib2
+import hashlib
 # XXX implement IAuthFunctions for controller actions
 
 #TODO: edit middleware tracking to include a check for robots, other actions?
@@ -145,7 +149,60 @@ def journal_resource_delete(context, data_dict):
     return ckan_resourcedelete(context, data_dict)
 
 
-class EdawaxPlugin(plugins.SingletonPlugin,):
+class NewTrackingMiddleware(TrackingMiddleware):
+    """
+    These area carried over from `middleware.py`
+    IMPORTANT: for this to work, `TrackingMiddleware` is disabled in that file.
+        It's commented out. Otherwise, both that tracking and this one run and
+        if the other one runs with one doesn't run as intened. It never
+        receives the `/_tracking` path
+    """
+    def __init__(self, app, config):
+        self.app = app
+        self.config = config
+        self.engine = sa.create_engine(config.get('sqlalchemy.url'))
+
+
+    def __call__(self, environ, start_response):
+        path = environ['PATH_INFO']
+        method = environ.get('REQUEST_METHOD')
+        if path == '/_tracking' and method == 'POST':
+            # do the tracking
+            # get the post data
+            payload = environ['wsgi.input'].read()
+            parts = payload.split('&')
+            data = {}
+            for part in parts:
+                k, v = part.split('=')
+                data[k] = urllib2.unquote(v).decode("utf8")
+
+            start_response('200 OK', [('Content-Type', 'text/html')])
+            # we want a unique anonomized key for each user so that we do
+            # not count multiple clicks from the same user.
+            key = ''.join([
+                environ['HTTP_USER_AGENT'],
+                environ['REMOTE_ADDR'],
+                environ.get('HTTP_ACCEPT_LANGUAGE', ''),
+                environ.get('HTTP_ACCEPT_ENCODING', ''),
+            ])
+
+            key = hashlib.md5(key).hexdigest()
+            if helpers.is_robot(environ['HTTP_USER_AGENT']):
+                print('found a robot')
+                return []
+            print('not a robot')
+            # store key/data here
+            sql = '''INSERT INTO tracking_raw
+                     (user_key, url, tracking_type)
+                     VALUES (%s, %s, %s)'''
+            self.engine.execute(sql, key, data.get('url'), data.get('type'))
+            return []
+        return self.app(environ, start_response)
+
+
+
+
+class EdawaxPlugin(plugins.SingletonPlugin):
     '''
     edawax specific layout and workflow
     '''
@@ -159,6 +216,14 @@ class EdawaxPlugin(plugins.SingletonPlugin,):
     #        inherit=True)  # XXX necessary?
     plugins.implements(plugins.IAuthFunctions)
     plugins.implements(plugins.IActions)
+    plugins.implements(plugins.IMiddleware, inherit=True)  # edawax isn't being added to the implementation of this. Don't know why
+    # TODO: find out why this is happening
+    print('\n!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!?')
+
+    def make_middleware(self, app, config):
+        app = NewTrackingMiddleware(app, config)
+
+        return app
 
     def update_config(self, config):
         tk.add_template_directory(config, 'templates')
@@ -201,6 +266,7 @@ class EdawaxPlugin(plugins.SingletonPlugin,):
                 'get_resource_name': helpers.get_resource_name,
                 'transform_to_map': helpers.transform_to_map,
                 'truncate_title': helpers.truncate_title,
+                'is_robot': helpers.is_robot,
                 }
 
     def before_map(self, map):
