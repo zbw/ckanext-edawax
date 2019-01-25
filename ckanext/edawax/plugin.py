@@ -188,9 +188,7 @@ class NewTrackingMiddleware(TrackingMiddleware):
 
             key = hashlib.md5(key).hexdigest()
             if helpers.is_robot(environ['HTTP_USER_AGENT']):
-                print('found a robot')
                 return []
-            print('not a robot')
             # store key/data here
             sql = '''INSERT INTO tracking_raw
                      (user_key, url, tracking_type)
@@ -217,6 +215,8 @@ class EdawaxPlugin(plugins.SingletonPlugin):
     plugins.implements(plugins.IAuthFunctions)
     plugins.implements(plugins.IActions)
     plugins.implements(plugins.IMiddleware, inherit=True)
+
+
     def make_middleware(self, app, config):
         app = NewTrackingMiddleware(app, config)
 
