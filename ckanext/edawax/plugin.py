@@ -154,7 +154,7 @@ class NewTrackingMiddleware(TrackingMiddleware):
     These area carried over from `middleware.py`
     IMPORTANT: for this to work, `TrackingMiddleware` is disabled in that file.
         It's commented out. Otherwise, both that tracking and this one run and
-        if the other one runs with one doesn't run as intened. It never
+        if the other one runs this one doesn't work as intened. It never
         receives the `/_tracking` path
     """
     def __init__(self, app, config):
@@ -216,10 +216,7 @@ class EdawaxPlugin(plugins.SingletonPlugin):
     #        inherit=True)  # XXX necessary?
     plugins.implements(plugins.IAuthFunctions)
     plugins.implements(plugins.IActions)
-    plugins.implements(plugins.IMiddleware, inherit=True)  # edawax isn't being added to the implementation of this. Don't know why
-    # TODO: find out why this is happening
-    print('\n!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!?')
-
+    plugins.implements(plugins.IMiddleware, inherit=True)
     def make_middleware(self, app, config):
         app = NewTrackingMiddleware(app, config)
 
