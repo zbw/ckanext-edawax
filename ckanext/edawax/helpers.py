@@ -18,7 +18,6 @@ import ckanext.edawax.robot_list as _list
 
 
 def is_robot(user_agent):
-    print('robo check')
     robots = _list.robots
     for robot in robots:
         pattern = re.compile(robot['pattern'], re.IGNORECASE)

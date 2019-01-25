@@ -67,12 +67,20 @@ class TestTrackingFunctional(helpers.FunctionalTestBase):
         app.post('/_tracking', params=params, extra_environ=extra_environ)
 
 
-
-    def test_dataset_0_views(self):
-        """ Hasn't been viewed yet """
+    def _create_package_resource(self, resource=False):
         user = factories.User()
         owner_org = factories.Organization(users=[{'name': user['id'], 'capacity': 'admin'}])
         dataset = factories.Dataset(owner_org=owner_org['id'])
+        if resource:
+            resource = factories.Resource(package_id=dataset['id'])
+            return dataset, resource
+        return dataset
+
+
+    def test_dataset_0_views(self):
+        """ Hasn't been viewed yet """
+        dataset = self._create_package_resource()
+
         package = helpers.call_action('package_show', id=dataset['id'], include_tracking=True)
         tracking_summary = package['tracking_summary']
 
@@ -82,9 +90,8 @@ class TestTrackingFunctional(helpers.FunctionalTestBase):
 
     def test_dataset_1_view_real(self):
         """ 1 view """
-        user = factories.User()
-        owner_org = factories.Organization(users=[{'name': user['id'], 'capacity': 'admin'}])
-        dataset = factories.Dataset(owner_org=owner_org['id'])
+        dataset = self._create_package_resource()
+
         package = helpers.call_action('package_show', id=dataset['id'], include_tracking=True)
 
         url = url_for(controller='package', action='read',
@@ -100,16 +107,13 @@ class TestTrackingFunctional(helpers.FunctionalTestBase):
 
     def test_dataset_3_view_real(self):
         """ multiple views from different users """
-        user = factories.User()
-        owner_org = factories.Organization(users=[{'name': user['id'], 'capacity': 'admin'}])
-        dataset = factories.Dataset(owner_org=owner_org['id'])
+        dataset = self._create_package_resource()
         package = helpers.call_action('package_show', id=dataset['id'], include_tracking=True)
 
         url = url_for(controller='package', action='read',
                              id=package['name'])
-        self._post_to_tracking(url, ip='111.222.333.44')
-        self._post_to_tracking(url, ip='111.222.333.55')
-        self._post_to_tracking(url, ip='111.222.333.66')
+        for ip in ['44', '55', '66']:
+            self._post_to_tracking(url, ip='111.222.333.{}'.format(ip))
         self._update_tracking_summary()
 
         package = helpers.call_action('package_show', id=dataset['id'], include_tracking=True)
@@ -120,9 +124,7 @@ class TestTrackingFunctional(helpers.FunctionalTestBase):
 
     def test_dataset_1_view_bot(self):
         """ 1 view from a bot, shouldn't be counted """
-        user = factories.User()
-        owner_org = factories.Organization(users=[{'name': user['id'], 'capacity': 'admin'}])
-        dataset = factories.Dataset(owner_org=owner_org['id'])
+        dataset = self._create_package_resource()
         package = helpers.call_action('package_show', id=dataset['id'], include_tracking=True)
         url = url_for(controller='package', action='read',
                              id=package['name'])
@@ -138,16 +140,14 @@ class TestTrackingFunctional(helpers.FunctionalTestBase):
 
     def test_dataset_3_view_bot(self):
         """ Multiple views from bots shouldn't be counted """
-        user = factories.User()
-        owner_org = factories.Organization(users=[{'name': user['id'], 'capacity': 'admin'}])
-        dataset = factories.Dataset(owner_org=owner_org['id'])
+        dataset = self._create_package_resource()
         package = helpers.call_action('package_show', id=dataset['id'], include_tracking=True)
 
         url = url_for(controller='package', action='read',
                              id=package['name'])
-        self._post_to_tracking(url, ip='111.222.333.44', browser='bot')
-        self._post_to_tracking(url, ip='111.222.333.55', browser='bot')
-        self._post_to_tracking(url, ip='111.222.333.66', browser='bot')
+
+        for ip in ['44', '55', '66']:
+            self._post_to_tracking(url, ip='111.222.333.{}'.format(ip), browser='bot')
         self._update_tracking_summary()
 
         package = helpers.call_action('package_show', id=dataset['id'], include_tracking=True)
@@ -159,10 +159,7 @@ class TestTrackingFunctional(helpers.FunctionalTestBase):
 
     def test_resource_0_views(self):
         """ should be 0 """
-        user = factories.User()
-        owner_org = factories.Organization(users=[{'name': user['id'], 'capacity': 'admin'}])
-        dataset = factories.Dataset(owner_org=owner_org['id'])
-        resource = factories.Resource(package_id=dataset['id'])
+        dataset, resource = self._create_package_resource(True)
 
         package = helpers.call_action('package_show', id=dataset['id'], include_tracking=True)
 
@@ -175,10 +172,7 @@ class TestTrackingFunctional(helpers.FunctionalTestBase):
 
     def test_resource_1_view_real(self):
         """ Viewing a resource shouldn't count """
-        user = factories.User()
-        owner_org = factories.Organization(users=[{'name': user['id'], 'capacity': 'admin'}])
-        dataset = factories.Dataset(owner_org=owner_org['id'])
-        resource = factories.Resource(package_id=dataset['id'])
+        dataset, resource = self._create_package_resource(True)
 
         package = helpers.call_action('package_show', id=dataset['id'], include_tracking=True)
 
@@ -199,10 +193,7 @@ class TestTrackingFunctional(helpers.FunctionalTestBase):
 
     def test_resource_1_download_real(self):
         """ Download from 1 user """
-        user = factories.User()
-        owner_org = factories.Organization(users=[{'name': user['id'], 'capacity': 'admin'}])
-        dataset = factories.Dataset(owner_org=owner_org['id'])
-        resource = factories.Resource(package_id=dataset['id'])
+        dataset, resource = self._create_package_resource(True)
 
         self._post_to_tracking(resource['url'], type_='resource')
         self._update_tracking_summary()
@@ -218,10 +209,7 @@ class TestTrackingFunctional(helpers.FunctionalTestBase):
 
     def test_resource_1_download_bot(self):
         """ Downlaod from a bot, shouldn't count """
-        user = factories.User()
-        owner_org = factories.Organization(users=[{'name': user['id'], 'capacity': 'admin'}])
-        dataset = factories.Dataset(owner_org=owner_org['id'])
-        resource = factories.Resource(package_id=dataset['id'])
+        dataset, resource = self._create_package_resource(True)
 
         self._post_to_tracking(resource['url'], type_='resource', browser='bot')
         self._update_tracking_summary()
@@ -237,14 +225,10 @@ class TestTrackingFunctional(helpers.FunctionalTestBase):
 
     def test_resource_3_downloads_diff_users_real(self):
         """ Multiple downloads from different users """
-        user = factories.User()
-        owner_org = factories.Organization(users=[{'name': user['id'], 'capacity': 'admin'}])
-        dataset = factories.Dataset(owner_org=owner_org['id'])
-        resource = factories.Resource(package_id=dataset['id'])
+        dataset, resource = self._create_package_resource(True)
 
-        self._post_to_tracking(resource['url'], type_='resource', ip='111.222.333.44')
-        self._post_to_tracking(resource['url'], type_='resource', ip='111.222.333.55')
-        self._post_to_tracking(resource['url'], type_='resource', ip='111.222.333.66')
+        for ip in ['44', '55', '66']:
+            self._post_to_tracking(resource['url'], type_='resource', ip='111.222.333.{}'.format(ip))
         self._update_tracking_summary()
 
         package = helpers.call_action('package_show', id=dataset['id'], include_tracking=True)
@@ -259,14 +243,10 @@ class TestTrackingFunctional(helpers.FunctionalTestBase):
 
     def test_resource_3_downloads_same_user_real(self):
         """ Multiple downloads from different users """
-        user = factories.User()
-        owner_org = factories.Organization(users=[{'name': user['id'], 'capacity': 'admin'}])
-        dataset = factories.Dataset(owner_org=owner_org['id'])
-        resource = factories.Resource(package_id=dataset['id'])
+        dataset, resource = self._create_package_resource(True)
 
-        self._post_to_tracking(resource['url'], type_='resource', ip='111.222.333.44')
-        self._post_to_tracking(resource['url'], type_='resource', ip='111.222.333.44')
-        self._post_to_tracking(resource['url'], type_='resource', ip='111.222.333.44')
+        for ip in ['44', '44', '44']:
+            self._post_to_tracking(resource['url'], type_='resource', ip='111.222.333.{}'.format(ip))
         self._update_tracking_summary()
 
         package = helpers.call_action('package_show', id=dataset['id'], include_tracking=True)
@@ -280,14 +260,10 @@ class TestTrackingFunctional(helpers.FunctionalTestBase):
 
     def test_resource_3_downloads_bots(self):
         """ Multiple downloads from bots, shouldn't count """
-        user = factories.User()
-        owner_org = factories.Organization(users=[{'name': user['id'], 'capacity': 'admin'}])
-        dataset = factories.Dataset(owner_org=owner_org['id'])
-        resource = factories.Resource(package_id=dataset['id'])
+        dataset, resource = self._create_package_resource(True)
 
-        self._post_to_tracking(resource['url'], type_='resource', ip='111.222.333.44', browser='bot')
-        self._post_to_tracking(resource['url'], type_='resource', ip='111.222.333.55', browser='bot')
-        self._post_to_tracking(resource['url'], type_='resource', ip='111.222.333.66', browser='bot')
+        for ip in ['44', '55', '66']:
+            self._post_to_tracking(resource['url'], type_='resource', ip='111.222.333.{}'.format(ip), browser='bot')
         self._update_tracking_summary()
 
         package = helpers.call_action('package_show', id=dataset['id'], include_tracking=True)
