@@ -172,7 +172,6 @@ class NewTrackingMiddleware(TrackingMiddleware):
             if 'download' in path:
                 data['url'] = prefix + path
                 data['type'] = 'resource'
-                print(data['url'])
             else:
                 data['url'] = path
                 data['type'] = 'page'
@@ -189,12 +188,11 @@ class NewTrackingMiddleware(TrackingMiddleware):
             key = hashlib.md5(key).hexdigest()
             if helpers.is_robot(environ['HTTP_USER_AGENT']):
                 return self.app(environ, start_response)
-            print('not a robot')
             # store key/data here
             sql = '''INSERT INTO tracking_raw
                      (user_key, url, tracking_type)
                      VALUES (%s, %s, %s)'''
-            self.engine.execute(sql, key, data.get('url'), data.get('type'))
+            self.engine.execute(sql, key, data.get('url').strip(), data.get('type'))
             return self.app(environ, start_response)
         return self.app(environ, start_response)
 
