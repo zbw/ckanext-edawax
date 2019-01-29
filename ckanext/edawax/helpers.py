@@ -17,6 +17,13 @@ import re
 import ckanext.edawax.robot_list as _list
 
 
+def track_path(path):
+    if '/journals/' in path or '/download/' in path:
+        return True
+    if '/dataset' in path and '/resource' not in path:
+        return True
+    return False
+
 def is_robot(user_agent):
     robots = _list.robots
     for robot in robots:

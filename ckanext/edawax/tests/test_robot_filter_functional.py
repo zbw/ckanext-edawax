@@ -11,6 +11,8 @@ import datetime
 import ckan
 import webtest
 
+import random
+
 
 class TestTrackingFunctional(helpers.FunctionalTestBase):
     """
@@ -64,7 +66,8 @@ class TestTrackingFunctional(helpers.FunctionalTestBase):
             'HTTP_ACCEPT_LANGUAGE': 'en',
             'HTTP_ACCEPT_ENCODING': 'gzip, deflate',
         }
-        app.post('/_tracking', params=params, extra_environ=extra_environ)
+
+        app.post(str(url), params=params, extra_environ=extra_environ)
 
 
     def _create_package_resource(self, resource=False):
@@ -73,6 +76,7 @@ class TestTrackingFunctional(helpers.FunctionalTestBase):
         dataset = factories.Dataset(owner_org=owner_org['id'])
         if resource:
             resource = factories.Resource(package_id=dataset['id'])
+            #, url='x/dataset/132/resource/{}/download/image.png'.format(random.randint(100, 999)))
             return dataset, resource
         return dataset
 
@@ -112,6 +116,7 @@ class TestTrackingFunctional(helpers.FunctionalTestBase):
 
         url = url_for(controller='package', action='read',
                              id=package['name'])
+
         for ip in ['44', '55', '66']:
             self._post_to_tracking(url, ip='111.222.333.{}'.format(ip))
         self._update_tracking_summary()
@@ -173,12 +178,9 @@ class TestTrackingFunctional(helpers.FunctionalTestBase):
     def test_resource_1_view_real(self):
         """ Viewing a resource shouldn't count """
         dataset, resource = self._create_package_resource(True)
+        url = resource['url']
 
-        package = helpers.call_action('package_show', id=dataset['id'], include_tracking=True)
-
-        url = url_for(controller='package', action='resource_read',
-                             id=package['name'], resource_id=resource['id'])
-        self._post_to_tracking(resource['url'])
+        self._post_to_tracking(url)
         self._update_tracking_summary()
 
         package = helpers.call_action('package_show', id=dataset['id'], include_tracking=True)
@@ -191,11 +193,12 @@ class TestTrackingFunctional(helpers.FunctionalTestBase):
         assert tracking_summary['recent'] == 0, 'Recent should be 0, {}'.format(tracking_summary['recent'])
 
 
-    def test_resource_1_download_real(self):
+    def _test_resource_1_download_real(self):
         """ Download from 1 user """
         dataset, resource = self._create_package_resource(True)
+        url = resource['url']
 
-        self._post_to_tracking(resource['url'], type_='resource')
+        self._post_to_tracking(url, type_='resource')
         self._update_tracking_summary()
 
         package = helpers.call_action('package_show', id=dataset['id'], include_tracking=True)
@@ -207,11 +210,12 @@ class TestTrackingFunctional(helpers.FunctionalTestBase):
         assert tracking_summary['total'] == 1, 'Total should be 1, {}'.format(tracking_summary['total'])
         assert tracking_summary['recent'] == 1, 'Recent should be 1, {}'.format(tracking_summary['recent'])
 
-    def test_resource_1_download_bot(self):
+    def _test_resource_1_download_bot(self):
         """ Downlaod from a bot, shouldn't count """
         dataset, resource = self._create_package_resource(True)
+        url = resource['url']
 
-        self._post_to_tracking(resource['url'], type_='resource', browser='bot')
+        self._post_to_tracking(url, type_='resource', browser='bot')
         self._update_tracking_summary()
 
         package = helpers.call_action('package_show', id=dataset['id'], include_tracking=True)
@@ -223,12 +227,14 @@ class TestTrackingFunctional(helpers.FunctionalTestBase):
         assert tracking_summary['total'] == 0, 'Total should be 0, {}'.format(tracking_summary['total'])
         assert tracking_summary['recent'] == 0, 'Recent should be 0, {}'.format(tracking_summary['recent'])
 
-    def test_resource_3_downloads_diff_users_real(self):
+
+    def _test_resource_3_downloads_diff_users_real(self):
         """ Multiple downloads from different users """
         dataset, resource = self._create_package_resource(True)
+        url = resource['url']
 
         for ip in ['44', '55', '66']:
-            self._post_to_tracking(resource['url'], type_='resource', ip='111.222.333.{}'.format(ip))
+            self._post_to_tracking(url, type_='resource', ip='111.222.333.{}'.format(ip))
         self._update_tracking_summary()
 
         package = helpers.call_action('package_show', id=dataset['id'], include_tracking=True)
@@ -241,12 +247,13 @@ class TestTrackingFunctional(helpers.FunctionalTestBase):
         assert tracking_summary['recent'] == 3, 'Recent should be 3, {}'.format(tracking_summary['recent'])
 
 
-    def test_resource_3_downloads_same_user_real(self):
+    def _test_resource_3_downloads_same_user_real(self):
         """ Multiple downloads from different users """
         dataset, resource = self._create_package_resource(True)
+        url = resource['url']
 
         for ip in ['44', '44', '44']:
-            self._post_to_tracking(resource['url'], type_='resource', ip='111.222.333.{}'.format(ip))
+            self._post_to_tracking(url, type_='resource', ip='111.222.333.{}'.format(ip))
         self._update_tracking_summary()
 
         package = helpers.call_action('package_show', id=dataset['id'], include_tracking=True)
@@ -258,12 +265,13 @@ class TestTrackingFunctional(helpers.FunctionalTestBase):
         assert tracking_summary['total'] == 1, 'Total should be 1, {}'.format(tracking_summary['total'])
         assert tracking_summary['recent'] == 1, 'Recent should be 1, {}'.format(tracking_summary['recent'])
 
-    def test_resource_3_downloads_bots(self):
+    def _test_resource_3_downloads_bots(self):
         """ Multiple downloads from bots, shouldn't count """
         dataset, resource = self._create_package_resource(True)
+        url = resource['url']
 
         for ip in ['44', '55', '66']:
-            self._post_to_tracking(resource['url'], type_='resource', ip='111.222.333.{}'.format(ip), browser='bot')
+            self._post_to_tracking(url, type_='resource', ip='111.222.333.{}'.format(ip), browser='bot')
         self._update_tracking_summary()
 
         package = helpers.call_action('package_show', id=dataset['id'], include_tracking=True)

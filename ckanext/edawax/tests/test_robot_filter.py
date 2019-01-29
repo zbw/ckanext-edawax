@@ -5,6 +5,26 @@ from the counter
 
 import ckanext.edawax.helpers as helpers
 
+class TestTrackPath(object):
+    def test_journal_landing_page_true(self):
+        path = '/journals/something-here'
+        result = helpers.track_path(path)
+        assert result == True, "Page should be tracked"
+
+    def test_dataset_landing_page_true(self):
+        path = '/dataset/a-data-resource'
+        result = helpers.track_path(path)
+        assert result == True, "Page should be tracked"
+
+    def test_resource_landing_page_false(self):
+        path = '/dataset/ksja-fp9w4-ru8jf-i4398r/resource/123a-123123-675234-34908g'
+        result = helpers.track_path(path)
+        assert result == False, "Page shouldn't be tracked"
+
+    def test_resource_download_true(self):
+        path = '/dataset/194349da-742a-415e-9525-6f8d66e7c7d5/resource/7155a289-940f-419f-85d3-d27128369551/download/image.png'
+        result = helpers.track_path(path)
+        assert result == True, "Page should be tracked"
 
 class TestRobotFilter(object):
     def test_filter_bot_true(self):
