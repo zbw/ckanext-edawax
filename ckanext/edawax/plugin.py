@@ -129,14 +129,21 @@ def journal_package_delete(context, data_dict):
 
 def journal_resource_delete(context, data_dict):
     """
-    don't allow resource delete if it has a DOI
+    don't allow resource delete if it has a DOI,
+    but allow author's to delete resources they added.
     """
     # resource = c.resource  # would this be reliable?
     resource = tk.get_action('resource_show')(context, data_dict)
+    package = tk.get_action('package_show')(context, {'id': resource['package_id']})
+    creator_id = package['creator_user_id']
+    creator = tk.get_action('user_show')(context, {'id': creator_id})
 
     if resource.get('dara_DOI', False) or _ctest(resource):
         return {'success': False, 'msg': "Resource can not be deleted because\
                 it has a DOI assigned"}
+    # creator's with 'author' rights should be able to delete resources
+    if context['user'] == creator['name']:
+        return {'success': True}
     return ckan_resourcedelete(context, data_dict)
 
 
