@@ -167,7 +167,6 @@ class NewTrackingMiddleware(TrackingMiddleware):
         path = environ['PATH_INFO']
         method = environ.get('REQUEST_METHOD')
         if helpers.track_path(path) and helpers.is_published(path):
-            print('tracking')
             data = {}
             prefix = config.get('ckan.site_url', 'http://127.0.0.1:5000')
             if 'download' in path:
@@ -194,7 +193,7 @@ class NewTrackingMiddleware(TrackingMiddleware):
                      VALUES (%s, %s, %s)'''
             self.engine.execute(sql, key, data.get('url').strip(), data.get('type'))
             return self.app(environ, start_response)
-        print('not tracking')
+
         return self.app(environ, start_response)
 
 
