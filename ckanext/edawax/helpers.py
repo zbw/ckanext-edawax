@@ -15,7 +15,27 @@ import ast
 
 import re
 import ckanext.edawax.robot_list as _list
+from urlparse import urlparse
 
+def is_published(url):
+    parts = urlparse(url)
+    if '/journals/' in parts.path:
+        return True
+    start = 9
+    if parts.scheme:
+        end = 36+start
+        dataset_name = parts.path[start:end]
+    else:
+        dataset_name = parts.path[start:]
+    try:
+        pck = tk.get_action('package_show')(None, {'id': dataset_name})
+        if is_private(pck) or in_review(pck) != 'reviewed':
+            return False
+        return True
+    except Exception as e:
+        pass
+
+    return False
 
 def track_path(path):
     if '/journals/' in path or '/download/' in path:

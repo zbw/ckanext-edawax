@@ -166,7 +166,8 @@ class NewTrackingMiddleware(TrackingMiddleware):
     def __call__(self, environ, start_response):
         path = environ['PATH_INFO']
         method = environ.get('REQUEST_METHOD')
-        if helpers.track_path(path):
+        if helpers.track_path(path) and helpers.is_published(path):
+            print('tracking')
             data = {}
             prefix = config.get('ckan.site_url', 'http://127.0.0.1:5000')
             if 'download' in path:
@@ -184,7 +185,6 @@ class NewTrackingMiddleware(TrackingMiddleware):
                 environ.get('HTTP_ACCEPT_LANGUAGE', ''),
                 environ.get('HTTP_ACCEPT_ENCODING', ''),
             ])
-
             key = hashlib.md5(key).hexdigest()
             if helpers.is_robot(environ['HTTP_USER_AGENT']):
                 return self.app(environ, start_response)
@@ -194,6 +194,7 @@ class NewTrackingMiddleware(TrackingMiddleware):
                      VALUES (%s, %s, %s)'''
             self.engine.execute(sql, key, data.get('url').strip(), data.get('type'))
             return self.app(environ, start_response)
+        print('not tracking')
         return self.app(environ, start_response)
 
 
@@ -262,6 +263,7 @@ class EdawaxPlugin(plugins.SingletonPlugin):
                 'truncate_title': helpers.truncate_title,
                 'is_robot': helpers.is_robot,
                 'track_path': helpers.track_path,
+                'is_published': helpers.is_published,
                 }
 
     def before_map(self, map):
