@@ -144,9 +144,9 @@ class WorkflowController(PackageController):
             filename = os.path.basename(url)
             r = requests.get(url)
             if r.status_code != 200:
-                pass
+                h.flash_error('Failed to download files.')
+                redirect(id)
             else:
-                print(len(r.content))
                 data[filename] = r
 
         if len(data) > 0:
@@ -159,7 +159,10 @@ class WorkflowController(PackageController):
             response.headers.update({"Content-Disposition": "attachment;filename={}".format(zip_name)})
             response.content_type = "application/zip"
             return s.getvalue()
-        return False  #make this better
+        # if there's nothing to download but someone gets to the download page
+        # /download_all, return them to the landing page
+        h.flash_error('Nothing to download.')
+        redirect(id)
 
 
 
