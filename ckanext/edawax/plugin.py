@@ -21,12 +21,7 @@ import sqlalchemy as sa
 import new_invites as invites
 import urllib2
 import hashlib
-# XXX implement IAuthFunctions for controller actions
 
-#TODO: edit middleware tracking to include a check for robots, other actions?
-# requires adding IMiddleware
-# plugins.implements(plugins.IMiddleware, inherit=True)
-# github.com/ckan/ckan/issues/4451
 
 def edawax_facets(facets_dict):
     """
@@ -166,6 +161,8 @@ class NewTrackingMiddleware(TrackingMiddleware):
     def __call__(self, environ, start_response):
         path = environ['PATH_INFO']
         method = environ.get('REQUEST_METHOD')
+        # don't count if it's not the right kind of page or if it's not
+        # published
         if helpers.track_path(path) and helpers.is_published(path):
             data = {}
             prefix = config.get('ckan.site_url', 'http://127.0.0.1:5000')
