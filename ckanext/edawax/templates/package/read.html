@@ -44,25 +44,6 @@
 
   {% block package_description %}
 
-{% if h.in_review(pkg) == 'true' %}
-      <span class="dataset-private label pull-right label-review">
-        <i class="icon-lock"></i>
-        {{ 'Review' }}
-      </span>
-      <br />
- {% endif %}
-
-{% if h.in_review(pkg) == 'reauthor' %}
-    <span class="dataset-private label pull-right label-reauthor"
-        title="Dataset has been resend to author"
-        >
-      <i class="icon-lock"></i>
-      {{ 'Re-Author' }}
-    </span>
-    <br />
-{% endif %}
-
-
 {% if DOI %}
     {% snippet 'package/snippets/doi.html', DOI=DOI, test='false' %}
 {% endif %}
@@ -70,7 +51,6 @@
 {% if DOI_Test and not DOI and use_testserver %}
     {% snippet 'package/snippets/doi.html', DOI=DOI_Test, test='true' %}
 {% endif %}
-
 
  {% if submission_id and is_admin %}
    <p style="color:grey; text-decoration: underline">Article Submission ID: {{ submission_id }} </p>
@@ -108,6 +88,22 @@
     {% endif %}
   </div>
 #}
+  {% if h.in_review(pkg) == 'true' %}
+        <span class="dataset-private label pull-right label-review">
+          <i class="icon-lock"></i>
+          {{ 'Review' }}
+        </span>
+
+   {% endif %}
+
+  {% if h.in_review(pkg) == 'reauthor' %}
+      <span class="dataset-private label pull-right label-reauthor"
+          title="Dataset has been resend to author">
+        <i class="icon-lock"></i>
+        {{ 'Re-Author' }}
+      </span>
+
+  {% endif %}
 
   {{ super() }}
 

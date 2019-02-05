@@ -221,3 +221,8 @@ label {
 .breadcrumb a{
   color: #505050 !important;
 }
+
+.label-review,
+.label-reauthor {
+  margin-left:10px;
+}
