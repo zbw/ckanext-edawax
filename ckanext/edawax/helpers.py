@@ -1,6 +1,6 @@
 import ckan.plugins.toolkit as tk
 import ckan.model as model
-from ckan.common import c
+from ckan.common import c, response, _, request
 from ckanext.dara.helpers import check_journal_role
 from pylons import config
 from toolz.itertoolz import unique
@@ -100,7 +100,6 @@ def transform_to_map(data):
     except Exception:
         pass
     return data
-
 
 def get_user_id():
     def context():
