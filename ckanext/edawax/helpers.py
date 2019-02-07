@@ -8,6 +8,98 @@ from collections import namedtuple
 import os
 from ckan.lib import helpers as h
 # from functools import wraps
+import datetime
+import collections
+from ckan.lib import cli
+import ast
+
+import re
+import ckanext.edawax.robot_list as _list
+from urlparse import urlparse
+
+
+def is_published(url):
+    parts = urlparse(url)
+    if '/journals/' in parts.path:
+        return True
+    start = 9
+    if parts.scheme:
+        end = 36 + start
+        dataset_name = parts.path[start:end]
+    else:
+        dataset_name = parts.path[start:]
+    try:
+        pck = tk.get_action('package_show')(None, {'id': dataset_name})
+        if is_private(pck) or in_review(pck) != 'reviewed':
+            return False
+        return True
+    except Exception as e:
+        return False
+
+def track_path(path):
+    if '/journals/' in path or '/download/' in path:
+        return True
+    if '/dataset' in path and '/resource' not in path:
+        return True
+    return False
+
+def is_robot(user_agent):
+    robots = _list.robots
+    for robot in robots:
+        pattern = re.compile(robot['pattern'], re.IGNORECASE)
+        if pattern.search(user_agent):
+            return True
+    return False
+
+
+def truncate_title(name):
+    if len(name) > 30:
+        base = name[0:23]
+        ending = name[-3:]
+        return '{}...{}'.format(base, ending)
+    return name
+
+
+def get_resource_name(data):
+    """
+        Return a list of dicts (name, url, package_id, resource_id)
+        or the ID of the package which will be used to provide a link
+        to add a resource for instances when none exist.
+    """
+    output = []
+    for resource in data['resources']:
+        output.append(resource['id'])
+    if len(output) == 0:
+        return data['id']
+    return output
+
+
+def transform_to_map(data):
+    """
+        data: list of resource ids
+        returns: list of dicts with resource data
+
+        Each dict contains the information needed by the popup to provide
+        the required information.
+    """
+    try:
+        final = []
+        lst = ast.literal_eval(data)
+        for item in lst:
+            _id = item
+            resource_data = tk.get_action('resource_show')(None, {'id':_id})
+            data = {
+                       'name': resource_data['name'],
+                       'url': resource_data['url'],
+                       'package_id': resource_data['package_id'],
+                       'resource_id': resource_data['id'],
+                       'format': resource_data['format']
+                    }
+            final.append(data)
+        return final
+    except Exception:
+        pass
+    return data
 
 
 def get_user_id():
@@ -74,7 +166,6 @@ def journal_volume_sorting(packages):
     """
     return namedtuple for package sorting with volume/issue as key
     """
-
     v = 'dara_Publication_Volume'
     i = 'dara_Publication_Issue'
 
@@ -97,3 +188,117 @@ def render_infopage(page):
         if os.path.exists(os.path.join(path, page.encode('utf-8'))):
             return h.render_markdown(tk.render(page), allow_html=True)
     tk.abort(404, "Markdown file not found")
+
+
+def journal_total_views(org):
+    url = org['name']
+    result = _total_journal_views(engine, target=url)
+    if len(result) > 0:
+        return result[0].count
+    else:
+        return 0
+
+
+def journal_recent_views(org):
+    measure_from = datetime.date.today() - datetime.timedelta(days=14)
+    url = org['name']
+    result =  _recent_journal_views(engine, measure_from=measure_from, target=url)
+    if len(result) > 0:
+        return result[0].count
+    else:
+        return 0
+
+
+def dataset_total_views(pkg):
+    result = _total_data_views(engine)
+    for r in result:
+        if r.name == pkg['name']:
+            return r.count
+    return 0
+
+
+def dataset_recent_views(pkg):
+    measure_from = datetime.date.today() - datetime.timedelta(days=14)
+    result = _recent_data_views(engine, measure_from)
+    for r in result:
+        if r.name == pkg['name']:
+            return r.count
+    return 0
+
+
+def resource_downloads(resource):
+    url = resource
+    sql = """
+            SELECT COALESCE(SUM(ts.count), 0) as total_views
+            FROM tracking_summary as ts
+            WHERE ts.url = %(url)s;
+          """
+    results = engine.execute(sql, url=url).fetchall()
+
+    return results[0][0]
+
+
+#===========================================================#
+# The following come from ckan/lib/cli.py                   #
+# They need to be changed to work with 'url' rather than ID #
+# to get the counts for JOURNALs, rather than datasets      #
+#===========================================================#
+import ckan.model as model
+engine = model.meta.engine
+
+_ViewCount = collections.namedtuple("ViewCount", "id name count")
+
+def _total_journal_views(engine, target):
+    sql = '''
+        SELECT p.id,
+               p.name,
+               COALESCE(SUM(ts.count), 0) AS total_views
+        FROM "group" AS p
+        CROSS JOIN tracking_summary AS ts
+        WHERE p.name = %(name)s
+            AND ts.url = %(url)s
+        GROUP BY p.id, p.name
+        ORDER BY total_views DESC
+    '''
+
+    return [_ViewCount(*t) for t in engine.execute(sql, {'name': target, 'url': '/journals/' + target }).fetchall()]
+
+def _recent_journal_views(engine, target, measure_from):
+    sql = '''
+        SELECT p.id,
+               p.name,
+               COALESCE(SUM(ts.count), 0) AS total_views
+           FROM "group" AS p
+           CROSS JOIN tracking_summary AS ts
+           WHERE ts.tracking_date >= %(measure_from)s
+                AND p.name = %(name)s
+                    AND ts.url = %(url)s
+           GROUP BY p.id, p.name
+           ORDER BY total_views DESC
+    '''
+    return [_ViewCount(*t) for t in engine.execute(sql, name=target, url='/journals/{}'.format(target), measure_from=str(measure_from)).fetchall()]
+
+def _total_data_views(engine):
+    sql = '''
+        SELECT p.id,
+               p.name,
+               COALESCE(SUM(s.count), 0) AS total_views
+           FROM package AS p
+           LEFT OUTER JOIN tracking_summary AS s ON s.package_id = p.id
+           GROUP BY p.id, p.name
+           ORDER BY total_views DESC
+    '''
+    return [_ViewCount(*t) for t in engine.execute(sql).fetchall()]
+
+def _recent_data_views(engine, measure_from):
+    sql = '''
+        SELECT p.id,
+               p.name,
+               COALESCE(SUM(s.count), 0) AS total_views
+           FROM package AS p
+           LEFT OUTER JOIN tracking_summary AS s ON s.package_id = p.id
+           WHERE s.tracking_date >= %(measure_from)s
+           GROUP BY p.id, p.name
+           ORDER BY total_views DESC
+    '''
+    return [_ViewCount(*t) for t in engine.execute(sql, measure_from=str(measure_from)).fetchall()]
