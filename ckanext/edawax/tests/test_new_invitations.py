@@ -31,12 +31,12 @@ class TestNewInvites(object):
            'journal_title': org['title']}
         return (member, test_member)
 
-    def test_choose_correct_email_body_for_member(self):
+    def _test_choose_correct_email_body_for_member(self):
         member, test_member = self._create_test_user(u'member')
         result = i.get_invite_body(member, test_member)
         assert 'deposit the replication' in result, ('Wrong Template: {}').format(result)
 
-    def test_choose_correct_email_body_for_editor(self):
+    def _test_choose_correct_email_body_for_editor(self):
         member, test_member = self._create_test_user(u'editor')
         result = i.get_invite_body(member, test_member)
         assert 'to serve as an additional editor' in result, ('Wrong Template: {}').format(result)
