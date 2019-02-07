@@ -28,6 +28,9 @@ from email.mime.application import MIMEApplication
 
 log = logging.getLogger(__name__)
 
+class MailerException(Exception):
+    pass
+
 def _get_user_role(user_name, org_id):
     data_dict = {'id': org_id}
     org_data = user_data = ckan.logic.get_action('organization_show')(data_dict=data_dict)

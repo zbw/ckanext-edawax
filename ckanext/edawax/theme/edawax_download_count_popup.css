@@ -1,0 +1,39 @@
+.dataset-list .popover .nums {
+    border: none;
+    margin: 0;
+    padding: 0;
+
+    float: left;
+    width: 100%;
+}
+
+.dataset-list .popover .nums dl {
+    width: 100% !important;
+}
+
+.dataset-list .popover .nums dd {
+    font-size: 20px;
+}
+
+.dataset-list .popover .go-to-dataset {
+    float: right;
+}
+
+.popover {
+    max-width: none !important;
+    width: auto;
+}
+
+.info_popover{
+    max-width: 10px;
+}
+
+.info_popover:hover {
+    cursor: help;
+}
+
+.popover-content{
+    max-height: 200px;
+    overflow-y: auto;
+    max-width: 350px;
+}
