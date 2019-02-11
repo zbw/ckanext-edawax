@@ -260,6 +260,7 @@ class EdawaxPlugin(plugins.SingletonPlugin):
                 'is_robot': helpers.is_robot,
                 'track_path': helpers.track_path,
                 'is_published': helpers.is_published,
+                'show_download_all': helpers.show_download_all
                 }
 
     def before_map(self, map):
@@ -327,6 +328,11 @@ class EdawaxPlugin(plugins.SingletonPlugin):
         map.connect('/dataset/{id}/reauthor',
                     controller="ckanext.edawax.controller:WorkflowController",
                     action="reauthor",)
+
+        # download all resources
+        map.connect('/dataset/{id}/download_all',
+                    controller="ckanext.edawax.controller:WorkflowController",
+                    action="download_all", )
 
         # infopages
         controller = 'ckanext.edawax.controller:InfoController'

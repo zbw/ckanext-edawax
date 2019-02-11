@@ -301,3 +301,9 @@ def _recent_data_views(engine, measure_from):
            ORDER BY total_views DESC
     '''
     return [_ViewCount(*t) for t in engine.execute(sql, measure_from=str(measure_from)).fetchall()]
+
+def show_download_all(pkg):
+    if not isinstance(pkg, dict):
+        return False
+    return len(pkg['resources']) > 1
+
