@@ -19,14 +19,13 @@ from urlparse import urlparse
 
 
 def has_doi(pkg):
-
     doi = pkg.get('dara_DOI', False) or pkg.get('dara_DOI_Test', False)
     if doi in ['', False]:
         return False
     return True
 
 
-def has_hammer(x):
+def has_hammer():
     return c.is_sysadmin
 
 
