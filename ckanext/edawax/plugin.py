@@ -8,6 +8,7 @@ from ckan.logic.auth import get_package_object
 from ckan.logic.auth.update import package_update as ckan_pkgupdate
 from ckan.logic.auth.delete import package_delete as ckan_pkgdelete
 from ckan.logic.auth.delete import resource_delete as ckan_resourcedelete
+from ckan.logic.auth.create import resource_create as ckan_resourcecreate
 from ckan.config.middleware import TrackingMiddleware
 # from collections import OrderedDict
 import ckan.lib.helpers as h
@@ -158,6 +159,20 @@ def journal_resource_delete(context, data_dict):
     return ckan_resourcedelete(context, data_dict)
 
 
+def journal_resource_create(context, data_dict):
+    """
+    Don't allow new resources to be added if there is a DOI for the package
+    """
+    data_dict['id'] = data_dict['package_id']
+    pkg_dict = tk.get_action('package_show')(context, data_dict)
+    if pkg_dict.get('dara_DOI', False) or _ctest(pkg_dict):
+        return {'success': False, 'msg': "Package can not be created because\
+                it has a DOI assigned"}
+
+    return ckan_resourcecreate(context, data_dict)
+
+
+
 class NewTrackingMiddleware(TrackingMiddleware):
     """
     These area carried over from `middleware.py`
@@ -248,6 +263,7 @@ class EdawaxPlugin(plugins.SingletonPlugin):
         return {'package_update': journal_package_update,
                 'package_delete': journal_package_delete,
                 'resource_delete': journal_resource_delete,
+                'resource_create': journal_resource_create,
                 }
 
     def get_helpers(self):
@@ -274,7 +290,9 @@ class EdawaxPlugin(plugins.SingletonPlugin):
                 'is_robot': helpers.is_robot,
                 'track_path': helpers.track_path,
                 'is_published': helpers.is_published,
-                'show_download_all': helpers.show_download_all
+                'show_download_all': helpers.show_download_all,
+                'has_doi': helpers.has_doi,
+                'has_hammer': helpers.has_hammer,
                 }
 
     def before_map(self, map):
