@@ -4,7 +4,7 @@
     {{ super() }}
     {# TODO: only show if there's more than one resource#}
     {% if h.show_download_all(pkg) %}
-    <a type="button" class="btn btn-success" id="download_all" target="_blank" href="/dataset/{{ pkg.id }}/download_all">
+    <a type="button" class="btn btn-success" id="download_all" href="/dataset/{{ pkg.id }}/download_all">
         Download All
     </a>
     {% endif %}
