@@ -18,6 +18,18 @@ import ckanext.edawax.robot_list as _list
 from urlparse import urlparse
 
 
+def has_doi(pkg):
+
+    doi = pkg.get('dara_DOI', False) or pkg.get('dara_DOI_Test', False)
+    if doi in ['', False]:
+        return False
+    return True
+
+
+def has_hammer(x):
+    return c.is_sysadmin
+
+
 def is_published(url):
     parts = urlparse(url)
     if '/journals/' in parts.path:
