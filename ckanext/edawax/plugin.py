@@ -11,7 +11,7 @@ from ckan.logic.auth.delete import resource_delete as ckan_resourcedelete
 from ckan.config.middleware import TrackingMiddleware
 # from collections import OrderedDict
 import ckan.lib.helpers as h
-from ckan.common import c
+from ckan.common import c, request
 from toolz.functoolz import compose
 from functools import partial
 from pylons import config
@@ -21,6 +21,7 @@ import sqlalchemy as sa
 import new_invites as invites
 import urllib2
 import hashlib
+
 
 
 def edawax_facets(facets_dict):
@@ -128,19 +129,32 @@ def journal_package_delete(context, data_dict):
         return {'success': False, 'msg': "Package can not be deleted because\
                 it has a DOI assigned"}
 
+    creator_id = pkg_dict['creator_user_id']
+    creator = tk.get_action('user_show')(context, {'id': creator_id})
+    if context['user'] == creator['name'] and 'resource_delete' in request.url:
+        return {'success': True}
+
     return ckan_pkgdelete(context, data_dict)
 
 
 def journal_resource_delete(context, data_dict):
     """
-    don't allow resource delete if it has a DOI
+    don't allow resource delete if it has a DOI,
+    but allow author's to delete resources they added.
     """
     # resource = c.resource  # would this be reliable?
     resource = tk.get_action('resource_show')(context, data_dict)
+    package = tk.get_action('package_show')(context, {'id': resource['package_id']})
+    creator_id = package['creator_user_id']
+    creator = tk.get_action('user_show')(context, {'id': creator_id})
 
     if resource.get('dara_DOI', False) or _ctest(resource):
         return {'success': False, 'msg': "Resource can not be deleted because\
                 it has a DOI assigned"}
+    # creator's with 'author' rights should be able to delete resources
+    if context['user'] == creator['name']:
+        return {'success': True}
+
     return ckan_resourcedelete(context, data_dict)
 
 
@@ -343,9 +357,14 @@ class EdawaxPlugin(plugins.SingletonPlugin):
                     action="md_page",
                     controller=controller,)
 
+        # resource_delete
+        #map.connect('/dataset/{id}/resource_delete/{resource_id}',
+        #            controller="ckanext.edawax.controller:WorkflowController",
+        #            action="resource_delete")
+
         return map
 
-    def organization_facets(self, facets_dict, organization_type, package_type):
+    def organization_facets(self, facets_dict, organization_type,package_type):
         # for some reason CKAN does not accept a new OrderedDict here (does
         # not happen with datasets facets!). So we have to modify the original
         # facets_dict
