@@ -263,7 +263,6 @@ class EdawaxPlugin(plugins.SingletonPlugin):
         return {'package_update': journal_package_update,
                 'package_delete': journal_package_delete,
                 'resource_delete': journal_resource_delete,
-                'resource_create': journal_resource_create,
                 }
 
     def get_helpers(self):
