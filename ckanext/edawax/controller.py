@@ -133,19 +133,6 @@ class WorkflowController(PackageController):
         redirect(id)
 
 
-    def login(self):
-        s = requests.session()
-        data = {'username': '', 'password': ''}
-        url = config.get('ckan.site_url') + '/login_generic'
-        print('=====================')
-        print(c)
-        r = s.post(url, data=data)
-        if 'field-login' in r.text:
-            raise RuntimeError('Login Failed.')
-            #return False
-        return s
-
-
     def download_all(self, id):
         data = {}
         context = self._context()
@@ -153,19 +140,18 @@ class WorkflowController(PackageController):
         zip_sub_dir = 'resources'
         zip_name = "{}_resouces_{}.zip".format(c.pkg_dict['title'].replace(' ', '_'), time.time())
 
-        if is_private(c.pkg_dict):
-            pass #s = self.login()
-
         resources = c.pkg_dict['resources']
         for resource in resources:
-            url = resource['url']
-            filename = os.path.basename(url)
-            r = requests.get(url, stream=True)
-            if r.status_code != 200:
-                h.flash_error('Failed to download files.')
-                redirect(id)
-            else:
-                data[filename] = r
+            rsc = tk.get_action('resource_show')(context, {'id': resource['id']})
+            if rsc.get('url_type') == 'upload':
+                url = resource['url']
+                filename = os.path.basename(url)
+                r = requests.get(url, stream=True)
+                if r.status_code != 200:
+                    h.flash_error('Failed to download files.')
+                    redirect(id)
+                else:
+                    data[filename] = r
 
         if len(data) > 0:
             s = StringIO.StringIO()
