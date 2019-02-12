@@ -314,7 +314,11 @@ def _recent_data_views(engine, measure_from):
     return [_ViewCount(*t) for t in engine.execute(sql, measure_from=str(measure_from)).fetchall()]
 
 def show_download_all(pkg):
+    count = 0
     if not isinstance(pkg, dict):
         return False
-    return len(pkg['resources']) > 1
-
+    for resource in pkg['resources']:
+        rsc = tk.get_action('resource_show')(None, {'id': resource['id']})
+        if rsc.get('url_type') == 'upload':
+            count += 1
+    return count > 1

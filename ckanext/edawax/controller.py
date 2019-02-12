@@ -11,6 +11,8 @@ from ckan.authz import get_group_or_org_admin_ids
 from ckanext.dara.helpers import check_journal_role
 from functools import wraps
 import notifications as n
+from ckanext.edawax.helpers import is_private
+from pylons import config
 
 # for download all
 import os
@@ -140,14 +142,16 @@ class WorkflowController(PackageController):
 
         resources = c.pkg_dict['resources']
         for resource in resources:
-            url = resource['url']
-            filename = os.path.basename(url)
-            r = requests.get(url)
-            if r.status_code != 200:
-                h.flash_error('Failed to download files.')
-                redirect(id)
-            else:
-                data[filename] = r
+            rsc = tk.get_action('resource_show')(context, {'id': resource['id']})
+            if rsc.get('url_type') == 'upload':
+                url = resource['url']
+                filename = os.path.basename(url)
+                r = requests.get(url, stream=True)
+                if r.status_code != 200:
+                    h.flash_error('Failed to download files.')
+                    redirect(id)
+                else:
+                    data[filename] = r
 
         if len(data) > 0:
             s = StringIO.StringIO()
