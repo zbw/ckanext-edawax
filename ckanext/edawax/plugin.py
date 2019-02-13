@@ -365,11 +365,6 @@ class EdawaxPlugin(plugins.SingletonPlugin):
                     controller="ckanext.edawax.controller:WorkflowController",
                     action="download_all", )
 
-        # change package state
-        map.connect('/dataset/state/{pkg_id}',
-                     controller="ckanext.edawax.controller:WorkflowController",
-                     action="cancel")
-
         # infopages
         controller = 'ckanext.edawax.controller:InfoController'
         map.connect('info', '/info',
