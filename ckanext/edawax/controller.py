@@ -3,7 +3,7 @@
 
 from ckan.controllers.package import PackageController
 import ckan.plugins.toolkit as tk
-from ckan.common import c
+from ckan.common import c, request, _, response
 from ckan import model
 import ckan.lib.helpers as h
 import logging
@@ -11,6 +11,15 @@ from ckan.authz import get_group_or_org_admin_ids
 from ckanext.dara.helpers import check_journal_role
 from functools import wraps
 import notifications as n
+from ckanext.edawax.helpers import is_private
+from pylons import config
+
+# for download all
+import os
+import time
+import zipfile
+import requests
+import StringIO
 
 
 log = logging.getLogger(__name__)
@@ -124,8 +133,47 @@ class WorkflowController(PackageController):
         redirect(id)
 
 
+    def download_all(self, id):
+        data = {}
+        context = self._context()
+        c.pkg_dict = tk.get_action('package_show')(context, {'id': id})
+        zip_sub_dir = 'resources'
+        zip_name = "{}_resouces_{}.zip".format(c.pkg_dict['title'].replace(' ', '_'), time.time())
+
+        resources = c.pkg_dict['resources']
+        for resource in resources:
+            rsc = tk.get_action('resource_show')(context, {'id': resource['id']})
+            if rsc.get('url_type') == 'upload':
+                url = resource['url']
+                filename = os.path.basename(url)
+                r = requests.get(url, stream=True)
+                if r.status_code != 200:
+                    h.flash_error('Failed to download files.')
+                    redirect(id)
+                else:
+                    data[filename] = r
+
+        if len(data) > 0:
+            s = StringIO.StringIO()
+            zf = zipfile.ZipFile(s, "w")
+            for item, content in data.items():
+                zip_path = os.path.join(zip_sub_dir, item)
+                zf.writestr(zip_path, content.content)
+            zf.close()
+            response.headers.update({"Content-Disposition": "attachment;filename={}".format(zip_name)})
+            response.content_type = "application/zip"
+            return s.getvalue()
+        # if there's nothing to download but someone gets to the download page
+        # /download_all, return them to the landing page
+        h.flash_error('Nothing to download.')
+        redirect(id)
+
+
+
+
+
 def redirect(id):
-        tk.redirect_to(controller='package', action='read', id=id)
+    tk.redirect_to(controller='package', action='read', id=id)
 
 
 class InfoController(tk.BaseController):

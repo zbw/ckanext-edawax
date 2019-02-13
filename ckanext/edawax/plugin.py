@@ -8,10 +8,11 @@ from ckan.logic.auth import get_package_object
 from ckan.logic.auth.update import package_update as ckan_pkgupdate
 from ckan.logic.auth.delete import package_delete as ckan_pkgdelete
 from ckan.logic.auth.delete import resource_delete as ckan_resourcedelete
+from ckan.logic.auth.create import resource_create as ckan_resourcecreate
 from ckan.config.middleware import TrackingMiddleware
 # from collections import OrderedDict
 import ckan.lib.helpers as h
-from ckan.common import c
+from ckan.common import c, request
 from toolz.functoolz import compose
 from functools import partial
 from pylons import config
@@ -21,6 +22,7 @@ import sqlalchemy as sa
 import new_invites as invites
 import urllib2
 import hashlib
+
 
 
 def edawax_facets(facets_dict):
@@ -128,20 +130,47 @@ def journal_package_delete(context, data_dict):
         return {'success': False, 'msg': "Package can not be deleted because\
                 it has a DOI assigned"}
 
+    creator_id = pkg_dict['creator_user_id']
+    creator = tk.get_action('user_show')(context, {'id': creator_id})
+    if context['user'] == creator['name'] and 'resource_delete' in request.url:
+        return {'success': True}
+
     return ckan_pkgdelete(context, data_dict)
 
 
 def journal_resource_delete(context, data_dict):
     """
-    don't allow resource delete if it has a DOI
+    don't allow resource delete if it has a DOI,
+    but allow author's to delete resources they added.
     """
     # resource = c.resource  # would this be reliable?
     resource = tk.get_action('resource_show')(context, data_dict)
+    package = tk.get_action('package_show')(context, {'id': resource['package_id']})
+    creator_id = package['creator_user_id']
+    creator = tk.get_action('user_show')(context, {'id': creator_id})
 
     if resource.get('dara_DOI', False) or _ctest(resource):
         return {'success': False, 'msg': "Resource can not be deleted because\
                 it has a DOI assigned"}
+    # creator's with 'author' rights should be able to delete resources
+    if context['user'] == creator['name']:
+        return {'success': True}
+
     return ckan_resourcedelete(context, data_dict)
+
+
+def journal_resource_create(context, data_dict):
+    """
+    Don't allow new resources to be added if there is a DOI for the package
+    """
+    data_dict['id'] = data_dict['package_id']
+    pkg_dict = tk.get_action('package_show')(context, data_dict)
+    if pkg_dict.get('dara_DOI', False) or _ctest(pkg_dict):
+        return {'success': False, 'msg': "Package can not be created because\
+                it has a DOI assigned"}
+
+    return ckan_resourcecreate(context, data_dict)
+
 
 
 class NewTrackingMiddleware(TrackingMiddleware):
@@ -260,6 +289,9 @@ class EdawaxPlugin(plugins.SingletonPlugin):
                 'is_robot': helpers.is_robot,
                 'track_path': helpers.track_path,
                 'is_published': helpers.is_published,
+                'show_download_all': helpers.show_download_all,
+                'has_doi': helpers.has_doi,
+                'has_hammer': helpers.has_hammer,
                 }
 
     def before_map(self, map):
@@ -328,6 +360,11 @@ class EdawaxPlugin(plugins.SingletonPlugin):
                     controller="ckanext.edawax.controller:WorkflowController",
                     action="reauthor",)
 
+        # download all resources
+        map.connect('/dataset/{id}/download_all',
+                    controller="ckanext.edawax.controller:WorkflowController",
+                    action="download_all", )
+
         # infopages
         controller = 'ckanext.edawax.controller:InfoController'
         map.connect('info', '/info',
@@ -337,9 +374,14 @@ class EdawaxPlugin(plugins.SingletonPlugin):
                     action="md_page",
                     controller=controller,)
 
+        # resource_delete
+        #map.connect('/dataset/{id}/resource_delete/{resource_id}',
+        #            controller="ckanext.edawax.controller:WorkflowController",
+        #            action="resource_delete")
+
         return map
 
-    def organization_facets(self, facets_dict, organization_type, package_type):
+    def organization_facets(self, facets_dict, organization_type,package_type):
         # for some reason CKAN does not accept a new OrderedDict here (does
         # not happen with datasets facets!). So we have to modify the original
         # facets_dict

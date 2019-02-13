@@ -18,6 +18,17 @@ import ckanext.edawax.robot_list as _list
 from urlparse import urlparse
 
 
+def has_doi(pkg):
+    doi = pkg.get('dara_DOI', False) or pkg.get('dara_DOI_Test', False)
+    if doi in ['', False]:
+        return False
+    return True
+
+
+def has_hammer():
+    return c.is_sysadmin
+
+
 def is_published(url):
     parts = urlparse(url)
     if '/journals/' in parts.path:
@@ -301,3 +312,13 @@ def _recent_data_views(engine, measure_from):
            ORDER BY total_views DESC
     '''
     return [_ViewCount(*t) for t in engine.execute(sql, measure_from=str(measure_from)).fetchall()]
+
+def show_download_all(pkg):
+    count = 0
+    if not isinstance(pkg, dict):
+        return False
+    for resource in pkg['resources']:
+        rsc = tk.get_action('resource_show')(None, {'id': resource['id']})
+        if rsc.get('url_type') == 'upload':
+            count += 1
+    return count > 1
