@@ -56,7 +56,7 @@ def truncate_title(name):
     if len(name) > 30:
         base = name[0:23]
         ending = name[-3:]
-        return '{}...{}'.format(base, ending)
+        return u'{}...{}'.format(base, ending)
     return name
 
 
