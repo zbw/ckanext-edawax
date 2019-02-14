@@ -70,11 +70,7 @@ def truncate_title(name):
     if len(name) > 30:
         base = name[0:23]
         ending = name[-3:]
-        try:
-            return '{}...{}'.format(base, ending)
-        except UnicodeEncodeError as e:
-            return '{}...{}'.format(base.encode('utf8'), ending.encode('utf8'))
-            #return "Error: {}".format(e)
+        return u'{}...{}'.format(base, ending)
     return name
 
 
