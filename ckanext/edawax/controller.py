@@ -138,7 +138,7 @@ class WorkflowController(PackageController):
         context = self._context()
         c.pkg_dict = tk.get_action('package_show')(context, {'id': id})
         zip_sub_dir = 'resources'
-        zip_name = "{}_resouces_{}.zip".format(c.pkg_dict['title'].replace(' ', '_'), time.time())
+        zip_name = u"{}_resouces_{}.zip".format(c.pkg_dict['title'].replace(' ', '_'), time.time())
 
         resources = c.pkg_dict['resources']
         for resource in resources:
@@ -160,7 +160,7 @@ class WorkflowController(PackageController):
                 zip_path = os.path.join(zip_sub_dir, item)
                 zf.writestr(zip_path, content.content)
             zf.close()
-            response.headers.update({"Content-Disposition": "attachment;filename={}".format(zip_name)})
+            response.headers.update({"Content-Disposition": "attachment;filename={}".format(zip_name.encode('utf8'))})
             response.content_type = "application/zip"
             return s.getvalue()
         # if there's nothing to download but someone gets to the download page
