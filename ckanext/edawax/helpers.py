@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import ckan.plugins.toolkit as tk
 import ckan.model as model
 from ckan.common import c, response, _, request
@@ -47,12 +48,14 @@ def is_published(url):
     except Exception as e:
         return False
 
+
 def track_path(path):
     if '/journals/' in path or '/download/' in path:
         return True
     if '/dataset' in path and '/resource' not in path:
         return True
     return False
+
 
 def is_robot(user_agent):
     robots = _list.robots
@@ -67,7 +70,11 @@ def truncate_title(name):
     if len(name) > 30:
         base = name[0:23]
         ending = name[-3:]
-        return '{}...{}'.format(base, ending)
+        try:
+            return '{}...{}'.format(base, ending)
+        except UnicodeEncodeError as e:
+            return '{}...{}'.format(base.encode('utf8'), ending.encode('utf8'))
+            #return "Error: {}".format(e)
     return name
 
 
@@ -111,6 +118,7 @@ def transform_to_map(data):
     except Exception:
         pass
     return data
+
 
 def get_user_id():
     def context():
@@ -273,6 +281,7 @@ def _total_journal_views(engine, target):
 
     return [_ViewCount(*t) for t in engine.execute(sql, {'name': target, 'url': '/journals/' + target }).fetchall()]
 
+
 def _recent_journal_views(engine, target, measure_from):
     sql = '''
         SELECT p.id,
@@ -288,6 +297,7 @@ def _recent_journal_views(engine, target, measure_from):
     '''
     return [_ViewCount(*t) for t in engine.execute(sql, name=target, url='/journals/{}'.format(target), measure_from=str(measure_from)).fetchall()]
 
+
 def _total_data_views(engine):
     sql = '''
         SELECT p.id,
@@ -299,6 +309,7 @@ def _total_data_views(engine):
            ORDER BY total_views DESC
     '''
     return [_ViewCount(*t) for t in engine.execute(sql).fetchall()]
+
 
 def _recent_data_views(engine, measure_from):
     sql = '''
@@ -312,6 +323,7 @@ def _recent_data_views(engine, measure_from):
            ORDER BY total_views DESC
     '''
     return [_ViewCount(*t) for t in engine.execute(sql, measure_from=str(measure_from)).fetchall()]
+
 
 def show_download_all(pkg):
     count = 0
