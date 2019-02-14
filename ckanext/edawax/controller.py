@@ -160,8 +160,6 @@ class WorkflowController(PackageController):
                 zip_path = os.path.join(zip_sub_dir, item)
                 zf.writestr(zip_path, content.content)
             zf.close()
-            print('================')
-            print(zip_name)
             response.headers.update({"Content-Disposition": "attachment;filename={}".format(zip_name.encode('utf8'))})
             response.content_type = "application/zip"
             return s.getvalue()
