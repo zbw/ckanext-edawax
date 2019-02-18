@@ -23,11 +23,12 @@ def is_published(url):
     if '/journals/' in parts.path:
         return True
     start = 9
-    if parts.scheme:
+    if len(parts.path) > 36:
         end = 36 + start
         dataset_name = parts.path[start:end]
     else:
         dataset_name = parts.path[start:]
+
     try:
         pck = tk.get_action('package_show')(None, {'id': dataset_name})
         if is_private(pck) or in_review(pck) != 'reviewed':
