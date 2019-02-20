@@ -290,6 +290,7 @@ def _total_data_views(engine):
     '''
     return [_ViewCount(*t) for t in engine.execute(sql).fetchall()]
 
+
 def _recent_data_views(engine, measure_from):
     sql = '''
         SELECT p.id,
