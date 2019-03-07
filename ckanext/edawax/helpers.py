@@ -40,7 +40,7 @@ def is_published(url):
         dataset_name = parts.path[start:end]
     else:
         dataset_name = parts.path[start:]
-
+    
     try:
         pck = tk.get_action('package_show')(None, {'id': dataset_name})
         if is_private(pck) or in_review(pck) != 'reviewed':
