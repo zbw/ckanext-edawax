@@ -292,6 +292,7 @@ class EdawaxPlugin(plugins.SingletonPlugin):
                 'show_download_all': helpers.show_download_all,
                 'has_doi': helpers.has_doi,
                 'has_hammer': helpers.has_hammer,
+                'is_admin': helpers.is_admin,
                 }
 
     def before_map(self, map):

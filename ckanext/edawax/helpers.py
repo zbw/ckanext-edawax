@@ -19,6 +19,15 @@ import ckanext.edawax.robot_list as _list
 from urlparse import urlparse
 
 
+def is_admin():
+    admins = c.group_admins
+    user_id = c.userobj.id
+    if user_id in admins:
+        return True
+    return False
+
+
+
 def has_doi(pkg):
     doi = pkg.get('dara_DOI', False) or pkg.get('dara_DOI_Test', False)
     if doi in ['', False]:
@@ -40,7 +49,7 @@ def is_published(url):
         dataset_name = parts.path[start:end]
     else:
         dataset_name = parts.path[start:]
-    
+
     try:
         pck = tk.get_action('package_show')(None, {'id': dataset_name})
         if is_private(pck) or in_review(pck) != 'reviewed':
