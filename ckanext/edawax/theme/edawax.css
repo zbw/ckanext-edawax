@@ -14,6 +14,7 @@ select,
 textarea,
 #dara_ {
   font-family: 'Roboto', "Helvetica Neue", Helvetica, Arial, sans-serif !important;
+  box-sizing: content-box;
 }
 .homepage .module-search .module-content {
   background-color: #008fc3;
