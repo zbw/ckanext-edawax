@@ -21,9 +21,12 @@ from urlparse import urlparse
 
 def is_admin():
     admins = c.group_admins
-    user_id = c.userobj.id
-    if user_id in admins:
-        return True
+    try:
+       user_id = c.userobj.id
+       if user_id in admins:
+          return True
+    except AttributeError as e:
+       pass
     return False
 
 
