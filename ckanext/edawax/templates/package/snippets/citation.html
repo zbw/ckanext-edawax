@@ -10,7 +10,7 @@ convert the JSON String
     {# {% set debug = h.dara_debug() %}#}
     <section class="package-citation">
 
-    <h3>Citation</h3>
+    <h3>Suggested Citation</h3>
 
     {% if dara_authors %}
 
@@ -34,8 +34,12 @@ convert the JSON String
 Version: {{ pkg_dict.dara_currentVersion }}.
 {% endif %}
 
-
-{{ journal }}.
+{% set journal_map = {'GER': 'German Economic Review', 'AEQ': 'Applied Economics Quarterly', 'IREE': 'International Journal for Re-Views in Empirical Economics', 'VSWG': 'Vierteljahrschrift für Sozial- und Wirtschaftsgeschichte'}%}
+{% if journal in ['GER', 'AEQ', 'IREE', 'VSWG'] %}
+    {{ journal_map[journal] }}.
+{% else %}
+    {{ journal }}.
+{% endif %}
 Dataset.
 
 {% if DOI %}
