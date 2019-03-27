@@ -32,10 +32,12 @@ def is_admin():
 
 
 def has_doi(pkg):
-    doi = pkg.get('dara_DOI', False) or pkg.get('dara_DOI_Test', False)
-    if doi in ['', False]:
-        return False
-    return True
+    if pkg:
+        doi = pkg.get('dara_DOI', False) or pkg.get('dara_DOI_Test', False)
+        if doi in ['', False]:
+            return False
+        return True
+    return False
 
 
 def has_hammer():
