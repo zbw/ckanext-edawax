@@ -1,8 +1,5 @@
-<<<<<<< HEAD
-You have been invited by the editor of {{ journal_title }} to deposit the replication files of your paper in ZBW's Journal Data Archive.
-=======
 You have been invited by the editor of the {{ journal_title }} to deposit the replication files of your paper in ZBW's Journal Data Archive.
->>>>>>> jda-dev/master
+
 
 To accept this invite, please reset your password at:
 
