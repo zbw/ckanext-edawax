@@ -26,9 +26,11 @@
       {# download stats here #}
       {% set total_downloads = h.resource_downloads(res['url']) %}
       {% if total_downloads > 0 %}
-      <div>
-          {{ _('Downloads') }}: {{ total_downloads }}
-      </div>
+        <div>
+            {{ _('Downloads') }}: {{ total_downloads }}
+        </div>
+      {% else %}
+        <div></div>
       {% endif %}
     </p>
   {% endblock %}
