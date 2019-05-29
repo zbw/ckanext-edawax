@@ -146,7 +146,12 @@ class WorkflowController(PackageController):
             if rsc.get('url_type') == 'upload':
                 url = resource['url']
                 filename = os.path.basename(url)
-                r = requests.get(url, stream=True)
+                # custom user agent header so that downloads from here count
+                headers = {
+                    'User-Agent': 'Ckan-Download-All Agent 1.0',
+                    'From': 'f.osorio@zbw.eu'
+                }
+                r = requests.get(url, stream=True, headers=headers)
                 if r.status_code != 200:
                     h.flash_error('Failed to download files.')
                     redirect(id)

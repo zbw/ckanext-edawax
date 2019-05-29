@@ -219,7 +219,6 @@ class NewTrackingMiddleware(TrackingMiddleware):
                      VALUES (%s, %s, %s)'''
             self.engine.execute(sql, key, data.get('url').strip(), data.get('type'))
             return self.app(environ, start_response)
-
         return self.app(environ, start_response)
 
 
