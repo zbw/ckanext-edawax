@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 # Hendrik Bunke
 # ZBW - Leibniz Information Centre for Economics
 
@@ -20,6 +21,7 @@ import time
 import zipfile
 import requests
 import StringIO
+from ckanext.dara.helpers import _parse_authors
 
 
 log = logging.getLogger(__name__)
@@ -133,6 +135,41 @@ class WorkflowController(PackageController):
         redirect(id)
 
 
+
+    def create_citataion_text(self, id):
+        """ Create a plain text file with a citation. Will be included in
+            the "download_all" zip file
+         """
+        context = self._context()
+        data = tk.get_action('package_show')(context, {'id': id})
+        citation = '{authors} ({year}): {dataset}. Version: {version}. {journal}. Dataset. {address}'
+
+        journal_map = {'GER': 'German Economic Review', 'AEQ': 'Applied Economics Quarterly', 'IREE': 'International Journal for Re-Views in Empirical Economics', 'VSWG': 'Vierteljahrschrift für Sozial- und Wirtschaftsgeschichte'}
+
+        authors = _parse_authors(data['dara_authors'])
+        year = data.get('dara_PublicationDate', '')
+        dataset_name = data.get('title', '')
+        dataset_version = data.get('dara_currentVersion', '')
+
+        temp_title = data['organization']['title']
+        if temp_title in journal_map.keys():
+            journal_title = journal_map[temp_tital]
+        else:
+            journal_title = temp_title
+
+        if data['dara_DOI'] != '':
+            address = 'https://doi.org/{}'.format(data['dara_doi'])
+        else:
+            address = '{}/dataset/{}'.format(config.get('ckan.site_url'), data['name'])
+
+        return citation.format(authors=authors,
+                               year=year,
+                               dataset=dataset_name,
+                               version=dataset_version,
+                               journal=journal_title,
+                               address=address)
+
+
     def download_all(self, id):
         data = {}
         context = self._context()
@@ -158,12 +195,17 @@ class WorkflowController(PackageController):
                 else:
                     data[filename] = r
 
+        data['citation.txt'] = self.create_citataion_text(id)
         if len(data) > 0:
             s = StringIO.StringIO()
             zf = zipfile.ZipFile(s, "w")
             for item, content in data.items():
                 zip_path = os.path.join(zip_sub_dir, item)
-                zf.writestr(zip_path, content.content)
+                try:
+                    zf.writestr(zip_path, content.content)
+                except Exception:
+                    # adding the citation file
+                    zf.writestr(zip_path, content)
             zf.close()
             response.headers.update({"Content-Disposition": "attachment;filename={}".format(zip_name.encode('utf8'))})
             response.content_type = "application/zip"
