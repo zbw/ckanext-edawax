@@ -1,5 +1,7 @@
 {% import 'macros/form.html' as form %}
 
+{% set res = c.resource %}
+
 <div id="view-{{ resource_view['id'] }}" class="resource-view" data-id="{{ resource_view['id'] }}" data-title="{{ resource_view['title'] }}" data-description="{{ resource_view['descripion'] }}">
   <a class="btn pull-right"
      href="#embed-{{ resource_view['id'] }}"
@@ -24,7 +26,7 @@
         </p>
         <p id="data-view-error" class="collapse"></p>
         <p>
-          <a href="{{ raw_resource_url }}" class="btn btn-large resource-url-analytics" target="_blank">
+          <a href="{{ res['url'] }}" class="btn btn-large resource-url-analytics" target="_blank">
             <i class="icon-large icon-download"></i>
             {{ _('Download file') }}
           </a>
