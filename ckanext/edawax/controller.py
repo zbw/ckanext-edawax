@@ -148,7 +148,7 @@ class WorkflowController(PackageController):
 
         authors = _parse_authors(data['dara_authors'])
         year = data.get('dara_PublicationDate', '')
-        dataset_name = data.get('title', '')
+        dataset_name = data.get('title', '').encode('utf-8')
         dataset_version = data.get('dara_currentVersion', '')
 
         temp_title = data['organization']['title']
@@ -161,10 +161,10 @@ class WorkflowController(PackageController):
             address = 'https://doi.org/{}'.format(data['dara_DOI'])
         else:
             address = '{}/dataset/{}'.format(config.get('ckan.site_url'), data['name'])
-
-        return citation.format(authors=authors,
+        
+	return citation.format(authors=authors,
                                year=year,
-                               dataset=dataset_name.encode('utf-8'),
+                               dataset=dataset_name,
                                version=dataset_version,
                                journal=journal_title,
                                address=address)
@@ -175,7 +175,7 @@ class WorkflowController(PackageController):
         context = self._context()
         c.pkg_dict = tk.get_action('package_show')(context, {'id': id})
         zip_sub_dir = 'resources'
-        zip_name = u"{}_resouces_{}.zip".format(c.pkg_dict['title'].replace(' ', '_'), time.time())
+        zip_name = u"{}_resouces_{}.zip".format(c.pkg_dict['title'].replace(' ', '_').replace(',', '_'), time.time())
 
         resources = c.pkg_dict['resources']
         for resource in resources:
@@ -195,7 +195,7 @@ class WorkflowController(PackageController):
                 else:
                     data[filename] = r
 
-        data['citation.txt'] = self.create_citataion_text(id)
+	data['citation.txt'] = self.create_citataion_text(id)
         if len(data) > 0:
             s = StringIO.StringIO()
             zf = zipfile.ZipFile(s, "w")
@@ -203,7 +203,7 @@ class WorkflowController(PackageController):
                 zip_path = os.path.join(zip_sub_dir, item)
                 try:
                     zf.writestr(zip_path, content.content)
-                except Exception:
+                except Exception as e:
                     # adding the citation file
                     zf.writestr(zip_path, content)
             zf.close()
