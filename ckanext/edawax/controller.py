@@ -164,7 +164,7 @@ class WorkflowController(PackageController):
 
         return citation.format(authors=authors,
                                year=year,
-                               dataset=dataset_name,
+                               dataset=dataset_name.encode('utf-8'),
                                version=dataset_version,
                                journal=journal_title,
                                address=address)
