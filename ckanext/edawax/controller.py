@@ -1,9 +1,10 @@
+# -*- coding: utf-8 -*-
 # Hendrik Bunke
 # ZBW - Leibniz Information Centre for Economics
 
 from ckan.controllers.package import PackageController
 import ckan.plugins.toolkit as tk
-from ckan.common import c
+from ckan.common import c, request, _, response
 from ckan import model
 import ckan.lib.helpers as h
 import logging
@@ -11,6 +12,16 @@ from ckan.authz import get_group_or_org_admin_ids
 from ckanext.dara.helpers import check_journal_role
 from functools import wraps
 import notifications as n
+from ckanext.edawax.helpers import is_private
+from pylons import config
+
+# for download all
+import os
+import time
+import zipfile
+import requests
+import StringIO
+from ckanext.dara.helpers import _parse_authors
 
 
 log = logging.getLogger(__name__)
@@ -124,8 +135,92 @@ class WorkflowController(PackageController):
         redirect(id)
 
 
+
+    def create_citataion_text(self, id):
+        """ Create a plain text file with a citation. Will be included in
+            the "download_all" zip file
+         """
+        context = self._context()
+        data = tk.get_action('package_show')(context, {'id': id})
+        citation = '{authors} ({year}): {dataset}. Version: {version}. {journal}. Dataset. {address}'
+
+        journal_map = {'GER': 'German Economic Review', 'AEQ': 'Applied Economics Quarterly', 'IREE': 'International Journal for Re-Views in Empirical Economics', 'VSWG': 'Vierteljahrschrift für Sozial- und Wirtschaftsgeschichte'}
+
+        authors = _parse_authors(data['dara_authors'])
+        year = data.get('dara_PublicationDate', '')
+        dataset_name = data.get('title', '')
+        dataset_version = data.get('dara_currentVersion', '')
+
+        temp_title = data['organization']['title']
+        if temp_title in journal_map.keys():
+            journal_title = journal_map[temp_tital]
+        else:
+            journal_title = temp_title
+
+        if data['dara_DOI'] != '':
+            address = 'https://doi.org/{}'.format(data['dara_doi'])
+        else:
+            address = '{}/dataset/{}'.format(config.get('ckan.site_url'), data['name'])
+
+        return citation.format(authors=authors,
+                               year=year,
+                               dataset=dataset_name,
+                               version=dataset_version,
+                               journal=journal_title,
+                               address=address)
+
+
+    def download_all(self, id):
+        data = {}
+        context = self._context()
+        c.pkg_dict = tk.get_action('package_show')(context, {'id': id})
+        zip_sub_dir = 'resources'
+        zip_name = u"{}_resouces_{}.zip".format(c.pkg_dict['title'].replace(' ', '_'), time.time())
+
+        resources = c.pkg_dict['resources']
+        for resource in resources:
+            rsc = tk.get_action('resource_show')(context, {'id': resource['id']})
+            if rsc.get('url_type') == 'upload':
+                url = resource['url']
+                filename = os.path.basename(url)
+                # custom user agent header so that downloads from here count
+                headers = {
+                    'User-Agent': 'Ckan-Download-All Agent 1.0',
+                    'From': 'f.osorio@zbw.eu'
+                }
+                r = requests.get(url, stream=True, headers=headers)
+                if r.status_code != 200:
+                    h.flash_error('Failed to download files.')
+                    redirect(id)
+                else:
+                    data[filename] = r
+
+        data['citation.txt'] = self.create_citataion_text(id)
+        if len(data) > 0:
+            s = StringIO.StringIO()
+            zf = zipfile.ZipFile(s, "w")
+            for item, content in data.items():
+                zip_path = os.path.join(zip_sub_dir, item)
+                try:
+                    zf.writestr(zip_path, content.content)
+                except Exception:
+                    # adding the citation file
+                    zf.writestr(zip_path, content)
+            zf.close()
+            response.headers.update({"Content-Disposition": "attachment;filename={}".format(zip_name.encode('utf8'))})
+            response.content_type = "application/zip"
+            return s.getvalue()
+        # if there's nothing to download but someone gets to the download page
+        # /download_all, return them to the landing page
+        h.flash_error('Nothing to download.')
+        redirect(id)
+
+
+
+
+
 def redirect(id):
-        tk.redirect_to(controller='package', action='read', id=id)
+    tk.redirect_to(controller='package', action='read', id=id)
 
 
 class InfoController(tk.BaseController):
