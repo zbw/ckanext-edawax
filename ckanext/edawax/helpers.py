@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import ckan.plugins.toolkit as tk
 import ckan.model as model
 from ckan.common import c, response, _, request
@@ -16,6 +17,31 @@ import ast
 import re
 import ckanext.edawax.robot_list as _list
 from urlparse import urlparse
+
+
+def is_admin():
+    admins = c.group_admins
+    try:
+       user_id = c.userobj.id
+       if user_id in admins:
+          return True
+    except AttributeError as e:
+       pass
+    return False
+
+
+
+def has_doi(pkg):
+    if pkg:
+        doi = pkg.get('dara_DOI', False) or pkg.get('dara_DOI_Test', False)
+        if doi in ['', False]:
+            return False
+        return True
+    return False
+
+
+def has_hammer():
+    return c.is_sysadmin
 
 
 def is_published(url):
@@ -37,12 +63,14 @@ def is_published(url):
     except Exception as e:
         return False
 
+
 def track_path(path):
     if '/journals/' in path or '/download/' in path:
         return True
     if '/dataset' in path and '/resource' not in path:
         return True
     return False
+
 
 def is_robot(user_agent):
     robots = _list.robots
@@ -101,6 +129,7 @@ def transform_to_map(data):
     except Exception:
         pass
     return data
+
 
 def get_user_id():
     def context():
@@ -263,6 +292,7 @@ def _total_journal_views(engine, target):
 
     return [_ViewCount(*t) for t in engine.execute(sql, {'name': target, 'url': '/journals/' + target }).fetchall()]
 
+
 def _recent_journal_views(engine, target, measure_from):
     sql = '''
         SELECT p.id,
@@ -277,6 +307,7 @@ def _recent_journal_views(engine, target, measure_from):
            ORDER BY total_views DESC
     '''
     return [_ViewCount(*t) for t in engine.execute(sql, name=target, url='/journals/{}'.format(target), measure_from=str(measure_from)).fetchall()]
+
 
 def _total_data_views(engine):
     sql = '''
@@ -303,3 +334,14 @@ def _recent_data_views(engine, measure_from):
            ORDER BY total_views DESC
     '''
     return [_ViewCount(*t) for t in engine.execute(sql, measure_from=str(measure_from)).fetchall()]
+
+
+def show_download_all(pkg):
+    count = 0
+    if not isinstance(pkg, dict):
+        return False
+    for resource in pkg['resources']:
+        rsc = tk.get_action('resource_show')(None, {'id': resource['id']})
+        if rsc.get('url_type') == 'upload':
+            count += 1
+    return count > 1

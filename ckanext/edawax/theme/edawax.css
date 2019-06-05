@@ -14,6 +14,7 @@ select,
 textarea,
 #dara_ {
   font-family: 'Roboto', "Helvetica Neue", Helvetica, Arial, sans-serif !important;
+  box-sizing: content-box;
 }
 .homepage .module-search .module-content {
   background-color: #008fc3;
@@ -202,16 +203,17 @@ label {
 }
 /*Fix word breaks in FF*/
 .media-heading {
-  word-break: normal;
+   word-break: normal;
 }
 
 .context-info h1.heading {
-  word-break: normal;
+   word-break: normal;
 }
+
 
 /*Prevent line breaks in author names*/
 .authors_title span{
-  white-space: nowrap;
+  white-space:nowrap;
 }
 
 .breadcrumb{
@@ -222,9 +224,16 @@ label {
   color: #505050 !important;
 }
 
+
 /* add indicator for extranal links in resource popup */
 a[target="_blank"]:after {
     content: url(http://upload.wikimedia.org/wikipedia/commons/6/64/Icon_External_Link.png);
     marget: 0 0 0 5px;
+}
+
+
+.label-review,
+.label-reauthor {
+  margin-left:10px;
 }
 

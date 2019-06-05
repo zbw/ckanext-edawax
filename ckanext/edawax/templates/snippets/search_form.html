@@ -1,0 +1,29 @@
+{% ckan_extends %}
+
+{% import 'macros/form.html' as form %}
+{% set sorting = sorting if sorting else [(_('Name Ascending'), 'name asc'), (_('Name Descending'), 'name desc')] %}
+
+
+{% block search_sortby %}
+    {% if sorting %}
+    {% if h.is_admin() %}
+      {{ sorting.append(('Private', 'private desc, metadata_modified desc')) }}
+      {{ sorting.append(('Review', 'dara_edawax_review desc')) }}
+      {#% set temp = sorting.append(('Private', 'private desc, metadata_modified desc')) %}
+      {% set temp = sorting.append(('Review', 'dara_edawax_review desc, private acs')) %#}
+    {% endif %}
+      <div class="form-select control-group control-order-by">
+        <label for="field-order-by">{{ _('Order by') }}</label>
+        <select id="field-order-by" name="sort">
+          {% for label, value in sorting %}
+            {% if label and value %}
+              <option value="{{ value }}"{% if sorting_selected == value %} selected="selected"{% endif %}>{{ label }}</option>
+            {% endif %}
+          {% endfor %}
+        </select>
+        {% block search_sortby_button %}
+        <button class="btn js-hide" type="submit">{{ _('Go') }}</button>
+        {% endblock %}
+      </div>
+    {% endif %}
+{% endblock %}
