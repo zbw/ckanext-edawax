@@ -158,7 +158,7 @@ class WorkflowController(PackageController):
             journal_title = temp_title
 
         if data['dara_DOI'] != '':
-            address = 'https://doi.org/{}'.format(data['dara_doi'])
+            address = 'https://doi.org/{}'.format(data['dara_DOI'])
         else:
             address = '{}/dataset/{}'.format(config.get('ckan.site_url'), data['name'])
 
