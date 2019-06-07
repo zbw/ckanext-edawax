@@ -2,6 +2,5 @@
 *.egg-info/*
 dist/*
 .*.swp
-*.pdf
 .gitignore
 /ckanext/edawax/theme/edawax.css
