@@ -7,8 +7,10 @@
 {% block search_sortby %}
     {% if sorting %}
     {% if h.is_admin() %}
+      <div style="display:none;">
       {{ sorting.append(('Private', 'private desc, metadata_modified desc')) }}
       {{ sorting.append(('Review', 'dara_edawax_review desc')) }}
+      </div>
       {#% set temp = sorting.append(('Private', 'private desc, metadata_modified desc')) %}
       {% set temp = sorting.append(('Review', 'dara_edawax_review desc, private acs')) %#}
     {% endif %}
