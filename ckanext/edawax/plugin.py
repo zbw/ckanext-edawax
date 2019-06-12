@@ -374,6 +374,11 @@ class EdawaxPlugin(plugins.SingletonPlugin):
                     action="md_page",
                     controller=controller,)
 
+        # export citations
+        map.connect('/citation/{type}/{id}',
+                    action="create_citation",
+                    controller=controller,)
+
         # resource_delete
         #map.connect('/dataset/{id}/resource_delete/{resource_id}',
         #            controller="ckanext.edawax.controller:WorkflowController",

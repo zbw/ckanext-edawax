@@ -23,6 +23,8 @@ import requests
 import StringIO
 from ckanext.dara.helpers import _parse_authors
 
+import ast
+from webob import Response, Request
 
 log = logging.getLogger(__name__)
 
@@ -161,8 +163,8 @@ class WorkflowController(PackageController):
             address = 'https://doi.org/{}'.format(data['dara_DOI'])
         else:
             address = '{}/dataset/{}'.format(config.get('ckan.site_url'), data['name'])
-        
-	return citation.format(authors=authors,
+
+        return citation.format(authors=authors,
                                year=year,
                                dataset=dataset_name,
                                version=dataset_version,
@@ -195,7 +197,7 @@ class WorkflowController(PackageController):
                 else:
                     data[filename] = r
 
-	data['citation.txt'] = self.create_citataion_text(id)
+        data['citation.txt'] = self.create_citataion_text(id)
         if len(data) > 0:
             s = StringIO.StringIO()
             zf = zipfile.ZipFile(s, "w")
@@ -222,6 +224,92 @@ class WorkflowController(PackageController):
 def redirect(id):
     tk.redirect_to(controller='package', action='read', id=id)
 
+context = {'model': model, 'session': model.Session,
+           'user': c.user or c.author, 'for_view': True,
+           'auth_user_obj': c.userobj, 'ignore_auth': True}
+
+
+def parse_ris_authors(authors):
+    out = ''
+    line = 'AU  - {last}, {first}\n'
+    authors = ast.literal_eval(authors)
+    for author in authors:
+        out += line.format(last=author['lastname'], first=author['firstname'])
+    return out
+
+
+def parse_bibtex_authors(authors):
+    temp_str = ''
+    temp_list = []
+    authors = ast.literal_eval(authors)
+    for author in authors:
+        temp_list.append('{} {}'.format(author['firstname'], author['lastname']))
+    if len(temp_list) > 1:
+        return " and ".join(temp_list)
+    else:
+        return temp_list[0]
+
+
+
+def parse_ris_doi(doi):
+    if doi != '':
+        return 'DO  - doi:{}\n'.format(doi)
+    return ''
+
+def create_ris_record(id):
+    contents = "TY  - DATA\nTI  - {title}\n{authors}{doi}ET  - {version}\nDA  - {date}\nJF  - {journal}\nPB  - Journal Data Archive\nUR  - {url}\nER  - \n"
+    pkg_dict = tk.get_action('package_show')(context, {'id': id})
+    title = pkg_dict['title']
+    authors = parse_ris_authors(pkg_dict['dara_authors'])
+    date = pkg_dict['dara_PublicationDate']
+    journal = pkg_dict['organization']['title']
+    url = '{}/dataset/{}'.format(config.get('ckan.site_url'), pkg_dict['name'])
+    version = pkg_dict['dara_currentVersion']
+    doi = parse_ris_doi(pkg_dict['dara_DOI'])
+
+    contents = contents.format(title=title.encode('utf-8'),authors=authors.encode('utf-8'),doi=doi,date=date,journal=journal.encode('utf-8'),url=url,version=version)
+
+    s = StringIO.StringIO()
+    s.write(contents)
+
+    response.headers.update({"Content-Disposition": "attachment;filename={}_citation.ris".format(pkg_dict['name'])})
+    response.content_type = "application/download"
+    res = Response(content_type = "application/download")
+    response.body = contents
+
+    return res
+
+
+def create_bibtex_record(id):
+    pkg_dict = tk.get_action('package_show')(context, {'id': id})
+    title = pkg_dict['title']
+    authors = parse_bibtex_authors(pkg_dict['dara_authors'])
+    date = pkg_dict['dara_PublicationDate']
+    journal = pkg_dict['organization']['title']
+    url = '{}/dataset/{}'.format(config.get('ckan.site_url'), pkg_dict['name'])
+    version = pkg_dict['dara_currentVersion']
+    identifier = '{}/{}'.format(pkg_dict['name'], date)
+
+    if pkg_dict['dara_DOI'] != '':
+        doi = ',\ndoi = "{}"'.format(pkg_dict['dara_DOI'])
+    else:
+        doi = ''
+
+    contents = '@data{{{identifier},\nauthor = {{{authors}}},\npublisher = "Journal Data Archiv"\ntitle = {{{title}}},\nyear = "{date}",\nversion = "{version}",\nurl = "{url}"{doi} }\n}'
+
+    contents = contents.format(identifier=identifier, authors=authors, title=title,date=date,version=version,url=url,doi=doi)
+
+    s = StringIO.StringIO()
+    s.write(contents)
+
+    response.headers.update({"Content-Disposition": "attachment;filename={}_citation.txt".format(pkg_dict['name'])})
+    response.content_type = "text/plain"
+    res = Response(content_type = "application/download")
+    response.body = contents
+
+    return res
+
+
 
 class InfoController(tk.BaseController):
 
@@ -233,3 +321,13 @@ class InfoController(tk.BaseController):
     def md_page(self):
         plist = tk.request.path.rsplit('/', 1)
         return tk.render(self.TEMPLATE, extra_vars={'page': plist[-1]})
+
+
+    def create_citation(self, type, id):
+        if type == 'ris':
+            create_ris_record(id)
+        elif type == 'bibtex':
+            create_bibtex_record(id)
+        else:
+            h.flash_error("Couldn't build {} citation.".format(type))
+            redirect(id)
