@@ -288,14 +288,18 @@ def create_bibtex_record(id):
     journal = pkg_dict['organization']['title'].encode('utf-8')
     url = '{}/dataset/{}'.format(config.get('ckan.site_url'), pkg_dict['name'])
     version = pkg_dict['dara_currentVersion']
-    identifier = '{}/{}'.format(pkg_dict['name'][:20], date)
+    if pkg_dict['dara_DOI'] != '':
+        temp_doi = pkg_dict['dara_DOI']
+        identifier = '{}'.format(temp_doi.split('/')[1])
+    else:
+        identifier = '{}/{}'.format(pkg_dict['name'][:10], date)
 
     if pkg_dict['dara_DOI'] != '':
         doi = ',\ndoi = "{}"'.format(pkg_dict['dara_DOI'])
     else:
         doi = ''
 
-    contents = '@misc{{{identifier},\nauthor = {{{authors}}},\npublisher = "Journal Data Archiv"\ntitle = {{{title}}},\nyear = "{date}",\nversion = "{version}",\nurl = "{url}"{doi} \n}}'
+    contents = '@data{{{identifier},\nauthor = {{{authors}}},\npublisher = "Journal Data Archiv"\ntitle = {{{title}}},\nyear = "{date}",\nversion = "{version}",\nurl = "{url}"{doi} \n}}'
 
     contents = contents.format(identifier=identifier, authors=authors, title=title,date=date,version=version,url=url,doi=doi)
 
