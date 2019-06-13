@@ -241,7 +241,7 @@ def parse_ris_authors(authors):
 def parse_bibtex_authors(authors):
     temp_str = ''
     temp_list = []
-    authors = ast.literal_eval(authors)
+    authors = ast.literal_eval(authors.decode('unicode-escape'))
     for author in authors:
         temp_list.append('{} {}'.format(author['firstname'], author['lastname']))
     if len(temp_list) > 1:
@@ -259,15 +259,15 @@ def parse_ris_doi(doi):
 def create_ris_record(id):
     contents = "TY  - DATA\nTI  - {title}\n{authors}{doi}ET  - {version}\nDA  - {date}\nJF  - {journal}\nPB  - Journal Data Archive\nUR  - {url}\nER  - \n"
     pkg_dict = tk.get_action('package_show')(context, {'id': id})
-    title = pkg_dict['title']
-    authors = parse_ris_authors(pkg_dict['dara_authors'])
+    title = pkg_dict['title'].encode('utf-8')
+    authors = parse_ris_authors(pkg_dict['dara_authors'].decode('unicode-escape'))
     date = pkg_dict['dara_PublicationDate']
     journal = pkg_dict['organization']['title']
     url = '{}/dataset/{}'.format(config.get('ckan.site_url'), pkg_dict['name'])
     version = pkg_dict['dara_currentVersion']
     doi = parse_ris_doi(pkg_dict['dara_DOI'])
 
-    contents = contents.format(title=title.encode('utf-8'),authors=authors.encode('utf-8'),doi=doi,date=date,journal=journal.encode('utf-8'),url=url,version=version)
+    contents = contents.format(title=title,authors=authors,doi=doi,date=date,journal=journal,url=url,version=version)
 
     s = StringIO.StringIO()
     s.write(contents)
@@ -282,10 +282,10 @@ def create_ris_record(id):
 
 def create_bibtex_record(id):
     pkg_dict = tk.get_action('package_show')(context, {'id': id})
-    title = pkg_dict['title']
+    title = pkg_dict['title'].encode('utf-8')
     authors = parse_bibtex_authors(pkg_dict['dara_authors'])
     date = pkg_dict['dara_PublicationDate']
-    journal = pkg_dict['organization']['title']
+    journal = pkg_dict['organization']['title'].encode('utf-8')
     url = '{}/dataset/{}'.format(config.get('ckan.site_url'), pkg_dict['name'])
     version = pkg_dict['dara_currentVersion']
     identifier = '{}/{}'.format(pkg_dict['name'][:20], date)
