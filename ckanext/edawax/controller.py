@@ -243,7 +243,7 @@ def parse_bibtex_authors(authors):
     temp_list = []
     authors = ast.literal_eval(authors.decode('unicode-escape'))
     for author in authors:
-        temp_list.append('{} {}'.format(author['firstname'], author['lastname']))
+        temp_list.append('{}, {}'.format(author['lastname'], author['firstname']))
     if len(temp_list) > 1:
         return " and ".join(temp_list)
     else:
@@ -257,7 +257,7 @@ def parse_ris_doi(doi):
     return ''
 
 def create_ris_record(id):
-    contents = "TY  - DATA\nTI  - {title}\n{authors}{doi}ET  - {version}\nDA  - {date}\nJF  - {journal}\nPB  - Journal Data Archive\nUR  - {url}\nER  - \n"
+    contents = "TY  - DATA\nT1  - {title}\n{authors}{doi}{abstract}{jels}ET  - {version}\nPY  - {date}\nPB  - ZBW - Leibniz Informationszentrum Wirtschaft\nUR  - {url}\nER  - \n"
     pkg_dict = tk.get_action('package_show')(context, {'id': id})
     title = pkg_dict['title'].encode('utf-8')
     authors = parse_ris_authors(pkg_dict['dara_authors'].decode('unicode-escape'))
@@ -267,7 +267,19 @@ def create_ris_record(id):
     version = pkg_dict['dara_currentVersion']
     doi = parse_ris_doi(pkg_dict['dara_DOI'])
 
-    contents = contents.format(title=title,authors=authors,doi=doi,date=date,journal=journal,url=url,version=version)
+    if pkg_dict['notes'] != '':
+        abstract = 'AB  - {}\n'.format(pkg_dict['notes'].replace('\n', ' ').replace('\r', ' '))
+    else:
+        abstract = ''
+
+    if 'dara_jels' in pkg_dict.keys():
+        jels = ''
+        for jel in pkg_dict['dara_jels']:
+            jels += 'KW  - {}\n'.format(jel)
+    else:
+        jels = ''
+
+    contents = contents.format(title=title,authors=authors,doi=doi,date=date,journal=journal,url=url,version=version,abstract=abstract,jels=jels)
 
     s = StringIO.StringIO()
     s.write(contents)
@@ -299,9 +311,19 @@ def create_bibtex_record(id):
     else:
         doi = ''
 
-    contents = '@data{{{identifier},\nauthor = {{{authors}}},\npublisher = "Journal Data Archiv"\ntitle = {{{title}}},\nyear = "{date}",\nversion = "{version}",\nurl = "{url}"{doi} \n}}'
+    if 'dara_jels' in pkg_dict.keys():
+        jels = ',\nkeywords = {'
+        for x, jel in enumerate(pkg_dict['dara_jels']):
+            if x < len(pkg_dict['dara_jels']) - 1:
+                jels += '{},'.format(jel)
+            else:
+                jels += '{}}}'.format(jel)
+    else:
+        jels = ''
 
-    contents = contents.format(identifier=identifier, authors=authors, title=title,date=date,version=version,url=url,doi=doi)
+    contents = '@data{{{identifier},\nauthor = {{{authors}}},\npublisher = ZBW - Leibniz Informationszentrum Wirtschaft}},\ntitle = {{{title}}},\nyear = {{{date}}},\nversion = {{{version}}},\nurl = {{{url}}}{jels}{doi} \n}}'
+
+    contents = contents.format(identifier=identifier, authors=authors, title=title,date=date,version=version,url=url,doi=doi,jels=jels)
 
     s = StringIO.StringIO()
     s.write(contents)
