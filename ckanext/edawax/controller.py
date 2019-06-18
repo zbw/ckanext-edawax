@@ -268,7 +268,7 @@ def create_ris_record(id):
     doi = parse_ris_doi(pkg_dict['dara_DOI'])
 
     if pkg_dict['notes'] != '':
-        abstract = 'AB  - {}\n'.format(pkg_dict['notes'].replace('\n', ' ').replace('\r', ' '))
+        abstract = 'AB  - {}\n'.format(pkg_dict['notes'].encode('utf-8').replace('\n', ' ').replace('\r', ' '))
     else:
         abstract = ''
 
