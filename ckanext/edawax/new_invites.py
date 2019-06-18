@@ -110,7 +110,7 @@ def _mail_recipient(recipient_name, recipient_email,
 
     # attach the file
     if role is not None and role == u'member':
-        attachment_file_name = "QuickManual_V1.2.3.pdf"
+        attachment_file_name = "QuickManual_V1.5.pdf"
         directory = os.path.dirname(__file__)
         rel_path = 'public/{}'.format(attachment_file_name)
         with open(os.path.join(directory, rel_path), 'rb') as file:
