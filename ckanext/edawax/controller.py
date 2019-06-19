@@ -241,7 +241,7 @@ def parse_ris_authors(authors):
 def parse_bibtex_authors(authors):
     temp_str = ''
     temp_list = []
-    authors = ast.literal_eval(authors.decode('unicode-escape'))
+    authors = ast.literal_eval(authors)
     for author in authors:
         temp_list.append('{}, {}'.format(author['lastname'], author['firstname']))
     if len(temp_list) > 1:
@@ -260,7 +260,7 @@ def create_ris_record(id):
     contents = "TY  - DATA\nT1  - {title}\n{authors}{doi}{abstract}{jels}ET  - {version}\nPY  - {date}\nPB  - ZBW - Leibniz Informationszentrum Wirtschaft\nUR  - {url}\nER  - \n"
     pkg_dict = tk.get_action('package_show')(context, {'id': id})
     title = pkg_dict['title'].encode('utf-8')
-    authors = parse_ris_authors(pkg_dict['dara_authors'].decode('unicode-escape'))
+    authors = parse_ris_authors(pkg_dict['dara_authors'])
     date = pkg_dict['dara_PublicationDate']
     journal = pkg_dict['organization']['title']
     url = '{}/dataset/{}'.format(config.get('ckan.site_url'), pkg_dict['name'])
