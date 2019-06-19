@@ -232,7 +232,7 @@ context = {'model': model, 'session': model.Session,
 def parse_ris_authors(authors):
     out = ''
     line = 'AU  - {last}, {first}\n'
-    authors = ast.literal_eval(authors)
+    authors = ast.literal_eval(authors.replace("null", "None"))
     for author in authors:
         out += line.format(last=author['lastname'], first=author['firstname'])
     return out
@@ -241,7 +241,7 @@ def parse_ris_authors(authors):
 def parse_bibtex_authors(authors):
     temp_str = ''
     temp_list = []
-    authors = ast.literal_eval(authors)
+    authors = ast.literal_eval(authors.replace("null", "None"))
     for author in authors:
         temp_list.append('{}, {}'.format(author['lastname'], author['firstname']))
     if len(temp_list) > 1:
