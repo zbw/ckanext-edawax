@@ -186,7 +186,7 @@ def show_retract_button(pkg):
 def show_reauthor_button(pkg):
     if not isinstance(pkg, dict):
         return False
-    return check_journal_role(pkg, 'admin') and in_review(pkg) == 'true'
+    return check_journal_role(pkg, 'admin') and in_review(pkg) == 'true' or is_reviewer(pkg) and in_review(pkg) == 'true'
 
 
 def res_abs_url(res):
