@@ -103,6 +103,9 @@ def journal_package_update(context, data_dict):
 
     user = context.get('auth_user_obj')
     pkg_obj = get_package_object(context, data_dict)
+    if helpers.is_reviewer(pkg_obj):
+        return {'success': helpers.is_reviewer(pkg_obj) }
+
     is_private = getattr(pkg_obj, 'private', False)
     is_admin = check_journal_role({'owner_org': pkg_obj.owner_org}, 'admin')
     is_owner = user.id == getattr(pkg_obj, 'creator_user_id', False)
