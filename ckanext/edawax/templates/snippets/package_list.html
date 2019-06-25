@@ -19,9 +19,11 @@ Example:
 
     {% for package in packages %}
       {% set is_admin = h.check_journal_role(package, 'admin') or h.check_access('sysadmin') %}
+      {% set is_reviewer = h.is_reviewer(package) %}
       {% if not package.private or
           (package.private and is_admin) or
-          (package.private and h.get_user_id() == package.creator_user_id)
+          (package.private and h.get_user_id() == package.creator_user_id) or
+          (package.private and is_reviewer)
       %}
 
           {% snippet 'snippets/package_item.html',

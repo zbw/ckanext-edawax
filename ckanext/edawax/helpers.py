@@ -19,6 +19,18 @@ import ckanext.edawax.robot_list as _list
 from urlparse import urlparse
 
 
+def is_reviewer(pkg):
+    try:
+        reviewer = getattr(pkg, 'maintainer')
+    except AttributeError:
+        try:
+            reviewer = pkg['maintainer']
+        except Exception:
+            return False
+    user = c.userobj.name
+
+    return reviewer == user
+
 def is_admin():
     admins = c.group_admins
     try:
