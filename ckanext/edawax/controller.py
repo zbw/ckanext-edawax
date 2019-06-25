@@ -267,7 +267,10 @@ def create_ris_record(id):
             authors = pkg_dict['author'] or ''
         authors = ''
     date = pkg_dict['dara_PublicationDate']
-    journal = pkg_dict['organization']['title']
+    try:
+        journal = pkg_dict['organization']['title']
+    except TypeError as e:
+        journal = ''
     url = '{}/dataset/{}'.format(config.get('ckan.site_url'), pkg_dict['name'])
     version = pkg_dict['dara_currentVersion']
     doi = parse_ris_doi(pkg_dict['dara_DOI'])
@@ -307,7 +310,10 @@ def create_bibtex_record(id):
             authors = pkg_dict['author'] or ''
         authors = ''
     date = pkg_dict['dara_PublicationDate']
-    journal = pkg_dict['organization']['title'].encode('utf-8')
+    try:
+        journal = pkg_dict['organization']['title'].encode('utf-8')
+    except TypeError as e:
+        journal = ''
     url = '{}/dataset/{}'.format(config.get('ckan.site_url'), pkg_dict['name'])
     version = pkg_dict['dara_currentVersion']
     if pkg_dict['dara_DOI'] != '':

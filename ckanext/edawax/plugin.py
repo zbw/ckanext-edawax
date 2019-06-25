@@ -204,12 +204,15 @@ class NewTrackingMiddleware(TrackingMiddleware):
             start_response('200 OK', [('Content-Type', 'text/html')])
             # we want a unique anonomized key for each user so that we do
             # not count multiple clicks from the same user.
-            key = ''.join([
-                environ['HTTP_USER_AGENT'],
-                environ['REMOTE_ADDR'],
-                environ.get('HTTP_ACCEPT_LANGUAGE', ''),
-                environ.get('HTTP_ACCEPT_ENCODING', ''),
-            ])
+            try:
+                key = ''.join([
+                    environ['HTTP_USER_AGENT'],
+                    environ['REMOTE_ADDR'],
+                    environ.get('HTTP_ACCEPT_LANGUAGE', ''),
+                    environ.get('HTTP_ACCEPT_ENCODING', ''),
+                ])
+            except KeyError as e:
+                return self.app(environ, start_response)
             key = hashlib.md5(key).hexdigest()
             if helpers.is_robot(environ['HTTP_USER_AGENT']):
                 return self.app(environ, start_response)
