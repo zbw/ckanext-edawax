@@ -40,10 +40,10 @@ class TestNewInvites(object):
         member, test_member = self._create_test_user(u'editor')
         result = i.get_invite_body(member, test_member)
         assert 'to serve as an additional editor' in result, ('Wrong Template: {}').format(result)
-    """
+
     def test_new_member_invitation(self):
         member, test_member = self._create_test_user('member')
         result = helpers.call_action('user_invite', **test_member)
         assert result != None, ('Result: {}').format(result)
         return
-    """
+

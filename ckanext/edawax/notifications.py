@@ -33,11 +33,10 @@ def package_url(dataset):
                           tk.url_for(controller='package', action='read',
                           id=dataset))
 
-def review(addresses, author, dataset):
+def review(addresses, author, dataset, reviewer=None):
     """
     notify admins on new or modified entities in their organization
     """
-
     def subid():
         pkg = tk.get_action('package_show')(None, {'id': dataset})
         submission_id = pkg.get('dara_jda_submission_id', None)
@@ -45,7 +44,7 @@ def review(addresses, author, dataset):
             return u"Article Submission ID: {}\n".format(submission_id)
         return u""
 
-    def message(address):
+    def message_editor(address):
 
         body = """
 Dear Editor,
@@ -70,7 +69,35 @@ best regards from ZBW--Journal Data Archive
         msg['X-Mailer'] = "CKAN {} [Plugin edawax]".format(ckan_version)
         return msg
 
-    t = map(lambda a: sendmail(a, message(a)), addresses)
+    def message_reviewer(address):
+
+        body = """
+Dear Reviwer,
+
+the author {user} has uploaded replication files to your journal's data archive.\n
+
+{submission_id}
+
+You can review it here:\n\n\t {url}
+
+best regards from ZBW--Journal Data Archive
+
+"""
+        d = {'user': author, 'url': package_url(dataset),
+             'submission_id': subid()}
+        body = body.format(**d)
+        msg = MIMEText(body.encode('utf-8'), 'plain', 'utf-8')
+        msg['Subject'] = Header(u"ZBW Journal Data Archive: Review Notification")
+        msg['From'] = config.get('smtp.mail_from')
+        msg['To'] = Header(address, 'utf-8')
+        msg['Date'] = Utils.formatdate(time())
+        msg['X-Mailer'] = "CKAN {} [Plugin edawax]".format(ckan_version)
+        return msg
+
+    # send email to journal admin and ckan admin
+    t = map(lambda a: sendmail(a, message_editor(a)), addresses)
+    if reviewer is not None:
+        r = sendmail(reviewer, message_reviewer(reviewer))
 
     # success if we have at least one successful send
     return any(t)
