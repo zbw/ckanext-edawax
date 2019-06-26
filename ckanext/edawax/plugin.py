@@ -107,6 +107,8 @@ def journal_package_update(context, data_dict):
     user = context.get('auth_user_obj')
     pkg_obj = get_package_object(context, data_dict)
     if helpers.is_reviewer(pkg_obj):
+        if 'resource_id' in request.urlvars.keys():
+            return {'success': False, 'msg': 'Reviewers cannot edit resources.' }
         return {'success': helpers.is_reviewer(pkg_obj) }
 
     is_private = getattr(pkg_obj, 'private', False)
@@ -169,11 +171,15 @@ def journal_resource_create(context, data_dict):
     """
     Don't allow new resources to be added if there is a DOI for the package
     """
+    print('\n**********************')
     data_dict['id'] = data_dict['package_id']
     pkg_dict = tk.get_action('package_show')(context, data_dict)
+    print(helpers.is_reviewer(pkg_dict))
     if pkg_dict.get('dara_DOI', False) or _ctest(pkg_dict):
         return {'success': False, 'msg': "Package can not be created because\
                 it has a DOI assigned"}
+    if helpers.is_reviewer(pkg_dict):
+        return {'success': False, 'msg': "Reviewers cannot create resources."}
 
     return ckan_resourcecreate(context, data_dict)
 
@@ -272,6 +278,7 @@ class EdawaxPlugin(plugins.SingletonPlugin):
         return {'package_update': journal_package_update,
                 'package_delete': journal_package_delete,
                 'resource_delete': journal_resource_delete,
+                'resource_create': journal_resource_create,
                 }
 
     def get_helpers(self):
