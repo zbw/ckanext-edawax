@@ -50,6 +50,8 @@ def get_invite_body(user, data=None):
     role = _get_user_role(user.name, data['group_id'])
     if role in ['editor', 'admin']:
         return render_jinja2('emails/invite_editor.txt', extra_vars)
+    elif role == 'reviewer':
+        return render_jinja2('emails/invite_reviewer.txt', extra_vars)
     return render_jinja2('emails/invite_author.txt', extra_vars)
 
 

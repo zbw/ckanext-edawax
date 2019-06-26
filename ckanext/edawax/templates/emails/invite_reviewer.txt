@@ -1,0 +1,11 @@
+You have been invited by the editor of the {{ journal_title }} to act as a reviewer for a recent entry.
+
+
+To accept this invite, please reset your password at:
+
+{{ reset_link }}
+
+You will receive a second email when the entry is ready for review.
+
+For advice, please consult the documentation of our service:
+{{ site_url }}/manual_EN.pdf

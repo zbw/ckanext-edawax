@@ -31,6 +31,7 @@ def is_reviewer(pkg):
 
     return reviewer == user
 
+
 def is_admin():
     admins = c.group_admins
     try:

@@ -23,6 +23,9 @@ import new_invites as invites
 import urllib2
 import hashlib
 
+# package_update
+from update import package_update
+
 
 
 def edawax_facets(facets_dict):
@@ -261,7 +264,8 @@ class EdawaxPlugin(plugins.SingletonPlugin):
 
     def get_actions(self):
         return {
-                    "user_invite": invites.user_invite
+                    "user_invite": invites.user_invite,
+                    "package_update": package_update,
                }
 
     def get_auth_functions(self):
