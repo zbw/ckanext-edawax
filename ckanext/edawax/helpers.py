@@ -26,8 +26,6 @@ def is_reviewer(pkg):
         try:
             reviewer = pkg['maintainer']
         except Exception as e:
-            print('@@@@@@@@@@@')
-            print(pkg)
             return False
     user = c.userobj.name
 
