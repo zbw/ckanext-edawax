@@ -126,8 +126,6 @@ class WorkflowController(PackageController):
         """reset dataset to private and leave review state.
         Should also send email to author
         """
-        print('***********')
-        print('reauthoring')
         context = self._context()
         msg = tk.request.params.get('msg', '')
         c.pkg_dict = tk.get_action('package_show')(context, {'id': id})

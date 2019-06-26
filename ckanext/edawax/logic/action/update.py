@@ -48,9 +48,6 @@ def package_update(context, data_dict):
     user = context['user']
     name_or_id = data_dict.get("id") or data_dict['name']
 
-    if '@' in data_dict.get("maintainer"):
-        print("\n{}\n".format(data_dict.get("maintainer")))
-
     pkg = model.Package.get(name_or_id)
     if pkg is None:
         raise NotFound(_('Package was not found.'))
