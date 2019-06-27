@@ -273,7 +273,10 @@ def create_ris_record(id):
         journal = ''
     url = '{}/dataset/{}'.format(config.get('ckan.site_url'), pkg_dict['name'])
     version = pkg_dict['dara_currentVersion']
-    doi = parse_ris_doi(pkg_dict['dara_DOI'])
+    if 'dara_DOI' in pkg_dict.keys():
+        doi = parse_ris_doi(pkg_dict['dara_DOI'])
+    else:
+        doi = ''
 
     if pkg_dict['notes'] != '':
         abstract = 'AB  - {}\n'.format(pkg_dict['notes'].encode('utf-8').replace('\n', ' ').replace('\r', ' '))
@@ -316,7 +319,7 @@ def create_bibtex_record(id):
         journal = ''
     url = '{}/dataset/{}'.format(config.get('ckan.site_url'), pkg_dict['name'])
     version = pkg_dict['dara_currentVersion']
-    if pkg_dict['dara_DOI'] != '':
+    if 'dara_DOI' in pkg_dict.keys() and pkg_dict['dara_DOI'] != '':
         temp_doi = pkg_dict['dara_DOI']
         identifier = '{}'.format(temp_doi.split('/')[1])
     else:
