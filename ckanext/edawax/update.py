@@ -39,7 +39,7 @@ def update_mainter_field(user_name, data_dict):
 
 
 def invite_reviwer(email, org_id):
-    new_user = tk.get_action('user_invite')(None, {'email': email, 'group_id': org_id, 'role': 'member'})
+    new_user = tk.get_action('user_invite')(None, {'email': email, 'group_id': org_id, 'role': 'reviewer'})
     return new_user
 
 
