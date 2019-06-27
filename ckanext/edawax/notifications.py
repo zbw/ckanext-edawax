@@ -49,11 +49,11 @@ def review(addresses, author, dataset, reviewer=None):
         body = """
 Dear Editor,
 
-the author {user} has uploaded replication files to your journal's data archive.\n
+the author {user} has uploaded replication files to your journal's data archive.
+
+You can review it here: {url}
 
 {submission_id}
-
-You can review it here:\n\n\t {url}
 
 best regards from ZBW--Journal Data Archive
 
@@ -72,13 +72,13 @@ best regards from ZBW--Journal Data Archive
     def message_reviewer(address):
 
         body = """
-Dear Reviwer,
+Dear Reviewer,
 
-the author {user} has uploaded replication files to your journal's data archive.\n
+the author {user} has uploaded replication files to your journal's data archive.
+
+You can review it here: {url}
 
 {submission_id}
-
-You can review it here:\n\n\t {url}
 
 best regards from ZBW--Journal Data Archive
 

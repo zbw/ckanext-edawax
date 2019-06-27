@@ -1,11 +1,10 @@
-You have been invited by the editor of the {{ journal_title }} to act as a reviewer for a recent entry.
+You have been invited by the editor of the {{ journal_title }} to act as a reviewer for a new entry in the journal's data repository.
 
+You will receive a second email when the entry is ready for review.
 
 To accept this invite, please reset your password at:
 
 {{ reset_link }}
 
-You will receive a second email when the entry is ready for review.
-
 For advice, please consult the documentation of our service:
-{{ site_url }}/manual_EN.pdf
+{{ site_url }}/User_Manual-EN_V1.5.pdf

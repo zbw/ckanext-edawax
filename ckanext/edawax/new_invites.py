@@ -12,6 +12,7 @@ import ckan.lib.mailer as mailer
 import ckan.logic.action.create as logic
 from ckan.lib.base import render_jinja2
 
+import ckan.plugins.toolkit as tk
 #imports for expanded mailing
 import os
 import smtplib
@@ -182,5 +183,13 @@ def mail_recipient(recipient_name, recipient_email, subject,
 def mail_user(recipient, subject, body, headers={}, role=None):
     if (recipient.email is None) or not len(recipient.email):
         raise MailerException(_("No recipient email address available!"))
-    mail_recipient(recipient.display_name, recipient.email, subject,
+    if role == 'reviewer':
+        name = 'Reviewer'
+    elif role == 'member':
+        name = 'Author'
+    else:
+        name = recipient.display_name
+
+
+    mail_recipient(name, recipient.email, subject,
             body, headers=headers, role=role)
