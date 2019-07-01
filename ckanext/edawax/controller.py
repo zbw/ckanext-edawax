@@ -125,7 +125,8 @@ class WorkflowController(PackageController):
         msg = tk.request.params.get('msg', '')
         c.pkg_dict = tk.get_action('package_show')(context, {'id': id})
         creator_mail = model.User.get(c.pkg_dict['creator_user_id']).email
-        note = n.reauthor(id, creator_mail, msg, context)
+        admin_mail = model.User.get(c.user).email
+        note = n.reauthor(id, creator_mail, admin_mail, msg, context)
 
         if note:
             c.pkg_dict.update({'private': True,

@@ -76,7 +76,7 @@ best regards from ZBW--Journal Data Archive
     return any(t)
 
 
-def reauthor(dataset, author_mail, msg, context):
+def reauthor(dataset, author_mail, admin_mail, msg, context):
     """
     notify author that dataset should be revised
     """
@@ -106,6 +106,7 @@ URL: {url}
     message = MIMEText(body.encode('utf-8'), 'plain', 'utf-8')
     message['Subject'] = Header(u"ZBW Journal Data Archive: Please revise your uploaded dataset")
     message['From'] = config.get('smtp.mail_from')
+    message['Cc'] = admin_mail
     message['To'] = Header(author_mail, 'utf-8')
     message['Date'] = Utils.formatdate(time())
     message['X-Mailer'] = "CKAN {} [Plugin edawax]".format(ckan_version)
