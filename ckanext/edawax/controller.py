@@ -76,7 +76,10 @@ class WorkflowController(PackageController):
         admins = get_group_or_org_admin_ids(c.pkg_dict['owner_org'])
         addresses = map(lambda admin_id: model.User.get(admin_id).email, admins)
         reviewer_name = c.pkg_dict['maintainer']
-        reviewer_email = tk.get_action('user_show')(context, {'id': reviewer_name})['email']
+        try:
+            reviewer_email = tk.get_action('user_show')(context, {'id': reviewer_name})['email']
+        except Exception as e:
+            reviewer_email = None
         note = n.review(addresses, user_name, id, reviewer_email)
 
         if note:

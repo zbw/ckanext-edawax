@@ -73,7 +73,7 @@ def package_update(context, data_dict):
 
     '''
     # handle reviewer
-    if '@' in data_dict.get("maintainer"):
+    if data_dict.get("maintainer") is not None and '@' in data_dict.get("maintainer"):
         email = data_dict.get("maintainer")
         # check that the email doesn't already belong to a user
         user_exists = email_exists(email)
@@ -104,12 +104,12 @@ def package_update(context, data_dict):
         maintainer = data_dict.get("maintainer")
         users = org_data['users']
         user_names = [user['name'] for user in users]
-        if maintainer not in user_names:
+        if maintainer is not None and maintainer not in user_names:
             # if not in org, add them
             users = org_data['users']
 
             users.append({'name': maintainer, 'capacity': 'member'})
-            updated = tk.get_action('organization_patch')(None, {'id': org_id, 'users': users})
+            updated = tk.get_action('organization_patch')({'ignore_auth': True}, {'id': org_id, 'users': users})
 
     model = context['model']
     user = context['user']
