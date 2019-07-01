@@ -12,7 +12,7 @@ from ckan.authz import get_group_or_org_admin_ids
 from ckanext.dara.helpers import check_journal_role
 from functools import wraps
 import notifications as n
-from ckanext.edawax.helpers import is_private
+from ckanext.edawax.helpers import is_private, is_robot
 from pylons import config
 
 # for download all
@@ -182,7 +182,7 @@ class WorkflowController(PackageController):
         resources = c.pkg_dict['resources']
         for resource in resources:
             rsc = tk.get_action('resource_show')(context, {'id': resource['id']})
-            if rsc.get('url_type') == 'upload':
+            if rsc.get('url_type') == 'upload' and not is_robot(request.user_agent):
                 url = resource['url']
                 filename = os.path.basename(url)
                 # custom user agent header so that downloads from here count
