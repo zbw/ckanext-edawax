@@ -74,7 +74,7 @@ best regards from ZBW--Journal Data Archive
         body = """
 Dear Reviewer,
 
-the author {user} has uploaded replication files to your journal's data archive.
+An author has uploaded replication files to your journal's data archive.
 
 You can review it here: {url}
 

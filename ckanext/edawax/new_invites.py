@@ -183,12 +183,7 @@ def mail_recipient(recipient_name, recipient_email, subject,
 def mail_user(recipient, subject, body, headers={}, role=None):
     if (recipient.email is None) or not len(recipient.email):
         raise MailerException(_("No recipient email address available!"))
-    if role == 'reviewer':
-        name = 'Reviewer'
-    elif role == 'member':
-        name = 'Author'
-    else:
-        name = recipient.display_name
+    name = recipient.display_name
 
 
     mail_recipient(name, recipient.email, subject,
