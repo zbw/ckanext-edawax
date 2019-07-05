@@ -19,6 +19,56 @@ import ckanext.edawax.robot_list as _list
 from urlparse import urlparse
 
 
+def format_resource_items_custom(items):
+    out = []
+    print('***************')
+    for item in items:
+        print(item)
+        if item[0] == u"dara_temporalCoverageFormal" and item[1] != u"":
+            for thing in items:
+                if thing[0] == u'dara_temporalCoverageFormal_end':
+                    end = thing[1]
+            out.append(( "Temporal Coverage (controlled)", "{}-{}".format(item[1], end) ))
+        elif item[0] == u'dara_authors':
+            if item[1] == "[u'', u'', u'', u'', u'']":
+                package = tk.get_action('package_show')(None, {'id': request.url.split('/')[4]})
+                authors = ast.literal_eval(package['dara_authors'])
+                out.append(("Authors", parse_authors(authors)))
+            else:
+                authors = ast.literal_eval(items[1])
+                out.append(("Authors", parse_authors(authors)))
+        else:
+            if item[0] in field_mapping.keys():
+                out.append(( field_mapping[item[0]], item[1] ))
+
+    return out
+
+
+def parse_authors(authors):
+    out = ''
+    if len(authors) > 1:
+        return 'and '.join(["{}, {}".format(author['lastname'], author['firstname']) for author in authors])
+    return "{}, {}".format(author['lastname'], author['firstname'])
+
+
+field_mapping = {u"dara_res_preselection": "Type",
+u"dara_currentVersion": "Version",
+u"dara_authors": "Authors",
+u"dara_DOI": "DOI",
+u"dara_PublicationDate": "Publication Date",
+u"dara_Availabilitycontrolled": "Availability",
+u"dara_geographicCoverage": "Geographic Area (controlled)",
+u"dara_geographicCoverageFree": "Geographic Area (free)",
+u"dara_temporalCoverageFormal": "Temporal Coverage (controlled)",
+u"dara_temporalCoverageFree": "Temporal Coverage (free)",
+u"dara_unitType": "Individual",
+u"dara_numberUnits": "Number of Units",
+u"dara_universeSampled": "Sampled Universe",
+u"dara_numberVariables": "Number of Variables",
+u"format": "Format",
+u"url": "URL"}
+
+
 def is_reviewer(pkg):
     reviewers = []
     try:

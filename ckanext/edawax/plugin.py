@@ -305,6 +305,7 @@ class EdawaxPlugin(plugins.SingletonPlugin):
                 'is_admin': helpers.is_admin,
                 'is_reviewer':  helpers.is_reviewer,
                 'show_notify_editor_button': helpers.show_notify_editor_button,
+                'format_resource_items_custom':helpers.format_resource_items_custom,
                 }
 
     def before_map(self, map):
