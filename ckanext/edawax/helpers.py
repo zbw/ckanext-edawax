@@ -20,16 +20,23 @@ from urlparse import urlparse
 
 
 def is_reviewer(pkg):
+    reviewers = []
     try:
         reviewer = getattr(pkg, 'maintainer')
+        reviewers.append(reviewer)
+        reviewer = getattr(pkg, 'maintainer_email')
+        reviewers.append(reviewer)
     except AttributeError:
         try:
             reviewer = pkg['maintainer']
+            reviewers.append(reviewer)
+            reviewer = pkg['maintainer_email']
+            reviewers.append(reviewer)
         except Exception as e:
             return False
     user = c.userobj.name
 
-    return reviewer == user
+    return user in reviewers
 
 
 def is_admin():
@@ -187,7 +194,13 @@ def show_retract_button(pkg):
 def show_reauthor_button(pkg):
     if not isinstance(pkg, dict):
         return False
-    return check_journal_role(pkg, 'admin') and in_review(pkg) == 'true' or is_reviewer(pkg) and in_review(pkg) == 'true'
+    return check_journal_role(pkg, 'admin') and in_review(pkg) == 'true'
+
+
+def show_notify_editor_button(pkg):
+    if not isinstance(pkg, dict):
+        return False
+    return in_review(pkg) == 'true' and is_reviewer(pkg)
 
 
 def res_abs_url(res):

@@ -38,9 +38,7 @@ def admin_req(func):
         controller = args[0]
         pkg = tk.get_action('package_show')(None, {'id': id})
         if not check_journal_role(pkg, 'admin') and not h.check_access('sysadmin'):
-            if not is_reviewer(pkg):
-                tk.abort(403, 'Unauthorized')
-        return func(controller, id)
+            return func(controller, id)
     return check
 
 
@@ -144,6 +142,21 @@ class WorkflowController(PackageController):
             h.flash_error('ERROR: Mail could not be sent. Please try again later or contact the site admin.')
         redirect(id)
 
+
+    def editor_notify(self, id):
+        context = self._context()
+        msg = tk.request.params.get('msg', '')
+        c.pkg_dict = tk.get_action('package_show')(context, {'id': id})
+        creator_mail = model.User.get(c.pkg_dict['creator_user_id']).email
+        note = n.editor_notify(id, creator_mail, msg, context)
+
+        if note:
+            c.pkg_dict.update({'private': True, 'dara_edawax_review': ''})
+            tk.get_action('package_update')(context, c.pkg_dict)
+            h.flash_success('Notification sent. Journal editor will...')
+        else:
+            h.flash_error('ERROR: Mail could not be sent. Please try again later or contact the site admin.')
+        redirect(id)
 
 
     def create_citataion_text(self, id):

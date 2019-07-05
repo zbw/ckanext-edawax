@@ -106,10 +106,6 @@ def journal_package_update(context, data_dict):
 
     user = context.get('auth_user_obj')
     pkg_obj = get_package_object(context, data_dict)
-    if helpers.is_reviewer(pkg_obj):
-        if 'resource_id' in request.urlvars.keys():
-            return {'success': False, 'msg': 'Reviewers cannot edit resources.' }
-        return {'success': helpers.is_reviewer(pkg_obj) }
 
     is_private = getattr(pkg_obj, 'private', False)
     is_admin = check_journal_role({'owner_org': pkg_obj.owner_org}, 'admin')
@@ -308,6 +304,7 @@ class EdawaxPlugin(plugins.SingletonPlugin):
                 'has_hammer': helpers.has_hammer,
                 'is_admin': helpers.is_admin,
                 'is_reviewer':  helpers.is_reviewer,
+                'show_notify_editor_button': helpers.show_notify_editor_button,
                 }
 
     def before_map(self, map):
@@ -375,6 +372,11 @@ class EdawaxPlugin(plugins.SingletonPlugin):
         map.connect('/dataset/{id}/reauthor',
                     controller="ckanext.edawax.controller:WorkflowController",
                     action="reauthor",)
+
+        # notify editor dataset review is complete
+        map.connect('/dataset/{id}/editor_notify',
+                    controller="ckanext.edawax.controller:WorkflowController",
+                    action="editor_notify",)
 
         # download all resources
         map.connect('/dataset/{id}/download_all',

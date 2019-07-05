@@ -3,7 +3,7 @@ from email.header import Header
 from email import Utils
 from email.mime.text import MIMEText
 from time import time
-from pylons import config
+from pylons import config, c
 import logging
 import ckan.plugins.toolkit as tk
 from ckan import __version__ as ckan_version
@@ -103,6 +103,44 @@ best regards from ZBW--Journal Data Archive
     return any(t)
 
 
+def editor_notify(dataset, author_mail, msg, context):
+    """
+    Notify journal editor that the review is finished
+    """
+    body = u"""
+Dear Editor,
+
+A reviewer has finished reviewing a submission to '{journal}.' The submission is available here: {url}.
+
+{message}
+    """
+
+    def create_message():
+        if msg:
+            return u"Message: \n========\n\n{}".format(msg)
+        return u""
+
+    reviewer_email = tk.get_action('user_show')(context, {'id': c.user})['email']
+
+    context['ignore_auth'] = True
+    pkg = tk.get_action('package_show')(context, {'id': dataset})
+    org_id = pkg.get('owner_org', pkg.get('group_id', False))
+    org = tk.get_action('organization_show')(context, {'id': org_id})
+    d = {'journal': org['title'], 'url': package_url(dataset), 'title': pkg.get('name'),
+         'message': create_message()}
+    body = body.format(**d)
+    message = MIMEText(body.encode('utf-8'), 'plain', 'utf-8')
+    message['Subject'] = Header(u"ZBW Journal Data Archive: Please revise your uploaded dataset")
+    message['From'] = reviewer_email
+    message['To'] = Header(author_mail, 'utf-8')
+    message['Cc'] = config.get('smtp.mail_from')
+    message['Date'] = Utils.formatdate(time())
+    message['X-Mailer'] = "CKAN {} [Plugin edawax]".format(ckan_version)
+
+    return sendmail(author_mail, message)  # boolean
+
+
+
 def reauthor(dataset, author_mail, msg, context):
     """
     notify author that dataset should be revised
@@ -134,6 +172,7 @@ URL: {url}
     message['Subject'] = Header(u"ZBW Journal Data Archive: Please revise your uploaded dataset")
     message['From'] = config.get('smtp.mail_from')
     message['To'] = Header(author_mail, 'utf-8')
+    message['Cc'] = config.get('smtp.mail_from')
     message['Date'] = Utils.formatdate(time())
     message['X-Mailer'] = "CKAN {} [Plugin edawax]".format(ckan_version)
 
