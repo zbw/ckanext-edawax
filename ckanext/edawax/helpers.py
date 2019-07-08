@@ -1,4 +1,4 @@
-# # -*- coding: utf-8 -*-
+# -*- coding: utf-8 -*-
 import ckan.plugins.toolkit as tk
 import ckan.model as model
 from ckan.common import c, response, _, request
@@ -43,13 +43,21 @@ def format_resource_items_custom(items):
                 a = parse_authors(authors)
                 out.append(("3 Authors", a))
             else:
-                authors = ast.literal_eval(items[1])
+                authors = item[1].decode('unicode_escape')
+                authors = ast.literal_eval(authors)
                 out.append(("3 Authors", parse_authors(authors)))
         elif item[0] == u'dara_geographicCoverage':
             countries = []
-            for country in ast.literal_eval(item[1]):
-                name = find_geographic_name(country)
-                countries.append(name)
+            try:
+                parsed = ast.literal_eval(item[1])
+            except ValueError:
+                parsed = item[1]
+            if type(parsed) == list:
+                for country in parsed:
+                    name = find_geographic_name(country)
+                    countries.append(name)
+            else:
+                countries = [find_geographic_name(parsed)]
             out.append(("7 Geographic Area (controlled)", ", ".join(countries)))
         else:
             if item[0] in field_mapping.keys():
@@ -60,11 +68,17 @@ def format_resource_items_custom(items):
     return clean_list
 
 
+def chunk(lst, n):
+    for i in range(0, len(lst), n):
+        yield lst[i:i+n]
+
 def parse_authors(authors):
     out = ''
-    if len(authors) > 1:
+    if type(authors[0]) == dict:   #len(authors) > 1:
         return ' and '.join([u"{}, {}".format(author['lastname'].decode('unicode_escape'), author['firstname'].decode('unicode_escape')) for author in authors])
-    return "{}, {}".format(author['lastname'].decode('unicode_escape'), author['firstname'].decode('unicode_escape'))
+    if len(authors) > 5:
+        return ' and '.join([u"{}, {}".format(c[0], c[1]) for c in chunk(authors, 5)])
+    return u"{}, {}".format(authors[0], authors[1])
 
 
 field_mapping = {u"dara_res_preselection": "1 Type",
