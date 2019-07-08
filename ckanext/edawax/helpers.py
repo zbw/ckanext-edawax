@@ -18,6 +18,15 @@ import re
 import ckanext.edawax.robot_list as _list
 from urlparse import urlparse
 
+from ckanext.dara.geography_coverage import geo
+
+
+def find_geographic_name(abbr):
+    for country in geo:
+        if country['value'] == abbr:
+            return country['text'].capitalize()
+    return ''
+
 
 def format_resource_items_custom(items):
     out = []
@@ -28,45 +37,50 @@ def format_resource_items_custom(items):
             for thing in items:
                 if thing[0] == u'dara_temporalCoverageFormal_end':
                     end = thing[1]
-            out.append(( "Temporal Coverage (controlled)", "{}-{}".format(item[1], end) ))
+            out.append(( "9 Temporal Coverage (controlled)", "{}-{}".format(item[1], end) ))
         elif item[0] == u'dara_authors':
             if item[1] == "[u'', u'', u'', u'', u'']":
                 package = tk.get_action('package_show')(None, {'id': request.url.split('/')[4]})
                 authors = ast.literal_eval(package['dara_authors'])
-                out.append(("Authors", parse_authors(authors)))
+                out.append(("3 Authors", parse_authors(authors)))
             else:
                 authors = ast.literal_eval(items[1])
-                out.append(("Authors", parse_authors(authors)))
+                out.append(("3 Authors", parse_authors(authors)))
+        elif item[0] == u'dara_geographicCoverage':
+            countries = []
+            for country in ast.literal_eval(item[1]):
+                name = find_geographic_name(country)
+                countries.append(name)
+            out.append(("7 Geographic Area (controlled)", ", ".join(countries)))
         else:
             if item[0] in field_mapping.keys():
                 out.append(( field_mapping[item[0]], item[1] ))
 
-    return out
+    sorted_list = sorted(out, key=lambda tup: tup[0])
+    clean_list = [(" ".join(x[0].split(" ")[1:]), x[1]) for x in sorted_list]
+    return clean_list
 
 
 def parse_authors(authors):
     out = ''
     if len(authors) > 1:
-        return 'and '.join(["{}, {}".format(author['lastname'], author['firstname']) for author in authors])
+        return ' and '.join(["{}, {}".format(author['lastname'], author['firstname']) for author in authors])
     return "{}, {}".format(author['lastname'], author['firstname'])
 
 
-field_mapping = {u"dara_res_preselection": "Type",
-u"dara_currentVersion": "Version",
-u"dara_authors": "Authors",
-u"dara_DOI": "DOI",
-u"dara_PublicationDate": "Publication Date",
-u"dara_Availabilitycontrolled": "Availability",
-u"dara_geographicCoverage": "Geographic Area (controlled)",
-u"dara_geographicCoverageFree": "Geographic Area (free)",
-u"dara_temporalCoverageFormal": "Temporal Coverage (controlled)",
-u"dara_temporalCoverageFree": "Temporal Coverage (free)",
-u"dara_unitType": "Individual",
-u"dara_numberUnits": "Number of Units",
-u"dara_universeSampled": "Sampled Universe",
-u"dara_numberVariables": "Number of Variables",
-u"format": "Format",
-u"url": "URL"}
+field_mapping = {u"dara_res_preselection": "1 Type",
+u"dara_currentVersion": "2 Version",
+u"dara_DOI": "4 DOI",
+u"dara_PublicationDate": "5 Publication Date",
+u"dara_Availabilitycontrolled": "6 Availability",
+u"dara_geographicCoverageFree": "8 Geographic Area (free)",
+u"dara_temporalCoverageFree": "91 Temporal Coverage (free)",
+u"dara_unitType": "92 Individual",
+u"dara_numberUnits": "93 Number of Units",
+u"dara_universeSampled": "94 Sampled Universe",
+u"dara_numberVariables": "95 Number of Variables",
+u"format": "96 Format",
+u"url": "97 URL"}
 
 
 def is_reviewer(pkg):
