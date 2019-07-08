@@ -1,4 +1,4 @@
-# -*- coding: utf-8 -*-
+# # -*- coding: utf-8 -*-
 import ckan.plugins.toolkit as tk
 import ckan.model as model
 from ckan.common import c, response, _, request
@@ -30,19 +30,18 @@ def find_geographic_name(abbr):
 
 def format_resource_items_custom(items):
     out = []
-    print('***************')
     for item in items:
-        print(item)
         if item[0] == u"dara_temporalCoverageFormal" and item[1] != u"":
             for thing in items:
                 if thing[0] == u'dara_temporalCoverageFormal_end':
                     end = thing[1]
-            out.append(( "9 Temporal Coverage (controlled)", "{}-{}".format(item[1], end) ))
+            out.append(( "9 Temporal Coverage (controlled)", "{} to {}".format(item[1], end) ))
         elif item[0] == u'dara_authors':
             if item[1] == "[u'', u'', u'', u'', u'']":
                 package = tk.get_action('package_show')(None, {'id': request.url.split('/')[4]})
                 authors = ast.literal_eval(package['dara_authors'])
-                out.append(("3 Authors", parse_authors(authors)))
+                a = parse_authors(authors)
+                out.append(("3 Authors", a))
             else:
                 authors = ast.literal_eval(items[1])
                 out.append(("3 Authors", parse_authors(authors)))
@@ -64,8 +63,8 @@ def format_resource_items_custom(items):
 def parse_authors(authors):
     out = ''
     if len(authors) > 1:
-        return ' and '.join(["{}, {}".format(author['lastname'], author['firstname']) for author in authors])
-    return "{}, {}".format(author['lastname'], author['firstname'])
+        return ' and '.join([u"{}, {}".format(author['lastname'].decode('unicode_escape'), author['firstname'].decode('unicode_escape')) for author in authors])
+    return "{}, {}".format(author['lastname'].decode('unicode_escape'), author['firstname'].decode('unicode_escape'))
 
 
 field_mapping = {u"dara_res_preselection": "1 Type",
@@ -75,7 +74,7 @@ u"dara_PublicationDate": "5 Publication Date",
 u"dara_Availabilitycontrolled": "6 Availability",
 u"dara_geographicCoverageFree": "8 Geographic Area (free)",
 u"dara_temporalCoverageFree": "91 Temporal Coverage (free)",
-u"dara_unitType": "92 Individual",
+u"dara_unitType": "92 Unit Type",
 u"dara_numberUnits": "93 Number of Units",
 u"dara_universeSampled": "94 Sampled Universe",
 u"dara_numberVariables": "95 Number of Variables",
