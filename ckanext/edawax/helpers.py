@@ -69,6 +69,7 @@ def format_resource_items_custom(items):
 
 
 def chunk(lst, n):
+    """ Generator to get evenly sized chunks from author list """
     for i in range(0, len(lst), n):
         yield lst[i:i+n]
 
