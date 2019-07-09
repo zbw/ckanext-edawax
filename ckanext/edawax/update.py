@@ -73,6 +73,10 @@ def package_update(context, data_dict):
 
     '''
     # handle reviewer
+    # if the 'maintainer' is an email, check if a user has that email
+    # if there is a user with the email, update the maintainer field
+    # otherwise, don't do anything - leave the email as the maintainer.
+    #
     if data_dict.get("maintainer") is not None and '@' in data_dict.get("maintainer"):
         email = data_dict.get("maintainer")
         # check that the email doesn't already belong to a user
@@ -92,8 +96,8 @@ def package_update(context, data_dict):
             except KeyError:
                 org_id = data_dict['owner_org']
 
-        new_user = invite_reviwer(email, org_id)
-        data_dict = update_mainter_field(new_user['name'], data_dict)
+        #new_user = invite_reviwer(email, org_id)
+        #data_dict = update_mainter_field(new_user['name'], data_dict)
     else:
         # check that user is member of the organization
         try:

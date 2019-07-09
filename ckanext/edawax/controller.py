@@ -24,6 +24,7 @@ import StringIO
 from ckanext.dara.helpers import _parse_authors
 
 from ckanext.edawax.helpers import is_reviewer
+from ckanext.edawax.update import user_exists, update_maintainer_field
 
 import ast
 from webob import Response, Request
@@ -54,6 +55,10 @@ class WorkflowController(PackageController):
     def review(self, id):
         """
         sends review notification to all journal admins
+
+        Check the maintainer's: if one is an email address, invite that person
+        to the JDA as a reviewer - need a new invitation that includes a link
+        to the dataset for review.
         """
 
         context = self._context()
@@ -72,13 +77,35 @@ class WorkflowController(PackageController):
 
         user_name = tk.c.userobj.fullname or tk.c.userobj.email
         admins = get_group_or_org_admin_ids(c.pkg_dict['owner_org'])
-        addresses = map(lambda admin_id: model.User.get(admin_id).email, admins)
-        reviewer_name = c.pkg_dict['maintainer']
-        try:
-            reviewer_email = tk.get_action('user_show')(context, {'id': reviewer_name})['email']
-        except Exception as e:
-            reviewer_email = None
-        note = n.review(addresses, user_name, id, reviewer_email)
+        addresses = map(lambda admin_id: model.User.get(admin_id).email,admins)
+
+        reviewer_names = []
+        reviewer_names.append(c.pkg_dict['maintainer'])
+        reviewer_names.append(c.pkg_dict['maintainer_email'])
+        reviewer_emails = []
+        # If either reviewer's name is an email address. Then create new user
+        # and update the field to be their new name.
+        for name in reviewer_names:
+            if '@' in name:
+                email = name
+                user_exists = email_exists(email)
+                data_dict = c.pkg_dict
+                if user_exists:
+                    data_dict = update_mainter_field(user_exists, data_dict)
+                else:
+                    try:
+                        org_id = data_dict['organization']['id']
+                    except KeyError:
+                        org_id = data_dict['owner_org']
+                new_user = invite_reviwer(email, org_id)
+                data_dict = update_mainter_field(new_user['name'], data_dict)
+            else:
+                # otherwise just notify them that they can review
+                try:
+                    reviewer_emails.append(tk.get_action('user_show')(context, {'id': name})['email'])
+                except Exception as e:
+                    reviewer_emails.append(None)
+        note = n.review(addresses, user_name, id, reviewer_emails)
 
         if note:
             c.pkg_dict['dara_edawax_review'] = 'true'

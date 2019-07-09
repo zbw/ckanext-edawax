@@ -19,12 +19,14 @@ import smtplib
 import logging
 from time import time
 from email import Utils
-from ckan.common import _, g
+from ckan.common import _, g, request
 from email.header import Header
 import paste.deploy.converters
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 from email.mime.application import MIMEApplication
+
+from ckanext.edawax.notifications import package_url
 
 
 log = logging.getLogger(__name__)
@@ -42,11 +44,14 @@ def _get_user_role(user_name, org_id):
     return False
 
 def get_invite_body(user, data=None):
+    print('***********')
+    print(request.url)
     extra_vars = {'reset_link': mailer.get_reset_link(user),
        'site_title': config.get('ckan.site_title'),
        'user_name': user.name,
        'site_url': config.get('ckan.site_url'),
-       'journal_title': data['journal_title']}
+       'journal_title': data['journal_title'],
+       'url': '<figure out how to get this...>'}
 
     role = _get_user_role(user.name, data['group_id'])
     if role in ['editor', 'admin']:

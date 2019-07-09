@@ -33,7 +33,7 @@ def package_url(dataset):
                           tk.url_for(controller='package', action='read',
                           id=dataset))
 
-def review(addresses, author, dataset, reviewer=None):
+def review(addresses, author, dataset, reviewers=None):
     """
     notify admins on new or modified entities in their organization
     """
@@ -96,8 +96,9 @@ best regards from ZBW--Journal Data Archive
 
     # send email to journal admin and ckan admin
     t = map(lambda a: sendmail(a, message_editor(a)), addresses)
-    if reviewer is not None:
-        r = sendmail(reviewer, message_reviewer(reviewer))
+    if reviewers is not None:
+        for reviewer in reviewers:
+            r = sendmail(reviewer, message_reviewer(reviewer))
 
     # success if we have at least one successful send
     return any(t)
