@@ -111,7 +111,7 @@ class WorkflowController(PackageController):
         if note:
             c.pkg_dict['dara_edawax_review'] = 'true'
             tk.get_action('package_update')(context, c.pkg_dict)
-            h.flash_success('Notification to Editors sent.')
+            h.flash_success('Notification to Reviewers sent.')
         else:
             h.flash_error('ERROR: Mail could not be sent. Please try again later or contact the site admin.')
 
@@ -179,7 +179,7 @@ class WorkflowController(PackageController):
         note = n.editor_notify(id, creator_mail, msg, context)
 
         if note:
-            c.pkg_dict.update({'private': True, 'dara_edawax_review': ''})
+            c.pkg_dict.update({'private': True, 'dara_edawax_review': 'finished'})
             tk.get_action('package_update')(context, c.pkg_dict)
             h.flash_success('Notification sent. Journal editor will...')
         else:

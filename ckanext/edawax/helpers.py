@@ -112,7 +112,10 @@ def is_reviewer(pkg):
             reviewers.append(reviewer)
         except Exception as e:
             return False
-    user = c.userobj.name
+    try:
+        user = c.userobj.name
+    except AttributeError as e:
+        user = None
 
     return user in reviewers
 
@@ -254,13 +257,13 @@ def is_private(pkg):
 
 
 def show_review_button(pkg):
-    return get_user_id() == pkg['creator_user_id'] and in_review(pkg) in ('false', 'reauthor')
+    return get_user_id() == pkg['creator_user_id'] and in_review(pkg) in ('false', 'reauthor', 'finished')
 
 
 def show_publish_button(pkg):
     if not isinstance(pkg, dict):
         return False
-    return check_journal_role(pkg, 'admin') and in_review(pkg) == 'true'
+    return check_journal_role(pkg, 'admin') and in_review(pkg) in ['true', 'finished']
 
 
 def show_retract_button(pkg):
@@ -272,7 +275,7 @@ def show_retract_button(pkg):
 def show_reauthor_button(pkg):
     if not isinstance(pkg, dict):
         return False
-    return check_journal_role(pkg, 'admin') and in_review(pkg) == 'true'
+    return check_journal_role(pkg, 'admin') and in_review(pkg) in ['true', 'finished']
 
 
 def show_notify_editor_button(pkg):

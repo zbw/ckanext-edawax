@@ -74,9 +74,9 @@ best regards from ZBW--Journal Data Archive
         body = """
 Dear Reviewer,
 
-An author has uploaded replication files to your journal's data archive.
+Replication files in your journal's data archive are ready for review.
 
-You can review it here: {url}
+You can review them here: {url}
 
 {submission_id}
 
@@ -163,6 +163,8 @@ URL: {url}
             return u"Message: \n========\n\n{}".format(msg)
         return u""
 
+    reviewer_email = tk.get_action('user_show')(context, {'id': c.user})['email']
+
     pkg = tk.get_action('package_show')(context, {'id': dataset})
     org_id = pkg.get('owner_org', pkg.get('group_id', False))
     org = tk.get_action('organization_show')(context, {'id': org_id})
@@ -171,7 +173,7 @@ URL: {url}
     body = body.format(**d)
     message = MIMEText(body.encode('utf-8'), 'plain', 'utf-8')
     message['Subject'] = Header(u"ZBW Journal Data Archive: Please revise your uploaded dataset")
-    message['From'] = config.get('smtp.mail_from')
+    message['From'] = reviewer_email
     message['To'] = Header(author_mail, 'utf-8')
     message['Cc'] = config.get('smtp.mail_from')
     message['Date'] = Utils.formatdate(time())
