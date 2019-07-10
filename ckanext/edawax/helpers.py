@@ -93,8 +93,7 @@ u"dara_unitType": "92 Unit Type",
 u"dara_numberUnits": "93 Number of Units",
 u"dara_universeSampled": "94 Sampled Universe",
 u"dara_numberVariables": "95 Number of Variables",
-u"format": "96 Format",
-u"url": "97 URL"}
+u"url": "96 URL"}
 
 
 def is_reviewer(pkg):
