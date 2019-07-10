@@ -64,6 +64,7 @@ def format_resource_items_custom(items):
                 out.append(( field_mapping[item[0]], item[1] ))
 
     sorted_list = sorted(out, key=lambda tup: tup[0])
+    # remove the numbers from the field names
     clean_list = [(" ".join(x[0].split(" ")[1:]), x[1]) for x in sorted_list]
     return clean_list
 
@@ -81,6 +82,12 @@ def parse_authors(authors):
         return ' and '.join([u"{}, {}".format(c[0], c[1]) for c in chunk(authors, 5)])
     return u"{}, {}".format(authors[0], authors[1])
 
+# redo with a dictionary that contains the order?
+# The dictionary would have the keys: position, field_name
+# Then go through the dictionary and insert tuples based on the postion given
+# in the dictionary? Too many moving parts?
+# will also need a way to process the few things than need to be
+# set - temporal coverage, authors, full geographic names
 
 field_mapping = {u"dara_res_preselection": "1 Type",
 u"dara_currentVersion": "2 Version",
