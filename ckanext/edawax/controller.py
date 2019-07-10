@@ -129,6 +129,7 @@ class WorkflowController(PackageController):
         h.flash_success('Dataset published')
         redirect(id)
 
+
     @admin_req
     def retract(self, id):
         """
@@ -149,6 +150,7 @@ class WorkflowController(PackageController):
         tk.get_action('package_update')(context, c.pkg_dict)
         h.flash_success('Dataset retracted')
         redirect(id)
+
 
     @admin_req
     def reauthor(self, id):
