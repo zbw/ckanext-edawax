@@ -33,12 +33,12 @@ def email_exists(email):
     return False
 
 
-def update_mainter_field(user_name, data_dict):
+def update_maintainer_field(user_name, data_dict):
     data_dict['maintainer'] = user_name
     return data_dict
 
 
-def invite_reviwer(email, org_id):
+def invite_reviewer(email, org_id):
     new_user = tk.get_action('user_invite')(None, {'email': email, 'group_id': org_id, 'role': 'reviewer'})
     return new_user
 
@@ -86,7 +86,7 @@ def package_update(context, data_dict):
         # otherwise create the user and update the 'maintainer field. with
         # new name
         if user_exists:
-            data_dict = update_mainter_field(user_exists, data_dict)
+            data_dict = update_maintainer_field(user_exists, data_dict)
             # needs to receive an email now? I think not
             # check if use is part of group, if not add them
 

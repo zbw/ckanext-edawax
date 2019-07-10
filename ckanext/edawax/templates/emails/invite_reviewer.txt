@@ -4,7 +4,7 @@ To accept this invite, please reset your password at:
 
 {{ reset_link }}
 
-The submission for review is available here:
+The submission for review is available here: {{ url }}
 
 For advice, please consult the documentation of our service:
 {{ site_url }}/User_Manual-EN_V1.5.pdf

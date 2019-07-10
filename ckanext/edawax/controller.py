@@ -24,7 +24,7 @@ import StringIO
 from ckanext.dara.helpers import _parse_authors
 
 from ckanext.edawax.helpers import is_reviewer
-from ckanext.edawax.update import user_exists, update_maintainer_field
+from ckanext.edawax.update import update_maintainer_field, email_exists, invite_reviewer
 
 import ast
 from webob import Response, Request
@@ -39,7 +39,8 @@ def admin_req(func):
         controller = args[0]
         pkg = tk.get_action('package_show')(None, {'id': id})
         if not check_journal_role(pkg, 'admin') and not h.check_access('sysadmin'):
-            return func(controller, id)
+            tk.abort(403, 'Unauthorized')
+        return func(controller, id)
     return check
 
 
@@ -91,14 +92,14 @@ class WorkflowController(PackageController):
                 user_exists = email_exists(email)
                 data_dict = c.pkg_dict
                 if user_exists:
-                    data_dict = update_mainter_field(user_exists, data_dict)
+                    data_dict = update_maintainer_field(user_exists, data_dict)
                 else:
                     try:
                         org_id = data_dict['organization']['id']
                     except KeyError:
                         org_id = data_dict['owner_org']
-                new_user = invite_reviwer(email, org_id)
-                data_dict = update_mainter_field(new_user['name'], data_dict)
+                    new_user = invite_reviewer(email, org_id)
+                    data_dict = update_maintainer_field(new_user['name'], data_dict)
             else:
                 # otherwise just notify them that they can review
                 try:

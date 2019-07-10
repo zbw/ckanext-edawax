@@ -44,14 +44,16 @@ def _get_user_role(user_name, org_id):
     return False
 
 def get_invite_body(user, data=None):
-    print('***********')
-    print(request.url)
+    id_ = request.urlvars['id']
+    url = u"{}{}".format(config.get('ckan.site_url'),
+                          tk.url_for(controller='package', action='read',
+                          id=id_))
     extra_vars = {'reset_link': mailer.get_reset_link(user),
        'site_title': config.get('ckan.site_title'),
        'user_name': user.name,
        'site_url': config.get('ckan.site_url'),
        'journal_title': data['journal_title'],
-       'url': '<figure out how to get this...>'}
+       'url': url}
 
     role = _get_user_role(user.name, data['group_id'])
     if role in ['editor', 'admin']:
