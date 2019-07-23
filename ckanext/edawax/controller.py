@@ -87,7 +87,7 @@ class WorkflowController(PackageController):
         # If either reviewer's name is an email address. Then create new user
         # and update the field to be their new name.
         for name in reviewer_names:
-            if '@' in name:
+            if name and '@' in name:
                 email = name
                 user_exists = email_exists(email)
                 data_dict = c.pkg_dict
@@ -106,6 +106,11 @@ class WorkflowController(PackageController):
                     reviewer_emails.append(tk.get_action('user_show')(context, {'id': name})['email'])
                 except Exception as e:
                     reviewer_emails.append(None)
+
+        # check that there are reivewers
+        if reviewer_emails[0] is None and reviewer_emails[1] is None:
+            h.flash_error('This submission has no reviewers. The journal editor has been notified.')
+
         note = n.review(addresses, user_name, id, reviewer_emails)
 
         if note:
