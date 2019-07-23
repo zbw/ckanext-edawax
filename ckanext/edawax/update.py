@@ -77,43 +77,49 @@ def package_update(context, data_dict):
     # if there is a user with the email, update the maintainer field
     # otherwise, don't do anything - leave the email as the maintainer.
     #
-    if data_dict.get("maintainer") is not None and '@' in data_dict.get("maintainer"):
-        email = data_dict.get("maintainer")
-        # check that the email doesn't already belong to a user
-        user_exists = email_exists(email)
+    reviewer_1 = data_dict.get("maintainer", None)
+    reviewer_2 = data_dict.get("maintainer_email", None)
+    reviewers = [reviewer_1, reviewer_2]
+    if reviewer_1 != '' or reviewer_2 != '':
+        if (reviewer_1 is not None and reviewer_2 is not None) and ('@' in reviewer_1 or '@' in reviewer_2):
+            for reviewer in reivewers:
+                if '@' in reviewer:
+                    email = reviewer
+                    # check that the email doesn't already belong to a user
+                    user_exists = email_exists(email)
 
-        # if user exists, update field to contain user name
-        # otherwise create the user and update the 'maintainer field. with
-        # new name
-        if user_exists:
-            data_dict = update_maintainer_field(user_exists, data_dict)
-            # needs to receive an email now? I think not
-            # check if use is part of group, if not add them
+                    # if user exists, update field to contain user name
+                    # otherwise create the user and update the 'maintainer field. with
+                    # new name
+                    if user_exists:
+                        data_dict = update_maintainer_field(user_exists, data_dict)
+                        # needs to receive an email now? I think not
+                        # check if use is part of group, if not add them
 
+                    else:
+                        try:
+                            org_id = data_dict['organization']['id']
+                        except KeyError:
+                            org_id = data_dict['owner_org']
+
+            #new_user = invite_reviwer(email, org_id)
+            #data_dict = update_mainter_field(new_user['name'], data_dict)
         else:
+            # check that user is member of the organization
             try:
                 org_id = data_dict['organization']['id']
             except KeyError:
                 org_id = data_dict['owner_org']
-
-        #new_user = invite_reviwer(email, org_id)
-        #data_dict = update_mainter_field(new_user['name'], data_dict)
-    else:
-        # check that user is member of the organization
-        try:
-            org_id = data_dict['organization']['id']
-        except KeyError:
-            org_id = data_dict['owner_org']
-        org_data = tk.get_action('organization_show')(None, {'id': org_id})
-        maintainer = data_dict.get("maintainer")
-        users = org_data['users']
-        user_names = [user['name'] for user in users]
-        if maintainer is not None and maintainer not in user_names:
-            # if not in org, add them
+            org_data = tk.get_action('organization_show')(None, {'id': org_id})
+            maintainer = data_dict.get("maintainer")
             users = org_data['users']
+            user_names = [user['name'] for user in users]
+            if maintainer is not None and maintainer not in user_names:
+                # if not in org, add them
+                users = org_data['users']
 
-            users.append({'name': maintainer, 'capacity': 'member'})
-            updated = tk.get_action('organization_patch')({'ignore_auth': True}, {'id': org_id, 'users': users})
+                users.append({'name': maintainer, 'capacity': 'member'})
+                updated = tk.get_action('organization_patch')({'ignore_auth': True}, {'id': org_id, 'users': users})
 
     model = context['model']
     user = context['user']
