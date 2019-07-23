@@ -33,14 +33,39 @@ def email_exists(email):
     return False
 
 
-def update_maintainer_field(user_name, data_dict):
-    data_dict['maintainer'] = user_name
+def update_maintainer_field(user_name, data_dict, field):
+    data_dict[field] = user_name
     return data_dict
 
 
 def invite_reviewer(email, org_id):
     new_user = tk.get_action('user_invite')(None, {'email': email, 'group_id': org_id, 'role': 'reviewer'})
     return new_user
+
+
+def check_reviewer(data_dict, reviewer, field):
+    """ Check if a reviewer's email exsits. If so update field with name """
+
+    if '@' in reviewer:
+        email = reviewer
+        # check that the email doesn't already belong to a user
+        user_exists = email_exists(email)
+
+        # if user exists, update field to contain user name
+        # otherwise create the user and update the 'maintainer field. with
+        # new name
+        if user_exists:
+            data_dict = update_maintainer_field(user_exists, data_dict, field)
+            # needs to receive an email now? I think not
+            # check if use is part of group, if not add them
+
+        else:
+            try:
+                return data_dict['organization']['id']
+            except KeyError:
+                return data_dict['owner_org']
+
+    return None
 
 
 def package_update(context, data_dict):
@@ -79,31 +104,15 @@ def package_update(context, data_dict):
     #
     reviewer_1 = data_dict.get("maintainer", None)
     reviewer_2 = data_dict.get("maintainer_email", None)
-    reviewers = [reviewer_1, reviewer_2]
-    if reviewer_1 != '' or reviewer_2 != '':
+
+    if (reviewer_1 != '' or reviewer_2 != ''):
         if (reviewer_1 is not None and reviewer_2 is not None) and ('@' in reviewer_1 or '@' in reviewer_2):
-            for reviewer in reviewers:
-                if '@' in reviewer:
-                    email = reviewer
-                    # check that the email doesn't already belong to a user
-                    user_exists = email_exists(email)
+            if reviewer_1 is not None and '@' in reviewer_1:
+                org_id = check_reviewer(data_dict, reviewer_1, "maintainer")
 
-                    # if user exists, update field to contain user name
-                    # otherwise create the user and update the 'maintainer field. with
-                    # new name
-                    if user_exists:
-                        data_dict = update_maintainer_field(user_exists, data_dict)
-                        # needs to receive an email now? I think not
-                        # check if use is part of group, if not add them
+            if reviewer_2 is not None and '@' in reviewer_2:
+                org_id = check_reviewer(data_dict, reviewer_2, "maintainer_email")
 
-                    else:
-                        try:
-                            org_id = data_dict['organization']['id']
-                        except KeyError:
-                            org_id = data_dict['owner_org']
-
-            #new_user = invite_reviwer(email, org_id)
-            #data_dict = update_mainter_field(new_user['name'], data_dict)
         else:
             # check that user is member of the organization
             try:
