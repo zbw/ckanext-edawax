@@ -82,7 +82,7 @@ def package_update(context, data_dict):
     reviewers = [reviewer_1, reviewer_2]
     if reviewer_1 != '' or reviewer_2 != '':
         if (reviewer_1 is not None and reviewer_2 is not None) and ('@' in reviewer_1 or '@' in reviewer_2):
-            for reviewer in reivewers:
+            for reviewer in reviewers:
                 if '@' in reviewer:
                     email = reviewer
                     # check that the email doesn't already belong to a user
