@@ -108,8 +108,9 @@ class WorkflowController(PackageController):
                     reviewer_emails.append(None)
 
         # check that there are reivewers
-        if reviewer_emails[0] is None and reviewer_emails[1] is None and pkg_dict['dara_edawax_review'] != 'false':
-            h.flash_error('This submission has no reviewers. The journal editor has been notified.')
+        if reviewer_emails[0] is None and reviewer_emails[1] is None and c.pkg_dict['dara_edawax_review'] != 'false':
+            if c.pkg_dict['dara_edawax_review'] == 'editor':
+                h.flash_error('This submission has no reviewers. The journal editor has been notified.')
 
         note = n.review(addresses, user_name, id, reviewer_emails)
 
@@ -123,31 +124,31 @@ class WorkflowController(PackageController):
         redirect(id)
 
 
-def update_review_status(pkg_dict, action=None):
-    """
-        Update the status of "dara_edawax_review"
-        Status:
-            - false = beginning of review phase
-            - editor = editor has for review
-            - reviewers = reviewers have for review
-            - reviewed = review is finished
-            - reauthor = sent back to author
+    def update_review_status(pkg_dict, action=None):
+        """
+            Update the status of "dara_edawax_review"
+            Status:
+                - false = beginning of review phase
+                - editor = editor has for review
+                - reviewers = reviewers have for review
+                - reviewed = review is finished
+                - reauthor = sent back to author
 
-        false -> editor
-        editor -> reviewers || reauthor
-        reviewers -> editor
-        editor -> reviewed
-    """
-    current_state = pkg_dict['dara_edawax_review']
+            false -> editor
+            editor -> reviewers || reauthor
+            reviewers -> editor
+            editor -> reviewed
+        """
+        current_state = pkg_dict['dara_edawax_review']
 
-    if current_state == 'false':
-        pkg_dict['dara_edawax_review'] = 'editor'
+        if current_state == 'false':
+            pkg_dict['dara_edawax_review'] = 'editor'
 
-    if current_state == 'editor':
-        pkg_dict['dara_edawax_review'] = 'reviewers'
+        if current_state == 'editor':
+            pkg_dict['dara_edawax_review'] = 'reviewers'
 
 
-    return pkg_dict
+        return pkg_dict
 
 
     @admin_req

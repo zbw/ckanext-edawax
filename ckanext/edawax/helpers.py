@@ -103,7 +103,19 @@ u"dara_numberVariables": "95 Number of Variables",
 u"url": "96 URL"}
 
 
+def get_org_admin(org_id):
+    admin = []
+    org_data = tk.get_action('organization_show')(None, {'id': org_id})
+    users = org_data['users']
+    for user in users:
+        if user['capacity'] == 'admin':
+            admin.append(user['name'])
+
+    return admin
+
+
 def is_reviewer(pkg):
+    # if there are no reviewers check that the journal editor / sysadmin is the user and give access
     reviewers = []
     try:
         reviewer = getattr(pkg, 'maintainer')
@@ -118,6 +130,15 @@ def is_reviewer(pkg):
             reviewers.append(reviewer)
         except Exception as e:
             return False
+
+    if reviewers[0] is None and reviewers[1] is None:
+        # add sysadmin
+        if is_admin():
+            reviewers.append(c.userobj.name)
+        else:
+            org_id = pkg['organization']['id']
+            reviewers = get_org_admin(org_id)
+
     try:
         user = c.userobj.name
     except AttributeError as e:
@@ -287,7 +308,7 @@ def show_reauthor_button(pkg):
 def show_notify_editor_button(pkg):
     if not isinstance(pkg, dict):
         return False
-    return in_review(pkg) == 'true' and is_reviewer(pkg)
+    return in_review(pkg) in ['true', 'reviewers'] and is_reviewer(pkg)
 
 
 def res_abs_url(res):
