@@ -56,9 +56,7 @@ def check_reviewer(data_dict, reviewer, field, new=False):
         # new name
         if user_exists:
             data_dict = update_maintainer_field(user_exists, data_dict, field)
-            # needs to receive an email now? I think not
-            # check if use is part of group, if not add them
-
+        # check if use is part of group, if not add them
         else:
             try:
                 org_id = data_dict['organization']['id']
