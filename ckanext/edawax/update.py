@@ -26,7 +26,7 @@ ValidationError = logic.ValidationError
 
 
 def email_exists(email):
-    users = tk.get_action('user_list')(None, {'all_fields': 'true'})
+    users = tk.get_action('user_list')({'ignore_auth': True}, {'all_fields': 'true'})
     for user in users:
         if user['email'] == email:
             return user['name']

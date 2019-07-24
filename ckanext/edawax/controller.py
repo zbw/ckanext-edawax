@@ -108,19 +108,47 @@ class WorkflowController(PackageController):
                     reviewer_emails.append(None)
 
         # check that there are reivewers
-        if reviewer_emails[0] is None and reviewer_emails[1] is None:
+        if reviewer_emails[0] is None and reviewer_emails[1] is None and pkg_dict['dara_edawax_review'] != 'false':
             h.flash_error('This submission has no reviewers. The journal editor has been notified.')
 
         note = n.review(addresses, user_name, id, reviewer_emails)
 
         if note:
-            c.pkg_dict['dara_edawax_review'] = 'true'
+            c.pkg_dict = update_review_status(c.pkg_dict)
             tk.get_action('package_update')(context, c.pkg_dict)
             h.flash_success('Notification to Reviewers sent.')
         else:
             h.flash_error('ERROR: Mail could not be sent. Please try again later or contact the site admin.')
 
         redirect(id)
+
+
+def update_review_status(pkg_dict, action=None):
+    """
+        Update the status of "dara_edawax_review"
+        Status:
+            - false = beginning of review phase
+            - editor = editor has for review
+            - reviewers = reviewers have for review
+            - reviewed = review is finished
+            - reauthor = sent back to author
+
+        false -> editor
+        editor -> reviewers || reauthor
+        reviewers -> editor
+        editor -> reviewed
+    """
+    current_state = pkg_dict['dara_edawax_review']
+
+    if current_state == 'false':
+        pkg_dict['dara_edawax_review'] = 'editor'
+
+    if current_state == 'editor':
+        pkg_dict['dara_edawax_review'] = 'reviewers'
+
+
+    return pkg_dict
+
 
     @admin_req
     def publish(self, id):
@@ -151,7 +179,7 @@ class WorkflowController(PackageController):
             h.flash_error("ERROR: DOI already assigned, dataset can't be retracted")
             redirect(id)
 
-        c.pkg_dict.update({'private': True, 'dara_edawax_review': 'true'})
+        c.pkg_dict.update({'private': True, 'dara_edawax_review': 'false'})
         tk.get_action('package_update')(context, c.pkg_dict)
         h.flash_success('Dataset retracted')
         redirect(id)
@@ -179,6 +207,7 @@ class WorkflowController(PackageController):
 
 
     def editor_notify(self, id):
+        """ Send from reviewer back to editor """
         context = self._context()
         msg = tk.request.params.get('msg', '')
         c.pkg_dict = tk.get_action('package_show')(context, {'id': id})
@@ -186,7 +215,7 @@ class WorkflowController(PackageController):
         note = n.editor_notify(id, creator_mail, msg, context)
 
         if note:
-            c.pkg_dict.update({'private': True, 'dara_edawax_review': 'finished'})
+            c.pkg_dict.update({'private': True, 'dara_edawax_review': 'editor'})
             tk.get_action('package_update')(context, c.pkg_dict)
             h.flash_success('Notification sent. Journal editor will...')
         else:
