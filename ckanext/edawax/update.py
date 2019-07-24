@@ -43,7 +43,7 @@ def invite_reviewer(email, org_id):
     return new_user
 
 
-def check_reviewer(data_dict, reviewer, field):
+def check_reviewer(data_dict, reviewer, field, new=False):
     """ Check if a reviewer's email exsits. If so update field with name """
 
     if '@' in reviewer:
@@ -61,11 +61,31 @@ def check_reviewer(data_dict, reviewer, field):
 
         else:
             try:
-                return data_dict['organization']['id']
+                org_id = data_dict['organization']['id']
             except KeyError:
-                return data_dict['owner_org']
+                org_id = data_dict['owner_org']
+            new_user = invite_reviewer(email, org_id)
+            data_dict = update_maintainer_field(new_user['name'], data_dict, field)
 
-    return None
+    return data_dict
+
+
+def add_user_to_journal(data_dict, org_id, field):
+    # add new user to journal if they aren't in already
+    org_data = tk.get_action('organization_show')(None, {'id': org_id})
+    maintainer = data_dict.get(field)
+    users = org_data['users']
+    user_names = [user['name'] for user in users]
+    if maintainer is not None and maintainer not in user_names:
+        # if not in org, add them
+        users = org_data['users']
+        users.append({'name': maintainer, 'capacity': 'member'})
+        updated = tk.get_action('organization_patch')({'ignore_auth': True}, {'id': org_id, 'users': users})
+
+    return True
+
+
+
 
 
 def package_update(context, data_dict):
@@ -133,7 +153,6 @@ def package_update(context, data_dict):
     model = context['model']
     user = context['user']
     name_or_id = data_dict.get("id") or data_dict['name']
-
 
     pkg = model.Package.get(name_or_id)
     if pkg is None:

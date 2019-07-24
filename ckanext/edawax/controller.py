@@ -24,7 +24,7 @@ import StringIO
 from ckanext.dara.helpers import _parse_authors
 
 from ckanext.edawax.helpers import is_reviewer
-from ckanext.edawax.update import update_maintainer_field, email_exists, invite_reviewer
+from ckanext.edawax.update import update_maintainer_field, email_exists, invite_reviewer, check_reviewer, add_user_to_journal
 
 import ast
 from webob import Response, Request
@@ -57,7 +57,7 @@ class WorkflowController(PackageController):
         """
         sends review notification to all journal admins
 
-        Check the maintainer's: if one is an email address, invite that person
+        Check the maintainers: if one is an email address, invite that person
         to the JDA as a reviewer - need a new invitation that includes a link
         to the dataset for review.
         """
@@ -80,32 +80,38 @@ class WorkflowController(PackageController):
         admins = get_group_or_org_admin_ids(c.pkg_dict['owner_org'])
         addresses = map(lambda admin_id: model.User.get(admin_id).email,admins)
 
-        reviewer_names = []
-        reviewer_names.append(c.pkg_dict['maintainer'])
-        reviewer_names.append(c.pkg_dict['maintainer_email'])
+        data_dict = c.pkg_dict
+        reviewer_1 = data_dict.get("maintainer", None)
+        reviewer_2 = data_dict.get("maintainer_email", None)
         reviewer_emails = []
-        # If either reviewer's name is an email address. Then create new user
-        # and update the field to be their new name.
-        for name in reviewer_names:
-            if name and '@' in name:
-                email = name
-                user_exists = email_exists(email)
-                data_dict = c.pkg_dict
-                if user_exists:
-                    data_dict = update_maintainer_field(user_exists, data_dict)
-                else:
-                    try:
-                        org_id = data_dict['organization']['id']
-                    except KeyError:
-                        org_id = data_dict['owner_org']
-                    new_user = invite_reviewer(email, org_id)
-                    data_dict = update_maintainer_field(new_user['name'], data_dict)
-            else:
-                # otherwise just notify them that they can review
-                try:
-                    reviewer_emails.append(tk.get_action('user_show')(context, {'id': name})['email'])
-                except Exception as e:
+
+        if (reviewer_1 != '' or reviewer_2 != ''):
+            if reviewer_1 is not None and reviewer_2 is not None:
+                if reviewer_1 is not None and '@' in reviewer_1:
+                    data_dict = check_reviewer(data_dict,reviewer_1,"maintainer")
                     reviewer_emails.append(None)
+                else:
+                    # otherwise just notify them that they can review
+                    try:
+                        reviewer_emails.append(tk.get_action('user_show')(context, {'id': reviewer_1})['email'])
+                        add_user_to_journal(c.pkg_dict, c.pkg_dict['organization']['id'], "maintainer")
+                    except Exception as e:
+                        reviewer_emails.append(None)
+
+
+                if reviewer_2 is not None and '@' in reviewer_2:
+                    data_dict = check_reviewer(data_dict,reviewer_2,"maintainer_email")
+                    reviewer_emails.append(None)
+                else:
+                    # otherwise just notify them that they can review
+                    try:
+                        reviewer_emails.append(tk.get_action('user_show')(context, {'id': reviewer_2})['email'])
+                        add_user_to_journal(c.pkg_dict, c.pkg_dict['organization']['id'], "maintainer_email")
+                    except Exception as e:
+                        reviewer_emails.append(None)
+            else:
+                reviewer_emails = [reviewer_1, reviewer_2]
+
 
         # check that there are reivewers
         if reviewer_emails[0] is None and reviewer_emails[1] is None and c.pkg_dict['dara_edawax_review'] != 'false':
@@ -142,7 +148,7 @@ class WorkflowController(PackageController):
         current_state = pkg_dict['dara_edawax_review']
 
         if current_state == 'false':
-            pkg_dict['dara_edawax_review'] = 'editor'
+            pkg_dict['dara_edawax_review'] = 'reviewers'
 
         if current_state == 'editor':
             pkg_dict['dara_edawax_review'] = 'reviewers'
