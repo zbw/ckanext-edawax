@@ -167,8 +167,7 @@ def journal_resource_create(context, data_dict):
     """
     Don't allow new resources to be added if there is a DOI for the package
     """
-    data_dict['id'] = data_dict['package_id']
-    pkg_dict = tk.get_action('package_show')(context, data_dict)
+    pkg_dict = tk.get_action('package_show')(context, {'id': data_dict['package_id']})
     if pkg_dict.get('dara_DOI', False) or _ctest(pkg_dict):
         return {'success': False, 'msg': "Package can not be created because\
                 it has a DOI assigned"}
