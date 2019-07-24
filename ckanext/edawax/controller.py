@@ -115,7 +115,7 @@ class WorkflowController(PackageController):
         note = n.review(addresses, user_name, id, reviewer_emails)
 
         if note:
-            c.pkg_dict = update_review_status(c.pkg_dict)
+            c.pkg_dict = self.update_review_status(c.pkg_dict)
             tk.get_action('package_update')(context, c.pkg_dict)
             h.flash_success('Notification to Reviewers sent.')
         else:
@@ -124,7 +124,7 @@ class WorkflowController(PackageController):
         redirect(id)
 
 
-    def update_review_status(pkg_dict, action=None):
+    def update_review_status(self, pkg_dict, action=None):
         """
             Update the status of "dara_edawax_review"
             Status:
