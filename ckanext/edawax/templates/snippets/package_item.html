@@ -21,7 +21,7 @@
 
 
 {% block heading_private %}
-  {% if h.in_review(package) == 'true' %}
+  {% if h.in_review(package) in ['true', 'editor', 'reviewers'] %}
       <span class="dataset-private label label-review">
         <i class="icon-lock"></i>
         {{ 'Review' }}

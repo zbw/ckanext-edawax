@@ -88,7 +88,7 @@
     {% endif %}
   </div>
 #}
-  {% if h.in_review(pkg) == 'true' %}
+  {% if h.in_review(pkg) in ['true', 'editor', 'reviewers'] %}
         <span class="dataset-private label pull-right label-review">
           <i class="icon-lock"></i>
           {{ 'Review' }}
