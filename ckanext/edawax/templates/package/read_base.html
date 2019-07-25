@@ -1,5 +1,6 @@
 {% ckan_extends %}
 {#{% set pkg = h.dara_pkg() %} #}
+{% import 'macros/form.html' as form %}
 
 {% block content_action %}
     {% resource 'edawax_fs/edawax-confirm.js' %}
@@ -22,12 +23,14 @@
         'heading': 'Please Confirm Submission',
         }) %}
 
+        {% set reviewers = false %}
          <a title="Sends notification to journal editors. You will be asked for confirmation and license acceptance."
               class="btn btn-warning" href="/dataset/{{pkg.id}}/review"
                           data-module="edawax-confirm"
                           data-module-i18n="{{ confirm }}">
            <i class="icon-envelope"></i>Send to Review
          </a>
+
     {% endif %}
 
 

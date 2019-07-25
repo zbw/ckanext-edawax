@@ -147,14 +147,21 @@ def is_reviewer(pkg):
     return user in reviewers
 
 
-def is_admin():
+def is_admin(pkg=None):
     admins = c.group_admins
+    if pkg:
+        org_id = pkg['owner_org']
+        admins = get_org_admin(org_id)
+        user_id = c.userobj.name
+        if user_id in admins:
+            return True
+
     try:
-       user_id = c.userobj.id
-       if user_id in admins:
-          return True
+        user_id = c.userobj.id
+        if user_id in admins:
+            return True
     except AttributeError as e:
-       pass
+        pass
     return False
 
 
@@ -284,31 +291,31 @@ def is_private(pkg):
 
 
 def show_review_button(pkg):
-    return (has_hammer() or is_admin()) and in_review(pkg) in ('false', 'reauthor', 'finished', 'editor')
+    return (is_admin(pkg) and in_review(pkg) in ('reauthor', 'finished', 'editor'))  or (get_user_id() == pkg['creator_user_id'] and in_review(pkg) == 'false') or has_hammer()
 
 
 def show_publish_button(pkg):
     if not isinstance(pkg, dict):
         return False
-    return (check_journal_role(pkg, 'admin') or has_hammer()) and in_review(pkg) in ['true', 'finished', 'editor']
+    return (check_journal_role(pkg, 'admin') or has_hammer()) and in_review(pkg) in ['true', 'finished', 'editor', 'reviewers']
 
 
 def show_retract_button(pkg):
     if not isinstance(pkg, dict):
         return False
-    return (check_journal_role(pkg, 'admin') or has_hammer()) and not pkg.get('private', True)
+    return (is_admin(pkg) or has_hammer()) and not pkg.get('private', True)
 
 
 def show_reauthor_button(pkg):
     if not isinstance(pkg, dict):
         return False
-    return (check_journal_role(pkg, 'admin') or has_hammer()) and in_review(pkg) in ['true', 'finished', 'editor']
+    return (check_journal_role(pkg, 'admin') or has_hammer()) and in_review(pkg) in ['true', 'finished', 'editor', 'reviewers']
 
 
 def show_notify_editor_button(pkg):
     if not isinstance(pkg, dict):
         return False
-    return in_review(pkg) in ['true', 'reviewers'] and (is_reviewer(pkg) or has_hammer() or is_reviewer())
+    return in_review(pkg) in ['true', 'reviewers'] and (has_hammer() or is_reviewer(pkg))
 
 
 def res_abs_url(res):

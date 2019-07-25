@@ -84,6 +84,7 @@ class WorkflowController(PackageController):
         reviewer_1 = data_dict.get("maintainer", None)
         reviewer_2 = data_dict.get("maintainer_email", None)
         reviewer_emails = []
+        context['auth_user_obj'].sysadmin = True
 
         if (reviewer_1 != '' or reviewer_2 != ''):
             if reviewer_1 is not None and reviewer_2 is not None:
@@ -96,6 +97,7 @@ class WorkflowController(PackageController):
                         reviewer_emails.append(tk.get_action('user_show')(context, {'id': reviewer_1})['email'])
                         add_user_to_journal(c.pkg_dict, c.pkg_dict['organization']['id'], "maintainer")
                     except Exception as e:
+                        print('Error getting email for reveiwer 1')
                         reviewer_emails.append(None)
 
 
@@ -108,6 +110,7 @@ class WorkflowController(PackageController):
                         reviewer_emails.append(tk.get_action('user_show')(context, {'id': reviewer_2})['email'])
                         add_user_to_journal(c.pkg_dict, c.pkg_dict['organization']['id'], "maintainer_email")
                     except Exception as e:
+                        print('Error getting email for reveiwer 2')
                         reviewer_emails.append(None)
             else:
                 reviewer_emails = [reviewer_1, reviewer_2]
@@ -148,7 +151,7 @@ class WorkflowController(PackageController):
         current_state = pkg_dict['dara_edawax_review']
 
         if current_state == 'false':
-            pkg_dict['dara_edawax_review'] = 'reviewers'
+            pkg_dict['dara_edawax_review'] = 'editor'
 
         if current_state == 'editor':
             pkg_dict['dara_edawax_review'] = 'reviewers'
