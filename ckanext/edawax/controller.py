@@ -414,7 +414,7 @@ def create_bibtex_record(id):
     else:
         identifier = '{}/{}'.format(pkg_dict['name'][:10], date)
 
-    if pkg_dict['dara_DOI'] != '':
+    if 'dara_DOI' in pkg_dict.keys() and pkg_dict['dara_DOI'] != '':
         doi = ',\ndoi = "{}"'.format(pkg_dict['dara_DOI'])
     else:
         doi = ''
