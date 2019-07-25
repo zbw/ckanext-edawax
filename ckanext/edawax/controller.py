@@ -84,6 +84,7 @@ class WorkflowController(PackageController):
         reviewer_1 = data_dict.get("maintainer", None)
         reviewer_2 = data_dict.get("maintainer_email", None)
         reviewer_emails = []
+        sysadmin_status = context['auth_user_obj'].sysadmin
         context['auth_user_obj'].sysadmin = True
 
         if (reviewer_1 != '' or reviewer_2 != ''):
@@ -114,6 +115,7 @@ class WorkflowController(PackageController):
                         reviewer_emails.append(None)
             else:
                 reviewer_emails = [reviewer_1, reviewer_2]
+        context['auth_user_obj'].sysadmin = sysadmin_status
 
 
         # check that there are reivewers
