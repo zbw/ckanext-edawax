@@ -1,6 +1,9 @@
 {% ckan_extends %}
 {% block header_wrapper %}
 {% resource 'edawax/edawax.css' %}
+{% resource 'edawax/changes.css' %}
+{% resource 'edawax/font.css' %}
+
 
     {% block header_account %}
         {% resource 'edawax/browser_check.js' %}
@@ -10,13 +13,11 @@
         {{ super() }}
     {% endblock %}
 
-
-    <header class="masthead">
-        <hgroup class="{{ g.header_class }}">
-        {% block header_logo %}
-            {{ super() }}
-        {% endblock %}
-        </hgroup>
+    <hgroup class="{{ g.header_class }}">
+    {% block header_logo %}
+        <a class="logo" href="/"><img src="/jda-logo.png" alt="ZBW Journal Data Archive" title="ZBW Journal Data Archive" /></a>
+    {% endblock %}
+    </hgroup>
 
     {% block header_debug %}
 
@@ -39,12 +40,18 @@
         {# ('blog', _('Blog')), #}
         {% block header_site_navigation %}
                 <nav class="section navigation">
+
                 <ul class="nav nav-pills">
+                    <li>
+                        {% block header_site_search %}
+                            {{ super() }}
+                        {% endblock %}
+                    </li>
                     {% block header_site_navigation_tabs %}
                     {{ h.build_nav_main(
-                    ('search', _('Datasets')),
-                    ('organizations_index', _('Journals')),
-                    ('info', _('Info')),
+                    ('search', _('datasets')),
+                    ('organizations_index', _('journals')),
+                    ('info', _('info')),
                     ) }}
                     {% endblock %}
                 </ul>
@@ -52,9 +59,6 @@
          {% endblock %}
 
 
-        {% block header_site_search %}
-            {{ super() }}
-        {% endblock %}
         </div>
         <div />
 

@@ -1,4 +1,8 @@
-/***************************************************  CHANGES ****************************************************************/
+/* Limit Font */
+body, input, button, select, textarea, #dara_, p{
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif !important;
+}
+
 html {
     /*height: 100%;*/
     /* Using this makes the height the size of the browser
@@ -13,18 +17,7 @@ body {
     background-repeat: no-repeat;
     background-attachment: fixed;
     background: linear-gradient(45deg, #95abc4 0%,#dde4ec 50%,#96acc6 100%) !important;
-
 }
-
-
-div.module {
-    margin-top: 0;
-}
-
-div.module > form.search-form{
-    border: 0 !important;
-}
-
 
 .hero, .hero::after, [role="main"] {
     background-color: transparent !important;  /* remove all colors or transparent */
@@ -34,23 +27,8 @@ div.module > form.search-form{
 .account-masthead {
   height: 42px;
   color: white;
-  background: #007bb4 !important;
 }
 
-#edawax_nav_search {
-  height: 42px;
-  color: #007bb4;
-  background: #ffffff !important;
-}
-
-
-/************ SEARCH *****************/
-.searchcontainer {
-    padding-top: 38px;
-    margin-bottom: 10px;
-    height: 172px;
-    background-image: radial-gradient(circle closest-corner at 12%-18px, #81afcb 0%, #005d95 100%);
-}
 
 
 .header-image {
@@ -85,145 +63,18 @@ div.module > form.search-form{
     margin-bottom: 7px;
     background-color: white;
     padding-left: 3%;
-    padding-right: 4px;
+    padding-right: 3%;
     padding-bottom: 4px;
     width: auto;
     height: auto;
-    /*box-shadow: 0 3px 0 1px rgba(0,0,0,0.05);*/
+    box-shadow: 0 3px 0 1px rgba(0,0,0,0.05);
 }
 
-.homepage .module-search {
-    border: none;
-    border-radius: none;
-    margin: 0;
-    background-color: white;
-    padding: 0;
-    width: auto;
-    height: auto;
-    box-shadow: none;
-}
-
-.homepage .module-search {
-    margin-bottom: 20px; /* maybe add the margin to another class */
-    background: none;
-}
-
- .module-search {
-    border: none;
-    border-radius: none;
-    margin: 0;
-    background-color: white;
-    padding: 0;
-    width: auto;
-    height: auto;
-    box-shadow: none;
-}
-
- .module-search {
-    margin-bottom: 20px; /* maybe add the margin to another class */
-    background: none;
-}
-.module-search .heading {
-    /* This creates a conflict with the information in the side bare*/
-    width: 25%;
-    float:left;
-}
-
-.search-input {
-    width: 75%; /* 75% */
-    float: left;
-
-}
-
-.search-input input {
-    border-radius: 6px;
-
-}
-
-.search-form {
-    height: 42px;
-
-}
-
-.module-search {
-    background-color: #007bb4;
-}
-
-.homepage .module-search .module-content {
-    background: linear-gradient(to bottom, rgba(48,149,195,1) 0%, rgba(0,123,180,1) 100%);
-}
-
-.homepage .module-search .tags {
-    background-color: rgba(255, 255, 255, 0.4) !important;
-    color: #005d95 !important;
-    border-radius: 6px;
-    margin-left: 128px !important;
-    box-shadow: 0 2px 0 1px rgba(0,0,0,0.02) !important;
-}
-
-.module-search .module-content {
-    background: linear-gradient(to bottom, rgba(48,149,195,1) 0%, rgba(0,123,180,1) 100%);
-}
-
-
-.box h2, form h3 {
+.box h2, form h3.heading {
     font-family: 'zbw_binaryregular';
     text-decoration: none;
     font-size: 1.8em;
     color: #000000;
-}
-
-form h3 {
-    color: white;
-}
-
-.homepage .module-search .search-giant input {
-    border: none;
-}
-
-.homepage .module-search .tags a:hover {
-    border: none;
-    background-color: #fff !important;
-    color: #007bb4 !important;
-    border-radius: 6px;
-    box-shadow: none;
-}
-
-.module-search .search-giant input {
-    border: none;
-}
-
-.tag {
-    border: none;
-    background-color: #007bb4;
-    color: #fff !important;
-    border-radius: 6px;
-    box-shadow: none;
-    padding: 2px 10px 2px 10px !important;
-}
-
-.module-search .tags a:hover {
-    border: none;
-    background-color: #fff !important;
-    color: #007bb4 !important;
-    border-radius: 6px;
-    box-shadow: none;
-}
-
-/*************** Popular Tags *********************/
-.search-form .search-input input {
-    height: 42px;
-}
-
-.search-form .search-input{
-    margin-bottom: 15px;
-}
-
-
-#zbwfooter > .inline:nth-of-type(2) {
-    width: 880px; /* has to get the same width as container */
-    margin: auto;
-    text-align: left;
 }
 
 
@@ -232,102 +83,84 @@ form h3 {
 }
 
 [role="main"] {
-    padding: 0px 0;
+    padding: 0px;
+    top: -80px;
 }
 
 
-/********** TAGS SECTION*****************/
-.homepage .module-search .tags{
-    width: 600px;
-    margin-left: calc((100% - 600px) / 2) !important;
-}
-
-
-.module-search .tags h3{
-    font-size: 14px;
-    line-height: 20px;
-    padding: 2px 8px;
-}
-
-.module-search .tags h3 {
-    display: block;
-    float: left;
-    margin: 5px 10px 0 0;
-}
-
-.module-search .tags{
-    padding: 5px 10px 10px 10px;
-    color: #005d95 !important;
-    box-shadow: 0 2px 0 1px rgba(0,0,0,0.02) !important;
-
-    width: 600px;
-    margin-left: calc((100% - 600px) / 2) !important;
-    border-radius: 0 0 6px 6px !important;
-    background-color: rgba(255,255,255,0.5);
-}
-
-.module-search .tags .tag{
-    display: block;
-    float: left;
-    margin: 5px 10px 0 0;
-}
-
-.module-search .tags:before,
-.module-search .tags:after{
-    display: table;
-    content: "";
-    line-height: 0;
-}
-
-.module-search .tags:after{
-    clear: both;
-}
-
-.module-search {
-    margin-bottom: 20px !important;
-    background: none;
-}
-/************** END Tags section********************/
-
-
-/***************  TABS  *******************/
-.nav-pills > li > a{
-    border: 0 !important;
-}
-
-.nav-pills > li:hover{
-    background: #7aabc8 !important;
-    border-radius: 6px 6px 0 0 !important;
-}
-
-.nav-pills > li.active > a {
-    color: #fff !important;
-    background: rgba(48,149,195,1) !important;
-}
-
-/***************END TABS*******************/
-
-
-/************ Search Headin******************/
-.module-search .module-content .heading{
-    margin-top: 0;
-    margin-bottom: 7px;
-    font-size: 24px;
-    line-height: 40px;
-}
 
 
 /************* End Heading*****************/
 
-#sitelinks {
-    margin-bottom: 0;
-    width: 880px; /* has to get the same width as container */
-    margin: auto;
+
+.box {
+    border-radius: 8px;
+    padding-left: 30px;
+    padding-right: 30px;
+    padding-bottom: 30px;
 }
 
-#sitelinks a {
-    color: #444444;
+/************* START Navigation ********************/
+#edawax_nav_search {
+    float: none !important;
+    height: 42px;
+    color: #007bb4;
+    padding-top: 5px;
+    padding-bottom: 75px;
+
 }
+
+#edawax_nav_search > nav.navigation {
+    margin-left: 0;
+}
+
+#edawax_nav_search > nav.navigation > ul > li{
+    width: 24%;
+    background-color: rgb(0,123,180);
+    border-radius: 8px;
+    margin-left: 1%;
+    margin-bottom: 4px;
+    align-content: center;
+}
+
+#edawax_nav_search > nav.navigation > ul > li > a,
+#edawax_nav_search > nav.navigation > ul > li > form > div > input {
+    color: white;
+    width: 100%;
+    text-align: center;
+    font-family: 'zbw_binaryregular';
+}
+
+#edawax_nav_search > nav.navigation > ul > li > form {
+    margin-bottom: 0;
+}
+
+#edawax_nav_search > nav.navigation > ul > li > form > div > input{
+    background-color: rgb(0,123,180);
+    border-radius: 8px;
+    text-align: left !important;
+}
+
+#edawax_nav_search > nav.navigation > ul > li > form > div > input::placeholder{
+    font-family: 'zbw_binaryregular';
+    color: white;
+    opacity: 1;
+    text-align: left !important;
+}
+
+#edawax_nav_search > nav.navigation > ul > li:hover,
+#edawax_nav_search > nav.navigation > ul > li.active{
+    background-color: #fff !important;
+}
+
+#edawax_nav_search > nav.navigation > ul > li > a:hover,
+#edawax_nav_search > nav.navigation > ul > li.active > a{
+    color: rgb(0,123,180);
+    border: none;
+}
+
+/************* END Naviagtion *********************/
+
 
 /************** START FOOTER ******************/
 .wrapper{
@@ -351,12 +184,13 @@ form h3 {
 #sitelinks{
     width: 920px; /* same size as main container */
 }
-/************** END FOOTER ******************/
 
-ul.inline > li, ol.inline > li {
-    padding-left: 0;
-    padding-right: 5%;
+#zbwfooter > .inline:nth-of-type(2) {
+    width: 880px; /* has to get the same width as container */
+    margin: auto;
+    text-align: left;
 }
+/************** END FOOTER ******************/
 
 
 
@@ -373,39 +207,258 @@ ul.inline > li, ol.inline > li {
     margin-top: 4px;
 }
 
-/************** TABS *******************/
-.navigation {
-    margin-left: calc((100% - 400px) / 2) !important;
-}
-
-/*.navigation {
-    margin-left: 242px !important;
-}*/
-
-.nav-pills > li > a {
-    border: none;
-    background-color: #ffffff !important;
-    color: #005d95  !important;
-    border-radius: 6px 6px 0 0 !important;
-    box-shadow: none;
-    padding: 10px 20px 10px 20px !important;
-    margin: 0 1px 0 0 !important;
-}
-
-
-.nav {
-    margin-bottom: 0 !important;
-}
-
-
-.module-search > form.search-form {
-    width: 800px !important;
-    padding-left: calc((100% - 800px) / 2) !important;
-    padding-right: calc((100% - 800px) / 2) !important;
-}
-
 
 /************ Before breadcrumbs ******************/
 #content{
     margin-top: 10px !important;
 }
+
+
+#zbwfooter,
+#sitelinks {
+    width: 940px;
+    margin-right: auto;
+    margin-left: auto;
+}
+
+
+/************ Responseive Settings *****************/
+@media (max-width: 1045px){
+    .navigation{
+        margin-left: calc((100% - 100px) / 2) !important;
+    }
+}
+
+@media (max-width: 979px) {
+    #zbwfooter, #sitelinks {
+        width: 724px !important;
+    }
+    #zbwfooter > .inline:nth-of-type(2) {
+        width: auto;
+    }
+
+    #sitelinks ul li img {
+        max-width: 60%;
+        width: auto;
+    }
+
+    #zbwfooter .inline li a img  {
+        padding-bottom: 15px;
+    }
+    #zbwfooter{
+        padding: 0;
+    }
+    .module > .module-content > .search-form{
+        height: 80px;
+    }
+    fieldset.author{
+        margin-left: 0px;
+    }
+    /*.navigation{
+        float: left;
+    }*/
+}
+
+/* Mobile Styles */
+@media (max-width: 800px) {
+
+    /*.main{
+        position: relative;
+        top: 70px;
+    }*/
+
+    .toolbar .breadcrumb {
+        font-size: 14px;
+    }
+
+    .toolbar .breadcrumb .home{
+        display: inline;
+    }
+
+    .breadcrumb .home .icon-home{
+        font-size: 14px;
+    }
+
+    .searchcontainer{
+        /*top: -35px !important;*/
+    }
+
+    .hero{
+        padding-top: 25px;
+    }
+
+    body {  /* main.css remove here */
+        padding-left: 0px;
+        padding-right: 0px;
+    }
+
+    #content { /* add the 20px here */
+        padding-left: 20px;
+        padding-right: 20px;
+    }
+
+    /* move the account stuff below logo */
+
+    .account-masthead .account {
+        float: right;  /*none;*/
+        /*padding-top: 80px;
+        padding-left: 3%;*/
+        background-color: #007bb4;
+    }
+
+    .account-masthead{
+        margin-right:0;
+    }
+
+    .account-masthead .container {
+        height: 30px;
+    }
+
+    .nav-tabs::before, .nav-pills::before, .nav-tabs::after, .nav-pills::after {
+        width: 100%
+    }
+
+    /* move the account stuff below logo END */
+
+    /* Header */
+
+    .header-image img {
+        position: absolute;
+        margin: auto;
+        left: 3%;
+        top: -42px;
+    }
+
+    /* TABS, Search field, Tags */
+
+
+
+    .navigation { /* TABS placed left */
+        /*margin-left: 0px !important;*/
+    }
+
+
+    .module-search .heading {
+        width: 26%;
+    }
+
+    .search-input {
+        width: 74%;
+    }
+
+    .module-search > form.search-form {
+        width: 96% !important;
+        padding-left: 2% !important;
+        padding-right: 2% !important;
+    }
+
+    .module-search .tags {
+        margin-left: 0px !important;
+        width: 100%;
+    }
+
+    #zbwfooter, #sitelinks {
+        width: 100% !important;
+        padding-left: 0;
+        padding-right: 0;
+
+    }
+
+    #zbwfooter > .inline:nth-of-type(2) {
+        width: auto;
+    }
+
+    #sitelinks ul li img {
+        max-width: 60%;
+        width: auto;
+
+    }
+
+    #zbwfooter .inline li:nth-of-type(1) a img {
+        padding-top: 15px;
+    }
+
+    #zbwfooter{
+        padding: 0 !important;
+    }
+
+    .module > .module-content > .search-form{
+        height: 110px;
+    }
+    .form-actions{
+        text-align: right;
+    }
+    [role="main"] {
+        padding: 0px;
+        /*top: -40px;*/
+    }
+}
+
+@media (max-width: 640px) {
+    .module-search .heading {
+        width: 35%;
+    }
+
+    .search-input {
+        width: 65%;
+    }
+
+    .navigation{
+        margin-left: calc((100% - 5px) / 2) !important;
+    }
+}
+
+@media (max-width: 540px) {
+    .navigation{
+        margin-left: 0px !important;
+    }
+
+    .searchcontainer{
+        top: -35px;
+    }
+
+    .searchcontainer{
+        top: -35px !important;
+    }
+
+    .naviagtion{
+        clear: both !important;
+        float: left !important;
+    }
+
+    [role="main"] {
+        top: -40px;
+    }
+}
+
+@media (max-width: 500px) {
+
+    .module-search .module-content .heading {
+        line-height: 25px !important;
+        margin-top: -3px !important;
+    }
+
+    #zbwfooter {
+        padding: 0;
+    }
+
+    .account-masthead .account {
+        /*position: relative;
+        top: 180px;*/
+        clear: both;
+        width: 100%;
+    }
+    .account-masthead {
+        padding-right: 0px;
+        height: 80px;
+    }
+
+}
+
+@media (max-width: 289px){
+    .module > .module-content > .search-form{
+        height: 130px;
+    }
+}
+
+
