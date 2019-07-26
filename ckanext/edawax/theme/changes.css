@@ -16,11 +16,15 @@ body {
     margin: 0 !important;
     background-repeat: no-repeat;
     background-attachment: fixed;
-    background: linear-gradient(45deg, #95abc4 0%,#dde4ec 50%,#96acc6 100%) !important;
+    background-image: url('/background_temp.jpg');
+    /*rgb(0, 93, 150)*/
+    background-image: linear-gradient(#95abc400 0%,#dde4ec9e 10%,rgb(0, 93, 150, 1) 100%), url('/background_temp.jpg') !important;
+    background-size: 100% auto;
 }
 
 .hero, .hero::after, [role="main"] {
     background-color: transparent !important;  /* remove all colors or transparent */
+
 }
 
 
@@ -57,7 +61,7 @@ body {
     top: -42px;
 }
 
-.box, #zbwfooter > .inline:nth-child(2) {
+.box {
     border: 1px solid #ffffff;
     border-radius: 8px;
     margin-bottom: 7px;
@@ -92,13 +96,6 @@ body {
 
 /************* End Heading*****************/
 
-
-.box {
-    border-radius: 8px;
-    padding-left: 30px;
-    padding-right: 30px;
-    padding-bottom: 30px;
-}
 
 /************* START Navigation ********************/
 #edawax_nav_search {
@@ -142,7 +139,7 @@ body {
 }
 
 #edawax_nav_search > nav.navigation > ul > li > form > div > input::placeholder{
-    font-family: 'zbw_binaryregular';
+    /*font-family: 'zbw_binaryregular';*/
     color: white;
     opacity: 1;
     text-align: left !important;
@@ -181,14 +178,32 @@ body {
     display: block;
 }
 
-#sitelinks{
+#sitelinks > li > a{
     width: 920px; /* same size as main container */
+    color: white;
+}
+
+#sitelinks > li{
+    align-content: left;
 }
 
 #zbwfooter > .inline:nth-of-type(2) {
     width: 880px; /* has to get the same width as container */
     margin: auto;
     text-align: left;
+}
+
+#zbwfooter > .inline:nth-of-type(1) {
+    border: 1px solid #ffffff;
+    border-radius: 8px;
+    margin-bottom: 7px;
+    background-color: white;
+    padding-left: 3%;
+    padding-right: 3%;
+    padding-bottom: 4px;
+    width: auto;
+    height: auto;
+    box-shadow: 0 3px 0 1px rgba(0,0,0,0.05);
 }
 /************** END FOOTER ******************/
 
