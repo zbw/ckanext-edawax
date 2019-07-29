@@ -23,6 +23,9 @@ import requests
 import StringIO
 from ckanext.dara.helpers import _parse_authors
 
+import ckan.lib.plugins
+lookup_package_plugin = ckan.lib.plugins.lookup_package_plugin
+
 
 import ast
 from webob import Response, Request
@@ -99,13 +102,26 @@ class WorkflowController(PackageController):
             pattern = re.compile('^10.\d{4,9}/[-._;()/:a-zA-Z0-9]+$')
             match = pattern.match(doi)
             if match is None:
-                h.flash_error('DOI is invalid. Format should be: 10.xxxx/xxxx. Please update the DOI before trying again to publish this resource.')
-                redirect(id)
+                h.flash_error('DOI is invalid. Format should be: 10.xxxx/xxxx. Please update the DOI before trying again to publish this resource. <a href="#doi" style="color: blue;">Jump to field.</a>', True)
+
+                errors = {'dara_Publication_PID': ['DOI is invalid. Format should be: 10.xxxx/xxxx']}
+
+                tk.redirect_to(controller='package', action='edit', id=id, errors=errors)
 
         c.pkg_dict.update({'private': False, 'dara_edawax_review': 'reviewed'})
         tk.get_action('package_update')(context, c.pkg_dict)
         h.flash_success('Dataset published')
         redirect(id)
+
+    def _get_package_type(self, id):
+        """
+        Given the id of a package this method will return the type of the
+        package, or 'dataset' if no type is currently set
+        """
+        pkg = model.Package.get(id)
+        if pkg:
+            return pkg.type or 'dataset'
+        return None
 
     @admin_req
     def retract(self, id):
