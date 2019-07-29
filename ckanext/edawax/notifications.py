@@ -173,12 +173,7 @@ URL: {url}
     body = body.format(**d)
     message = MIMEText(body.encode('utf-8'), 'plain', 'utf-8')
     message['Subject'] = Header(u"ZBW Journal Data Archive: Please revise your uploaded dataset")
-<<<<<<< HEAD
     message['From'] = reviewer_email
-=======
-    message['From'] = config.get('smtp.mail_from')
-    message['Cc'] = admin_mail
->>>>>>> master
     message['To'] = Header(author_mail, 'utf-8')
     message['Cc'] = config.get('smtp.mail_from')
     message['Date'] = Utils.formatdate(time())
