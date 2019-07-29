@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # Hendrik Bunke
 # ZBW - Leibniz Information Centre for Economics
-
+import re
 from ckan.controllers.package import PackageController
 import ckan.plugins.toolkit as tk
 from ckan.common import c, request, _, response
@@ -12,7 +12,7 @@ from ckan.authz import get_group_or_org_admin_ids
 from ckanext.dara.helpers import check_journal_role
 from functools import wraps
 import notifications as n
-from ckanext.edawax.helpers import is_private
+from ckanext.edawax.helpers import is_private, is_robot
 from pylons import config
 
 # for download all
@@ -22,9 +22,9 @@ import zipfile
 import requests
 import StringIO
 from ckanext.dara.helpers import _parse_authors
-
 from ckanext.edawax.helpers import is_reviewer
 from ckanext.edawax.update import update_maintainer_field, email_exists, invite_reviewer, check_reviewer, add_user_to_journal
+
 
 import ast
 from webob import Response, Request
@@ -169,6 +169,17 @@ class WorkflowController(PackageController):
         """
         context = self._context()
         c.pkg_dict = tk.get_action('package_show')(context, {'id': id})
+
+        # validate the DOI, if any
+        doi = c.pkg_dict['dara_Publication_PID']
+        type_ = c.pkg_dict['dara_Publication_PIDType']
+        if type_ == 'DOI':
+            pattern = re.compile('^10.\d{4,9}/[-._;()/:a-zA-Z0-9]+$')
+            match = pattern.match(doi)
+            if match is None:
+                h.flash_error('DOI is invalid. Format should be: 10.xxxx/xxxx. Please update the DOI before trying again to publish this resource.')
+                redirect(id)
+
         c.pkg_dict.update({'private': False, 'dara_edawax_review': 'reviewed'})
         tk.get_action('package_update')(context, c.pkg_dict)
         h.flash_success('Dataset published')
@@ -206,7 +217,8 @@ class WorkflowController(PackageController):
         msg = tk.request.params.get('msg', '')
         c.pkg_dict = tk.get_action('package_show')(context, {'id': id})
         creator_mail = model.User.get(c.pkg_dict['creator_user_id']).email
-        note = n.reauthor(id, creator_mail, msg, context)
+        admin_mail = model.User.get(c.user).email
+        note = n.reauthor(id, creator_mail, admin_mail, msg, context)
 
         if note:
             c.pkg_dict.update({'private': True,
@@ -279,7 +291,7 @@ class WorkflowController(PackageController):
         resources = c.pkg_dict['resources']
         for resource in resources:
             rsc = tk.get_action('resource_show')(context, {'id': resource['id']})
-            if rsc.get('url_type') == 'upload':
+            if rsc.get('url_type') == 'upload' and not is_robot(request.user_agent):
                 url = resource['url']
                 filename = os.path.basename(url)
                 # custom user agent header so that downloads from here count
@@ -370,7 +382,10 @@ def create_ris_record(id):
         journal = ''
     url = '{}/dataset/{}'.format(config.get('ckan.site_url'), pkg_dict['name'])
     version = pkg_dict['dara_currentVersion']
-    doi = parse_ris_doi(pkg_dict['dara_DOI'])
+    if 'dara_DOI' in pkg_dict.keys():
+        doi = parse_ris_doi(pkg_dict['dara_DOI'])
+    else:
+        doi = ''
 
     if pkg_dict['notes'] != '':
         abstract = 'AB  - {}\n'.format(pkg_dict['notes'].encode('utf-8').replace('\n', ' ').replace('\r', ' '))
@@ -413,7 +428,7 @@ def create_bibtex_record(id):
         journal = ''
     url = '{}/dataset/{}'.format(config.get('ckan.site_url'), pkg_dict['name'])
     version = pkg_dict['dara_currentVersion']
-    if pkg_dict['dara_DOI'] != '':
+    if 'dara_DOI' in pkg_dict.keys() and pkg_dict['dara_DOI'] != '':
         temp_doi = pkg_dict['dara_DOI']
         identifier = '{}'.format(temp_doi.split('/')[1])
     else:
