@@ -152,7 +152,10 @@ def is_admin(pkg=None):
     if pkg:
         org_id = pkg['owner_org']
         admins = get_org_admin(org_id)
-        user_id = c.userobj.name
+        try:
+            user_id = c.userobj.name
+        except Exceptions:
+            return False
         if user_id in admins:
             return True
 
