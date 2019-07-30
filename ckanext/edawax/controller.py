@@ -23,8 +23,7 @@ import requests
 import StringIO
 from ckanext.dara.helpers import _parse_authors
 
-import ckan.lib.plugins
-lookup_package_plugin = ckan.lib.plugins.lookup_package_plugin
+import ckan.lib.base as base
 
 
 import ast
@@ -105,8 +104,19 @@ class WorkflowController(PackageController):
                 h.flash_error('DOI is invalid. Format should be: 10.xxxx/xxxx. Please update the DOI before trying again to publish this resource. <a href="#doi" style="color: blue;">Jump to field.</a>', True)
 
                 errors = {'dara_Publication_PID': ['DOI is invalid. Format should be: 10.xxxx/xxxx']}
+                package_type = 'dataset'
+                form_snippet = 'package/new_package_form.html'
+                data = c.pkg_dict
+                form_vars = {'data': data, 'errors': errors,
+                     'error_summary': {}, 'action': 'edit',
+                     'dataset_type': package_type,
+                    }
 
-                tk.redirect_to(controller='package', action='edit', id=id, errors=errors)
+                form_vars['stage'] = ['active']
+
+                vars = {'errors': errors, 'form_vars': form_vars, 'form_snippet': form_snippet}
+                return base.render('package/edit.html', extra_vars=vars)
+                #tk.redirect_to(controller='package', action='edit', id=id, errors=errors)
 
         c.pkg_dict.update({'private': False, 'dara_edawax_review': 'reviewed'})
         tk.get_action('package_update')(context, c.pkg_dict)
