@@ -51,7 +51,7 @@ class WorkflowController(PackageController):
     def _context(self):
         return {'model': model, 'session': model.Session,
                 'user': c.user or c.author, 'for_view': True,
-                'auth_user_obj': c.userobj}
+                'auth_user_obj': c.userobj, 'save': 'save' in request.params}
 
     def review(self, id):
         """
@@ -101,37 +101,23 @@ class WorkflowController(PackageController):
             pattern = re.compile('^10.\d{4,9}/[-._;()/:a-zA-Z0-9]+$')
             match = pattern.match(doi)
             if match is None:
-                h.flash_error('DOI is invalid. Format should be: 10.xxxx/xxxx. Please update the DOI before trying again to publish this resource. <a href="#doi" style="color: blue;">Jump to field.</a>', True)
-
-                errors = {'dara_Publication_PID': ['DOI is invalid. Format should be: 10.xxxx/xxxx']}
-                package_type = 'dataset'
-                form_snippet = 'package/new_package_form.html'
-                data = c.pkg_dict
-                form_vars = {'data': data, 'errors': errors,
-                     'error_summary': {}, 'action': 'edit',
-                     'dataset_type': package_type,
-                    }
-
-                form_vars['stage'] = ['active']
-
-                vars = {'errors': errors, 'form_vars': form_vars, 'form_snippet': form_snippet}
-                return base.render('package/edit.html', extra_vars=vars)
-                #tk.redirect_to(controller='package', action='edit', id=id, errors=errors)
+                """
+                """
+                return self.update(id)
 
         c.pkg_dict.update({'private': False, 'dara_edawax_review': 'reviewed'})
+        c.pkg = context.get('package')
         tk.get_action('package_update')(context, c.pkg_dict)
         h.flash_success('Dataset published')
         redirect(id)
 
-    def _get_package_type(self, id):
-        """
-        Given the id of a package this method will return the type of the
-        package, or 'dataset' if no type is currently set
-        """
-        pkg = model.Package.get(id)
-        if pkg:
-            return pkg.type or 'dataset'
-        return None
+
+    def update(self, id):
+        h.flash_error('DOI is invalid. Format should be: 10.xxxx/xxxx. Please update the DOI before trying again to publish this resource. <a href="#doi" style="color: blue;">Jump to field.</a>', True)
+        errors = {'dara_Publication_PID': ['DOI is invalid. Format should be: 10.xxxx/xxxx']}
+
+        tk.redirect_to(controller='package', action='edit', id=id, errors=errors)
+
 
     @admin_req
     def retract(self, id):
