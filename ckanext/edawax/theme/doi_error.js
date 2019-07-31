@@ -2,7 +2,8 @@
  * Small script to check if there's a DOI error and make changes to page
 */
 
-function checkError(){
+function checkErrorTop(){
+    /* Error message when trying to publish */
     var message_container = document.getElementsByClassName('flash-messages');
     var messages = message_container[0].childNodes;
 
@@ -13,6 +14,20 @@ function checkError(){
     }
 }
 
+function checkErrorMid(){
+    /* Error message trying to update with a bad DOI */
+    var message_container = document.getElementsByClassName('error-explanation');
+    var list = message_container[0].childNodes[3];
+    var item = list.childNodes[1];
+
+    if (item){
+        return true;
+    }
+    return false;
+
+}
+
+
 function createError(){
     var new_element = document.createElement('span');
     new_element.className = "error-block";
@@ -21,8 +36,17 @@ function createError(){
     return new_element;
 }
 
+function createLink(){
+    var new_element = document.createElement('a');
+    new_element.href= '#doi';
+    new_element.style.color = ' blue';
+    new_element.innerHTML = 'Jump to field.'
 
-if (checkError()){
+    return new_element;
+}
+
+
+if (checkErrorTop()){
     var pub = document.getElementById('publication');
     var target = pub.childNodes[1].childNodes[7].childNodes[1];
 
@@ -31,4 +55,13 @@ if (checkError()){
 
     var new_element = createError();
     target.appendChild(new_element);
+}
+
+
+if (checkErrorMid()){
+    var message_container = document.getElementsByClassName('error-explanation');
+    var list = message_container[0].childNodes[3];
+    var item = list.childNodes[1];
+
+    item.appendChild(createLink());
 }
