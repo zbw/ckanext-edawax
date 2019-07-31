@@ -46,7 +46,7 @@
                       </a>
                       <p>
                           {{ h.linked_user(package.creator_user_id, maxlength=100) }}
-                      </p> 
+                      </p>
                       <h3 class="dataset-heading">
                         {{ h.link_to(h.truncate(title, truncate_title), h.url_for(controller='package', action='read', id=package.name)) }}
                         {% if package.get('state', '').startswith('draft') %}

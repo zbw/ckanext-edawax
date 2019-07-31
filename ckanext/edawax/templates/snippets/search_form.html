@@ -4,6 +4,15 @@
 {% set sorting = sorting if sorting else [(_('Name Ascending'), 'name asc'), (_('Name Descending'), 'name desc')] %}
 
 
+{% block search_input %}
+{% endblock %}
+
+{% block search_title %}
+  {#% if not no_title %}
+    <h2 class="zbw-font zbw-blue">{% snippet 'snippets/search_result_text.html', query=query, count=count, type=type %}</h2>
+  {% endif %#}
+{% endblock %}
+
 {% block search_sortby %}
     {% if sorting %}
     {% if h.is_admin() %}
@@ -14,7 +23,21 @@
       {#% set temp = sorting.append(('Private', 'private desc, metadata_modified desc')) %}
       {% set temp = sorting.append(('Review', 'dara_edawax_review desc, private acs')) %#}
     {% endif %}
-      <div class="form-select control-group control-order-by">
+      <div class="form-select control-group control-order-by zbw-box">
+        {% if not no_title %}
+          <h2 class="zbw-font zbw-blue">{% snippet 'snippets/search_result_text.html', query=query, count=count, type=type %}</h2>
+        {% endif %}
+
+
+        {% block page_primary_action %}
+          {% if h.check_access('package_create') %}
+          {% set group = c.group_dict.id or None %}
+            <div class="page_primary_action add_data_button">
+              {% link_for _('Add Dataset'), controller='package', action='new', group=group, class_='btn btn-primary', icon='plus-sign-alt' %}
+            </div>
+          {% endif %}
+        {% endblock %}
+
         <label for="field-order-by">{{ _('Order by') }}</label>
         <select id="field-order-by" name="sort">
           {% for label, value in sorting %}
