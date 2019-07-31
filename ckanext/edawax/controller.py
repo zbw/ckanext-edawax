@@ -101,9 +101,10 @@ class WorkflowController(PackageController):
             pattern = re.compile('^10.\d{4,9}/[-._;()/:a-zA-Z0-9]+$')
             match = pattern.match(doi)
             if match is None:
-                """
-                """
-                return self.update(id)
+                h.flash_error('DOI is invalid. Format should be: 10.xxxx/xxxx. Please update the DOI before trying again to publish this resource. <a href="#doi" style="color: blue;">Jump to field.</a>', True)
+                errors = {'dara_Publication_PID': ['DOI is invalid. Format should be: 10.xxxx/xxxx']}
+
+                tk.redirect_to(controller='package', action='edit', id=id)
 
         c.pkg_dict.update({'private': False, 'dara_edawax_review': 'reviewed'})
         c.pkg = context.get('package')
@@ -111,12 +112,6 @@ class WorkflowController(PackageController):
         h.flash_success('Dataset published')
         redirect(id)
 
-
-    def update(self, id):
-        h.flash_error('DOI is invalid. Format should be: 10.xxxx/xxxx. Please update the DOI before trying again to publish this resource. <a href="#doi" style="color: blue;">Jump to field.</a>', True)
-        errors = {'dara_Publication_PID': ['DOI is invalid. Format should be: 10.xxxx/xxxx']}
-
-        tk.redirect_to(controller='package', action='edit', id=id, errors=errors)
 
 
     @admin_req
