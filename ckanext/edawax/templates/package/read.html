@@ -42,6 +42,7 @@
     <meta property="schema:includedInDataCatalog" resource="{{ h.ckan_site_url() }}"
         typeof="schema:DataCatalog" />
 
+
   {% block package_description %}
 
 {% if DOI %}
@@ -123,7 +124,7 @@
 
 
 {% block package_tags %}
-    {{ super() }}
+    {% snippet "package/snippets/tags.html", tags=pkg.tags %}
   {% endblock %}
 
 
@@ -139,3 +140,16 @@
 
 </div>
 {% endblock %}
+
+
+{% block page_heading %}
+  {{ pkg.title|lower or pkg.name|lower }}
+  {% if pkg.state.startswith('draft') %}
+    [{{ _('Draft') }}]
+  {% endif %}
+  {% if pkg.state == 'deleted' %}
+    [{{ _('Deleted') }}]
+  {% endif %}
+{% endblock %}
+
+
