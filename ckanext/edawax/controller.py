@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # Hendrik Bunke
 # ZBW - Leibniz Information Centre for Economics
-
+import re
 from ckan.controllers.package import PackageController
 import ckan.plugins.toolkit as tk
 from ckan.common import c, request, _, response
@@ -22,6 +22,9 @@ import zipfile
 import requests
 import StringIO
 from ckanext.dara.helpers import _parse_authors
+
+import ckan.lib.base as base
+
 
 import ast
 from webob import Response, Request
@@ -48,7 +51,7 @@ class WorkflowController(PackageController):
     def _context(self):
         return {'model': model, 'session': model.Session,
                 'user': c.user or c.author, 'for_view': True,
-                'auth_user_obj': c.userobj}
+                'auth_user_obj': c.userobj, 'save': 'save' in request.params}
 
     def review(self, id):
         """
@@ -90,10 +93,26 @@ class WorkflowController(PackageController):
         """
         context = self._context()
         c.pkg_dict = tk.get_action('package_show')(context, {'id': id})
+
+        # validate the DOI, if any
+        doi = c.pkg_dict['dara_Publication_PID']
+        type_ = c.pkg_dict['dara_Publication_PIDType']
+        if type_ == 'DOI':
+            pattern = re.compile('^10.\d{4,9}/[-._;()/:a-zA-Z0-9]+$')
+            match = pattern.match(doi)
+            if match is None:
+                h.flash_error('DOI is invalid. Format should be: 10.xxxx/xxxx. Please update the DOI before trying again to publish this resource. <a href="#doi" style="color: blue;">Jump to field.</a>', True)
+                errors = {'dara_Publication_PID': ['DOI is invalid. Format should be: 10.xxxx/xxxx']}
+
+                tk.redirect_to(controller='package', action='edit', id=id)
+
         c.pkg_dict.update({'private': False, 'dara_edawax_review': 'reviewed'})
+        c.pkg = context.get('package')
         tk.get_action('package_update')(context, c.pkg_dict)
         h.flash_success('Dataset published')
         redirect(id)
+
+
 
     @admin_req
     def retract(self, id):
