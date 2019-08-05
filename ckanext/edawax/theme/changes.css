@@ -224,8 +224,20 @@ body {
     background: #007bb4 !important;
 }
 
+.stages > .complete> .highlight{
+    background: #39a9de !important;
+}
+.stages li.complete::before{
+    color: #39a9de !important;
+}
+
 .stages li.active::before{
     color: #007bb4 !important;
+}
+
+.stages li.active::after{
+    border-top-color: #007bb4;
+    border-bottom-color: #007bb4;
 }
 
 /*********** END Forms********************/
