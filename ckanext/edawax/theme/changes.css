@@ -15,7 +15,7 @@ html {
 }
 
 .span9{
-    width: 74% !important;
+    width: calc(74% - 00px) !important;
     margin-bottom: 5px;
 }
 
@@ -58,6 +58,19 @@ html {
     padding: 10px !important;
 }
 
+.zbw-box-bottom{
+    float: none !important;
+    background-color: white;
+    border-radius: 0 0 8px 8px;
+    margin-bottom: 5px !important;
+    padding: 10px !important;
+}
+
+.zbw-box-full > form > .form-actions{
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+}
+
 .dataset-item{
     float: none !important;
     background-color: white;
@@ -66,6 +79,10 @@ html {
     padding: 10px !important;
 }
 
+.nav.nav-pills {
+    margin-bottom: 0;
+    margin-top: 0;
+}
 
 .row.wrapper{
     background-color: transparent;
@@ -98,6 +115,11 @@ body {
 .hero, .hero::after, [role="main"] {
     background-color: transparent !important;  /* remove all colors or transparent */
 
+}
+
+[role="main"]{
+    position: relative;
+    top: -8px;
 }
 
 
@@ -173,6 +195,40 @@ body {
 }
 
 /************* End Heading*****************/
+
+
+/*********** START Forms********************/
+.dataset-form,
+.page-heading {
+    background-color: white;
+    border-radius: 8px;
+    padding: 10px;
+}
+
+#user-edit-form {
+    background-color: white;
+    border-radius: 8px;
+    padding: 10px;
+}
+
+.form-actions {
+    margin: 0;
+}
+
+.stages {
+    border-radius: 8px 8px 0 0;
+    margin: -10px -10px 5px -10px;
+}
+
+.stages > .active > .highlight{
+    background: #007bb4 !important;
+}
+
+.stages li.active::before{
+    color: #007bb4 !important;
+}
+
+/*********** END Forms********************/
 
 
 /************* START Navigation ********************/
@@ -452,13 +508,52 @@ li.active > a {
 
 .journal_info {
     display: block !important;
-
 }
+
+.info-panel {
+    background-color: transparent !important;
+    padding: 0 !important;
+}
+
+.about-info.active,
+.about-info {
+    background-color: white !important;
+    margin-bottom: 5px !important;
+    border-radius: 8px !important;
+    border: 0;
+}
+
+.about-info.active > a{
+    font-weight: bold;
+}
+
+.about-info > a {
+    background-color: white !important;
+    border: 0 !important;
+    border-radius: 8px !important;
+}
+
+.about-info > a:hover {
+    font-weight: bold;
+}
+
+
 
 /************** END Info Panel ******************/
 
 
 /************** START Resource Panel ******************/
+.intro {
+    margin-top: 5px !important;
+}
+
+article.about {
+    background-color: white;
+    border-radius: 8px;
+    padding: 10px;
+}
+
+
 .primary > article > .module-content > div > h1{
     background-color: white !important;
     padding: 10px !important;
