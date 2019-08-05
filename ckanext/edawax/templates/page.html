@@ -82,11 +82,11 @@
                       </header>
                     {% endblock %}
                     <div class="module-content">
-                      {% if self.page_primary_action() | trim %}
+                      {# % if self.page_primary_action() | trim %}
                         <div class="page_primary_action">
                           {% block page_primary_action %}{% endblock %}
                         </div>
-                      {% endif %}
+                      {% endif % #}
                       {% block primary_content_inner %}
                       {% endblock %}
                     </div>

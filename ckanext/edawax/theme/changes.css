@@ -37,8 +37,10 @@ html {
 }
 
 
+.right {
+    float: right;
+}
 
-.dataset-item,
 .zbw-box{
     float: none !important;
     background-color: white;
@@ -46,6 +48,23 @@ html {
     margin-bottom: 5px !important;
     padding: 10px !important;
 }
+
+.zbw-box-full{
+    float: none !important;
+    background-color: white;
+    border-radius: 8px;
+    margin-bottom: 5px !important;
+    padding: 10px !important;
+}
+
+.dataset-item{
+    float: none !important;
+    background-color: white;
+    border-radius: 8px;
+    margin-bottom: 5px !important;
+    padding: 10px !important;
+}
+
 
 .row.wrapper{
     background-color: transparent;
@@ -55,6 +74,10 @@ html {
     width:100%;
     padding: 0 !important;
     margin: 0 !important;
+}
+
+.module-content.box {
+    padding: 10px !important;
 }
 
 body {
@@ -137,7 +160,7 @@ body {
 
 [role="main"] {
     padding: 0px;
-    top: -80px;
+    /*top: -80px;*/
 }
 
 
@@ -157,7 +180,7 @@ body {
     height: 42px;
     color: #007bb4;
     padding-top: 5px;
-    padding-bottom: 75px;
+    /*padding-bottom: 75px;*/
 
 }
 
@@ -215,8 +238,58 @@ body {
     display: none;
 }
 
+
+/********** START GRID ******************/
+
+.media-grid-ii{
+    display: grid;
+    grid-gap: 5px;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    margin-left: 0;
+}
+
+.media-item-ii{
+    list-style: none;
+    background-color: white;
+    padding: 15px;
+    border-radius: 8px;
+}
+
+.media-view-ii > span {
+    display: none !important;
+}
+
+/********** END GRID ******************/
+
+
 /************* END Naviagtion *********************/
 
+
+/** START Journal List **/
+
+
+.media-grid {
+    background: none !important;
+    border: 0 !important;
+    margin: 0px -25px 0px -27px;
+    position: relative;
+    left: 27px;
+}
+
+.media-item {
+    border-radius: 8px;
+    margin: 0 5px 5px 0;
+}
+
+.media-view{
+    border: 0;
+}
+
+.media-heading{
+    color: rgb(0,123,180);
+}
+
+/** END Journal List**/
 
 /************** START SEARCH FORM *********************/
 
@@ -291,7 +364,7 @@ li.active > a {
 
 }
 
-.span3 > .module.module-narrow {
+.span3 > .module.module-narrow.journal {
     display: none !important;
 }
 
@@ -358,7 +431,10 @@ li.active > a {
     color: rgb(0, 123, 180)
 }
 
+.journal_info {
+    display: block !important;
 
+}
 
 /************** END Info Panel ******************/
 
@@ -374,7 +450,7 @@ li.active > a {
 }
 
 .primary > article > .module-content > div {
-    padding-top: 10px
+    /*padding-top: 10px*/
 }
 
 .notes {
@@ -395,6 +471,7 @@ li.active > a {
     border-radius: 8px;
     padding: 10px;
     margin-top: 5px;
+    margin-bottom: 0 !important;
 }
 
 .download_all_wrapper{
@@ -423,9 +500,32 @@ li.active > a {
     width: 80px;
 }
 
-.
-
 /************** END Resource Panel ********************/
+
+/************** START TAGS ******************/
+
+.tag_section {
+    background-color: white;
+    border-radius: 8px;
+    padding: 10px;
+    margin-top: 5px;
+}
+
+.tag_section > ul{
+    background-color: white !important;
+    border: 0 !important;
+    box-shadow: none !important;
+    -webkit-box-shadow: none !important;
+
+}
+
+.tag{
+    background-color: rgb(219, 232, 240) !important;
+    border: 0 !important;
+    border-radius: 8px !important;
+}
+
+/************** END TAGS ******************/
 
 
 /************** START FOOTER ******************/
