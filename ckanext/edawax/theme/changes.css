@@ -573,6 +573,7 @@ article.about {
     font-family: 'zbw_binaryregular';
     margin-top: 0 !important;
     color: rgb(0, 123, 180) !important;
+    border-radius: 0 0 8px 8px;
 }
 
 .primary > article > .module-content > div {
@@ -588,6 +589,7 @@ article.about {
 .authors_title{
     background-color: white;
     padding: 5px 10px;
+    margin-top: 5px;
 }
 
 .related_publication,
