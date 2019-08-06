@@ -55,7 +55,11 @@
             {% endblock %}
 
             {% block primary %}
-              <div class="primary span9">
+              {% if h.is_edit_page() %}
+                <div class="primary span12">
+              {% else %}
+                <div class="primary span9">
+              {% endif %}
                 {#
                 The primary_content block can be used to add content to the page.
                 This is the main block that is likely to be used within a template.

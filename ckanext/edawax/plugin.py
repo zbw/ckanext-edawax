@@ -295,6 +295,7 @@ class EdawaxPlugin(plugins.SingletonPlugin):
                 'has_doi': helpers.has_doi,
                 'has_hammer': helpers.has_hammer,
                 'is_admin': helpers.is_admin,
+                'is_edit_page': helpers.is_edit_page,
                 }
 
     def before_map(self, map):

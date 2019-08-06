@@ -19,6 +19,13 @@ import ckanext.edawax.robot_list as _list
 from urlparse import urlparse
 
 
+def is_edit_page():
+    if ('edit' in request.url or 'views' in request.url) and not 'user/edit' in request.url:
+        return True
+    return False
+
+
+
 def is_admin():
     admins = c.group_admins
     try:

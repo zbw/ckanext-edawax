@@ -12,7 +12,7 @@
 
 {% block resource_content %}
 
-<div prefix="schema: http://schema.org/" typeof="schema:CreativeWork" resource="{{ h.full_current_url() }}">
+<div prefix="schema: http://schema.org/" typeof="schema:CreativeWork" resource="{{ h.full_current_url() }}" class="zbw-box-full bottom-gap">
     <meta property="schema:isPartOf" typeof="schema:Dataset" resource="{{ pkg_url }}" />
 
   {% block resource_read_title %}
@@ -139,4 +139,40 @@
   {% if 'datastore' in g.plugins %}
     <li>{% snippet 'package/snippets/data_api_button.html', resource=res, datastore_root_url=c.datastore_api %}</li>
   {% endif %}
+{% endblock %}
+
+
+{% block resource_additional_information_inner %}
+<div class="module-content zbw-box-full">
+  <h2>{{ _('Additional Information') }}</h2>
+  <table class="table table-striped table-bordered table-condensed" data-module="table-toggle-more">
+    <thead>
+      <tr>
+        <th scope="col">{{ _('Field') }}</th>
+        <th scope="col">{{ _('Value') }}</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <th scope="row">{{ _('Last updated') }}</th>
+        <td>{{ h.render_datetime(res.last_modified) or h.render_datetime(res.revision_timestamp) or h.render_datetime(res.created) or _('unknown') }}</td>
+      </tr>
+      <tr>
+        <th scope="row">{{ _('Created') }}</th>
+        <td>{{ h.render_datetime(res.created) or _('unknown') }}</td>
+      </tr>
+      <tr>
+        <th scope="row">{{ _('Format') }}</th>
+        <td>{{ res.mimetype_inner or res.mimetype or res.format or _('unknown') }}</td>
+      </tr>
+      <tr>
+        <th scope="row">{{ _('License') }}</th>
+        <td>{% snippet "snippets/license.html", pkg_dict=pkg, text_only=True %}</td>
+      </tr>
+      {% for key, value in h.format_resource_items(res.items()) %}
+        <tr class="toggle-more"><th scope="row">{{ key }}</th><td>{{ value }}</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
 {% endblock %}

@@ -10,6 +10,10 @@ html {
      */
 }
 
+.account-masthead{
+    background: #007bb4 !important;
+}
+
 .row.wrapper{
     margin-bottom: 0 !important;
 }
@@ -29,7 +33,7 @@ html {
 
 .zbw-blue {
     /*#008fc3*/
-    color: rgb(0, 123, 180) !important;
+    color: #007bb4 !important;
     margin: 0 !important;
 }
 
@@ -192,6 +196,13 @@ body {
     text-decoration: none;
     font-size: 1.8em;
     color: rgb(29,82,122)
+}
+
+small {
+    font-size: 9px;
+    background-color: white;
+    border-radius: 8px;
+    padding: 5px;
 }
 
 /************* End Heading*****************/
@@ -515,7 +526,7 @@ li.active > a {
 .module-heading{
     background-color: white;
     border: 0;
-    color: rgb(0, 123, 180)
+    color: #007bb4; /*rgb(0, 123, 180)*/
 }
 
 .journal_info {
@@ -553,6 +564,10 @@ li.active > a {
 
 /************** END Info Panel ******************/
 
+.bottom-gap {
+    margin-bottom: 5px;
+}
+
 
 /************** START Resource Panel ******************/
 .intro {
@@ -573,7 +588,7 @@ article.about {
     font-family: 'zbw_binaryregular';
     margin-top: 0 !important;
     color: rgb(0, 123, 180) !important;
-    border-radius: 0 0 8px 8px;
+    /*border-radius: 0 0 8px 8px;*/
 }
 
 .primary > article > .module-content > div {
@@ -651,6 +666,69 @@ article.about {
     background-color: rgb(219, 232, 240) !important;
     border: 0 !important;
     border-radius: 8px !important;
+}
+
+
+
+/********* START Resource ***************/
+
+.resources {
+    margin-top: 8px !important;
+    margin-bottom: 8px !important;
+    background-color: white;
+    border-radius: 8px;
+}
+
+.resources > h2 {
+    border-radius: 8px !important;
+}
+
+.actions {
+    top: 10px !important;
+    right: 10px !important;
+}
+
+.module-resource {
+    border-radius: 8px !important;
+}
+
+.hide {
+    display: none;
+}
+
+.empty{
+    background-color: white;
+    border-radius: 8px;
+}
+
+/********* END Resource***************/
+
+
+.user-list{
+    background-color: white;
+    padding: 10px;
+    border-radius: 0 0 8px 8px;
+}
+
+.form-horizontal {
+    background-color: white;
+    border-radius: 0 0 8px 8px;
+    padding: 10px;
+}
+
+.no-nav .page-header{
+    border-radius: 8px 8px 0 0;
+}
+
+.page_primary_action{
+    background-color: white;
+    margin-bottom: 5px;
+    border-radius: 0 0 8px 8px;
+}
+
+.context-info .info {
+    border: 0;
+    margin-top: 5px;
 }
 
 /************** END TAGS ******************/
