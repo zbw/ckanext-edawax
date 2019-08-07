@@ -20,7 +20,8 @@ from urlparse import urlparse
 
 
 def is_edit_page():
-    if ('edit' in request.url or 'views' in request.url) and not 'user/edit' in request.url:
+    if ('edit' in request.url or 'views' in request.url) and not ('user/edit' in request.url or 'journals/edit' in request.url):
+        print('\nTrue\n')
         return True
     return False
 
