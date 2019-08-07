@@ -810,6 +810,9 @@ article.about {
     margin-top: 4px;
 }
 
+.search-form .filter-list{
+    margin: 0 0 0 5px;
+}
 
 /************ Before breadcrumbs ******************/
 #content{
