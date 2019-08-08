@@ -28,7 +28,7 @@
           <h2 class="zbw-font zbw-blue" style="display: inline;">{% snippet 'snippets/search_result_text.html', query=query, count=count, type=type %}</h2>
         {% endif %}
 
-        <div style="float: right;">
+        <div class="search-order" style="display: inline;">
           <label for="field-order-by">{{ _('Order by') }}</label>
           <select id="field-order-by" name="sort">
             {% for label, value in sorting %}
@@ -38,7 +38,7 @@
             {% endfor %}
           </select>
         </div>
-        <br>
+
         {% block page_primary_action %}
           {% if h.check_access('package_create') %}
           {% set group = c.group_dict.id or None %}

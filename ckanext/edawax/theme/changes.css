@@ -847,6 +847,10 @@ article.about {
     padding-bottom: 0;
 }
 
+.module-content > form > .form-select.control-group.control-order-by.zbw-box > div.search-order {
+    float: right;
+}
+
 /************ Before breadcrumbs ******************/
 #content{
     margin-top: 5px !important;
