@@ -427,7 +427,7 @@ a.media-view-ii:hover {
 }
 
 .add_data_button {
-    float: left;
+    /*float: left;*/
     margin-right: 35px;
 }
 
@@ -841,6 +841,10 @@ article.about {
 
 .search-form .filter-list{
     margin: 0 0 0 5px;
+}
+
+.search-form{
+    padding-bottom: 0;
 }
 
 /************ Before breadcrumbs ******************/
