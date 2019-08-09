@@ -109,6 +109,10 @@ html {
     padding: 10px !important;
 }
 
+.module-content:last-child{
+    padding-bottom: 0 !important;
+}
+
 .span9 > section > div.module-content,
 .span9 > article > div.module-content{
     padding-left: 0px !important;
@@ -697,6 +701,11 @@ article.about {
 
 .label-review {
     margin-left: 0px !important;
+}
+
+.homepage.layout-1,
+.homepage.layout-2{
+    height: 0;
 }
 
 /************** END Resource Panel ********************/
