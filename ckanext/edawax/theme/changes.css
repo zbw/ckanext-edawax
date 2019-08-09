@@ -109,8 +109,13 @@ html {
     padding: 10px !important;
 }
 
+.module-content:first-child{
+    padding-top: 0 !important;
+}
+
 .module-content:last-child{
     padding-bottom: 0 !important;
+
 }
 
 .span9 > section > div.module-content,
@@ -439,12 +444,19 @@ a.media-view-ii:hover {
     background-color: white;
     border-radius: 8px;
     height: 100px;
-    margin-bottom: 5px;
+    margin-bottom: 10px;
+
+    position: relative;
+    top: 5px;
 }
 
 .add_data_button {
     /*float: left;*/
     margin-right: 35px;
+}
+
+h1.page-heading{
+    margin-bottom: 5px;
 }
 
 /************** END SEARCH FORM *********************/
@@ -481,10 +493,6 @@ a.media-view-ii:hover {
 
 li.active > a {
     border-radius: 8px 8px 0 0;
-}
-
-.module-content > :last-child{
-    /*border-bottom: 0 !important;*/
 }
 
 .module-content.page-header.zbw-box + .module-content{
@@ -738,7 +746,7 @@ article.about {
 /********* START Resource ***************/
 
 .resources {
-    margin-top: 8px !important;
+    margin-top: 5px !important;
     margin-bottom: 8px !important;
     background-color: white;
     border-radius: 8px;
