@@ -100,14 +100,24 @@ html {
 }
 
 .module-content{
-    width:100%;
-    padding: 0 !important;
+    /*width:100%;*/
+    padding: 0;
     margin: 0 !important;
 }
 
 .module-content.box {
     padding: 10px !important;
 }
+
+.span9 > section > div.module-content,
+.span9 > article > div.module-content{
+    padding-left: 0px !important;
+}
+
+.span9 > section > div.module-content {
+    padding-top: 0px !important;
+}
+
 
 .page-heading-members {
     display: inline;
@@ -160,7 +170,9 @@ body {
   color: white;
 }
 
-
+.data-viewer-info {
+    padding: 10px !important;
+}
 
 .header-image {
     position: relative !important;
@@ -452,6 +464,10 @@ a.media-view-ii:hover {
     z-index: 100;
 }
 
+.context-info > .module-content {
+    padding: 0px !important;
+}
+
 .module-content.page-header.zbw-box{
     /*margin-bottom: 5px !important;*/
     border-bottom: 1px solid white;
@@ -516,7 +532,7 @@ li.active > a {
     background-color: white;
     border-radius: 8px;
     border-top: none !important;
-    padding: 10px;
+    padding: 10px !important;
     margin: 0 !important;
     margin-bottom: 5px !important;
 }
@@ -598,6 +614,11 @@ li.active > a {
 
 
 /************** START Resource Panel ******************/
+
+.embedded-content{
+    margin-top: -6px;
+}
+
 .intro {
     margin-top: 5px !important;
 }
@@ -608,7 +629,6 @@ article.about {
     padding: 10px;
 }
 
-
 .primary > article > .module-content > div > h1{
     background-color: white !important;
     padding: 10px !important;
@@ -616,7 +636,7 @@ article.about {
     font-family: 'zbw_binaryregular';
     margin-top: 0 !important;
     color: rgb(0, 123, 180) !important;
-    /*border-radius: 0 0 8px 8px;*/
+    border-radius: 0px 0px 8px 8px;
 }
 
 .primary > article > .module-content > div {
@@ -631,8 +651,12 @@ article.about {
 
 .authors_title{
     background-color: white;
-    padding: 5px 10px;
+    padding: 5px 10px 5px 10px;
     margin-top: 5px;
+}
+
+.dataset-content > .authors_title{
+    padding-left: 0px !important;
 }
 
 .related_publication,
@@ -669,6 +693,10 @@ article.about {
 
 .export-btn {
     width: 80px;
+}
+
+.label-review {
+    margin-left: 0px !important;
 }
 
 /************** END Resource Panel ********************/
@@ -743,6 +771,10 @@ article.about {
     border-radius: 8px;
     /*border-radius: 0 0 8px 8px;*/
     padding: 10px;
+}
+
+.page-header {
+    padding: 0 !important;
 }
 
 .no-nav .page-header{
