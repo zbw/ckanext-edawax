@@ -23,7 +23,7 @@
       {#% set temp = sorting.append(('Private', 'private desc, metadata_modified desc')) %}
       {% set temp = sorting.append(('Review', 'dara_edawax_review desc, private acs')) %#}
     {% endif %}
-      <div class="form-select control-group control-order-by zbw-box">
+      <div class="form-select control-group control-order-by zbw-box box-top">
         {% if not no_title %}
           <h2 class="zbw-font zbw-blue" style="display: inline;">{% snippet 'snippets/search_result_text.html', query=query, count=count, type=type %}</h2>
         {% endif %}

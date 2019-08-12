@@ -1,11 +1,11 @@
 {% ckan_extends %}
 
 {% block primary_content_inner %}
-<div class="zbw-box-bottom" style="margin-top: 5px;">
+<div class="zbw-box box-bottom" style="margin-top: 5px;">
   <h3 class="page-heading-members">{{ _('{0} members'.format(c.members|length)) }}</h3>
   {% link_for _('Add Member'), controller='organization', action='member_new', id=c.group_dict.id, class_='btn btn-primary member-button', icon='plus-sign-alt' %}
 </div>
-  <table class="table table-header table-hover table-bordered zbw-box-full-no-padding">
+  <table class="table table-header table-hover table-bordered zbw-box box-full box-no-padding">
     <col width="70" />
     <col width="40" />
     <col width="20" />

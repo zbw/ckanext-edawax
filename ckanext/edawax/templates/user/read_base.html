@@ -5,10 +5,10 @@
   <section class="module-content">
     {% block secondary_content_inner %}
       {% block user_image %}
-      <div class="image zbw-box-full">{{ h.linked_gravatar(user.email_hash, 190) }}</div>
+      <div class="image zbw-box box-full">{{ h.linked_gravatar(user.email_hash, 190) }}</div>
       {% endblock %}
 
-      <div class="zbw-box-full">
+      <div class="zbw-box box-full">
       {% block user_heading %}
       <h1 class="heading">{{ user.display_name }}</h1>
       {% endblock %}
@@ -50,7 +50,7 @@
         {% endblock %}
       {% endif %}
       {% block user_info %}
-      <div class="info zbw-box-full">
+      <div class="info zbw-box box-full">
         <dl>
           {% if user.name.startswith('http://') or user.name.startswith('https://') %}
             <dt>{{ _('Open ID') }}</dt>

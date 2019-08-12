@@ -37,45 +37,36 @@ html {
     margin: 0 !important;
 }
 
-.zbw-top {
-    background-color: white !important;
-}
-
-
 .right {
     float: right;
 }
 
-.zbw-box{
-    float: none !important;
+
+/********* START ZBW BOX**************/
+.zbw-box {
+    float: none;
     background-color: white;
-    border-radius: 8px 8px 0 0;
-    margin-bottom: 5px !important;
-    padding: 10px !important;
+    margin-bottom: 5px;
+    padding: 10px;
 }
 
-.zbw-box-full{
-    float: none !important;
-    background-color: white;
+.box-full {
     border-radius: 8px;
-    margin-bottom: 5px !important;
-    padding: 10px !important;
 }
 
-.zbw-box-full-no-padding{
-    float: none !important;
-    background-color: white;
-    border-radius: 8px;
-    margin-bottom: 5px !important;
-}
-
-.zbw-box-bottom{
-    float: none !important;
-    background-color: white;
+.box-bottom {
     border-radius: 0 0 8px 8px;
-    margin-bottom: 5px !important;
-    padding: 10px !important;
 }
+
+.box-top {
+    border-radius: 8px 8px 0 0;
+}
+
+.box-full-no-padding {
+    padding: 0 !important;
+}
+
+/********END ZBW BOX***************/
 
 .zbw-box-full > form > .form-actions{
     margin-left: 0 !important;
@@ -147,20 +138,6 @@ html {
 .span75{
     width: calc(100% - 469px) !important;
     margin-left: 9px !important;
-}
-
-body {
-    /*height: 100% !important;*/
-    margin: 0 !important;
-    background-repeat: no-repeat;
-    background-attachment: fixed;
-    /*background-image: url('/background_temp.jpg');*/
-    /*rgb(0, 93, 150)*/
-    background-image: linear-gradient(#95abc400 0%,#dde4ec9e 10%,rgb(0, 93, 150, 1) 100%), url('/background_temp.jpg') !important;
-    background-size: 100% auto;
-
-    /*background: rgb(0, 93, 150) !important;*/
-
 }
 
 .hero, .hero::after, [role="main"] {
@@ -543,10 +520,10 @@ li.active > a {
 .top-info {
     background-color: white;
     border-radius: 8px;
-    border-top: none !important;
-    padding: 10px !important;
-    margin: 0 !important;
-    margin-bottom: 5px !important;
+    border-top: none;
+    padding: 10px;
+    margin: 0;
+    margin-bottom: 5px;
 }
 
 .nums{
@@ -607,7 +584,6 @@ li.active > a {
 }
 
 .about-info > a {
-    background-color: white !important;
     border: 0 !important;
     border-radius: 8px !important;
 }

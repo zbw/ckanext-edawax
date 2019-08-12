@@ -6,3 +6,7 @@ href='http://fonts.googleapis.com/css?family=Roboto:400,500,300,300italic,400ita
 rel='stylesheet' type='text/css' />
 {{ super() }}
 {% endblock %}
+
+{% block styles %}
+    {% resource 'edawax/custom.css' %}
+{% endblock %}
