@@ -2,6 +2,21 @@
 
 {% block page_primary_action %}
     {% if not h.has_doi(pkg) or h.has_hammer() %}
-        {% link_for _('Add new resource'), controller='package', action='new_resource', id=c.pkg_dict.name, class_='btn btn-primary', icon='plus' %}
+        {% link_for _('Add new resource'), controller='package', action='new_resource', id=c.pkg_dict.name, class_='btn btn-primary test', icon='plus' %}
     {% endif %}
+{% endblock %}
+
+
+{% block primary_content_inner %}
+  {% if pkg.resources %}
+    <ul class="resource-list zbw-box box-full"{% if has_reorder %} data-module="resource-reorder" data-module-id="{{ pkg.id }}"{% endif %}>
+      {% for resource in pkg.resources %}
+        {% snippet 'package/snippets/resource_item.html', pkg=pkg, res=resource, url_is_edit=true %}
+      {% endfor %}
+    </ul>
+  {% else %}
+    {% trans url=h.url_for(controller='package', action='new_resource', id=pkg.name) %}
+      <p class="empty">This dataset has no data, <a href="{{ url }}">why not add some?</a></p>
+    {% endtrans %}
+  {% endif %}
 {% endblock %}
