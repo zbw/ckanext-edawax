@@ -20,7 +20,7 @@
   {% endblock %}
 
   {% block resource_read_url %}
-    <div class="muted ellipsis" property="schema:distribution" typeof="schema:DataDownload" resource="{{ res.url }}">
+    <!--div class="muted ellipsis" property="schema:distribution" typeof="schema:DataDownload" resource="{{ res.url }}">
         {% if res.url and h.is_url(res.url) %}
             URL:
               <a href="{{ res.url }}" title="{{ res.url }}" property="schema:url">
@@ -29,11 +29,11 @@
         {% elif res.url %}
             Resource URL: {{ res.url }}
         {% endif %}
-    </div>
+    </div-->
   {% endblock %}
 
   {% if dara_authors %}
-      <div class="muted ellipsis" style="margin-bottom:1.25em;">Creators:
+      <div class="muted ellipsis" style="margin-bottom:1.25em; padding-left: 10px;">Creators:
             {% for author in dara_authors %}
                 <div property="schema:author" style="display:inline"
                         typeof="schema:Person"

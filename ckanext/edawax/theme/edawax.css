@@ -176,10 +176,10 @@ label {
   color: #005d95;
 }
 .label-review {
-  background-color: darkorange;
+  background-color: darkorange !important;
 }
 .label-reauthor {
-  background-color: #808096;
+  background-color: #808096 !important;
 }
 .span6 {
   margin-top: 50px;

@@ -25,7 +25,7 @@
 
 
 {% block package_search_results_api_inner %}
-<small>
+<!--small>
   {% set api_link = h.link_to(_('API'), h.url_for(controller='api', action='get_api', ver=3)) %}
   {% set api_doc_link = h.link_to(_('API Docs'), '/info/api-guide') %}
   {% if g.dumps_url -%}
@@ -38,5 +38,5 @@
       You can also access this registry using the {{ api_link }} (see {{ api_doc_link}}).
     {% endtrans %}
   {%- endif %}
-</small>
+</small-->
 {% endblock %}

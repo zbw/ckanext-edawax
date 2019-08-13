@@ -45,7 +45,13 @@
                 <ul class="nav nav-pills">
                     <li>
                         {% block header_site_search %}
-                            {{ super() }}
+                                <form class="section site-search simple-input" action="{% url_for controller='package', action='search' %}" method="get">
+                                  <div class="field">
+                                    <label for="field-sitewide-search">{% block header_site_search_label %}{{ _('Search Datasets') }}{% endblock %}</label>
+                                    <input id="field-sitewide-search" type="text" name="q" placeholder="{{ _('search') }}" />
+                                    <button class="btn-search" type="submit"><i class="icon-search"></i></button>
+                                  </div>
+                                </form>
                         {% endblock %}
                     </li>
                     {% block header_site_navigation_tabs %}
@@ -66,7 +72,5 @@
     </div>
         <!--</div> -->
     </header>
-
-
-
 {% endblock %}
+

@@ -54,7 +54,9 @@
 {% endif %}
 
  {% if submission_id and is_admin %}
-   <p style="color:grey; text-decoration: underline">Article Submission ID: {{ submission_id }} </p>
+  <div class="zbw-box" style="margin-bottom: 0;">
+   <p style="color:grey; text-decoration: underline;">Article Submission ID: {{ submission_id }} </p>
+  </div>
  {% endif %}
 
  {% snippet 'package/snippets/authors.html', dara_authors=dara_authors %}

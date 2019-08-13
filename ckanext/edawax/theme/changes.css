@@ -56,6 +56,11 @@ body {
 }
 
 
+#field-sitewide-search::placeholder{
+    font-family: 'zbw_binaryregular';
+    font-size: 16px;
+}
+
 /********* START ZBW BOX**************/
 .zbw-box {
     float: none !important;
@@ -107,7 +112,7 @@ body {
 .module-content{
     /*width:100%;*/
     padding: 0;
-    margin: 0 !important;
+    margin: 0;
 }
 
 .module-content.box {
@@ -429,10 +434,13 @@ a.media-view-ii:hover {
 /** END Journal List**/
 
 /************** START SEARCH FORM *********************/
+#organization-datasets-search-form {
+    border-radius: 0 0 8px 8px;
+}
 
 .search-form {
     background-color: white;
-    border-radius: 8px;
+    /*border-radius: 8px;*/
     height: 100px;
     margin-bottom: 5px;
 
@@ -487,7 +495,7 @@ li.active > a {
 
 .module-content.page-header.zbw-box + .module-content{
     position: relative;
-    top: -10px;
+    /*top: -10px;*/
 }
 
 .content-action > a {
@@ -648,7 +656,7 @@ article.about {
 .authors_title{
     background-color: white;
     padding: 5px 10px 5px 10px;
-    margin-top: 5px;
+    /*margin-top: 5px;*/
 }
 
 .dataset-content > .authors_title{
