@@ -61,6 +61,15 @@ body {
     font-size: 16px;
 }
 
+.dashboard-list {
+    list-style: none;
+    margin-left: 0;
+}
+
+.dashboard-list > li:first-child {
+    border-radius: 0 0 8px 8px;
+}
+
 /********* START ZBW BOX**************/
 .zbw-box {
     float: none !important;
@@ -257,7 +266,7 @@ small {
 .dataset-form,
 .page-heading {
     background-color: white;
-    border-radius: 8px;
+    /*border-radius: 8px;*/
     padding: 10px;
 }
 
@@ -440,7 +449,7 @@ a.media-view-ii:hover {
 
 .search-form {
     background-color: white;
-    /*border-radius: 8px;*/
+    border-radius: 8px;
     height: 100px;
     margin-bottom: 5px;
 
@@ -451,6 +460,7 @@ a.media-view-ii:hover {
 .add_data_button {
     /*float: left;*/
     margin-right: 35px;
+    margin-top: 10px;
 }
 
 h1.page-heading{
@@ -655,7 +665,7 @@ article.about {
 
 .authors_title{
     background-color: white;
-    padding: 5px 10px 5px 10px;
+    padding: 15px 10px 5px 10px;
     /*margin-top: 5px;*/
 }
 
@@ -777,8 +787,8 @@ article.about {
 
 .form-horizontal {
     background-color: white;
-    border-radius: 8px;
-    /*border-radius: 0 0 8px 8px;*/
+    /*border-radius: 8px;*/
+    border-radius: 0 0 8px 8px;
     padding: 10px;
 }
 
@@ -882,6 +892,7 @@ article.about {
     padding-bottom: 0;
 }
 
+.module-content > .box-bottom > form > .form-select.control-group.control-order-by.zbw-box > div.search-order,
 .module-content > form > .form-select.control-group.control-order-by.zbw-box > div.search-order {
     float: right;
 }

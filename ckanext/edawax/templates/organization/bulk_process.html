@@ -1,7 +1,7 @@
 {% ckan_extends %}
 
 {% block primary_content_inner %}
-  <h3 class="page-heading" style="margin-bottom: 5px;">
+  <h3 class="page-heading zbw-box box-bottom">
     {% block page_heading %}
       {%- if c.page.item_count -%}
         {{ c.page.item_count }} datasets{{ _(" found for \"{query}\"").format(query=c.q) if c.q }}
@@ -18,7 +18,7 @@
     <div class="primary-bulk span6">
       {% block form %}
         {% if c.page.item_count %}
-          <form method="POST" data-module="basic-form" class="zbw-box box-full box-no-padding">
+          <form method="POST" data-module="basic-form" class="zbw-box box-full box-full-no-padding">
             <table class="table table-bordered table-header table-hover table-bulk-edit table-edit-hover" data-module="table-selectable-rows">
               <col width="8">
               <col width="120">
@@ -97,7 +97,7 @@
             (_('Name Descending'), 'title_string desc'),
             (_('Last Modified'), 'data_modified desc') ]
           %}
-          {% snippet 'snippets/search_form.html', form_id='organization-datasets-search-form', type='dataset', query=c.q, sorting=sorting, sorting_selected=c.sort_by_selected, no_title=true, search_class=' ' %}
+          {% snippet 'snippets/search_form.html', form_id='organization-datasets-search-form-bulk', type='dataset', query=c.q, sorting=sorting, sorting_selected=c.sort_by_selected, no_title=true, search_class=' ' %}
         {% endblock %}
 
         {#{% snippet 'snippets/simple_search.html', q=c.q, sort=c.sort_by_selected, placeholder=_('Search datasets...'), extra_sort=[(_('Last Modified'), 'data_modified asc')], input_class='search-normal', form_class='search-aside' %}#}
