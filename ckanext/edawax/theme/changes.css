@@ -715,7 +715,7 @@ article.about {
 
 .homepage.layout-1,
 .homepage.layout-2{
-    height: 0;
+    /*height: 0;*/
 }
 
 /************** END Resource Panel ********************/
