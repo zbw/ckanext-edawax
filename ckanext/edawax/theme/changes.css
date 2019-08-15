@@ -537,7 +537,7 @@ li.active > a {
 .context-info {
     background-color: transparent;
     border-radius: 8px;
-    margin-bottom: 5px;
+    /*margin-bottom: 5px;*/
 }
 
 .span3 > .module.module-narrow.social,
@@ -550,10 +550,12 @@ li.active > a {
     padding: 10px;
     margin: 0;
     margin-bottom: 5px;
+    /*margin-top: 5px;*/
 }
 
 .nums{
     margin-top: 5px !important;
+    margin-bottom: 5px !important;
 }
 
 .social {
@@ -716,6 +718,14 @@ article.about {
 .homepage.layout-1,
 .homepage.layout-2{
     /*height: 0;*/
+}
+
+.heading {
+    padding-top: 5px;
+}
+
+.no-display{
+    display: none;
 }
 
 /************** END Resource Panel ********************/
