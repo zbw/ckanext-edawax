@@ -3,7 +3,11 @@
 {% set DOI_Test = pkg['dara_DOI_Test'] %}
 {% set use_testserver = h.dara_use_testserver() %}
 {% set submission_id = pkg['dara_jda_submission_id'] %}
+{% if pkg %}
 {% set is_admin = h.check_journal_role(pkg, 'admin') or h.check_access('sysadmin') %}
+{% else %}
+{% set is_admin = False %}
+{% endif %}
 
 <div class="authors_title">
   {% if DOI %}
