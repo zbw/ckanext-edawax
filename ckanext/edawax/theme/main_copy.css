@@ -535,7 +535,7 @@ a:focus {
   clear: both;
 }
 p {
-  margin: 0 0 0;
+  /*margin: 0 0 0;*/
 }
 .lead {
   margin-bottom: 20px;
@@ -5578,7 +5578,7 @@ a.tag:hover {
 .module-heading {
   *zoom: 1;
   margin: 0;
-  padding: 7px 25px;
+  /*padding: 7px 25px;*/
   font-size: 14px;
   line-height: 1.3;
   /*background-color: #f6f6f6;
@@ -6031,7 +6031,7 @@ a.tag:hover {
 .nav-aside > li {
   font-size: 12px;
   line-height: 1.16666667em;
-  padding: 7px 25px;
+  padding: 7px 10px;
   border-bottom: 1px dotted #dddddd;
 }
 .nav-simple > li:last-of-type,
@@ -8188,7 +8188,7 @@ h4 small {
   margin-top: 15px;
   padding-top: 10px;
   padding-bottom: 0;
-  border-top: 1px dotted #DDD;
+  /*border-top: 1px dotted #DDD;*/
 }
 .context-info .nums:before,
 .context-info .nums:after {

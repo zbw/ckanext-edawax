@@ -96,6 +96,17 @@ body {
 
 /********END ZBW BOX***************/
 
+
+.logo > img {
+    height: 70px;
+}
+
+div.account {
+    height: 35px;
+    position: relative;
+    top: -10px;
+}
+
 .zbw-box-full > form > .form-actions{
     margin-left: 0 !important;
     margin-right: 0 !important;
@@ -134,7 +145,10 @@ body {
 
 .module-content:last-child{
     padding-bottom: 0 !important;
+}
 
+.description {
+    margin-top: 0;
 }
 
 .span9 > section > div.module-content,
@@ -180,7 +194,7 @@ body {
 
 
 .account-masthead {
-  height: 42px;
+  height: 35px;
   color: white;
 }
 
@@ -190,7 +204,7 @@ body {
 
 .header-image {
     position: relative !important;
-    height: 42px;
+    height: 35px;
     background: #fff;
     width: 100%;
     left: 0 !important;
@@ -201,7 +215,8 @@ body {
     position: absolute;
     margin:auto;
     left: 8%;
-    top: -42px;
+    top: -35px;
+
 }
 
 .masthead {
@@ -259,6 +274,13 @@ small {
     padding: 5px;
 }
 
+.doi_wrapper {
+    height: 40px;
+}
+
+.doi_wrapper > div {
+    padding-top: 20px;
+}
 /************* End Heading*****************/
 
 
@@ -370,6 +392,18 @@ small {
 .toolbar{
     display: none;
 }
+
+/* Breadcrumbs */
+/*ol.breadcrumb,
+.icon-home,
+.breadcrumb,
+.breadcrumb a {
+    color: white !important;
+    text-shadow: -1px 0 #007bb4, 0 1px #007bb4, 1px 0 #007bb4, 0 -1px #007bb4;
+    font-size: 18px;
+}*/
+
+/**/
 
 
 /********** START GRID ******************/
@@ -574,13 +608,13 @@ li.active > a {
 .nums dl dt{
     font-size: 15px !important;
     font-weight: bold !important;
-    text-align: center;
+    /*text-align: center;*/
 }
 
 .nums dl dd{
-    font-size: 15px !important;
+    font-size: 20px !important;
     font-weight: normal !important;
-    text-align: center;
+    /*text-align: center;*/
     line-height: 1.5 !important;
 }
 
@@ -722,6 +756,7 @@ article.about {
 
 .heading {
     padding-top: 5px;
+    font-weight: bold;
 }
 
 .no-display{
