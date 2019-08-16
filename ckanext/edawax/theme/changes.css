@@ -276,6 +276,8 @@ small {
 
 .doi_wrapper {
     height: 40px;
+    /*float: right !important;
+    width: 50%;*/
 }
 
 .doi_wrapper > div {

@@ -45,29 +45,34 @@
 
   {% block package_description %}
 
+
+{#
 {% if DOI %}
-    <div class="doi_wrapper">
+    <div class="doi_wrapper zbw-box" style="margin-bottom: 0;">
     {% snippet 'package/snippets/doi.html', DOI=DOI, test='false' %}
 {% endif %}
 
 {% if DOI_Test and not DOI and use_testserver %}
-    <div class="doi_wrapper">
+    <div class="doi_wrapper zbw-box" style="margin-bottom: 0;">
     {% snippet 'package/snippets/doi.html', DOI=DOI_Test, test='true' %}
 {% endif %}
 
- {% if submission_id and is_admin %}
-  <div class="zbw-box" style="margin-bottom: 0; padding-top: 5px !important;">
-   <p style="color:grey; text-decoration: underline;">Article Submission ID: {{ submission_id }} </p>
-  </div>
- {% endif %}
+  {% if submission_id and is_admin %}
+    <div class="zbw-box" style="margin-bottom: 0; padding-top:5px !important;">
+     <p style="color:grey; text-decoration: underline;">Article Submission ID: {{ submission_id }} </p>
+    </div>
+  {% else %}
+    <div class="zbw-box" style="display: none;"></div>
+  {% endif %}
 
 {% if DOI %}
   </div>
 {% elif DOI_Test and not DOI and use_testserver %}
   </div>
 {% endif %}
+#}
 
- {% snippet 'package/snippets/authors.html', dara_authors=dara_authors %}
+ {% snippet 'package/snippets/authors.html', dara_authors=dara_authors, pkg=pkg %}
 
 {#
   <div class="authors_title">
