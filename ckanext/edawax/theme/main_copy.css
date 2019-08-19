@@ -8389,7 +8389,7 @@ h4 small {
   font-size: 13px;
   font-weight: bold;
   padding: 0 10px;
-  line-height: 31px;
+  line-height: 31px !important;
 }
 .account-masthead .account ul li a span.username,
 .account-masthead .account ul li a span.text {
