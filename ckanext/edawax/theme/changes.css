@@ -105,8 +105,8 @@ body {
     border-radius: 8px;
 }
 
-.page-header + .module-content > form {
-    border-radius: 0 !important;
+.page-header + .module-content > form#dataset-edit {
+    border-radius: 0 0 8px 8px;
 }
 
 .logo > img {
@@ -525,8 +525,6 @@ h1.page-heading{
 .pagination{
     background-color: white;
     border-radius: 8px;
-    width: 700px;
-
     margin: 0 !important;
 }
 

@@ -15,7 +15,7 @@
 
   <div class="clearfix">
     <h1 class="hide-heading">{{ _('Edit datasets') }}</h1>
-    <div class="primary-bulk span6">
+    <div class="primary-bulk span6" style="margin-top: 5px !important;">
       {% block form %}
         {% if c.page.item_count %}
           <form method="POST" data-module="basic-form" class="zbw-box box-full box-full-no-padding">
@@ -88,7 +88,7 @@
         {% endif %}
       {% endblock %}
       </div>
-    <aside class="tertiary span75">
+    <aside class="tertiary span75" style="margin-top: 5px;">
       {% block tertiary_content %}
 
         {% block search_form %}
