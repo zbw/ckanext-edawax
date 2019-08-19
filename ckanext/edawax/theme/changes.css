@@ -100,8 +100,12 @@ body {
 
 /********END ZBW BOX***************/
 
-#dataset-edit {
+ #dataset-edit {
     border-radius: 8px;
+}
+
+.page-header + .module-content > form {
+    border-radius: 0 !important;
 }
 
 .logo > img {
