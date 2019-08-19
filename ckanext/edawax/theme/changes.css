@@ -90,12 +90,19 @@ body {
     border-radius: 8px 8px 0 0;
 }
 
+.box-full-override {
+    border-radius: 8px !important;
+}
+
 .box-full-no-padding {
     padding: 0 !important;
 }
 
 /********END ZBW BOX***************/
 
+#dataset-edit {
+    border-radius: 8px;
+}
 
 .logo > img {
     height: 70px;
@@ -734,9 +741,15 @@ article.about {
     background-image: linear-gradient(to bottom, rgb(234,138,61) 15px, rgb(235,107,6) 15px) !important;
 }
 
+.btn-primary,
 .split{
     background-image: linear-gradient(to bottom, rgb(39, 117, 165) 15px, rgb(4,93, 151) 15px) !important;
     background-color: rgb(4,93, 151) !important;
+}
+
+.split-red {
+    background-image: linear-gradient(to bottom, #E15F59 15px, #da4f49 15px) !important;
+    background-color: #da4f49 !important;
 }
 
 .package-citation > .container{
