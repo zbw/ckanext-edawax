@@ -76,6 +76,7 @@ body {
     background-color: white;
     margin-bottom: 5px;
     padding: 10px !important;
+    margin-top: 0;
 }
 
 .box-full {
