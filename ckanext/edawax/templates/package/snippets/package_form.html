@@ -11,3 +11,4 @@
         <a class="btn btn-danger pull-left" href="{% url_for controller='package', action='delete', id=data.id %}" data-module="confirm-action" data-module-i18n="{{ locale }}">{% block delete_button_text %}{{ _('Delete') }}{% endblock %}</a>
     {% endif %}
 {% endblock %}
+

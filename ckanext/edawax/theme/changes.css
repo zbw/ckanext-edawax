@@ -318,7 +318,7 @@ small {
 
 .stages {
     border-radius: 8px 8px 0 0;
-    margin: -10px -10px 5px -10px;
+    margin: 0px 0px 0px 0px;
 }
 
 .stages > .active > .highlight {
@@ -840,7 +840,10 @@ article.about {
 }
 
 /********* END Resource***************/
-
+.blank {
+    background-color: transparent !important;
+    padding: 0 !important;
+}
 
 .user-list{
     background-color: white;
