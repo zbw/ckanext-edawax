@@ -845,6 +845,10 @@ article.about {
     padding: 0 !important;
 }
 
+#dataset-search-form-small{
+    height: 55px;
+}
+
 .user-list{
     background-color: white;
     padding: 10px;
@@ -940,7 +944,7 @@ article.about {
 /********* LOGIN *****************/
 .account-masthead .account ul li a{
     padding-top: 10px !important;
-    font-size: 16px !important;
+    font-size: 14px !important;
 }
 
 /*************Search*****************/
