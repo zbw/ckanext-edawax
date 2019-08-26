@@ -22,7 +22,7 @@ Example:
             <img class="journal_img" src="{{ organization.image_display_url or h.url_for_static('/base/images/placeholder-organization.png') }}" width="100%" alt="{{ organization.name }}" />
           </a>
         </div>
-        <h1 class="heading">{{ organization.title or organization.name }}</h1>
+        <h1 class="heading zbw-blue">{{ organization.title or organization.name }}</h1>
         {% if organization.description %}
           <p>
             {{ h.markdown_extract(organization.description, 180) }}
