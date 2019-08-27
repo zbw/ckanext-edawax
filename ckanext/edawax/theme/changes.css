@@ -981,243 +981,90 @@ article.about {
 }
 
 
+/********* Info Rollover **************/
+.about-info.active > a {
+    background-color: #007bb4 !important;
+    border-radius: 7px !important;
+    color: white !important;
+}
+
+
 /************ Responseive Settings *****************/
-@media (max-width: 1045px){
-    .navigation{
-        margin-left: calc((100% - 100px) / 2) !important;
-    }
-}
-
-@media (max-width: 979px) {
-    #zbwfooter, #sitelinks {
-        width: 724px !important;
-    }
-    #zbwfooter > .inline:nth-of-type(2) {
-        width: auto;
-    }
-
-    #sitelinks ul li img {
-        max-width: 60%;
-        width: auto;
-    }
-
-    #zbwfooter .inline li a img  {
-        padding-bottom: 15px;
-    }
-    #zbwfooter{
-        padding: 0;
-    }
-    .module > .module-content > .search-form{
-        height: 80px;
-    }
-    fieldset.author{
-        margin-left: 0px;
-    }
-    /*.navigation{
-        float: left;
-    }*/
-}
 
 /* Mobile Styles */
-@media (max-width: 800px) {
-
-    /*.main{
-        position: relative;
-        top: 70px;
-    }*/
-
-    .toolbar .breadcrumb {
-        font-size: 14px;
+@media (max-width: 770px) {
+    /* fill screen with width*/
+    body {
+        padding-left: 0px !important;
+        padding-right: 0px !important;
     }
-
-    .toolbar .breadcrumb .home{
-        display: inline;
-    }
-
-    .breadcrumb .home .icon-home{
-        font-size: 14px;
-    }
-
-    .searchcontainer{
-        /*top: -35px !important;*/
-    }
-
-    .hero{
-        padding-top: 25px;
-    }
-
-    body {  /* main.css remove here */
-        padding-left: 0px;
-        padding-right: 0px;
-    }
-
-    #content { /* add the 20px here */
-        padding-left: 20px;
-        padding-right: 20px;
-    }
-
-    /* move the account stuff below logo */
-
-    .account-masthead .account {
-        float: right;  /*none;*/
-        /*padding-top: 80px;
-        padding-left: 3%;*/
-        background-color: #007bb4;
-    }
-
     .account-masthead{
-        margin-right:0;
+        margin: 0px !important;
+        padding: 0px !important;
     }
-
-    .account-masthead .container {
-        height: 30px;
+    /* adjust main content width and placement*/
+    [role="main"] .primary{
+        float: none !important;
     }
-
-    .nav-tabs::before, .nav-pills::before, .nav-tabs::after, .nav-pills::after {
-        width: 100%
+    .wrapper {
+        margin: 0px !important;
     }
-
-    /* move the account stuff below logo END */
-
-    /* Header */
-
-    .header-image img {
-        position: absolute;
-        margin: auto;
-        left: 3%;
-        top: -42px;
-    }
-
-    /* TABS, Search field, Tags */
-
-
-
-    .navigation { /* TABS placed left */
-        /*margin-left: 0px !important;*/
-    }
-
-
-    .module-search .heading {
-        width: 26%;
-    }
-
-    .search-input {
-        width: 74%;
-    }
-
-    .module-search > form.search-form {
-        width: 96% !important;
-        padding-left: 2% !important;
-        padding-right: 2% !important;
-    }
-
-    .module-search .tags {
-        margin-left: 0px !important;
-        width: 100%;
-    }
-
-    #zbwfooter, #sitelinks {
+    .span9{
         width: 100% !important;
-        padding-left: 0;
-        padding-right: 0;
-
     }
-
-    #zbwfooter > .inline:nth-of-type(2) {
-        width: auto;
+    /* fix width to screen */
+    .container{
+        width: calc(100% - 10px) !important;
     }
-
-    #sitelinks ul li img {
-        max-width: 60%;
-        width: auto;
-
-    }
-
-    #zbwfooter .inline li:nth-of-type(1) a img {
-        padding-top: 15px;
-    }
-
     #zbwfooter{
-        padding: 0 !important;
+        width: calc(100% - 20px) !important;
+        text-align: center !important;
+    }
+    /* modify side bar */
+    aside.span3{
+        width: 100% !important;
+    }
+    aside.span3 > .module-narrow > .module-content > p {
+        margin-top: 0 !important;
     }
 
-    .module > .module-content > .search-form{
-        height: 110px;
+    /* journal navigation */
+    ul.nav-tabs > li {
+        display: inline-block;
     }
-    .form-actions{
-        text-align: right;
+    .nav-tabs {
+        margin: 0 !important;
     }
-    [role="main"] {
-        padding: 0px;
-        /*top: -40px;*/
-    }
-}
-
-@media (max-width: 640px) {
-    .module-search .heading {
-        width: 35%;
+    a.show-filters{
+        position: relative;
+        top: -52px;
+        left: 150px;
     }
 
-    .search-input {
-        width: 65%;
+    /** Journal infor on resource page **/
+    section.resources,
+    .social,
+    .nums,
+    .top-info{
+        width: calc((100% / 2) - 22px);
     }
 
-    .navigation{
-        margin-left: calc((100% - 5px) / 2) !important;
-    }
-}
-
-@media (max-width: 540px) {
-    .navigation{
-        margin-left: 0px !important;
+    .top-info{
+        float: left;
     }
 
-    .searchcontainer{
-        top: -35px;
+    .social,
+    .nums{
+        float: right;
+        margin-top: 0;
     }
 
-    .searchcontainer{
-        top: -35px !important;
+    /** resource - resource list **/
+    section.resources{
+        float: left;
+        margin-top: 0
     }
 
-    .naviagtion{
-        clear: both !important;
-        float: left !important;
-    }
-
-    [role="main"] {
-        top: -40px;
-    }
-}
-
-@media (max-width: 500px) {
-
-    .module-search .module-content .heading {
-        line-height: 25px !important;
-        margin-top: -3px !important;
-    }
-
-    #zbwfooter {
-        padding: 0;
-    }
-
-    .account-masthead .account {
-        /*position: relative;
-        top: 180px;*/
-        clear: both;
-        width: 100%;
-    }
-    .account-masthead {
-        padding-right: 0px;
-        height: 80px;
-    }
-
-}
-
-@media (max-width: 289px){
-    .module > .module-content > .search-form{
-        height: 130px;
-    }
 }
 
 
