@@ -5810,7 +5810,7 @@ a.tag:hover {
 }
 .secondary .module:first-child,
 .primary .module:first-child {
-  margin-top: 0;
+  /*margin-top: 0;*/
 }
 .no-nav .module:last-child {
   margin-top: 0;
@@ -7050,7 +7050,7 @@ textarea {
 }
 @media (max-width: 768px) {
   .resource-item .btn-group {
-    display: none;
+  /*display: none;*/
   }
 }
 .resource-list.reordering .resource-item {
@@ -8186,7 +8186,7 @@ h4 small {
 }
 .context-info .nums {
   *zoom: 1;
-  margin-top: 15px;
+  /*margin-top: 15px;*/
   padding-top: 10px;
   padding-bottom: 0;
   /*border-top: 1px dotted #DDD;*/
@@ -8390,7 +8390,7 @@ h4 small {
   font-size: 13px;
   font-weight: bold;
   padding: 0 10px;
-  line-height: 31px !important;
+  line-height: 31px;
 }
 .account-masthead .account ul li a span.username,
 .account-masthead .account ul li a span.text {

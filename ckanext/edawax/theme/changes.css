@@ -600,7 +600,7 @@ li.active > a {
 }
 
 .nums{
-    margin-top: 5px !important;
+    margin-top: 5px;
     margin-bottom: 5px !important;
 }
 
@@ -721,7 +721,13 @@ article.about {
     padding-left: 0px !important;
 }
 
-.related_publication,
+.related_publication{
+    background-color: white;
+    border-radius: 8px;
+    padding: 10px;
+    margin-top: 5px;
+    margin-bottom: 0;
+}
 .package-citation,
 #dataset-resources {
     background-color: white;
@@ -811,7 +817,7 @@ article.about {
 /********* START Resource ***************/
 
 .resources {
-    margin-top: 5px !important;
+    margin-top: 5px;
     margin-bottom: 8px !important;
     background-color: white;
     border-radius: 8px;
@@ -887,11 +893,10 @@ article.about {
 }
 
 #zbwfooter {
-    margin-top: 0px !important;
+    margin-top: 0px;
     padding-top: 0px !important;
     padding-left: 0px !important;
     padding-right: 0px !important;
-    text-align: right !important;
     display: 0 !important;
 
     /*position: relative;
@@ -943,8 +948,8 @@ article.about {
 
 /********* LOGIN *****************/
 .account-masthead .account ul li a{
-    padding-top: 10px !important;
-    font-size: 14px !important;
+    padding-top: 10px;
+    font-size: 14px;
 }
 
 /*************Search*****************/
@@ -1018,7 +1023,7 @@ article.about {
     }
     #zbwfooter{
         width: calc(100% - 20px) !important;
-        text-align: center !important;
+        text-align: center;
     }
     /* modify side bar */
     aside.span3{
@@ -1032,6 +1037,11 @@ article.about {
     ul.nav-tabs > li {
         display: inline-block;
     }
+    /* info page navigation */
+    ul.nav-tabs > li.about-info {
+        display: block;
+    }
+
     .nav-tabs {
         margin: 0 !important;
     }
@@ -1042,29 +1052,185 @@ article.about {
     }
 
     /** Journal infor on resource page **/
-    section.resources,
-    .social,
+    .tag_section,
+    .related_publication,
+    section.module.resources,
+    .module.social,
     .nums,
-    .top-info{
+    .top-info {
         width: calc((100% / 2) - 22px);
     }
 
-    .top-info{
+    .related_publication,
+    .top-info {
         float: left;
     }
 
-    .social,
-    .nums{
+    .tag_section{
+        float: right;
+    }
+
+    .tag_section,
+    .related_publication{
+        margin-bottom: 5px;
+    }
+
+    .module.social,
+    .nums {
         float: right;
         margin-top: 0;
     }
 
     /** resource - resource list **/
-    section.resources{
+    section.module.resources {
         float: left;
-        margin-top: 0
+        margin-top: 0;
     }
 
+    /* limit resource description width */
+    li.resource-item > p {
+        width: 400px;
+    }
 }
 
+@media (max-width: 460px) {
+    /*
+     * Stack navigation
+     * Adjust footer (might need to happen at a bigger size?)
+     */
+    .authed > ul > li > a{
+        height: 35px;
+        padding: 0 5px 0 10px !important;
+        line-height: 35px !important;
+     }
 
+    li.resource-item > p {
+        width: 250px;
+    }
+
+    nav.navigation > ul.nav > li > a{
+        padding: 0;
+     }
+
+    .nav.nav-pills > li > a {
+        padding-top: 0;
+        padding-bottom: 0;
+        height: 30px;
+        display: inline-block;
+        width: 100%;
+        line-height: 30px
+    }
+
+    /* stack navigation */
+    [role="main"]{
+        top: 105px;
+    }
+
+    #edawax_nav_search > nav.navigation > ul > li:first-child{
+        float: none;
+        width: calc(100% - 20px);
+        margin-left: 3%;
+    }
+
+    #edawax_nav_search > nav.navigation > ul > li {
+        float: none;
+        width: calc(100% - 10px);
+    }
+
+    /* Footer */
+    #zbwfooter{
+        margin-top: 110px;
+        text-align: none;
+    }
+
+    #zbwfooter > ul.inline > li > a >img {
+        max-width: 100%;
+    }
+
+    /* Adjust "filter results" button */
+    a.show-filters {
+        position: unset;
+    }
+    #organization-datasets-search-form > a.show-filters{
+        position: relative;
+    }
+    #zbwfooter > ul.inline > li {
+        width: 20%;
+    }
+    #zbwfooter > ul#sitelinks > li {
+        width: unset;
+    }
+    /*TODO: adjust user navigation. Needs a better location.*/
+     div.account.avatar.authed{
+        width: 100%;
+        background-color: #007bb4;
+        top: 68px;
+     }
+
+     .header-image + .container{
+        margin-top: 32px;
+     }
+
+    .account-masthead > div.container{
+        width:100% !important;;
+    }
+}
+
+@media (max-width: 375px) {
+    /*
+     * "Filter Results" button placement
+     * Adjust "user" navigation
+     */
+     #edawax_nav_search > nav.navigation > ul > li:first-child{
+        margin-left: 3%;
+     }
+
+     /* adjust footer */
+     #zbwfooter > ul.inline > li {
+        font-size: 8px !important;
+     }
+
+    /* Sort dropdown settings */
+    label {
+        font-size: 12px !important;
+    }
+    select#field-order-by{
+        width: 100px;
+    }
+    div.form-select{
+        margin-bottom: 0;
+    }
+    a.show-filters{
+        margin-left: 5px;
+    }
+
+    /* Resource descriptions on dataset page */
+    li.resource-item > p {
+        width: 150px;
+    }
+
+    .module.resources{
+        margin-top: 0;
+    }
+
+    section.module.resources,
+    .module.social {
+        width: calc((100% / 2) - 22px);
+    }
+
+    a.heading > span:first-child {
+        display:block;
+        width: 50%;
+    }
+
+    /* adjust filter button */
+    a.show-filters{
+       top: -169px;
+       left: 5px;
+    }
+
+    /* TODO: are download buttons important on mobile? */
+
+
+
+}
