@@ -116,7 +116,7 @@ body {
 div.account {
     height: 35px;
     position: relative;
-    top: -10px;
+    /*top: -10px;*/
 }
 
 .zbw-box-full > form > .form-actions{
