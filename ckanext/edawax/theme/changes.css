@@ -693,7 +693,7 @@ article.about {
 
 .primary > article > .module-content > div > h1{
     background-color: white !important;
-    padding: 10px !important;
+    padding: 10px;
     margin-bottom: 0 !important;
     font-family: 'zbw_binaryregular';
     margin-top: 0 !important;
@@ -1093,6 +1093,13 @@ article.about {
     }
 }
 
+@media (max-width: 536px) {
+    a.show-filters{
+        top: -170px;
+        left: 1px;
+    }
+}
+
 @media (max-width: 460px) {
     /*
      * Stack navigation
@@ -1219,14 +1226,19 @@ article.about {
     }
 
     a.heading > span:first-child {
-        display:block;
+        display: block;
         width: 50%;
     }
 
     /* adjust filter button */
     a.show-filters{
-       top: -169px;
-       left: 5px;
+        top: -199px;
+        left: 1px;
+    }
+
+    /* adjust dataset title placement */
+    .primary > article > .module-content > div > h1 {
+        padding-top: 20px;
     }
 
     /* TODO: are download buttons important on mobile? */
