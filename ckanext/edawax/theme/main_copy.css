@@ -8355,7 +8355,7 @@ h4 small {
   *zoom: 1;
   min-height: 30px;
   color: #ffffff;
-  background: #003647 url("../../../base/images/bg.png");
+  /*background: #003647 url("../../../base/images/bg.png");*/
 }
 .account-masthead:before,
 .account-masthead:after {

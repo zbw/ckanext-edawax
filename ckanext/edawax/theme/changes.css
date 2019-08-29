@@ -20,25 +20,25 @@ body {
 
   background-repeat: no-repeat;
     background-attachment: fixed;
-  background-image: linear-gradient(#95abc400 0%,#dde4ec9e 10%,rgb(0, 93, 150, 1) 100%), url('/background_temp.jpg') !important;
+  background-image: linear-gradient(#95abc400 0%,#dde4ec9e 10%,rgb(0, 93, 150, 1) 100%), url('/background_temp.jpg');
     background-size: 100% auto;
 }
 
 .account-masthead{
-    background: #007bb4 !important;
+    background: #007bb4;
 }
 
 .row.wrapper{
-    margin-bottom: 0 !important;
+    margin-bottom: 0;
 }
 
-.span9{
-    width: calc(74% - 00px) !important;
+.primary.span9{
+    width: calc(74% - 0px);
     margin-bottom: 5px;
 }
 
-.span3{
-    width: 25.4% !important;
+.primary + .span3{
+    width: 25.4%;
 }
 
 .zbw-font {
@@ -47,8 +47,8 @@ body {
 
 .zbw-blue {
     /*#008fc3*/
-    color: #007bb4 !important;
-    margin: 0 !important;
+    color: #007bb4;
+    margin: 0;
 }
 
 .right {
@@ -71,11 +71,15 @@ body {
 }
 
 /********* START ZBW BOX**************/
+.search-form .control-order-by.zbw-box{
+    float: none;
+}
+
 .zbw-box {
-    float: none !important;
+    float: none;
     background-color: white;
     margin-bottom: 5px;
-    padding: 10px !important;
+    padding: 10px;
     margin-top: 0;
 }
 
@@ -96,7 +100,7 @@ body {
 }
 
 .box-full-no-padding {
-    padding: 0 !important;
+    padding: 0;
 }
 
 /********END ZBW BOX***************/
@@ -119,17 +123,20 @@ div.account {
     /*top: -10px;*/
 }
 
+/*
 .zbw-box-full > form > .form-actions{
     margin-left: 0 !important;
     margin-right: 0 !important;
 }
+*/
 
-.dataset-item{
-    float: none !important;
+li.dataset-item,
+li.dataset-item:last-of-type{
+    float: none;
     background-color: white;
     border-radius: 8px;
-    margin-bottom: 5px !important;
-    padding: 10px !important;
+    margin-bottom: 5px;
+    padding: 10px;
 }
 
 .nav.nav-pills {
@@ -148,28 +155,30 @@ div.account {
 }
 
 .module-content.box {
-    padding: 10px !important;
+    padding: 10px !important; /* Where is this? */
 }
 
-.module-content:first-child{
-    padding-top: 0 !important;
+div.module-content:first-child,
+header.module-content:first-child{
+    padding-top: 0;
 }
 
 .module-content:last-child{
-    padding-bottom: 0 !important;
+    padding-bottom: 0;
 }
 
 .description {
     margin-top: 0;
 }
 
-.span9 > section > div.module-content,
+div.span9 div.module-content,
+.span9 div.module-content,
 .span9 > article > div.module-content{
-    padding-left: 0px !important;
+    padding-left: 0px;
 }
 
 .span9 > section > div.module-content {
-    padding-top: 0px !important;
+    padding-top: 0px;
 }
 
 
@@ -185,23 +194,23 @@ div.account {
 
 .primary-bulk {
     /*width: 0;*/
-    margin-top: 0 !important;
+    margin-top: 0;
     margin-left: 0;
 }
 
-.span75{
-    width: calc(100% - 469px) !important;
-    margin-left: 9px !important;
+.primary .tertiary.span75{
+    width: calc(100% - 469px);
+    margin-left: 9px;
 }
 
-.hero, .hero::after, [role="main"] {
-    background-color: transparent !important;  /* remove all colors or transparent */
+.hero, .hero::after, div [role="main"] {
+    background-color: transparent;  /* remove all colors or transparent */
 
 }
 
 [role="main"]{
     position: relative;
-    top: -8px;
+    top: -3px;
 }
 
 
@@ -211,16 +220,16 @@ div.account {
 }
 
 .data-viewer-info {
-    padding: 10px !important;
+    padding: 10px;
 }
 
-.header-image {
-    position: relative !important;
+hgroup.header-image {
+    position: relative;
     height: 35px;
     background: #fff;
     width: 100%;
-    left: 0 !important;
-    top: 0 !important;
+    left: 0;
+    top: 0;
 }
 
 .header-image img {
@@ -231,6 +240,7 @@ div.account {
 
 }
 
+/* Is this being used? */
 .masthead {
     background-color: #005d95 !important;
     height: 122px !important;
@@ -316,27 +326,27 @@ small {
     margin: 0;
 }
 
-.stages {
+ol.stages {
     border-radius: 8px 8px 0 0;
     margin: 0px 0px 0px 0px;
 }
 
-.stages > .active > .highlight {
-    background: #007bb4 !important;
+ol.stages > li.active > .highlight {
+    background: #007bb4;
 }
 
-.stages > .complete > .highlight {
-    background: #39a9de !important;
+ol.stages > li.complete > .highlight {
+    background: #39a9de;
 }
-.stages li.complete::before {
-    color: #39a9de !important;
-}
-
-.stages li.active::before {
-    color: #007bb4 !important;
+ol.stages li.complete::before {
+    color: #39a9de;
 }
 
-.stages li.active::after {
+ol.stages li.active::before {
+    color: #007bb4;
+}
+
+ol.stages li.active::after {
     border-top-color: #007bb4;
     border-bottom-color: #007bb4;
 }
@@ -345,13 +355,12 @@ small {
 
 
 /************* START Navigation ********************/
-#edawax_nav_search {
-    float: none !important;
+div#edawax_nav_search {
+    float: none;
     height: 42px;
     color: #007bb4;
     padding-top: 5px;
     /*padding-bottom: 75px;*/
-
 }
 
 #edawax_nav_search > nav.navigation {
@@ -381,7 +390,7 @@ small {
 #edawax_nav_search > nav.navigation > ul > li > form > div > input{
     background-color: rgb(0,123,180);
     border-radius: 8px;
-    text-align: left !important;
+    text-align: left;
     border-style: none;
 }
 
@@ -389,12 +398,12 @@ small {
     /*font-family: 'zbw_binaryregular';*/
     color: white;
     opacity: 1;
-    text-align: left !important;
+    text-align: left;
 }
 
 #edawax_nav_search > nav.navigation > ul > li:hover,
 #edawax_nav_search > nav.navigation > ul > li.active{
-    background-color: #fff !important;
+    background-color: #fff;
 }
 
 #edawax_nav_search > nav.navigation > ul > li > a:hover,
@@ -438,7 +447,7 @@ small {
 }
 
 .media-view-ii > span {
-    display: none !important;
+    display: none;
 }
 
 a.media-view-ii {
@@ -466,7 +475,7 @@ a.media-view-ii:hover {
 
 /** START Journal List **/
 
-
+/*
 .media-grid {
     background: none !important;
     border: 0 !important;
@@ -483,7 +492,7 @@ a.media-view-ii:hover {
 .media-view{
     border: 0;
 }
-
+*/
 .media-heading{
     color: rgb(0,123,180);
 }
@@ -522,10 +531,10 @@ h1.page-heading{
     color: rgb(0, 123, 180);
 }
 
-.pagination{
+.module-content div.pagination{
     background-color: white;
     border-radius: 8px;
-    margin: 0 !important;
+    margin: 0;
 }
 
 .page-header > .content_action {
@@ -534,8 +543,8 @@ h1.page-heading{
     z-index: 100;
 }
 
-.context-info > .module-content {
-    padding: 0px !important;
+.context-info > section.module-content {
+    padding: 0px;
 }
 
 .module-content.page-header.zbw-box{
@@ -564,8 +573,8 @@ li.active > a {
 /************** END Item List ****************/
 
 /************** START Info Panel ******************/
-.wrapper{
-    background-image: none !important;
+div.wrapper{
+    background-image: none;
     border: none;
     -webkit-box-shadow: none;
 
@@ -577,7 +586,7 @@ li.active > a {
 }
 
 .span3 > .module.module-narrow.social {
-    display: block !important;
+    display: block;
 }
 
 .context-info {
@@ -599,35 +608,36 @@ li.active > a {
     /*margin-top: 5px;*/
 }
 
-.nums{
+.module-content > div.nums,
+div.nums{
     margin-top: 5px;
-    margin-bottom: 5px !important;
+    margin-bottom: 5px;
 }
 
-.social {
-    font-size: 15px !important;
-    font-weight: bold !important;
-    color: black !important;
+.social > .module-heading {
+    font-size: 15px;
+    font-weight: bold;
+    color: black;
 }
 
 .social > ul > li {
     border: 0;
     color: black;
-    font-size: 11.9px !important;
-    font-weight: normal !important;
+    font-size: 11.9px;
+    font-weight: normal;
 }
 
-.nums dl dt{
-    font-size: 15px !important;
-    font-weight: bold !important;
+.context-info div.nums > dl > dt{
+    font-size: 15px;
+    font-weight: bold;
     /*text-align: center;*/
 }
 
-.nums dl dd{
-    font-size: 20px !important;
-    font-weight: normal !important;
+.context-info div.nums dl dd{
+    font-size: 20px;
+    font-weight: normal;
     /*text-align: center;*/
-    line-height: 1.5 !important;
+    line-height: 1.5;
 }
 
 .module-heading{
@@ -637,19 +647,23 @@ li.active > a {
 }
 
 .journal_info {
-    display: block !important;
+    display: block;
 }
 
-.info-panel {
-    background-color: transparent !important;
-    padding: 0 !important;
+.module-shallow.info-panel .module-content:first-child{
+    padding-top: 0;
 }
 
-.about-info.active,
-.about-info {
-    background-color: white !important;
-    margin-bottom: 5px !important;
-    border-radius: 8px !important;
+.module.module-narrow.module-shallow.info-panel {
+    background-color: transparent;
+    padding: 0;
+}
+
+.nav-tabs > li.about-info.active,
+.nav-tabs > li.about-info {
+    background-color: white;
+    margin-bottom: 5px;
+    border-radius: 8px;
     border: 0;
 }
 
@@ -657,9 +671,9 @@ li.active > a {
     font-weight: bold;
 }
 
-.about-info > a {
-    border: 0 !important;
-    border-radius: 8px !important;
+.nav-tabs.nav-stacked > li.about-info > a {
+    border: 0;
+    border-radius: 8px;
 }
 
 .about-info > a:hover {
@@ -676,14 +690,13 @@ li.active > a {
 
 
 /************** START Resource Panel ******************/
-
-.embedded-content{
+.embedded-content {
     margin-top: -6px;
 }
 
-.intro {
+/*.intro {
     margin-top: 5px !important;
-}
+}*/
 
 article.about {
     background-color: white;
@@ -691,13 +704,19 @@ article.about {
     padding: 10px;
 }
 
-.primary > article > .module-content > div > h1{
-    background-color: white !important;
+/*  */
+div.context-info .module-content{
+    padding: 0;
+}
+
+/* What/where is this? */
+.primary > article > .module-content > div > h1 {
+    background-color: white;
     padding: 10px;
-    margin-bottom: 0 !important;
+    margin-bottom: 0;
     font-family: 'zbw_binaryregular';
-    margin-top: 0 !important;
-    color: rgb(0, 123, 180) !important;
+    margin-top: 0;
+    color: rgb(0, 123, 180);
     border-radius: 0px 0px 8px 8px;
 }
 
@@ -718,7 +737,7 @@ article.about {
 }
 
 .dataset-content > .authors_title{
-    padding-left: 0px !important;
+    padding-left: 0px;
 }
 
 .related_publication{
@@ -734,31 +753,33 @@ article.about {
     border-radius: 8px;
     padding: 10px;
     margin-top: 5px;
-    margin-bottom: 0 !important;
+    margin-bottom: 0;
 }
 
 .download_all_wrapper{
     width: 100%;
 }
 
-.download_all_wrapper > a {
+.download_all_wrapper > a#download_all {
     /*position: absolute;
     top: 14px;
     right: 18px;*/
     margin-left: calc(100% - 116px);
-    background-color: rgb(235,107,6) !important;
-    background-image: linear-gradient(to bottom, rgb(234,138,61) 15px, rgb(235,107,6) 15px) !important;
+    background-color: rgb(235,107,6);
+    background-image: linear-gradient(to bottom, rgb(234,138,61) 15px, rgb(235,107,6) 15px);
 }
 
-.btn-primary,
-.split{
-    background-image: linear-gradient(to bottom, rgb(39, 117, 165) 15px, rgb(4,93, 151) 15px) !important;
-    background-color: rgb(4,93, 151) !important;
+button.btn-primary,
+a.btn-primary,
+a.split{
+    background-image: linear-gradient(to bottom, rgb(39, 117, 165) 15px, rgb(4,93, 151) 15px);
+    background-color: rgb(4,93, 151);
 }
 
+a.btn-danger,
 .split-red {
-    background-image: linear-gradient(to bottom, #E15F59 15px, #da4f49 15px) !important;
-    background-color: #da4f49 !important;
+    background-image: linear-gradient(to bottom, #E15F59 15px, #da4f49 15px);
+    background-color: #da4f49;
 }
 
 .package-citation > .container{
@@ -770,7 +791,7 @@ article.about {
 }
 
 .label-review {
-    margin-left: 0px !important;
+    margin-left: 0px;
 }
 
 .homepage.layout-1,
@@ -799,41 +820,90 @@ article.about {
 }
 
 .tag_section > ul{
-    background-color: white !important;
-    border: 0 !important;
-    box-shadow: none !important;
-    -webkit-box-shadow: none !important;
+    background-color: white;
+    border: 0;
+    box-shadow: none;
+    -webkit-box-shadow: none;
 
 }
 
-.tag{
-    background-color: rgb(219, 232, 240) !important;
-    border: 0 !important;
-    border-radius: 8px !important;
+a.tag{
+    background-color: rgb(219, 232, 240);
+    border: 0;
+    border-radius: 8px;
+}
+li > a.tag:hover{
+    background-color: #007bb4;
+    border: 0;
+    box-shadow: none;
 }
 
 
 
 /********* START Resource ***************/
 
+/* Rollover */
+.resources > h2.module-heading{
+    padding: 5px;
+}
+
+ul.nav-simple > li{
+    padding-left: 0;
+}
+li.nav-item.active > a {
+    background-color: #007bb4;
+    border-radius: 0;
+}
+
+li.nav-item.active > a::before {
+    display: none;
+}
+
+li.nav-item > a,
+li.nav-aside li a {
+    margin: -7px -10px -7px 0px;
+    padding: 7px 10px 7px 0px;
+}
+
+
+.box-top {
+    border-radius: 8px 8px 0 0;
+}
+
+/*
+.primary > article > .module-content > div > h1 {
+    padding-left: 0 !important;
+}
+*/
+
+.zbw-box.box-bottom {
+    padding-left: 20px;
+}
+
+.media-heading {
+    padding-top: 7px;
+}
+/* end rollover */
+
 .resources {
     margin-top: 5px;
-    margin-bottom: 8px !important;
+    margin-bottom: 5px;
     background-color: white;
     border-radius: 8px;
 }
 
+section.module:first-child .module-heading,
 .resources > h2 {
-    border-radius: 8px !important;
+    border-radius: 8px;
 }
 
-.actions {
-    top: 10px !important;
-    right: 10px !important;
+section.module-resource .actions {
+    top: 10px;
+    right: 10px;
 }
 
-.module-resource {
-    border-radius: 8px !important;
+section.module-resource {
+    border-radius: 8px;
 }
 
 .hide {
@@ -846,9 +916,11 @@ article.about {
 }
 
 /********* END Resource***************/
-.blank {
-    background-color: transparent !important;
-    padding: 0 !important;
+
+/* part of some forms */
+form.blank {
+    background-color: transparent;
+    padding: 0;
 }
 
 #dataset-search-form-small{
@@ -868,8 +940,8 @@ article.about {
     padding: 10px;
 }
 
-.page-header {
-    padding: 0 !important;
+header.page-header {
+    padding: 0;
 }
 
 .no-nav .page-header{
@@ -892,12 +964,12 @@ article.about {
     margin-bottom: 10px;
 }
 
-#zbwfooter {
+div#zbwfooter {
     margin-top: 0px;
-    padding-top: 0px !important;
-    padding-left: 0px !important;
-    padding-right: 0px !important;
-    display: 0 !important;
+    padding-top: 0px;
+    padding-left: 0px;
+    padding-right: 0px;
+    display: 0;
 
     /*position: relative;
     top: -113px;*/
@@ -973,8 +1045,8 @@ article.about {
 }
 
 /************ Before breadcrumbs ******************/
-#content{
-    margin-top: 5px !important;
+#content.container{
+    margin-top: 0px;
 }
 
 
@@ -987,10 +1059,10 @@ article.about {
 
 
 /********* Info Rollover **************/
-.about-info.active > a {
-    background-color: #007bb4 !important;
-    border-radius: 7px !important;
-    color: white !important;
+li.about-info.active > a {
+    background-color: #007bb4;
+    border-radius: 7px;
+    color: white;
 }
 
 
