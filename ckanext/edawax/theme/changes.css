@@ -1072,37 +1072,37 @@ li.about-info.active > a {
 @media (max-width: 770px) {
     /* fill screen with width*/
     body {
-        padding-left: 0px !important;
-        padding-right: 0px !important;
+        padding-left: 0px;
+        padding-right: 0px;
     }
     .account-masthead{
-        margin: 0px !important;
-        padding: 0px !important;
+        margin: 0px;
+        padding: 0px;
     }
     /* adjust main content width and placement*/
-    [role="main"] .primary{
-        float: none !important;
+    [role="main"] div.primary{
+        float: none;
     }
-    .wrapper {
-        margin: 0px !important;
+    .row.wrapper {
+        margin: 0px;
     }
-    .span9{
-        width: 100% !important;
+    .primary.span9{
+        width: 100%;
     }
     /* fix width to screen */
-    .container{
-        width: calc(100% - 10px) !important;
+    div.container{
+        width: calc(100% - 10px);
     }
     #zbwfooter{
-        width: calc(100% - 20px) !important;
+        width: calc(100% - 20px);
         text-align: center;
     }
     /* modify side bar */
-    aside.span3{
-        width: 100% !important;
+    aside.secondary.span3{
+        width: 100%;
     }
     aside.span3 > .module-narrow > .module-content > p {
-        margin-top: 0 !important;
+        margin-top: 0;
     }
 
     /* journal navigation */
@@ -1114,8 +1114,8 @@ li.about-info.active > a {
         display: block;
     }
 
-    .nav-tabs {
-        margin: 0 !important;
+    .page-header .nav.nav-tabs {
+        margin: 0;
     }
     a.show-filters{
         position: relative;
@@ -1177,10 +1177,15 @@ li.about-info.active > a {
      * Stack navigation
      * Adjust footer (might need to happen at a bigger size?)
      */
-    .authed > ul > li > a{
+     .row.wrapper{
+        margin-top: 5px;
+     }
+
+    .account-masthead div.account ul li a,
+    div.authed > ul > li > a{
         height: 35px;
-        padding: 0 5px 0 10px !important;
-        line-height: 35px !important;
+        padding: 0 5px 0 10px;
+        line-height: 35px;
      }
 
     li.resource-item > p {
@@ -1251,7 +1256,7 @@ li.about-info.active > a {
      }
 
     .account-masthead > div.container{
-        width:100% !important;;
+        width:100%;
     }
 }
 
