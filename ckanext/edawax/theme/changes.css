@@ -1065,10 +1065,28 @@ li.about-info.active > a {
     color: white;
 }
 
+li.nav-item:last-child:hover,
+li.nav-item:last-child,
+.resources > .nav > li:last-child > a {
+    border-radius: 0 0 8px 8px;
+}
+
+.nav-item.active{
+background-color: #007bb4
+}
 
 /************ Responseive Settings *****************/
 
 /* Mobile Styles */
+@media (max-width: 950px){
+    header.account-masthead{
+        margin-right: 0;
+    }
+    #zbwfooter{
+        width: 724px;
+    }
+}
+
 @media (max-width: 770px) {
     /* fill screen with width*/
     body {
@@ -1113,6 +1131,16 @@ li.about-info.active > a {
     ul.nav-tabs > li.about-info {
         display: block;
     }
+    /* make info navigate into two columns? */
+    /*
+    .about-info{
+        width: calc((100% / 2) - 2.5px);
+        float: left;
+    }
+    .about-info:nth-child(even){
+        margin-left: 5px;
+    }
+    */
 
     .page-header .nav.nav-tabs {
         margin: 0;
@@ -1124,13 +1152,26 @@ li.about-info.active > a {
     }
 
     /** Journal infor on resource page **/
+    .half_size,
     .tag_section,
-    .related_publication,
+    .related_publication.half_size,
     section.module.resources,
-    .module.social,
     .nums,
     .top-info {
         width: calc((100% / 2) - 22px);
+    }
+
+    .resources + .module.social{
+        width: calc((100% / 2) - 2px);
+    }
+
+    .module.social{
+        width: calc((100% / 2) - 22px);
+    }
+
+    /* if there's no tag section make the related_publication full lenght*/
+    .related_publication.full_size{
+        width: calc(100% - 20px);
     }
 
     .related_publication,
@@ -1163,6 +1204,19 @@ li.about-info.active > a {
     li.resource-item > p {
         width: 400px;
     }
+
+    /* remove .nums top margin */
+    .module-content > div.nums, div.nums{
+        margin-top: 0;
+    }
+
+    div#edawax_nav_search{
+        margin: 0 5px;
+    }
+
+    div.module-content:last-child{
+        padding-bottom: 0;
+    }
 }
 
 @media (max-width: 536px) {
@@ -1188,6 +1242,12 @@ li.about-info.active > a {
         line-height: 35px;
      }
 
+     /* adjust masthead width */
+     header.account-masthead{
+        margin-right: 0;
+        padding-right: 0;
+     }
+
     li.resource-item > p {
         width: 250px;
     }
@@ -1207,7 +1267,8 @@ li.about-info.active > a {
 
     /* stack navigation */
     [role="main"]{
-        top: 105px;
+        top: 110px;
+
     }
 
     #edawax_nav_search > nav.navigation > ul > li:first-child{
@@ -1222,8 +1283,8 @@ li.about-info.active > a {
     }
 
     /* Footer */
-    #zbwfooter{
-        margin-top: 110px;
+    div#zbwfooter{
+        margin-top: 120px;
         text-align: none;
     }
 
@@ -1257,6 +1318,10 @@ li.about-info.active > a {
 
     .account-masthead > div.container{
         width:100%;
+    }
+
+    h1.page-heading {
+        font-size: 16px;
     }
 }
 
@@ -1297,8 +1362,11 @@ li.about-info.active > a {
         margin-top: 0;
     }
 
-    section.module.resources,
-    .module.social {
+    section.module.resources{
+        width: calc((100% / 2) - 22px);
+    }
+
+    .module.social{
         width: calc((100% / 2) - 22px);
     }
 

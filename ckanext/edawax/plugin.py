@@ -297,6 +297,7 @@ class EdawaxPlugin(plugins.SingletonPlugin):
                 'is_admin': helpers.is_admin,
                 'is_edit_page': helpers.is_edit_page,
                 'is_landing_page': helpers.is_landing_page,
+                'tags_exist': helpers.tags_exist,
                 }
 
     def before_map(self, map):

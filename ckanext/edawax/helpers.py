@@ -19,6 +19,12 @@ import ckanext.edawax.robot_list as _list
 from urlparse import urlparse
 
 
+def tags_exist(data):
+    pkg = tk.get_action('package_show')(None, {'id': data.current_package_id})
+    if pkg['tags'] != []:
+        return True
+    return False
+
 def is_landing_page():
     if 'edit' in request.url:
         return False
