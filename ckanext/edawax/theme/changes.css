@@ -45,6 +45,8 @@ body {
     font-family: 'zbw_binaryregular';
 }
 
+.search-form h2.zbw-blue,
+.form-select > h2.zbw-blue,
 .zbw-blue {
     /*#008fc3*/
     color: #007bb4;
@@ -646,8 +648,11 @@ div.nums{
     color: #007bb4; /*rgb(0, 123, 180)*/
 }
 
+.module-shallow .module-content.journal_info:first-child,
 .journal_info {
     display: block;
+    margin-top: 0;
+    padding: 0;
 }
 
 .module-shallow.info-panel .module-content:first-child{
@@ -1036,12 +1041,16 @@ div#zbwfooter {
 }
 
 .search-form{
-    padding-bottom: 0;
+    /*padding-bottom: 0;*/
 }
 
 .module-content > .box-bottom > form > .form-select.control-group.control-order-by.zbw-box > div.search-order,
 .module-content > form > .form-select.control-group.control-order-by.zbw-box > div.search-order {
     float: right;
+}
+
+.embed-btn{
+    margin-right: 15px;
 }
 
 /************ Before breadcrumbs ******************/
