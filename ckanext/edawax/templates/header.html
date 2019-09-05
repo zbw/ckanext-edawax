@@ -4,7 +4,6 @@
 {% resource 'edawax/changes.css' %}
 {% resource 'edawax/font.css' %}
 
-
     {% block header_account %}
         {% resource 'edawax/browser_check.js' %}
         {% resource 'edawax/doi_error.js' %}
@@ -37,6 +36,64 @@
         #}
 
         <!-- <div class="content"> -->
+{% block toolbar %}
+    <div class="toolbar zbw-box">
+      {% block breadcrumb %}
+        {% if self.breadcrumb_content() | trim %}
+          <ol class="breadcrumb">
+            {% snippet 'snippets/home_breadcrumb_item.html' %}
+            {% block breadcrumb_content %}
+                {% set crumbs = h.get_page_type() %}
+                {% if crumbs['text'] != 'Home' %}
+
+                    {% if crumbs['id'] %}
+                        {% if crumbs['controller'] in ['organization', 'package'] %}
+                            <li>{% link_for _('Journals'), controller=crumbs['controller'], action='index' %}
+                        {% else %}
+                            <li>{% link_for _('Users'), controller=crumbs['controller'], action='index' %}
+                        {% endif %}
+
+                        {% if crumbs['parent'] %}
+                            <li>{% link_for crumbs['parent']['title']|truncate(30), controller='organization', action='read', id=crumbs['parent']['id'] %}
+                        {% endif %}
+
+                        {% if crumbs['action'] == 'edit' %}
+                            {% if crumbs['controller'] == 'organization' %}
+                                <li>{% link_for crumbs['resource']['title'], controller=crumbs['controller'], action='read', id=crumbs['id'] %}
+                            {% elif crumbs['controller'] == 'user' %}
+                                <li>{% link_for crumbs['text'], controller=crumbs['controller'], action='read', id=crumbs['id'] %}
+                            {% else %}
+                                <li>{% link_for crumbs['resource']['title'], controller=crumbs['controller'], action='read', id=crumbs['id'] %}
+                            {% endif %}
+                        {% endif %}
+
+                        {% if crumbs['action'] == 'edit' %}
+                            <li>{% link_for _('Edit'), controller=crumbs['controller'], action=crumbs['action'], id=crumbs['id'] %}
+                        {% else %}
+                            <li>{% link_for crumbs['text']|truncate(30), controller=crumbs['controller'], action=crumbs['action'], id=crumbs['id'] %}
+                        {% endif %}
+
+                    {% elif crumbs['resource_id'] %}
+                        <li>{% link_for crumbs['text']|truncate(30), controller=crumbs['controller'], action=crumbs['action'], resource_id=crumbs['resource_id'], id=crumbs['id'] %}
+                    {% else %}
+                        {% if crumbs['action'] == 'new' %}
+                            <li>{% link_for crumbs['text']|truncate(30), controller="read", action=crumbs['action'] %}
+
+                            <li class="active"><a href="">{{ "Create " + crumbs['controller']|replace('package', 'a Dataset')|replace('organization', 'an Organization') }}</a>
+                        {% else %}
+
+                        <li>{% link_for crumbs['text']|truncate(30), controller=crumbs['controller'], action=crumbs['action'] %}
+
+                        {% endif %}
+                    {% endif %}
+
+                {% endif %}
+            {% endblock %}
+          </ol>
+        {% endif %}
+      {% endblock %}
+    </div>
+{% endblock %}
         <div id="edawax_nav_search">
         {# ('blog', _('Blog')), #}
         {% block header_site_navigation %}

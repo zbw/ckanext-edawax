@@ -414,9 +414,33 @@ div#edawax_nav_search {
     border: none;
 }
 
-.toolbar{
-    display: none;
+
+/* Breadcrumbs */
+div.toolbar{
+    /*display: none;*/
+    background-color: transparent;
+    margin-bottom: 0;
 }
+ol.breadcrumb .home .icon-home{
+    font-size: 18px;
+}
+div.toolbar > ol.breadcrumb{
+  color: white;
+  font-size: 16px
+}
+
+div.toolbar > ol.breadcrumb a{
+  color: white;
+}
+
+div.toolbar > ol.breadcrumb a:focus{
+    font-weight: bold;
+}
+
+ol.breadcrumb > li{
+    text-shadow: unset;
+}
+
 
 /* Breadcrumbs */
 /*ol.breadcrumb,

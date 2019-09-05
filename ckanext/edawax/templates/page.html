@@ -32,7 +32,7 @@
             </div>
           {% endblock %}
 
-          {% block toolbar %}
+          {#% block toolbar %}
             <div class="toolbar zbw-box">
               {% block breadcrumb %}
                 {% if self.breadcrumb_content() | trim %}
@@ -43,7 +43,7 @@
                 {% endif %}
               {% endblock %}
             </div>
-          {% endblock %}
+          {% endblock %#}
 
           <div class="row wrapper{% block wrapper_class %}{% endblock %}{% if self.secondary()|trim == '' %} no-nav{% endif %}">
 

@@ -19,6 +19,70 @@ import ckanext.edawax.robot_list as _list
 from urlparse import urlparse
 
 
+def get_page_type():
+    """
+        Get page type to make breadcrumbs
+    """
+    action = request.urlvars['action']
+    controller = request.urlvars['controller']
+    id_ = request.urlvars.get('id', None)
+    resource_id = request.urlvars.get('resource_id', None)
+
+    try:
+        pkg = tk.get_action('{}_show'.format(controller))(None, {'id': id_})
+    except:
+        pkg = None
+
+    try:
+        if 'organization' in pkg.keys():
+            journal = pkg['organization']['title']
+            parent = pkg['organization']
+            resource = pkg
+        else:
+            parent = None
+            resource = None
+    except AttributeError:
+        parent = None
+    resource = pkg
+
+    if action == 'search':
+        text = "Datasets"
+    elif action == 'index':
+        if controller == 'organization':
+            text = 'Journals'
+        else:
+            text = 'Home'
+    elif action == 'read':
+        try:
+            text = pkg['title']
+        except KeyError:
+            # working with user name
+            text = id_
+    elif action == 'resource_read':
+        text = resource_id
+    elif action == 'new':
+        if controller == 'package':
+            text = 'Dataset'
+        elif controller == 'organization':
+            text = 'Journal'
+    elif action == 'dashboard_read':
+        text = 'Stats'
+    elif action in ['dashboard', 'dashboard_datasets', 'dashboard_organizations']:
+        text = 'Dashbaord'
+    elif action == 'edit':
+        if controller == 'user':
+            text = id_
+        else:
+            text = 'Edit'
+    elif action == 'resource_edit':
+        text = 'Edit'
+    #TODO: make this better
+    else:
+        raise ValueError('This wasnt accounted for: {}'.format(action))
+
+    return {'text': text,'action': action, 'controller': controller, 'id': id_, 'resource_id': resource_id, 'parent': parent, 'resource': resource}
+
+
 def tags_exist(data):
     pkg = tk.get_action('package_show')(None, {'id': data.current_package_id})
     if pkg['tags'] != []:
