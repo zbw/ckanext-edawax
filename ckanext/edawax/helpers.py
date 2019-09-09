@@ -76,7 +76,18 @@ def get_page_type():
             text = 'Edit'
     elif action == 'resource_edit':
         text = 'Edit'
-    #TODO: make this better
+    elif action == 'login':
+        text = 'Login'
+    elif action == 'register':
+        text = 'Registration'
+    elif action == 'logged_out_page':
+        text = 'Log Out'
+    elif action == 'request_reset':
+        text = 'Password reset'
+    elif action == 'activity':
+        text = 'Activity'
+    elif action == 'about':
+        text = 'About'
     else:
         raise ValueError('This wasnt accounted for: {}'.format(action))
 

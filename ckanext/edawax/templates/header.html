@@ -82,7 +82,18 @@
                             <li class="active"><a href="">{{ "Create " + crumbs['controller']|replace('package', 'a Dataset')|replace('organization', 'an Organization') }}</a>
                         {% else %}
 
-                        <li>{% link_for crumbs['text']|truncate(30), controller=crumbs['controller'], action=crumbs['action'] %}
+                        {% if crumbs['action'] == 'logged_out_page' %}
+                            <li></li>
+                        {% elif crumbs['action'] == 'register' %}
+                            <li class="active">{{ h.nav_link(_('Registration'), controller='user', action='register') }}</li>
+                        {% elif crumbs['action'] == 'login' %}
+                            <li class="active">{{ h.nav_link(_('Login'), controller='user', action='login') }}</li>
+                        {% elif crumbs['action'] == 'activity' %}
+                        {% else %}
+                            <li>{% link_for crumbs['text']|truncate(30), controller=crumbs['controller'], action=crumbs['action'] %}
+                        {% endif %}
+
+
 
                         {% endif %}
                     {% endif %}
