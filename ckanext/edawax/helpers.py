@@ -34,14 +34,14 @@ def get_page_type():
         pkg = None
 
     try:
-        if 'organization' in pkg.keys() and pkg['organization'] is not None:
+        if 'organization' in pkg.keys():
             journal = pkg['organization']['title']
             parent = pkg['organization']
             resource = pkg
         else:
             parent = None
             resource = None
-    except [AttributeError, TypeError]:
+    except (AttributeError, TypeError):
         parent = None
     resource = pkg
 
