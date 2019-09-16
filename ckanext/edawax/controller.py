@@ -210,7 +210,12 @@ class WorkflowController(PackageController):
                     'User-Agent': 'Ckan-Download-All Agent 1.0',
                     'From': 'f.osorio@zbw.eu'
                 }
-                r = requests.get(url, stream=True, headers=headers)
+                try:
+                    ca_file = config.get('ckan.cert_path')
+                    r = requests.get(url, stream=True, headers=headers,
+                            verify=ca_file)
+                except Exception:
+                    r = requests.get(url, stream=True, headers=headers)
                 if r.status_code != 200:
                     h.flash_error('Failed to download files.')
                     redirect(id)
