@@ -8385,7 +8385,7 @@ h4 small {
   display: block;
   float: left;
 }
-.account-masthead .account ul li a {
+header.account-masthead .account ul li a {
   display: block;
   font-size: 13px;
   font-weight: bold;

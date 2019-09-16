@@ -45,6 +45,7 @@ def get_page_type():
         parent = None
     resource = pkg
 
+    ignore = False
     if action == 'search':
         text = "Datasets"
     elif action == 'index':
@@ -67,7 +68,7 @@ def get_page_type():
             text = 'Journal'
     elif action == 'dashboard_read':
         text = 'Stats'
-    elif action in ['dashboard', 'dashboard_datasets', 'dashboard_organizations']:
+    elif action in ['dashboard', 'dashboard_datasets', 'dashboard_organizations', 'logged_in']:
         text = 'Dashbaord'
     elif action == 'edit':
         if controller == 'user':
@@ -81,17 +82,22 @@ def get_page_type():
     elif action == 'register':
         text = 'Registration'
     elif action == 'logged_out_page':
-        text = 'Log Out'
+        text = 'Logged Out'
+        ignore = True
     elif action == 'request_reset':
         text = 'Password reset'
     elif action == 'activity':
         text = 'Activity'
     elif action == 'about':
         text = 'About'
+    elif action == 'md_page':
+        text = 'Info'
+        ignore = True
     else:
         raise ValueError('This wasnt accounted for: {}'.format(action))
 
-    return {'text': text,'action': action, 'controller': controller, 'id': id_, 'resource_id': resource_id, 'parent': parent, 'resource': resource}
+    return {'text': text,'action': action, 'controller': controller, 'id': id_, 'resource_id': resource_id, 'parent': parent, 'resource': resource,
+         'ignore': ignore}
 
 
 def tags_exist(data):

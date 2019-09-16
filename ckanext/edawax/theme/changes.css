@@ -225,6 +225,10 @@ div.span9 div.module-content,
     padding: 10px;
 }
 
+.data-viewer-error{
+    margin-left: 5px;
+}
+
 hgroup.header-image {
     position: relative;
     height: 35px;

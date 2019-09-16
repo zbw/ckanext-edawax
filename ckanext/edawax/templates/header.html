@@ -37,6 +37,8 @@
 
         <!-- <div class="content"> -->
 {% block toolbar %}
+    {% set crumbs = h.get_page_type() %}
+    {% if crumbs['ignore'] != True %}
     <div class="toolbar zbw-box">
       {% block breadcrumb %}
         {% if self.breadcrumb_content() | trim %}
@@ -45,7 +47,6 @@
             {% block breadcrumb_content %}
                 {% set crumbs = h.get_page_type() %}
                 {% if crumbs['text'] != 'Home' %}
-
                     {% if crumbs['id'] %}
                         {% if crumbs['controller'] in ['organization', 'package'] %}
                             <li>{% link_for _('Journals'), controller=crumbs['controller'], action='index' %}
@@ -81,20 +82,14 @@
 
                             <li class="active"><a href="">{{ "Create " + crumbs['controller']|replace('package', 'a Dataset')|replace('organization', 'an Organization') }}</a>
                         {% else %}
-
-                        {% if crumbs['action'] == 'logged_out_page' %}
-                            <li></li>
-                        {% elif crumbs['action'] == 'register' %}
-                            <li class="active">{{ h.nav_link(_('Registration'), controller='user', action='register') }}</li>
-                        {% elif crumbs['action'] == 'login' %}
-                            <li class="active">{{ h.nav_link(_('Login'), controller='user', action='login') }}</li>
-                        {% elif crumbs['action'] == 'activity' %}
-                        {% else %}
-                            <li>{% link_for crumbs['text']|truncate(30), controller=crumbs['controller'], action=crumbs['action'] %}
-                        {% endif %}
-
-
-
+                            {% if crumbs['action'] == 'register' %}
+                                <li class="active">{{ h.nav_link(_('Registration'), controller='user', action='register') }}</li>
+                            {% elif crumbs['action'] == 'login' %}
+                                <li class="active">{{ h.nav_link(_('Login'), controller='user', action='login') }}</li>
+                            {% elif crumbs['action'] == 'activity' %}
+                            {% else %}
+                                <li>{% link_for crumbs['text']|truncate(30), controller=crumbs['controller'], action=crumbs['action'] %}
+                            {% endif %}
                         {% endif %}
                     {% endif %}
 
@@ -104,6 +99,9 @@
         {% endif %}
       {% endblock %}
     </div>
+    {% else %}
+        <span></span>
+    {% endif %}
 {% endblock %}
         <div id="edawax_nav_search">
         {# ('blog', _('Blog')), #}
