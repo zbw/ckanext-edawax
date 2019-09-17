@@ -742,7 +742,11 @@ div.context-info .module-content{
     padding: 0;
 }
 
-/* What/where is this? */
+/* Journal data in `About` */
+.primary > article > .module-content > div.zbw-box > h1 {
+    padding: 0px;
+}
+
 .primary > article > .module-content > div > h1 {
     background-color: white;
     padding: 10px;
