@@ -93,6 +93,9 @@ def get_page_type():
     elif action == 'md_page':
         text = 'Info'
         ignore = True
+    elif action in ['resources', 'doi']:
+        text = 'Resources'
+        ignore = True
     else:
         raise ValueError('This wasnt accounted for: {}'.format(action))
 

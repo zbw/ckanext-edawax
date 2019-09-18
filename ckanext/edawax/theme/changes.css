@@ -722,6 +722,8 @@ div.nums{
 }
 
 
+
+
 /************** START Resource Panel ******************/
 .embedded-content {
     margin-top: -6px;
@@ -791,6 +793,10 @@ div.context-info .module-content{
     padding: 10px;
     margin-top: 5px;
     margin-bottom: 0;
+}
+
+.package-citation {
+    padding-left: 25px;
 }
 
 .download_all_wrapper{
@@ -1428,7 +1434,4 @@ background-color: #007bb4
     }
 
     /* TODO: are download buttons important on mobile? */
-
-
-
 }
