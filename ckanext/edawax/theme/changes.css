@@ -1437,3 +1437,175 @@ background-color: #007bb4
 }
 
 
+/**********************************/
+/**********************************/
+/* * * Copy of Clemen's style * * */
+/**********************************/
+/**********************************/
+.header-image {
+    /*margin-bottom: 180px;*/
+}
+
+/* Login Button */
+.not-authed {
+    /*margin-top: -9px !important;*/
+}
+
+.box h2 {
+    color: #005d95;
+}
+
+h1 {
+    font-size: 24px;
+}
+
+#field-sitewide-search::placeholder {
+    color: #d0e0ec;
+    font-size: 20px;
+}
+
+.simple-input .field .btn-search {
+    color: #d0e0ec;
+    padding-right: 6px;
+}
+
+
+
+/* Selector fun */
+section.related_publication,
+.primary > article > .module-content > div > div,
+.primary > article > .module-content > div > h1,
+.primary > article > .module-content > div > section#dataset-resources{
+    padding-left: 25px;
+}
+
+.primary > article > .module-content > div > section:last-of-type {
+    /*padding-left: 0px;*/
+}
+
+.primary > article > .module-content > div > section:last-of-type > .tag_section {
+    padding-left: 25px;
+}
+
+.module-content.box.intro {
+    padding: 10px 25px 20px 25px;
+}
+
+.nav-pills > li > a {
+    font-size: 20px;
+}
+
+/* Main Navigation */
+
+/* INFO */
+article.about {
+    padding: 10px 25px 40px 25px;
+}
+
+/* DATASETS */
+
+div.box-top {
+    border-radius: 8px;
+    margin-bottom: 0;
+}
+
+li.dataset-item {
+    padding: 0 20px 20px 25px;
+}
+
+.dataset-heading a {
+    color: #005d95;
+}
+
+.dataset-content + div  { /* the property is set in html but the div has no selector */
+    margin-top: 20px;
+}
+
+#dataset-search-form {
+    min-height: 60px;
+    height: auto;
+    /* setting the filter "formats" more height needed */
+}
+
+.add_data_button {
+    margin-top: 12px;
+}
+
+.search-form .filter-list {
+    padding-left: 20px;
+}
+
+.search-form .filter-list .pill {
+    margin-bottom: 12px;
+    background-color: #007bb4;
+    border-radius: 8px;
+}
+
+#dataset-search-form h2 {
+    line-height: 40px;
+}
+
+/* Side Modules */
+.nav-simple > li {
+    border-top: 1px solid #e5e5e5;
+    border-bottom: none;
+    padding-left: 0px;
+}
+
+.module-footer {
+    padding-left: 10px;
+    padding-right: 2px;
+    border-top: 1px solid #e5e5e5;
+}
+
+.module-heading {
+    font-size: 16px;
+    padding-top: 8px;
+    padding-bottom: 8px;
+    padding-left: 10px;
+}
+
+/* Rollover */
+.nav-item.active > a {
+    background-color: #007bb4;
+    border-radius: 0;
+}
+
+.nav-item.active > a::before {
+    display: none;
+}
+
+.nav-item > a,
+.nav-aside li a {
+    margin: -7px -10px -7px 0px;
+    padding: 7px 10px 7px 0px;
+}
+
+
+.box-top {
+    border-radius: 8px 8px 0 0;
+}
+
+.zbw-box.box-bottom {
+    padding-left: 20px;
+}
+
+.media-heading {
+    padding-top: 7px;
+}
+
+/* WIP */
+p.empty {
+    margin: 0;
+    padding: 10px;
+    min-height: 172px;
+}
+
+.module-content.page-header.box-top + .module-content p.empty {
+    border-radius: 0 0 8px 8px;
+}
+
+.dataset-content p.empty, .zbw-box.box-full p.empty, aside p.empty  {
+    padding: 10px 0 0 0;
+    min-height: 0px;
+}
