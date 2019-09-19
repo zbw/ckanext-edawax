@@ -8879,7 +8879,7 @@ header.account-masthead .account ul li a {
   margin-bottom: 15px;
 }
 .popover {
-  width: auto;
+  width: 300px;
 }
 .popover .popover-title {
   font-weight: bold;
