@@ -1134,6 +1134,12 @@ background-color: #007bb4
     }
 }
 
+@media (max-width: 767px){
+    .toolbar{
+        margin-left: 10px;
+    }
+}
+
 @media (max-width: 770px) {
     /* fill screen with width*/
     body {
@@ -1193,9 +1199,9 @@ background-color: #007bb4
         margin: 0;
     }
     a.show-filters{
-        position: relative;
+        /*position: relative;
         top: -52px;
-        left: 150px;
+        left: 150px;*/
     }
 
     /** Journal infor on resource page **/
@@ -1270,6 +1276,30 @@ background-color: #007bb4
     a.show-filters{
         top: -170px;
         left: 1px;
+    }
+}
+
+@media (max-width: 490px){
+    .search-form .control-order-by .search-order label {
+        display: table-column;
+    }
+}
+
+@media (max-width: 430px){
+    .search-form .control-order-by .search-order select {
+        width: 120px;
+    }
+}
+
+@media (max-width: 360px){
+    div.form-select h2 {
+        font-size: 20px;
+    }
+}
+
+@media (max-width: 320px){
+    div.form-select h2 {
+        font-size: 18px;
     }
 }
 

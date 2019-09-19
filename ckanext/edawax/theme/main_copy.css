@@ -7470,9 +7470,9 @@ textarea {
     color: #fff;
     text-shadow: none;
   }
-  .toolbar .breadcrumb .home {
+  /*.toolbar .breadcrumb .home {
     display: none;
-  }
+  }*/
   .toolbar .breadcrumb a {
     color: #fff;
     text-shadow: none;
