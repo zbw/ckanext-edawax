@@ -93,7 +93,7 @@ def get_page_type():
     elif action == 'md_page':
         text = 'Info'
         ignore = True
-    elif action in ['resources', 'doi']:
+    elif action in ['resources', 'doi', 'new_resource']:
         text = 'Resources'
         ignore = True
     else:

@@ -315,7 +315,7 @@ small {
 
 
 /*********** START Forms********************/
-.dataset-form,
+/*.dataset-form,*/
 .page-heading {
     background-color: white;
     /*border-radius: 8px;*/
@@ -330,6 +330,8 @@ small {
 
 .form-actions {
     margin: 0;
+    background-color: white;
+    border-radius: 8px;
 }
 
 ol.stages {
@@ -977,10 +979,10 @@ form.blank {
 }
 
 .form-horizontal {
-    background-color: white;
+    /*background-color: white;*/
     /*border-radius: 8px;*/
     border-radius: 0 0 8px 8px;
-    padding: 10px;
+    /*padding: 10px;*/
 }
 
 header.page-header {
