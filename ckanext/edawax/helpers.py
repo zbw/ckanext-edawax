@@ -97,7 +97,9 @@ def get_page_type():
         text = 'Resources'
         ignore = True
     else:
-        raise ValueError('This wasnt accounted for: {}'.format(action))
+        text = ''
+        ignore = True
+        #raise ValueError('This wasnt accounted for: {}'.format(action))
 
     return {'text': text,'action': action, 'controller': controller, 'id': id_, 'resource_id': resource_id, 'parent': parent, 'resource': resource,
          'ignore': ignore}
