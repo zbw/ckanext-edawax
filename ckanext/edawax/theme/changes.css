@@ -1311,6 +1311,12 @@ background-color: #007bb4
     }
 }
 
+@media (max-width: 310px){
+    div.form-select h2 {
+        font-size: 14px;
+    }
+}
+
 @media (max-width: 530px) {
     div.account.avatar.authed{
         width: 100%;
