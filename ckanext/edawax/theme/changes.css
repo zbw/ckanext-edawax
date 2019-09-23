@@ -1069,6 +1069,12 @@ div#zbwfooter {
     font-size: 14px;
 }
 
+.authed > ul,
+.authed > ul > li,
+header.account-masthead div.account ul li a{
+    line-height: 35px
+}
+
 /*************Search*****************/
 .masthead .site-search input{
     border: none;
@@ -1301,7 +1307,34 @@ background-color: #007bb4
 
 @media (max-width: 320px){
     div.form-select h2 {
-        font-size: 18px;
+        font-size: 16px;
+    }
+}
+
+@media (max-width: 530px) {
+    div.account.avatar.authed{
+        width: 100%;
+        background-color: #007bb4;
+        top: 70px;
+     }
+
+    .account-masthead > div.container{
+        width:100%;
+    }
+
+    header.account-masthead{
+        margin-right: 0;
+        padding-right: 0;
+    }
+
+    .authed > ul,
+    .authed > ul > li,
+    header.account-masthead div.account ul li a{
+        line-height: 35px
+    }
+
+    .header-image + .container{
+        margin-top: 32px;
     }
 }
 
@@ -1347,7 +1380,6 @@ background-color: #007bb4
     /* stack navigation */
     [role="main"]{
         top: 110px;
-
     }
 
     #edawax_nav_search > nav.navigation > ul > li:first-child{
@@ -1384,16 +1416,10 @@ background-color: #007bb4
     #zbwfooter > ul#sitelinks > li {
         width: unset;
     }
-    /*TODO: adjust user navigation. Needs a better location.*/
-     div.account.avatar.authed{
-        width: 100%;
-        background-color: #007bb4;
-        top: 68px;
-     }
 
-     .header-image + .container{
+    .header-image + .container{
         margin-top: 32px;
-     }
+    }
 
     .account-masthead > div.container{
         width:100%;
@@ -1471,7 +1497,7 @@ background-color: #007bb4
 
 /**********************************/
 /**********************************/
-/* * * Copy of Clemen's style * * */
+/* * *   UPDATE TO THE STYLE  * * */
 /**********************************/
 /**********************************/
 .header-image {
@@ -1500,8 +1526,6 @@ h1 {
     color: #d0e0ec;
     padding-right: 6px;
 }
-
-
 
 /* Selector fun */
 section.related_publication,
