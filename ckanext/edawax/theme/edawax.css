@@ -4,8 +4,8 @@ body,
 [role=main],
 .main,
 .hero {
-  background-color: #f4f4f4;
-  /*background-image: none;*/
+  /*background-color: #f4f4f4;
+  background-image: none;*/
 }
 body,
 input,

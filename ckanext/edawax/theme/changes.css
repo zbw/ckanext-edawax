@@ -16,12 +16,14 @@ body {
   font-size: 14px;
   line-height: 20px;
   color: #444444;
-  background-color: #eeeeee;
+  /*background-color: #eeeeee;*/
 
   background-repeat: no-repeat;
-    background-attachment: fixed;
-  background-image: linear-gradient(#95abc400 0%,#dde4ec9e 10%,rgb(0, 93, 150, 1) 100%), url('/background_temp.jpg');
-    background-size: 100% auto;
+  background-attachment: fixed;
+  /*background-image: linear-gradient(#95abc400 0%,#dde4ec9e 10%,rgb(0, 93, 150, 1) 100%), url('/background_temp.jpg');*/
+  background-color: #005d95;
+  /*background-image: url('/background_temp.jpg');*/
+  background-size: 100% auto;
 }
 
 .account-masthead{
@@ -367,7 +369,7 @@ div#edawax_nav_search {
     float: none;
     height: 42px;
     color: #007bb4;
-    padding-top: 5px;
+    /*padding-top: 5px;*/
     /*padding-bottom: 75px;*/
 }
 
@@ -1526,7 +1528,13 @@ h1 {
 #field-sitewide-search::placeholder {
     color: #d0e0ec;
     font-size: 20px;
+    padding-left: 5px;
+    padding-right: 0px;
 }
+ul.nav-pills > li:first-child:hover{
+    background-color: #007bb4 !important;
+}
+
 
 .simple-input .field .btn-search {
     color: #d0e0ec;
