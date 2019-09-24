@@ -409,6 +409,7 @@ div#edawax_nav_search {
     color: white;
     opacity: 1;
     text-align: left;
+    line-height: 21px;
 }
 
 #edawax_nav_search > nav.navigation > ul > li:hover,
