@@ -33,6 +33,12 @@ def get_page_type():
     except:
         pkg = None
 
+    if resource_id:
+        resource = tk.get_action('resource_show')(None, {'id': resource_id})
+        resource_name = resource['name']
+    else:
+        resource_name = 'Resource'
+
     try:
         if 'organization' in pkg.keys():
             journal = pkg['organization']['title']
@@ -60,7 +66,7 @@ def get_page_type():
             # working with user name
             text = id_
     elif action == 'resource_read':
-        text = resource_id
+        text = resource_name
     elif action == 'new':
         if controller == 'package':
             text = 'Dataset'

@@ -62,20 +62,20 @@ Registered DOIs can be found in the "dara_DOI" field in `package_show` or `resou
 
 * List of all journals
 
-[http://journaldata.zbw.eu/api/3/action/organization_list](http://journaldata.zbw.eu/api/3/action/organization_list)
+[https://journaldata.zbw.eu/api/3/action/organization_list](https://journaldata.zbw.eu/api/3/action/organization_list)
 ![alt text](/journal_list.PNG "Journal List")
 
 * List of all journals with additional fields
 
-[http://journaldata.zbw.eu/api/3/action/organization_list?all_fields=true](http://journaldata.zbw.eu/api/3/action/organization_list?all_fields=true)
+[https://journaldata.zbw.eu/api/3/action/organization_list?all_fields=true](https://journaldata.zbw.eu/api/3/action/organization_list?all_fields=true)
 ![alt text](/journal_list_detials.PNG "Journal List with Details")
 
 * Details for one journal
 
-[http://journaldata.zbw.eu/api/3/action/organization_show?id=sdj](http://journaldata.zbw.eu/api/3/action/organization_show?id=sdj)
+[https://journaldata.zbw.eu/api/3/action/organization_show?id=sdj](https://journaldata.zbw.eu/api/3/action/organization_show?id=sdj)
 ![alt text](/journal_details.PNG "Journal Details")
 
 * Details for one dataset
 
-[http://www.journaldata.zbw.eu/api/3/action/package_show?id=data-management-in-economics-journals-replication-data](http://www.journaldata.zbw.eu/api/3/action/package_show?id=data-management-in-economics-journals-replication-data)
+[https://journaldata.zbw.eu/api/3/action/package_show?id=data-management-in-economics-journals-replication-data](https://journaldata.zbw.eu/api/3/action/package_show?id=data-management-in-economics-journals-replication-data)
 ![alt text](/data_details.PNG "Dataset Details")

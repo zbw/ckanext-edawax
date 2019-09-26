@@ -100,7 +100,7 @@ h2 {
 .nav-pills > .active > a,
 .nav-pills > .active > a:hover,
 .nav-pills > .active > a:focus {
-  color: #505050;
+  /*color: #505050;*/
   font-weight: 400;
   background-color: transparent !important;
 }

@@ -46,7 +46,9 @@
             {% snippet 'snippets/home_breadcrumb_item.html' %}
             {% block breadcrumb_content %}
                 {% set crumbs = h.get_page_type() %}
+                {# is it the homepage? no breadcrumbs #}
                 {% if crumbs['text'] != 'Home' %}
+                    {# Resource exists #}
                     {% if crumbs['id'] %}
                         {% if crumbs['controller'] in ['organization', 'package'] %}
                             <li>{% link_for _('Journals'), controller=crumbs['controller'], action='index' %}
@@ -56,6 +58,10 @@
 
                         {% if crumbs['parent'] %}
                             <li>{% link_for crumbs['parent']['title']|truncate(30), controller='organization', action='read', id=crumbs['parent']['id'] %}
+                        {% endif %}
+
+                        {% if crumbs['action'] == 'resource_read' %}
+                            <li>{% link_for crumbs['resource']['title'], controller='package', action='read', id=crumbs['resource']['name'] %}
                         {% endif %}
 
                         {% if crumbs['action'] == 'edit' %}
@@ -71,12 +77,21 @@
                         {% if crumbs['action'] == 'edit' %}
                             <li>{% link_for _('Edit'), controller=crumbs['controller'], action=crumbs['action'], id=crumbs['id'] %}
                         {% else %}
+
+                        {% if crumbs['resource_id'] %}
+                            <li>{% link_for crumbs['text']|truncate(30), controller=crumbs['controller'], action=crumbs['action'], resource_id=crumbs['resource_id'], id=crumbs['id'] %}
+                        {% else %}
                             <li>{% link_for crumbs['text']|truncate(30), controller=crumbs['controller'], action=crumbs['action'], id=crumbs['id'] %}
                         {% endif %}
 
+                        {% endif %}
+
+
+                    {# existing resource #}
                     {% elif crumbs['resource_id'] %}
                         <li>{% link_for crumbs['text']|truncate(30), controller=crumbs['controller'], action=crumbs['action'], resource_id=crumbs['resource_id'], id=crumbs['id'] %}
                     {% else %}
+                        {# something new #}
                         {% if crumbs['action'] == 'new' %}
                             <li>{% link_for crumbs['text']|truncate(30), controller="read", action=crumbs['action'] %}
 
