@@ -22,7 +22,7 @@ body {
   background-attachment: fixed;
   /*background-image: linear-gradient(#95abc400 0%,#dde4ec9e 10%,rgb(0, 93, 150, 1) 100%), url('/background_temp.jpg');*/
   background-color: #005d95;
-  /*background-image: url('/background_temp.jpg');*/
+  background-image: url('/background.jpg');
   background-size: 100% auto;
 }
 
@@ -158,9 +158,9 @@ li.dataset-item:last-of-type{
     margin: 0;
 }
 
-.module-content.box {
-    padding: 10px !important; /* Where is this? */
-}
+/*.module-content.box {
+    padding: 10px !important; /* Where is this? >> intro page */
+/*}*/
 
 div.module-content:first-child,
 header.module-content:first-child{
@@ -238,6 +238,7 @@ hgroup.header-image {
     width: 100%;
     left: 0;
     top: 0;
+    margin-bottom: 5px;
 }
 
 .header-image img {
@@ -655,9 +656,9 @@ div.nums{
 }
 
 .social > .module-heading {
-    font-size: 15px;
+    font-size: 17px;
     font-weight: bold;
-    color: black;
+    color: #007bb4;
 }
 
 .social > ul > li {
@@ -740,9 +741,9 @@ div.nums{
     margin-top: -6px;
 }
 
-/*.intro {
-    margin-top: 5px !important;
-}*/
+div.module-content.box.intro {
+    padding: 0 25px 25px 25px;
+}
 
 article.about {
     background-color: white;
@@ -999,6 +1000,11 @@ form.blank {
     /*border-radius: 8px;*/
     border-radius: 0 0 8px 8px;
     /*padding: 10px;*/
+}
+
+.dataset-form.form-horizontal:not(#dataset-edit){
+    background-color: white;
+    padding: 10px;
 }
 
 header.page-header {
@@ -1567,8 +1573,10 @@ ul.nav-pills > li:first-child:hover{
 
 .simple-input .field .btn-search {
     color: #d0e0ec;
-    padding-right: 6px;
+    padding-right: 10px;
+    margin-right: 10px;
 }
+
 
 /* Selector fun */
 section.related_publication,
