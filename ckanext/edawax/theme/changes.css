@@ -140,7 +140,7 @@ li.dataset-item:last-of-type{
     background-color: white;
     border-radius: 8px;
     margin-bottom: 5px;
-    padding: 10px;
+    padding: 0 20px 20px 25px;
 }
 
 .nav.nav-pills {
@@ -821,9 +821,11 @@ div.context-info .module-content{
     /*position: absolute;
     top: 14px;
     right: 18px;*/
-    margin-left: calc(100% - 117px);
+    margin-left: calc(100% - 120px);
     background-color: rgb(235,107,6);
     background-image: linear-gradient(to bottom, rgb(234,138,61) 15px, rgb(235,107,6) 15px);
+    padding-left: 13px;
+    padding-right: 13px;
 }
 
 button.btn-primary,
@@ -902,7 +904,7 @@ li > a.tag:hover{
 
 /* Rollover */
 .resources > h2.module-heading{
-    padding: 5px;
+    padding: 10px;
 }
 
 ul.nav-simple > li{
@@ -924,7 +926,7 @@ li.nav-aside li a {
 }
 
 .module.resources > ul.nav-simple > li.nav-item > a{
-    padding-left: 15px;
+    padding-left: 10px;
 }
 
 
@@ -1024,6 +1026,11 @@ header.page-header {
 
 
 /************** START FOOTER ******************/
+/* in cooperation with */
+.coop{
+    margin-bottom: 10px;
+}
+
 .wrapper{
     box-shadow: none;
     border: none;

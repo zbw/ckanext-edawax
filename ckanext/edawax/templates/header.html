@@ -61,14 +61,14 @@
                         {% endif %}
 
                         {% if crumbs['action'] == 'resource_read' %}
-                            <li>{% link_for crumbs['resource']['title'], controller='package', action='read', id=crumbs['resource']['name'] %}
+                            <li>{% link_for crumbs['resource']['title']|truncate(30), controller='package', action='read', id=crumbs['resource']['name'] %}
                         {% endif %}
 
                         {% if crumbs['action'] == 'edit' %}
                             {% if crumbs['controller'] == 'organization' %}
-                                <li>{% link_for crumbs['resource']['title'], controller=crumbs['controller'], action='read', id=crumbs['id'] %}
+                                <li>{% link_for crumbs['resource']['title']|truncate(30), controller=crumbs['controller'], action='read', id=crumbs['id'] %}
                             {% elif crumbs['controller'] == 'user' %}
-                                <li>{% link_for crumbs['text'], controller=crumbs['controller'], action='read', id=crumbs['id'] %}
+                                <li>{% link_for crumbs['text']|truncate(30), controller=crumbs['controller'], action='read', id=crumbs['id'] %}
                             {% else %}
                                 <li>{% link_for crumbs['resource']['title'], controller=crumbs['controller'], action='read', id=crumbs['id'] %}
                             {% endif %}

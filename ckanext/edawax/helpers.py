@@ -75,7 +75,7 @@ def get_page_type():
     elif action == 'dashboard_read':
         text = 'Stats'
     elif action in ['dashboard', 'dashboard_datasets', 'dashboard_organizations', 'logged_in']:
-        text = 'Dashbaord'
+        text = 'Dashboard'
     elif action == 'edit':
         if controller == 'user':
             text = id_
