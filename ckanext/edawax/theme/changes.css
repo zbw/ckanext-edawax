@@ -10,6 +10,10 @@ html {
      */
 }
 
+span{
+    word-wrap: break-word;
+}
+
 body {
   margin: 0;
   font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
@@ -1178,6 +1182,12 @@ h1.registration + form {
     background-color: white;
 }
 
+.citation-export {
+    float: right;
+    margin-top: 10px;
+    padding-right: 10px;
+}
+
 /************ Responseive Settings *****************/
 
 /* Mobile Styles */
@@ -1280,11 +1290,8 @@ h1.registration + form {
         width: calc(100% - 20px);
     }
 
+    .top-info,
     .related_publication,
-    .top-info {
-        float: left;
-    }
-
     .tag_section{
         float: right;
     }
@@ -1293,10 +1300,15 @@ h1.registration + form {
     .related_publication{
         margin-bottom: 5px;
     }
+    .tag_section{
+        margin-top: 0;
+    }
+    .nums{
+        margin-top:5px;
+    }
     .module.social,
     .nums {
-        float: right;
-        margin-top: 0;
+        float: left;
     }
     /** resource - resource list **/
     section.module.resources {
@@ -1304,18 +1316,39 @@ h1.registration + form {
         margin-top: 0;
     }
     /* limit resource description width */
-    li.resource-item > p {
-        width: 400px;
-    }
     /* remove .nums top margin */
     .module-content > div.nums, div.nums{
-        margin-top: 0;
+        margin-top: 5px;
     }
     div#edawax_nav_search{
         margin: 0 5px;
     }
     div.module-content:last-child{
         padding-bottom: 0;
+    }
+    /* unset "explore" buttons */
+    li.resource-item .btn-group{
+        position: unset;
+    }
+    /* move download all button to match above change */
+    .download_all_wrapper > a#download_all{
+        margin-left: 60px;
+    }
+
+    /* floating boxes */
+    #dataset-resources{
+        float: left;
+        width: calc((100% / 2) - 22px);;
+    }
+    .package-citation{
+        float: right;
+    }
+}
+
+@media (max-width: 620px) {
+    div.dropdown{
+        float: none;
+        margin-top: -10px;
     }
 }
 
@@ -1335,6 +1368,12 @@ h1.registration + form {
 @media (max-width: 430px){
     .search-form .control-order-by .search-order select {
         width: 120px;
+    }
+}
+
+@media (max-width: 425px){
+    .media-grid-ii{
+        grid-template-columns:repeat(auto-fill, minmax(calc((100% / 2) - 22px), 1fr));
     }
 }
 
@@ -1477,6 +1516,23 @@ h1.registration + form {
     h1.page-heading {
         font-size: 16px;
     }
+
+    a.btn{
+        padding-left: 6px;
+        padding-right: 6px;
+    }
+    li.resource-item{
+        padding-right: 0;
+    }
+    .download_all_wrapper > a#download_all {
+        width: 97px;
+        padding-left: 0;
+        padding-right: 0;
+    }
+    /* Resource descriptions on dataset page */
+    li.resource-item > p {
+        width: 100px;
+    }
 }
 
 @media (max-width: 375px) {
@@ -1507,11 +1563,6 @@ h1.registration + form {
         margin-left: 5px;
     }
 
-    /* Resource descriptions on dataset page */
-    li.resource-item > p {
-        width: 150px;
-    }
-
     .module.resources{
         margin-top: 0;
     }
@@ -1526,7 +1577,6 @@ h1.registration + form {
 
     a.heading > span:first-child {
         display: block;
-        width: 50%;
     }
 
     /* adjust filter button */
@@ -1539,8 +1589,6 @@ h1.registration + form {
     .primary > article > .module-content > div > h1 {
         padding-top: 20px;
     }
-
-    /* TODO: are download buttons important on mobile? */
 }
 
 
