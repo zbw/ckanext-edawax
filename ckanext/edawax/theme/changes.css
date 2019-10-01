@@ -830,11 +830,12 @@ div.context-info .module-content{
     /*position: absolute;
     top: 14px;
     right: 18px;*/
-    margin-left: calc(100% - 120px);
+    margin-left: calc(100% - 119px);
     background-color: rgb(235,107,6);
     background-image: linear-gradient(to bottom, rgb(234,138,61) 15px, rgb(235,107,6) 15px);
     padding-left: 13px;
     padding-right: 13px;
+    width: 81px;
 }
 
 button.btn-primary,
