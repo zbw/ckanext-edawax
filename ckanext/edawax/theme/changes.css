@@ -63,10 +63,14 @@ body {
     float: right;
 }
 
+#field-sitewide-search::-ms-input-placeholder{
+    font-family: 'zbw_binaryregular';
+    opacity: 1;
+}
 
 #field-sitewide-search::placeholder{
     font-family: 'zbw_binaryregular';
-    font-size: 16px;
+    opacity: 1;
 }
 
 .dashboard-list {
@@ -435,6 +439,7 @@ div.toolbar{
     /*display: none;*/
     background-color: transparent;
     margin-bottom: 0;
+    margin-top: 5px;
 }
 ol.breadcrumb .home .icon-home{
     font-size: 17px;
@@ -474,6 +479,7 @@ ol.breadcrumb > li{
 
 .media-grid-ii{
     display: grid;
+    display: -ms-grid;
     grid-gap: 5px;
     grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
     margin-left: 0;
@@ -655,7 +661,7 @@ div.wrapper{
 
 .module-content > div.nums,
 div.nums{
-    margin-top: 5px;
+    margin-top: 0px;
     margin-bottom: 5px;
 }
 
@@ -799,7 +805,6 @@ div.context-info .module-content{
     background-color: white;
     border-radius: 8px;
     padding: 10px;
-    margin-top: 5px;
     margin-bottom: 0;
     padding-left: 25px;
 }
@@ -809,7 +814,7 @@ div.context-info .module-content{
     border-radius: 8px;
     padding: 10px;
     margin-top: 5px;
-    margin-bottom: 0;
+    margin-bottom: 5px;
 }
 
 .package-citation {
@@ -1129,6 +1134,9 @@ header.account-masthead div.account ul li a{
     margin-top: 4px;
 }
 
+input#field-sitewide-search[type="text"]{
+    font-size: 16px;
+}
 .search-form .filter-list{
     margin: 0 0 0 5px;
 }
@@ -1289,22 +1297,17 @@ h1.registration + form {
     .related_publication.full_size{
         width: calc(100% - 20px);
     }
-
     .top-info,
     .related_publication,
     .tag_section{
         float: right;
     }
-
-    .tag_section,
-    .related_publication{
+    .tag_section{
+        margin-top: 5px;
         margin-bottom: 5px;
     }
-    .tag_section{
-        margin-top: 0;
-    }
     .nums{
-        margin-top:5px;
+        /*margin-top:5px;*/
     }
     .module.social,
     .nums {
@@ -1318,7 +1321,7 @@ h1.registration + form {
     /* limit resource description width */
     /* remove .nums top margin */
     .module-content > div.nums, div.nums{
-        margin-top: 5px;
+        /*margin-top: 5px;*/
     }
     div#edawax_nav_search{
         margin: 0 5px;
@@ -1342,6 +1345,7 @@ h1.registration + form {
     }
     .package-citation{
         float: right;
+        margin-bottom: 5px;
     }
 }
 
@@ -1349,6 +1353,13 @@ h1.registration + form {
     div.dropdown{
         float: none;
         margin-top: -10px;
+    }
+}
+
+@media (max-width: 552px) {
+    .page-header div.content_action {
+        float: left;
+        margin-bottom: 5px;
     }
 }
 
@@ -1362,6 +1373,26 @@ h1.registration + form {
 @media (max-width: 490px){
     .search-form .control-order-by .search-order label {
         display: table-column;
+    }
+}
+
+@media (max-width: 460px){
+    div#edawax_nav_search > nav.navigation > ul > li > form > div > input{
+        text-align: center;
+        color: white;
+        font-size: 16px;
+        opacity: 1;
+    }
+
+    #edawax_nav_search > nav.navigation > ul > li > form > div > input::-ms-input-placeholder{
+        text-align: center;
+        font-size: 16px;
+    }
+
+    #edawax_nav_search > nav.navigation > ul > li > form > div > input::placeholder,
+    #edawax_nav_search > nav.navigation > ul > li > form > div > input::-webkit-input-placeholder{
+        text-align: center;
+        font-size: 16px;
     }
 }
 
@@ -1385,7 +1416,7 @@ h1.registration + form {
 
 @media (max-width: 320px){
     div.form-select h2 {
-        font-size: 16px;
+        font-size: 17px;
     }
 }
 
@@ -1514,7 +1545,7 @@ h1.registration + form {
     }
 
     h1.page-heading {
-        font-size: 16px;
+        font-size: 17px;
     }
 
     a.btn{
@@ -1614,9 +1645,20 @@ h1 {
     font-size: 24px;
 }
 
-#field-sitewide-search::placeholder {
+#field-sitewide-search::placeholder,
+#field-sitewide-search::-ms-input-placeholder{
     color: white;
-    font-size: 20px;
+    font-size: 16px;
+    padding-left: 5px;
+    padding-right: 0px;
+    opacity: 1;
+}
+
+
+#edawax_nav_search > nav.navigation > ul > li > form > div > input::placeholder,
+#edawax_nav_search > nav.navigation > ul > li > form > div > input::-webkit-input-placeholder{
+    color: white;
+    font-size: 16px;
     padding-left: 5px;
     padding-right: 0px;
     opacity: 1;
