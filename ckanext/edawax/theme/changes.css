@@ -1136,7 +1136,7 @@ header.account-masthead div.account ul li a{
 }
 
 input#field-sitewide-search[type="text"]{
-    font-size: 16px;
+    font-size: 17px;
 }
 .search-form .filter-list{
     margin: 0 0 0 5px;
@@ -1300,9 +1300,9 @@ h1.registration + form {
     }
     /** Journal info on resource page **/
     .half_size,
-    .tag_section,
-    .related_publication.half_size,
-    section.module.resources,
+    /*.tag_section,*/
+    /*.related_publication.half_size,*/
+    /*section.module.resources,*/
     .nums,
     .top-info {
         width: calc((100% / 2) - 22px);
@@ -1318,7 +1318,7 @@ h1.registration + form {
 
     /* if there's no tag section make the related_publication full lenght*/
     .related_publication.full_size{
-        width: calc(100% - 20px);
+        /*width: calc(100% - 20px);*/
     }
     .top-info,
     .related_publication,
@@ -1326,7 +1326,7 @@ h1.registration + form {
         float: right;
     }
     .tag_section{
-        margin-top: 5px;
+        margin-top: 0px;
         margin-bottom: 5px;
     }
     .nums{
@@ -1354,7 +1354,7 @@ h1.registration + form {
     }
     /* unset "explore" buttons */
     li.resource-item .btn-group{
-        position: unset;
+        /*position: unset;*/
     }
     /* move download all button to match above change */
     .download_all_wrapper > a#download_all{
@@ -1363,19 +1363,14 @@ h1.registration + form {
 
     /* floating boxes */
     #dataset-resources{
-        float: left;
-        width: calc((100% / 2) - 22px);;
-    }
-    .package-citation{
-        float: right;
-        margin-bottom: 5px;
+        /*float: left;
+        width: calc((100% / 2) - 22px);*/
     }
 }
 
 @media (max-width: 620px) {
-    div.dropdown{
-        float: none;
-        margin-top: -10px;
+    p.description + div.dropdown{
+        position: unset;
     }
 }
 
@@ -1719,7 +1714,7 @@ section.related_publication,
 }
 
 .nav-pills > li > a {
-    font-size: 20px;
+    font-size: 17px;
 }
 
 /* Main Navigation */
