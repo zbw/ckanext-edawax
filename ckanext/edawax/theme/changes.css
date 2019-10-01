@@ -1242,7 +1242,7 @@ h1.registration + form {
         padding-left: 10px;
     }
 
-    section.related_publication.half_size,
+    .package-citation + section.related_publication,
     div.primary > article > .module-content > div > div,
     div.primary > article > .module-content > div > h1,
     div.primary > article > .module-content > div > section#dataset-resources{
@@ -1320,13 +1320,11 @@ h1.registration + form {
     .related_publication.full_size{
         /*width: calc(100% - 20px);*/
     }
-    .top-info,
-    .related_publication,
-    .tag_section{
+    .top-info{
         float: right;
     }
     .tag_section{
-        margin-top: 0px;
+        margin-top: 5px;
         margin-bottom: 5px;
     }
     .nums{
@@ -1370,7 +1368,7 @@ h1.registration + form {
 
 @media (max-width: 620px) {
     p.description + div.dropdown{
-        position: unset;
+        position: unset !important;
     }
 }
 
