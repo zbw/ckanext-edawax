@@ -1680,7 +1680,7 @@ section.related_publication,
 .primary > article > .module-content > div > div,
 .primary > article > .module-content > div > h1,
 .primary > article > .module-content > div > section#dataset-resources{
-    /*padding-left: 25px;*/
+    padding-left: 25px;
 }
 
 .primary > article > .module-content > div > section:last-of-type {
