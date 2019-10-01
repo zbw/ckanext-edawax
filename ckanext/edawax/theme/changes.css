@@ -1213,9 +1213,16 @@ h1.registration + form {
     /*.toolbar{
         margin-left: 10px;
     }*/
+    [class*=span]{
+        float: none;
+        display: block;
+    }
 }
 
 @media (max-width: 770px) {
+    [class*="span"]{
+        float: none !important;
+    }
     /* fill screen with width*/
     body {
         padding-left: 0px;
@@ -1224,6 +1231,13 @@ h1.registration + form {
     .related_publication,
     .tag_section,
     .package-citation{
+        padding-left: 10px;
+    }
+
+    section.related_publication.half_size,
+    div.primary > article > .module-content > div > div,
+    div.primary > article > .module-content > div > h1,
+    div.primary > article > .module-content > div > section#dataset-resources{
         padding-left: 10px;
     }
 
