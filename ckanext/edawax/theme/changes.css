@@ -1220,6 +1220,14 @@ h1.registration + form {
 }
 
 @media (max-width: 770px) {
+    .tag_section > h3 {
+        margin: 0;
+    }
+    ul.tag-list.well{
+        padding: 0 0 5px 0;
+        font-size: 12px;
+    }
+
     [class*="span"]{
         float: none !important;
     }
