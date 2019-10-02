@@ -59,7 +59,7 @@ def get_page_type():
             text = 'Journals'
         else:
             text = 'Home'
-            ignore = True
+            #ignore = True
     elif action == 'read':
         try:
             text = pkg['title']

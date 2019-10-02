@@ -440,7 +440,9 @@ div.toolbar{
     /*display: none;*/
     background-color: transparent;
     margin-bottom: 0;
-    margin-top: 5px;
+    margin-top: 0px;
+    padding-top: 0px;
+    padding-bottom: 5px;
 }
 ol.breadcrumb .home .icon-home{
     font-size: 17px;
@@ -739,13 +741,9 @@ div.nums{
 
 
 /************** END Info Panel ******************/
-
 .bottom-gap {
     margin-bottom: 5px;
 }
-
-
-
 
 /************** START Resource Panel ******************/
 .embedded-content {
@@ -754,6 +752,11 @@ div.nums{
 
 div.module-content.box.intro {
     padding: 0 25px 25px 25px;
+}
+
+div.intro{
+    margin-top: 7% !important;
+    margin-bottom: 7% !important;
 }
 
 article.about {

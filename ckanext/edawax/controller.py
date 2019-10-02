@@ -95,8 +95,13 @@ class WorkflowController(PackageController):
         c.pkg_dict = tk.get_action('package_show')(context, {'id': id})
 
         # validate the DOI, if any
-        doi = c.pkg_dict['dara_Publication_PID']
-        type_ = c.pkg_dict['dara_Publication_PIDType']
+        try:
+            doi = c.pkg_dict['dara_Publication_PID']
+            type_ = c.pkg_dict['dara_Publication_PIDType']
+        except KeyError:
+            doi = ''
+            type_ = ''
+
         if type_ == 'DOI':
             pattern = re.compile('^10.\d{4,9}/[-._;()/:a-zA-Z0-9]+$')
             match = pattern.match(doi)
