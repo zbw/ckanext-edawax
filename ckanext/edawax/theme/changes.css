@@ -827,15 +827,13 @@ div.context-info .module-content{
 }
 
 .download_all_wrapper > a#download_all {
-    /*position: absolute;
-    top: 14px;
-    right: 18px;*/
-    margin-left: calc(100% - 119px);
+    margin-left: calc(100% - 123px);
     background-color: rgb(235,107,6);
     background-image: linear-gradient(to bottom, rgb(234,138,61) 15px, rgb(235,107,6) 15px);
-    padding-left: 13px;
-    padding-right: 13px;
+    padding-left: 11px;
+    padding-right: 11px;
     width: 81px;
+    display: inline;
 }
 
 button.btn-primary,
@@ -1356,7 +1354,7 @@ h1.registration + form {
     }
     /* move download all button to match above change */
     .download_all_wrapper > a#download_all{
-        margin-left: 60px;
+        /*margin-left: 60px;*/
     }
 
     /* floating boxes */
@@ -1367,8 +1365,13 @@ h1.registration + form {
 }
 
 @media (max-width: 620px) {
+    .resource-item .btn-group,
     p.description + div.dropdown{
         position: unset !important;
+    }
+
+    .download_all_wrapper > a#download_all{
+        margin-left: 61px;
     }
 }
 
@@ -1573,8 +1576,8 @@ h1.registration + form {
     }
     .download_all_wrapper > a#download_all {
         width: 97px;
-        padding-left: 0;
-        padding-right: 0;
+        padding-left: 5px;
+        padding-right: 5px;
     }
     /* Resource descriptions on dataset page */
     li.resource-item > p {
