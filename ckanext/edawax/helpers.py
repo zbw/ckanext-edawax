@@ -109,7 +109,15 @@ def get_page_type():
         #raise ValueError('This wasnt accounted for: {}'.format(action))
 
     return {'text': text,'action': action, 'controller': controller, 'id': id_, 'resource_id': resource_id, 'parent': parent, 'resource': resource,
-         'ignore': ignore}
+         'ignore': False}
+
+
+def normal_height():
+    path = request.upath_info
+    pages = ['/', '/user/login', '/user/logged_out_redirect', '/user/reset']
+    if path in pages:
+        return False
+    return True
 
 
 def tags_exist(data):

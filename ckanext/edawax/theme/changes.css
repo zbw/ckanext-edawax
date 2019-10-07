@@ -382,6 +382,10 @@ div#edawax_nav_search {
     /*padding-top: 5px;*/
     /*padding-bottom: 75px;*/
 }
+div#edawax_nav_search.spacing{
+    margin-bottom: 7%;
+}
+
 
 #edawax_nav_search > nav.navigation {
     margin-left: 0;
@@ -443,6 +447,7 @@ div.toolbar{
     margin-top: 0px;
     padding-top: 0px;
     padding-bottom: 5px;
+    height: 22.1px;
 }
 ol.breadcrumb .home .icon-home{
     font-size: 17px;
@@ -754,11 +759,11 @@ div.module-content.box.intro {
     padding: 0 25px 25px 25px;
 }
 
-.spacing,
+/*.spacing,
 div.intro{
     margin-top: 7% !important;
     margin-bottom: 10% !important;
-}
+}*/
 
 article.about {
     background-color: white;
@@ -1061,7 +1066,7 @@ header.page-header {
 }
 
 div#zbwfooter {
-    margin-top: 0px;
+    margin-top: 7%;
     padding-top: 0px;
     padding-left: 0px;
     padding-right: 0px;
@@ -1235,6 +1240,9 @@ h1.registration + form {
 }
 
 @media (max-width: 770px) {
+    div#edawax_nav_search.spacing{
+        margin-bottom: 0;
+    }
     .tag_section > h3 {
         margin: 0;
     }

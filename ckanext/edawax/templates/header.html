@@ -118,7 +118,11 @@
         <span></span>
     {% endif %}
 {% endblock %}
+        {% if h.normal_height() %}
         <div id="edawax_nav_search">
+        {% else %}
+        <div id="edawax_nav_search" class="spacing">
+        {% endif %}
         {# ('blog', _('Blog')), #}
         {% block header_site_navigation %}
                 <nav class="section navigation">
