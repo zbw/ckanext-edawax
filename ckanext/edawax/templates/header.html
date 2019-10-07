@@ -42,7 +42,7 @@
     <div class="toolbar zbw-box">
       {% block breadcrumb %}
         {% if self.breadcrumb_content() | trim %}
-          <ol class="breadcrumb truncate">
+          <ol class="breadcrumb">
             {% snippet 'snippets/home_breadcrumb_item.html' %}
             {% block breadcrumb_content %}
                 {% set crumbs = h.get_page_type() %}
@@ -75,7 +75,11 @@
                         {% endif %}
 
                         {% if crumbs['action'] == 'edit' %}
+                            {% if crumbs['controller'] != 'organization' %}
                             <li>{% link_for _('Edit'), controller=crumbs['controller'], action=crumbs['action'], id=crumbs['id'] %}
+                            {% else %}
+                            <li>{% link_for _('Admin'), controller=crumbs['controller'], action=crumbs['action'], id=crumbs['id'] %}
+                            {% endif %}
                         {% else %}
 
                         {% if crumbs['resource_id'] %}

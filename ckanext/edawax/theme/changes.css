@@ -473,6 +473,10 @@ div.toolbar > ol.breadcrumb a:focus{
 ol.breadcrumb > li{
     text-shadow: unset;
 }
+/* last item should be bold */
+ol.breadcrumb > li:last-child{
+    font-weight: bold;
+}
 
 
 /* Breadcrumbs */

@@ -80,6 +80,8 @@ def get_page_type():
     elif action == 'edit':
         if controller == 'user':
             text = id_
+        elif controller == 'organization':
+            text = 'Admin'
         else:
             text = 'Edit'
     elif action == 'resource_edit':
@@ -103,6 +105,9 @@ def get_page_type():
     elif action in ['resources', 'doi', 'new_resource']:
         text = 'Resources'
         ignore = True
+    elif action in ['bulk_process', 'members']:
+        text = 'Admin'
+        action = 'edit'
     else:
         text = ''
         ignore = True
