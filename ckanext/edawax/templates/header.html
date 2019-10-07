@@ -42,7 +42,7 @@
     <div class="toolbar zbw-box">
       {% block breadcrumb %}
         {% if self.breadcrumb_content() | trim %}
-          <ol class="breadcrumb">
+          <ol class="breadcrumb truncate">
             {% snippet 'snippets/home_breadcrumb_item.html' %}
             {% block breadcrumb_content %}
                 {% set crumbs = h.get_page_type() %}
