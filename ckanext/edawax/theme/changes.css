@@ -754,9 +754,10 @@ div.module-content.box.intro {
     padding: 0 25px 25px 25px;
 }
 
+.spacing,
 div.intro{
     margin-top: 7% !important;
-    margin-bottom: 7% !important;
+    margin-bottom: 10% !important;
 }
 
 article.about {
@@ -1014,6 +1015,15 @@ form.blank {
     /*border-radius: 8px;*/
     border-radius: 0 0 8px 8px;
     /*padding: 10px;*/
+}
+
+.reset-request {
+    background-color: white;
+    border-radius: 8px;
+}
+.reset-request > h1{
+    padding-left: 25px;
+    border-radius: 8px;
 }
 
 .dataset-form.form-horizontal:not(#dataset-edit){

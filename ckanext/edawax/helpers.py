@@ -59,7 +59,7 @@ def get_page_type():
             text = 'Journals'
         else:
             text = 'Home'
-            #ignore = True
+            ignore = True
     elif action == 'read':
         try:
             text = pkg['title']
@@ -274,19 +274,19 @@ def show_review_button(pkg):
 def show_publish_button(pkg):
     if not isinstance(pkg, dict):
         return False
-    return check_journal_role(pkg, 'admin') and in_review(pkg) == 'true'
+    return (check_journal_role(pkg, 'admin') or has_hammer()) and in_review(pkg) == 'true'
 
 
 def show_retract_button(pkg):
     if not isinstance(pkg, dict):
         return False
-    return check_journal_role(pkg, 'admin') and not pkg.get('private', True)
+    return (check_journal_role(pkg, 'admin') or has_hammer())and not pkg.get('private', True)
 
 
 def show_reauthor_button(pkg):
     if not isinstance(pkg, dict):
         return False
-    return check_journal_role(pkg, 'admin') and in_review(pkg) == 'true'
+    return (check_journal_role(pkg, 'admin') or has_hammer()) and in_review(pkg) == 'true'
 
 
 def res_abs_url(res):

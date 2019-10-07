@@ -5615,9 +5615,9 @@ a.tag:hover {
   margin-bottom: 0;
 }
 .module:first-child .module-heading {
-  -webkit-border-radius: 3px 0 0 0;
-  -moz-border-radius: 3px 0 0 0;
-  border-radius: 3px 0 0 0;
+  -webkit-border-radius: 8px 0 0 0;
+  -moz-border-radius: 8px 0 0 0;
+  border-radius: 8px 0 0 0;
   border-top-width: 0;
 }
 .module:last-child {
