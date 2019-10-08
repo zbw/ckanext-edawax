@@ -1367,6 +1367,10 @@ h1.registration + form {
         width: calc((100% / 2) - 22px);
     }
 
+    .nums{
+        padding-right: 10px;
+    }
+
     .resources + .module.social{
         width: calc((100% / 2) - 2px);
     }
@@ -1471,12 +1475,11 @@ h1.registration + form {
 }
 
 @media (max-width: 460px){
+    div#edawax_nav_search > nav.navigation > ul > li:nth-last-child(-n+2),
     div#edawax_nav_search > nav.navigation > ul > li{
-        margin-left: 1.5%;
+        margin-left: 5px;
     }
-    #edawax_nav_search > nav.navigation > ul > li:nth-last-child(-n+2){
-        margin-left: 0;
-    }
+
     div#edawax_nav_search > nav.navigation > ul > li > form > div > input{
         text-align: center;
         color: white;
@@ -1498,6 +1501,12 @@ h1.registration + form {
         text-align: center;
         font-size: 16px;
     }
+
+    div.search-form > h2{
+        padding: 0 !important;
+        font-size: 20px;
+        line-height: 40px;
+    }
 }
 
 @media (max-width: 430px){
@@ -1513,6 +1522,18 @@ h1.registration + form {
 @media (max-width: 425px){
     .media-grid-ii{
         grid-template-columns:repeat(auto-fill, minmax(calc((100% / 2) - 22px), 1fr));
+    }
+}
+
+@media (max-width: 400px){
+    div.form-select h2{
+        font-size: 20px;
+    }
+
+    select {
+        height: 11px;
+        line-height: 10px;
+        font-size: 10px;
     }
 }
 
