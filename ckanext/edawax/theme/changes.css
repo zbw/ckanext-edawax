@@ -678,6 +678,10 @@ div.wrapper{
     /*margin-top: 5px;*/
 }
 
+.nums{
+    padding-right: 0;
+}
+
 .module-content > div.nums,
 div.nums{
     margin-top: 0px;
