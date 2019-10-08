@@ -6445,8 +6445,9 @@ textarea {
 .simple-input .field input {
   width: 100%;
   height: auto;
-  margin: 0 -7px;
-  padding: 7px 0px 7px 5px;
+  /*margin: 0 -7px;*/
+  margin: 0;
+  padding: 7px 0px 7px 0px;
 }
 .simple-input .field .btn-search {
   position: absolute;

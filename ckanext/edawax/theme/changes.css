@@ -39,12 +39,14 @@ body {
 }
 
 .primary.span9{
-    width: calc(74% - 0px);
+    /*width: calc(74% - 0px);*/
+    width: calc(75% - 0px);
     margin-bottom: 5px;
 }
 
 .primary + .span3{
-    width: 25.4%;
+    /*width: 25.4%;*/
+    width: 24%;
 }
 
 .zbw-font {
@@ -1161,6 +1163,8 @@ header.account-masthead div.account ul li a{
 
 input#field-sitewide-search[type="text"]{
     font-size: 17px;
+    padding-left: 5px;
+    width: calc(100% - 5px);
 }
 .search-form .filter-list{
     margin: 0 0 0 5px;
@@ -1731,6 +1735,13 @@ h1 {
 ul.nav-pills > li:first-child:hover{
     background-color: #007bb4 !important;
 }
+#edawax_nav_search > nav.navigation > ul > li:first-child{
+    margin-left: 0;
+}
+.nav-pills li:nth-last-child(-n+2) {
+    margin-left: 1.5% !important;;
+}
+
 
 
 .simple-input .field .btn-search {
