@@ -6964,7 +6964,7 @@ textarea {
   line-height: 1;
 }
 .dataset-item {
-  border-bottom: 1px dotted #dddddd;
+  /*border-bottom: 1px dotted #dddddd;*/
   padding-bottom: 20px;
   margin-bottom: 20px;
 }
@@ -9202,7 +9202,7 @@ header.account-masthead .account ul li a {
   display: none;
 }
 table {
-  table-layout: fixed;
+  /*table-layout: fixed;*/
 }
 thead th {
   vertical-align: top;
