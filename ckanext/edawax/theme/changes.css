@@ -601,6 +601,7 @@ h1.page-heading{
     color: rgb(0, 123, 180);
 }
 
+.module-content + div.pagination,
 .module-content div.pagination{
     background-color: white;
     border-radius: 8px;
