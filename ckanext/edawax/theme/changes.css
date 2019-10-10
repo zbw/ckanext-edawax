@@ -1371,8 +1371,13 @@ h1.registration + form {
         padding-right: 10px;
     }
 
+    .resources{
+        width: calc((100% / 2) - 22px);
+    }
+
     .resources + .module.social{
         width: calc((100% / 2) - 2px);
+        float: right;
     }
 
     .module.social{
