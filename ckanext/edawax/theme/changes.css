@@ -1371,7 +1371,7 @@ h1.registration + form {
         padding-right: 10px;
     }
 
-    .resources{
+    .resources:not(#dataset-resources){
         width: calc((100% / 2) - 22px);
     }
 
