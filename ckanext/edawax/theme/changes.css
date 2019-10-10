@@ -1474,41 +1474,6 @@ h1.registration + form {
     }
 }
 
-@media (max-width: 460px){
-    div#edawax_nav_search > nav.navigation > ul > li:nth-last-child(-n+2),
-    div#edawax_nav_search > nav.navigation > ul > li{
-        margin-left: 5px;
-    }
-
-    div#edawax_nav_search > nav.navigation > ul > li > form > div > input{
-        text-align: center;
-        color: white;
-        font-size: 16px;
-        opacity: 1;
-    }
-
-    div#edawax_nav_search > nav.navigation > ul > li > form > div > input{
-        /*padding-right: 3px;*/
-    }
-
-    #edawax_nav_search > nav.navigation > ul > li > form > div > input::-ms-input-placeholder{
-        text-align: center;
-        font-size: 16px;
-    }
-
-    #edawax_nav_search > nav.navigation > ul > li > form > div > input::placeholder,
-    #edawax_nav_search > nav.navigation > ul > li > form > div > input::-webkit-input-placeholder{
-        text-align: center;
-        font-size: 16px;
-    }
-
-    div.search-form > h2{
-        padding: 0 !important;
-        font-size: 20px;
-        line-height: 40px;
-    }
-}
-
 @media (max-width: 430px){
     .search-form .control-order-by .search-order select {
         width: 120px;
@@ -1583,6 +1548,38 @@ h1.registration + form {
 }
 
 @media (max-width: 460px) {
+    div#edawax_nav_search > nav.navigation > ul > li:nth-last-child(-n+2),
+    div#edawax_nav_search > nav.navigation > ul > li{
+        margin-left: 5px;
+    }
+
+    div#edawax_nav_search > nav.navigation > ul > li > form > div > input{
+        text-align: center;
+        color: white;
+        font-size: 16px;
+        opacity: 1;
+    }
+
+    div#edawax_nav_search > nav.navigation > ul > li > form > div > input{
+        /*padding-right: 3px;*/
+    }
+
+    #edawax_nav_search > nav.navigation > ul > li > form > div > input::-ms-input-placeholder{
+        text-align: center;
+        font-size: 16px;
+    }
+
+    #edawax_nav_search > nav.navigation > ul > li > form > div > input::placeholder,
+    #edawax_nav_search > nav.navigation > ul > li > form > div > input::-webkit-input-placeholder{
+        text-align: center;
+        font-size: 16px;
+    }
+
+    div.search-form > h2{
+        padding: 0 !important;
+        font-size: 20px;
+        line-height: 40px;
+    }
     /*
      * Stack navigation
      * Adjust footer (might need to happen at a bigger size?)
@@ -1605,7 +1602,7 @@ h1.registration + form {
      }
 
     li.resource-item > p {
-        width: 250px;
+        /*width: 250px;*/
     }
 
     nav.navigation > ul.nav > li > a{
@@ -1691,7 +1688,7 @@ h1.registration + form {
     }
     /* Resource descriptions on dataset page */
     li.resource-item > p {
-        width: 100px;
+        /*width: 100px;*/
     }
 }
 
