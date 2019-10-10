@@ -1511,6 +1511,10 @@ h1.registration + form {
     div.form-select h2 {
         font-size: 20px;
     }
+
+    table.table-condensed{
+        table-layout: fixed;
+    }
 }
 
 @media (max-width: 320px){
