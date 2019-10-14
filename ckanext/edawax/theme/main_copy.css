@@ -6772,7 +6772,7 @@ textarea {
 }
 @media (max-width: 768px) {
   .stages li .highlight {
-    text-indent: -9999px;
+    /*text-indent: -9999px;*/
   }
 }
 .stages li.active .highlight {

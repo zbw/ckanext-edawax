@@ -1493,6 +1493,18 @@ h1.registration + form {
     .media-grid-ii{
         grid-template-columns:repeat(auto-fill, minmax(calc((100% / 2) - 22px), 1fr));
     }
+
+    #authors > .author{
+        margin-left: 0px;
+    }
+
+    #authors > .author > div > a.remove_author{
+        margin-left: 0px;
+    }
+
+    #s2id_field-tags{
+        width: 200px !important;
+    }
 }
 
 @media (max-width: 400px){
