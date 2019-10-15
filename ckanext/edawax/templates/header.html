@@ -70,7 +70,7 @@
                             {% elif crumbs['controller'] == 'user' %}
                                 <li>{% link_for crumbs['text']|truncate(30), controller=crumbs['controller'], action='read', id=crumbs['id'] %}
                             {% else %}
-                                <li>{% link_for crumbs['resource']['title'], controller=crumbs['controller'], action='read', id=crumbs['id'] %}
+                                <li>{% link_for crumbs['resource']['title']|truncate(30), controller=crumbs['controller'], action='read', id=crumbs['id'] %}
                             {% endif %}
                         {% endif %}
 

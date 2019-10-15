@@ -6348,7 +6348,7 @@ textarea {
   }
 }
 .form-horizontal .control-label {
-  width: 120px;
+  /*width: 120px;*/
 }
 @media (min-width: 768px) {
   .form-horizontal .controls {
@@ -6737,8 +6737,8 @@ textarea {
 }
 .stages li.complete:after {
   border-color: rgba(197, 226, 196, 0);
-  border-top-color: #c5e2c4;
-  border-bottom-color: #c5e2c4;
+  border-top-color: #39a9de;
+  border-bottom-color: #39a9de;
 }
 .stages.stage-3 li.complete:first-child:after {
   content: none;
