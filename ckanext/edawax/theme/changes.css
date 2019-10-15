@@ -767,6 +767,10 @@ div.nums{
 }
 
 /************** START Resource Panel ******************/
+.resource-list{
+    overflow: hidden;
+}
+
 .embedded-content {
     margin-top: -6px;
 }
@@ -858,11 +862,13 @@ div.context-info .module-content{
 }
 
 .download_all_wrapper > a#download_all {
-    margin-left: calc(100% - 124px);
+    /*margin-left: calc(100% - 124px);*/
     background-color: rgb(235,107,6);
     background-image: linear-gradient(to bottom, rgb(234,138,61) 15px, rgb(235,107,6) 15px);
     padding-left: 12px;
     padding-right: 12px;
+    float: right;
+    margin-right: 10px;
 }
 
 button.btn-primary,
@@ -1465,12 +1471,14 @@ h1.registration + form {
     }
 
     .download_all_wrapper > a#download_all{
-        margin-left: 61px;
+        float: none;
+        margin-left: 60px;
     }
 
     .form-horizontal .controls{
         margin-left: 0;
     }
+
 }
 
 @media (max-width: 552px) {
