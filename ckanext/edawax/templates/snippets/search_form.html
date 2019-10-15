@@ -40,7 +40,7 @@
         </div>
 
         {% block page_primary_action %}
-          {% if h.check_access('package_create') and 'dataset' not in request.url %}
+          {% if h.check_access('package_create', {'owner_org': c.group_dict.id}) and 'dataset' not in request.url %}
           {% set group = c.group_dict.id or None %}
             <div class="page_primary_action add_data_button">
               {% link_for _('Add Dataset'), controller='package', action='new', group=group, class_='btn btn-primary split', icon='plus-sign-alt' %}
