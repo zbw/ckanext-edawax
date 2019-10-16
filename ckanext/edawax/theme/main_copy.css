@@ -1659,7 +1659,7 @@ legend + .control-group {
 }
 .form-horizontal .control-label {
   float: left;
-  width: 160px;
+  /*width: 160px;*/
   padding-top: 5px;
   text-align: right;
 }
@@ -6348,7 +6348,7 @@ textarea {
   }
 }
 .form-horizontal .control-label {
-  /*width: 120px;*/
+  width: 120px;
 }
 @media (min-width: 768px) {
   .form-horizontal .controls {
