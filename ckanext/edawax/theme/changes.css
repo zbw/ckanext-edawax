@@ -27,7 +27,10 @@ body {
   /*background-image: linear-gradient(#95abc400 0%,#dde4ec9e 10%,rgb(0, 93, 150, 1) 100%), url('/background_temp.jpg');*/
   background-color: #005d95;
   background-image: url('/background.jpg');
-  background-size: 100% auto;
+  background-size: cover;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
 }
 
 .account-masthead{
@@ -758,8 +761,6 @@ div.nums{
 .about-info > a:hover {
     font-weight: bold;
 }
-
-
 
 /************** END Info Panel ******************/
 .bottom-gap {
