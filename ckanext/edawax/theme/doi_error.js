@@ -53,7 +53,7 @@ function createLink(){
 }
 
 
-if (checkErrorTop() and checkPageDisplay()){
+if (checkErrorTop() && checkPageDisplay()){
     var pub = document.getElementById('publication');
     var target = pub.childNodes[1].childNodes[7].childNodes[1];
 
@@ -65,7 +65,7 @@ if (checkErrorTop() and checkPageDisplay()){
 }
 
 
-if (checkErrorMid() and checkPageDisplay()){
+if (checkErrorMid() && checkPageDisplay()){
     var message_container = document.getElementsByClassName('error-explanation');
     var list = message_container[0].childNodes[3];
     var item = list.childNodes[1];
