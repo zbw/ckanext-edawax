@@ -6226,7 +6226,7 @@ a.tag:hover {
 }
 .btn,
 label {
-  font-weight: bold;
+  font-weight: 500;
 }
 .btn-rounded {
   -webkit-border-radius: 100px;
