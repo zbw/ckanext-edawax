@@ -2,14 +2,6 @@
 body, input, button, select, textarea, #dara_, p{
     font-family: "Helvetica Neue", Helvetica, Arial, sans-serif !important;
 }
-
-html {
-    /*height: 100%;*/
-    /* Using this makes the height the size of the browser
-     * not the height of the page.
-     */
-}
-
 span{
     word-wrap: break-word;
 }
@@ -20,11 +12,8 @@ body {
   font-size: 14px;
   line-height: 20px;
   color: #444444;
-  /*background-color: #eeeeee;*/
-
   background-repeat: no-repeat;
   background-attachment: fixed;
-  /*background-image: linear-gradient(#95abc400 0%,#dde4ec9e 10%,rgb(0, 93, 150, 1) 100%), url('/background_temp.jpg');*/
   background-color: #005d95;
   background-image: url('/background.jpg');
   background-size: cover;
@@ -42,13 +31,11 @@ body {
 }
 
 .primary.span9{
-    /*width: calc(74% - 0px);*/
     width: calc(75% - 0px);
     margin-bottom: 5px;
 }
 
 .primary + .span3{
-    /*width: 25.4%;*/
     width: 24%;
 }
 
@@ -59,7 +46,6 @@ body {
 .search-form h2.zbw-blue,
 .form-select > h2.zbw-blue,
 .zbw-blue {
-    /*#008fc3*/
     color: #007bb4;
     margin: 0;
 }
@@ -137,15 +123,7 @@ body {
 div.account {
     height: 35px;
     position: relative;
-    /*top: -10px;*/
 }
-
-/*
-.zbw-box-full > form > .form-actions{
-    margin-left: 0 !important;
-    margin-right: 0 !important;
-}
-*/
 
 li.dataset-item,
 li.dataset-item:last-of-type{
@@ -166,14 +144,9 @@ li.dataset-item:last-of-type{
 }
 
 .module-content{
-    /*width:100%;*/
     padding: 0;
     margin: 0;
 }
-
-/*.module-content.box {
-    padding: 10px !important; /* Where is this? >> intro page */
-/*}*/
 
 div.module-content:first-child,
 header.module-content:first-child{
@@ -210,7 +183,6 @@ div.span9 div.module-content,
 }
 
 .primary > article > .module-content > div > div.primary-bulk {
-    /*width: 0;*/
     margin-top: 0;
     margin-left: 0;
     padding-left: 0;
@@ -301,7 +273,6 @@ hgroup.header-image {
 
 [role="main"] {
     padding: 0px;
-    /*top: -80px;*/
 }
 
 
@@ -321,8 +292,6 @@ small {
 
 .doi_wrapper {
     height: 40px;
-    /*float: right !important;
-    width: 50%;*/
 }
 
 .doi_wrapper > div {
@@ -332,10 +301,8 @@ small {
 
 
 /*********** START Forms********************/
-/*.dataset-form,*/
 .page-heading {
     background-color: white;
-    /*border-radius: 8px;*/
     padding: 10px;
 }
 
@@ -384,8 +351,6 @@ div#edawax_nav_search {
     float: none;
     height: 42px;
     color: #007bb4;
-    /*padding-top: 5px;*/
-    /*padding-bottom: 75px;*/
 }
 div#edawax_nav_search.spacing{
     margin-bottom: 7%;
@@ -429,7 +394,6 @@ div#edawax_nav_search.spacing{
 
 #edawax_nav_search > nav.navigation > ul > li > form > div > input::placeholder,
 #edawax_nav_search > nav.navigation > ul > li > form > div > input::-webkit-input-placeholder{
-    /*font-family: 'zbw_binaryregular';*/
     color: white;
     opacity: 1;
     text-align: left;
@@ -450,7 +414,6 @@ div#edawax_nav_search.spacing{
 
 /* Breadcrumbs */
 div.toolbar{
-    /*display: none;*/
     background-color: transparent;
     margin-bottom: 0;
     margin-top: 0px;
@@ -482,20 +445,6 @@ ol.breadcrumb > li{
 ol.breadcrumb > li:last-child{
     font-weight: bold;
 }
-
-
-/* Breadcrumbs */
-/*ol.breadcrumb,
-.icon-home,
-.breadcrumb,
-.breadcrumb a {
-    color: white !important;
-    text-shadow: -1px 0 #007bb4, 0 1px #007bb4, 1px 0 #007bb4, 0 -1px #007bb4;
-    font-size: 18px;
-}*/
-
-/**/
-
 
 /********** START GRID ******************/
 
@@ -547,25 +496,6 @@ a.media-view-ii:hover {
 
 
 /** START Journal List **/
-
-/*
-.media-grid {
-    background: none !important;
-    border: 0 !important;
-    margin: 0px -25px 0px -27px;
-    position: relative;
-    left: 27px;
-}
-
-.media-item {
-    border-radius: 8px;
-    margin: 0 5px 5px 0;
-}
-
-.media-view{
-    border: 0;
-}
-*/
 .media-heading{
     color: rgb(0,123,180);
 }
@@ -582,13 +512,9 @@ a.media-view-ii:hover {
     border-radius: 8px;
     height: 100px;
     margin-bottom: 5px;
-
-    /*position: relative;
-    top: 5px;*/
 }
 
 .add_data_button {
-    /*float: left;*/
     margin-right: 35px;
     margin-top: 10px;
 }
@@ -622,10 +548,7 @@ h1.page-heading{
 }
 
 .module-content.page-header.zbw-box{
-    /*margin-bottom: 5px !important;*/
     border-bottom: 1px solid white;
-    /*position: relative;
-    top: 11px;*/
 }
 
 li.active > a {
@@ -634,7 +557,6 @@ li.active > a {
 
 .module-content.page-header.zbw-box + .module-content{
     position: relative;
-    /*top: -10px;*/
 }
 
 .content-action > a {
@@ -651,14 +573,7 @@ div.wrapper{
     background-image: none;
     border: none;
     -webkit-box-shadow: none;
-
-
 }
-
-.span3 > .module.module-narrow.journal {
-    /*display: none !important;*/
-}
-
 .span3 > .module.module-narrow.social {
     display: block;
 }
@@ -666,7 +581,6 @@ div.wrapper{
 .context-info {
     background-color: transparent;
     border-radius: 8px;
-    /*margin-bottom: 5px;*/
 }
 
 .span3 > .module.module-narrow.social,
@@ -679,7 +593,6 @@ div.wrapper{
     padding: 10px;
     margin: 0;
     margin-bottom: 5px;
-    /*margin-top: 5px;*/
 }
 
 .nums{
@@ -708,14 +621,12 @@ div.nums{
 .context-info div.nums > dl > dt{
     font-size: 17px;
     font-weight: normal;
-    /*text-align: center;*/
     color: #007bb4;
 }
 
 .context-info div.nums dl dd{
     font-size: 14px;
     font-weight: normal;
-    /*text-align: center;*/
     line-height: 1.5;
 }
 
@@ -780,19 +691,12 @@ div.module-content.box.intro {
     padding: 0 25px 25px 25px;
 }
 
-/*.spacing,
-div.intro{
-    margin-top: 7% !important;
-    margin-bottom: 10% !important;
-}*/
-
 article.about {
     background-color: white;
     border-radius: 8px;
     padding: 10px;
 }
 
-/*  */
 div.context-info .module-content{
     padding: 0;
 }
@@ -812,10 +716,6 @@ div.context-info .module-content{
     border-radius: 0px 0px 8px 8px;
 }
 
-.primary > article > .module-content > div {
-    /*padding-top: 10px*/
-}
-
 .notes {
     background-color: white;
     padding: 10px;
@@ -825,7 +725,6 @@ div.context-info .module-content{
 .authors_title{
     background-color: white;
     padding: 15px 10px 5px 10px;
-    /*margin-top: 5px;*/
 }
 
 .dataset-content > .authors_title{
@@ -850,7 +749,6 @@ div.context-info .module-content{
 
 .package-citation {
     padding-left: 25px;
-    /*padding-right: 25px;*/
 }
 
 .resource_downloads{
@@ -863,7 +761,6 @@ div.context-info .module-content{
 }
 
 .download_all_wrapper > a#download_all {
-    /*margin-left: calc(100% - 124px);*/
     background-color: rgb(235,107,6);
     background-image: linear-gradient(to bottom, rgb(234,138,61) 15px, rgb(235,107,6) 15px);
     padding-left: 12px;
@@ -876,7 +773,7 @@ div.context-info .module-content{
 button.btn-primary,
 a.btn-primary,
 a.split{
-    background-image: linear-gradient(to bottom, rgb(39, 117, 165) 15px, rgb(4,93, 151) 15px);
+    background-image: linear-gradient(to bottom, rgb(39, 117, 165) 15px, #007bb4 15px);
     background-color: rgb(4,93, 151);
 }
 
@@ -896,11 +793,6 @@ a.btn-danger,
 
 .label-review {
     margin-left: 0px;
-}
-
-.homepage.layout-1,
-.homepage.layout-2{
-    /*height: 0;*/
 }
 
 .heading {
@@ -929,9 +821,7 @@ a.btn-danger,
     border: 0;
     box-shadow: none;
     -webkit-box-shadow: none;
-
 }
-
 a.tag{
     background-color: rgb(219, 232, 240);
     border: 0;
@@ -942,9 +832,6 @@ li > a.tag:hover{
     border: 0;
     box-shadow: none;
 }
-
-
-
 /********* START Resource ***************/
 
 /* Rollover */
@@ -979,12 +866,6 @@ li.nav-aside li a {
     border-radius: 8px 8px 0 0;
 }
 
-/*
-.primary > article > .module-content > div > h1 {
-    padding-left: 0 !important;
-}
-*/
-
 .zbw-box.box-bottom {
     padding-left: 20px;
 }
@@ -992,7 +873,6 @@ li.nav-aside li a {
 .media-heading {
     padding-top: 7px;
 }
-/* end rollover */
 
 .resources {
     margin-top: 5px;
@@ -1043,10 +923,7 @@ form.blank {
 }
 
 .form-horizontal {
-    /*background-color: white;*/
-    /*border-radius: 8px;*/
     border-radius: 0 0 8px 8px;
-    /*padding: 10px;*/
 }
 
 .reset-request {
@@ -1098,9 +975,6 @@ div#zbwfooter {
     padding-left: 0px;
     padding-right: 0px;
     display: 0;
-
-    /*position: relative;
-    top: -113px;*/
 }
 
 #zbwfooter ul{
@@ -1109,7 +983,6 @@ div#zbwfooter {
 }
 
 #zbwfooter ul:first-child{
-    /*display: block;*/
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -1144,16 +1017,10 @@ div#zbwfooter {
     border-radius: 8px;
     margin-bottom: 7px;
     background-color: white;
-    /*padding-left: 3%;
-    padding-right: 3%;*/
     padding-bottom: 4px;
     width: auto;
     height: auto;
     box-shadow: 0 3px 0 1px rgba(0,0,0,0.05);
-}
-
-#zbwfooter > .inline:nth-of-type(1) > li{
-    /*margin-left: 6%;*/
 }
 
 /************** END FOOTER ******************/
@@ -1186,10 +1053,6 @@ input#field-sitewide-search[type="text"]{
 }
 .search-form .filter-list{
     margin: 0 0 0 5px;
-}
-
-.search-form{
-    /*padding-bottom: 0;*/
 }
 
 .module-content > .box-bottom > form > .form-select.control-group.control-order-by.zbw-box > div.search-order,
@@ -1400,20 +1263,12 @@ h1.registration + form {
     .module.social{
         width: calc((100% / 2) - 22px);
     }
-
-    /* if there's no tag section make the related_publication full lenght*/
-    .related_publication.full_size{
-        /*width: calc(100% - 20px);*/
-    }
     .top-info{
         float: right;
     }
     .tag_section{
         margin-top: 5px;
         margin-bottom: 5px;
-    }
-    .nums{
-        /*margin-top:5px;*/
     }
     .module.social,
     .nums {
@@ -1424,32 +1279,12 @@ h1.registration + form {
         float: left;
         margin-top: 0;
     }
-    /* limit resource description width */
-    /* remove .nums top margin */
-    .module-content > div.nums, div.nums{
-        /*margin-top: 5px;*/
-    }
     div#edawax_nav_search{
         margin: 0 5px;
     }
     div.module-content:last-child{
         padding-bottom: 0;
     }
-    /* unset "explore" buttons */
-    li.resource-item .btn-group{
-        /*position: unset;*/
-    }
-    /* move download all button to match above change */
-    .download_all_wrapper > a#download_all{
-        /*margin-left: 60px;*/
-    }
-
-    /* floating boxes */
-    #dataset-resources{
-        /*float: left;
-        width: calc((100% / 2) - 22px);*/
-    }
-
     div.toolbar{
         height: unset;
     }
@@ -1632,7 +1467,6 @@ h1.registration + form {
     .form-actions .control-required-message{
         margin-left: 0px;
     }
-
     fieldset.author{
         margin-left: 0px;
     }
@@ -1650,16 +1484,10 @@ h1.registration + form {
         font-size: 16px;
         opacity: 1;
     }
-
-    div#edawax_nav_search > nav.navigation > ul > li > form > div > input{
-        /*padding-right: 3px;*/
-    }
-
     #edawax_nav_search > nav.navigation > ul > li > form > div > input::-ms-input-placeholder{
         text-align: center;
         font-size: 16px;
     }
-
     #edawax_nav_search > nav.navigation > ul > li > form > div > input::placeholder,
     #edawax_nav_search > nav.navigation > ul > li > form > div > input::-webkit-input-placeholder{
         text-align: center;
@@ -1692,10 +1520,6 @@ h1.registration + form {
         padding-right: 0;
      }
 
-    li.resource-item > p {
-        /*width: 250px;*/
-    }
-
     nav.navigation > ul.nav > li > a{
         padding: 0;
      }
@@ -1720,7 +1544,6 @@ h1.registration + form {
 
     div#edawax_nav_search > nav.navigation > ul > li:first-child{
         float: none;
-        /*width: calc(100% - 20px);*/
         margin-left: 5px;
     }
 
@@ -1746,25 +1569,18 @@ h1.registration + form {
     #organization-datasets-search-form > a.show-filters{
         position: relative;
     }
-    #zbwfooter > ul.inline > li {
-        /*width: 20%;*/
-    }
     #zbwfooter > ul#sitelinks > li {
         width: unset;
     }
-
     .header-image + .container{
         margin-top: 32px;
     }
-
     .account-masthead > div.container{
         width:100%;
     }
-
     h1.page-heading {
         font-size: 17px;
     }
-
     a.btn{
         padding-left: 6px;
         padding-right: 6px;
@@ -1777,10 +1593,6 @@ h1.registration + form {
         padding-left: 5px;
         padding-right: 5px;
     }
-    /* Resource descriptions on dataset page */
-    li.resource-item > p {
-        /*width: 100px;*/
-    }
 }
 
 @media (max-width: 375px) {
@@ -1791,12 +1603,10 @@ h1.registration + form {
      #edawax_nav_search > nav.navigation > ul > li:first-child{
         margin-left: 3%;
      }
-
      /* adjust footer */
      #zbwfooter > ul.inline > li {
         font-size: 8px !important;
      }
-
     /* Sort dropdown settings */
     label {
         font-size: 12px !important;
@@ -1810,29 +1620,23 @@ h1.registration + form {
     a.show-filters{
         margin-left: 5px;
     }
-
     .module.resources{
         margin-top: 0;
     }
-
     section.module.resources{
         width: calc((100% / 2) - 22px);
     }
-
     .module.social{
         width: calc((100% / 2) - 22px);
     }
-
     a.heading > span:first-child {
         display: block;
     }
-
     /* adjust filter button */
     a.show-filters{
         top: -199px;
         left: 1px;
     }
-
     /* adjust dataset title placement */
     .primary > article > .module-content > div > h1 {
         padding-top: 20px;
@@ -1845,17 +1649,8 @@ h1.registration + form {
 /* * *   UPDATE TO THE STYLE  * * */
 /**********************************/
 /**********************************/
-.header-image {
-    /*margin-bottom: 180px;*/
-}
-
-/* Login Button */
-.not-authed {
-    /*margin-top: -9px !important;*/
-}
-
 .box h2 {
-    color: #005d95;
+    color: #007bb4;
 }
 
 h1 {
@@ -1891,8 +1686,6 @@ ul.nav-pills > li:first-child:hover{
     margin-left: 1.5%;
 }
 
-
-
 .simple-input .field .btn-search {
     color: #d0e0ec;
     padding-right: 10px;
@@ -1906,14 +1699,6 @@ section.related_publication,
 .primary > article > .module-content > div > h1,
 .primary > article > .module-content > div > section#dataset-resources{
     padding-left: 25px;
-}
-
-.primary > article > .module-content > div > section:last-of-type {
-    /*padding-left: 0px;*/
-}
-
-.primary > article > .module-content > div > section:last-of-type > .tag_section {
-    /*padding-left: 25px;*/
 }
 
 .module-content.box.intro {
@@ -1991,7 +1776,6 @@ li.dataset-item {
     font-size: 17px;
     padding-top: 8px;
     padding-bottom: 8px;
-    /*padding-left: 10px;*/
 }
 
 /* Rollover */
