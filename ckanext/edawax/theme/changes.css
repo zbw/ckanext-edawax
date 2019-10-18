@@ -1,3 +1,24 @@
+/*************************************************************
+ * Chunks of the style sheet are broken in to the following  *
+ * sections, not everything is in a section:                 *
+ * ========================================================= *
+ * ZBW Box                                                   *
+ * Forms                                                     *
+ * Grid                                                      *
+ * Search Form                                               *
+ * Item List                                                 *
+ * Info Panel (left side)                                    *
+ * Resource panel                                            *
+ * Tags                                                      *
+ * Resource                                                  *
+ * Footer                                                    *
+ * Login                                                     *
+ * Search                                                    *
+ * Before Breadcrumbs                                        *
+ * Info Rollover                                             *
+ * Responsive Settings                                       *
+ *************************************************************/
+
 /* Limit Font */
 body, input, button, select, textarea, #dara_, p{
     font-family: "Helvetica Neue", Helvetica, Arial, sans-serif !important;
@@ -98,11 +119,7 @@ body {
     border-radius: 8px 8px 0 0;
 }
 
-.box-full-override {
-    border-radius: 8px !important;
-}
-
-.box-full-no-padding {
+.box-no-padding {
     padding: 0;
 }
 
@@ -203,7 +220,6 @@ div.span9 div.module-content,
     top: -3px;
 }
 
-
 .account-masthead {
   height: 35px;
   color: white;
@@ -232,7 +248,6 @@ hgroup.header-image {
     margin:auto;
     left: 8%;
     top: -35px;
-
 }
 
 /* Is this being used? */
@@ -266,7 +281,6 @@ hgroup.header-image {
     color: #000000;
 }
 
-
 .homepage [role="main"] {
     padding: 0px 0;
 }
@@ -274,7 +288,6 @@ hgroup.header-image {
 [role="main"] {
     padding: 0px;
 }
-
 
 .zbw_font {
     font-family: 'zbw_binaryregular';
@@ -322,22 +335,18 @@ ol.stages {
     border-radius: 8px 8px 0 0;
     margin: 0px 0px 0px 0px;
 }
-
 ol.stages > li.active > .highlight {
     background: #007bb4;
 }
-
 ol.stages > li.complete > .highlight {
     background: #39a9de;
 }
 ol.stages li.complete::before {
     color: #39a9de;
 }
-
 ol.stages li.active::before {
     color: #007bb4;
 }
-
 ol.stages li.active::after {
     border-top-color: #007bb4;
     border-bottom-color: #007bb4;
@@ -355,12 +364,9 @@ div#edawax_nav_search {
 div#edawax_nav_search.spacing{
     margin-bottom: 7%;
 }
-
-
 #edawax_nav_search > nav.navigation {
     margin-left: 0;
 }
-
 #edawax_nav_search > nav.navigation > ul > li{
     width: 24%;
     background-color: rgb(0,123,180);
@@ -369,29 +375,24 @@ div#edawax_nav_search.spacing{
     margin-bottom: 4px;
     align-content: center;
 }
-
 #edawax_nav_search > nav.navigation > ul > li:first-child{
     background-color: transparent;
 }
-
 #edawax_nav_search > nav.navigation > ul > li > a,
 #edawax_nav_search > nav.navigation > ul > li > form > div > input {
     color: white;
     text-align: center;
     font-family: 'zbw_binaryregular';
 }
-
 #edawax_nav_search > nav.navigation > ul > li > form {
     margin-bottom: 0;
 }
-
 #edawax_nav_search > nav.navigation > ul > li > form > div > input{
     background-color: rgb(0,123,180);
     border-radius: 8px;
     text-align: left;
     border-style: none;
 }
-
 #edawax_nav_search > nav.navigation > ul > li > form > div > input::placeholder,
 #edawax_nav_search > nav.navigation > ul > li > form > div > input::-webkit-input-placeholder{
     color: white;
@@ -399,19 +400,15 @@ div#edawax_nav_search.spacing{
     text-align: left;
     line-height: 22px;
 }
-
 #edawax_nav_search > nav.navigation > ul > li:hover,
 #edawax_nav_search > nav.navigation > ul > li.active{
     background-color: #fff;
 }
-
 #edawax_nav_search > nav.navigation > ul > li > a:hover,
 #edawax_nav_search > nav.navigation > ul > li.active > a{
     color: rgb(0,123,180);
     border: none;
 }
-
-
 /* Breadcrumbs */
 div.toolbar{
     background-color: transparent;
@@ -447,7 +444,6 @@ ol.breadcrumb > li:last-child{
 }
 
 /********** START GRID ******************/
-
 .media-grid-ii{
     display: grid;
     display: -ms-grid;
@@ -565,7 +561,6 @@ li.active > a {
     border-radius: 3px;
     text-decoration: none;
 }
-
 /************** END Item List ****************/
 
 /************** START Info Panel ******************/
@@ -679,10 +674,6 @@ div.nums{
 }
 
 /************** START Resource Panel ******************/
-.download_all_wrapper{
-    overflow: hidden;
-}
-
 .embedded-content {
     margin-top: -6px;
 }
@@ -756,7 +747,10 @@ div.context-info .module-content{
     color: #007bb4;
 }
 
+/* This has a child with a :float: - this keeps it bound
+   inside the parent*/
 .download_all_wrapper{
+    overflow: hidden;
     width: 100%;
 }
 
@@ -833,7 +827,6 @@ li > a.tag:hover{
     box-shadow: none;
 }
 /********* START Resource ***************/
-
 /* Rollover */
 .resources > h2.module-heading{
     padding: 10px;
@@ -860,7 +853,6 @@ li.nav-aside li a {
 .module.resources > ul.nav-simple > li.nav-item > a{
     padding-left: 10px;
 }
-
 
 .box-top {
     border-radius: 8px 8px 0 0;
@@ -905,7 +897,6 @@ section.module-resource {
 }
 
 /********* END Resource***************/
-
 /* part of some forms */
 form.blank {
     background-color: transparent;
@@ -1731,7 +1722,7 @@ li.dataset-item {
     color: #005d95;
 }
 
-.dataset-content + div  { /* the property is set in html but the div has no selector */
+.dataset-content + div { /* the property is set in html but the div has no selector */
     margin-top: 20px;
 }
 
@@ -1807,7 +1798,6 @@ li.dataset-item {
     padding-top: 7px;
 }
 
-/* WIP */
 p.empty {
     margin: 0;
     padding: 10px;
