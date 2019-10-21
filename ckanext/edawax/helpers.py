@@ -19,6 +19,16 @@ import ckanext.edawax.robot_list as _list
 from urlparse import urlparse
 
 
+def count_packages(packages):
+    count = 0
+    for package in packages:
+        if not package['private'] or (package['private'] and is_admin()) or \
+            (package['private'] and \
+                get_user_id() == package['creator_user_id']):
+            count += 1
+    return count
+
+
 def get_page_type():
     """
         Get page type to make breadcrumbs

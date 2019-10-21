@@ -8,7 +8,6 @@
   {% if user.datasets %}
     {% snippet 'snippets/package_list.html', packages=user.datasets, list_class="dashboard-list" %}
   {% else %}
-
     {% if c.is_myself %}
       <p class="empty">
         {{ _('You haven\'t created any datasets.') }}

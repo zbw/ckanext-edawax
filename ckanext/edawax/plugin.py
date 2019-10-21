@@ -300,6 +300,7 @@ class EdawaxPlugin(plugins.SingletonPlugin):
                 'tags_exist': helpers.tags_exist,
                 'get_page_type': helpers.get_page_type,
                 'normal_height': helpers.normal_height,
+                'count_packages': helpers.count_packages,
                 }
 
     def before_map(self, map):
