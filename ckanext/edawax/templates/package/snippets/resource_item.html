@@ -26,20 +26,19 @@
       {# download stats here #}
       {% set total_downloads = h.resource_downloads(res['url']) %}
       {% if total_downloads > 0 %}
-        <div>
+        <div class="resource_downloads">
             {{ _('Downloads') }}: {{ total_downloads }}
         </div>
       {% else %}
-        <div></div>
       {% endif %}
     </p>
   {% endblock %}
   {% block resource_item_explore %}
   {% if not url_is_edit %}
   <div class="dropdown btn-group">
-    <a href="#" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
+    <a href="#" class="btn btn-primary dropdown-toggle split" data-toggle="dropdown">
       <i class="icon-share-alt"></i>
-      {{ _('Explore') }}
+      {{ _('explore') }}
       <span class="caret"></span>
     </a>
     <ul class="dropdown-menu">

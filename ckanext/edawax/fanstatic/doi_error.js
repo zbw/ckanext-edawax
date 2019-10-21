@@ -40,7 +40,8 @@ function createLink(){
     var new_element = document.createElement('a');
     new_element.href= '#doi';
     new_element.style.color = ' blue';
-    new_element.innerHTML = 'Jump to field.'
+    //new_element.innerHTML = 'Jump to field.';
+    new_element.innerHTML = window.location.href;
 
     return new_element;
 }

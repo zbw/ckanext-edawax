@@ -33,27 +33,32 @@
 {% endblock %}
 #}
 
-
+</div>
 <div id='zbwfooter'>
-    <ul class="inline" id="sitelinks">
-        <li><a href="/info">About</a></li>
-        <li><a href="/info/imprint">Imprint</a></li>
-        <li><a href="/info/data">Data Protection</a></li>
-        <li><a href="/info/contact">Contact</a></li>
-    </ul>
-
     <ul class="inline">
-        <li><a href="http://zbw.eu"><img src="{% url_for_static
+        <li>
+            <a href="http://zbw.eu"><img src="{% url_for_static
         '/base/images/zbw-logo-trans.png' %}"  />
-            </a></li>
+            </a>
+        </li>
 
-            <li style="font-size: 0.8em; padding-left:33px;">in cooperation with <br />
+        <li style="font-size: 0.8em;">
+            <div class="coop">in cooperation with</div>
             <a href="https://www.diw.de/soep"><img src="{% url_for_static
-            '/diw_soep_logo_sw.jpg' %}" /></a></li>
+            '/diw_soep_logo_sw.jpg' %}" /></a>
+        </li>
+
+        <li>
+            <a href="http://doi.org/10.17616/R3BM03"><img src="{%
+            url_for_static '/base/images/re3data.png' %}" /></a>
+        </li>
     </ul>
-    <ul class="inline randl-box">
-        <li><a href="http://doi.org/10.17616/R3BM03"><img src="{%
-        url_for_static '/base/images/re3data.png' %}" /></a></li>
+
+    <ul class="inline" id="sitelinks">
+        <li><a href="/info">About&nbsp;|</a></li>
+        <li><a href="/info/imprint">Imprint&nbsp;|</a></li>
+        <li><a href="/info/data">Data Protection&nbsp;|</a></li>
+        <li><a href="/info/contact">Contact</a></li>
     </ul>
 
     {% block footer_debug %}

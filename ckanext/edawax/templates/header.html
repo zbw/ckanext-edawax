@@ -1,6 +1,8 @@
 {% ckan_extends %}
 {% block header_wrapper %}
 {% resource 'edawax/edawax.css' %}
+{% resource 'edawax/changes.css' %}
+{% resource 'edawax/font.css' %}
 
     {% block header_account %}
         {% resource 'edawax/browser_check.js' %}
@@ -11,13 +13,11 @@
         {{ super() }}
     {% endblock %}
 
-
-    <header class="masthead">
-        <hgroup class="{{ g.header_class }}">
-        {% block header_logo %}
-            {{ super() }}
-        {% endblock %}
-        </hgroup>
+    <hgroup class="{{ g.header_class }}">
+    {% block header_logo %}
+        <a class="logo" href="/"><img src="/jda-logo.png" alt="ZBW Journal Data Archive" title="ZBW Journal Data Archive" /></a>
+    {% endblock %}
+    </hgroup>
 
     {% block header_debug %}
 
@@ -36,16 +36,118 @@
         #}
 
         <!-- <div class="content"> -->
-        <div id="edawax_nav_search" style="float:right;">
+{% block toolbar %}
+    {% set crumbs = h.get_page_type() %}
+    {% if crumbs['ignore'] != True %}
+    <div class="toolbar zbw-box">
+      {% block breadcrumb %}
+        {% if self.breadcrumb_content() | trim %}
+          <ol class="breadcrumb">
+            {% snippet 'snippets/home_breadcrumb_item.html' %}
+            {% block breadcrumb_content %}
+                {% set crumbs = h.get_page_type() %}
+                {# is it the homepage? no breadcrumbs #}
+                {% if crumbs['text'] != 'Home' %}
+                    {# Resource exists #}
+                    {% if crumbs['id'] %}
+                        {% if crumbs['controller'] in ['organization', 'package'] %}
+                            <li>{% link_for _('Journals'), controller=crumbs['controller'], action='index' %}
+                        {% else %}
+                            <li>{% link_for _('Users'), controller=crumbs['controller'], action='index' %}
+                        {% endif %}
+
+                        {% if crumbs['parent'] %}
+                            <li>{% link_for crumbs['parent']['title']|truncate(30), controller='organization', action='read', id=crumbs['parent']['id'] %}
+                        {% endif %}
+
+                        {% if crumbs['action'] == 'resource_read' %}
+                            <li>{% link_for crumbs['resource']['title']|truncate(30), controller='package', action='read', id=crumbs['resource']['name'] %}
+                        {% endif %}
+
+                        {% if crumbs['action'] == 'edit' %}
+                            {% if crumbs['controller'] == 'organization' %}
+                                <li>{% link_for crumbs['resource']['title']|truncate(30), controller=crumbs['controller'], action='read', id=crumbs['id'] %}
+                            {% elif crumbs['controller'] == 'user' %}
+                                <li>{% link_for crumbs['text']|truncate(30), controller=crumbs['controller'], action='read', id=crumbs['id'] %}
+                            {% else %}
+                                <li>{% link_for crumbs['resource']['title']|truncate(30), controller=crumbs['controller'], action='read', id=crumbs['id'] %}
+                            {% endif %}
+                        {% endif %}
+
+                        {% if crumbs['action'] == 'edit' %}
+                            {% if crumbs['controller'] != 'organization' %}
+                            <li>{% link_for _('Edit'), controller=crumbs['controller'], action=crumbs['action'], id=crumbs['id'] %}
+                            {% else %}
+                            <li>{% link_for _('Admin'), controller=crumbs['controller'], action=crumbs['action'], id=crumbs['id'] %}
+                            {% endif %}
+                        {% else %}
+
+                        {% if crumbs['resource_id'] %}
+                            <li>{% link_for crumbs['text']|truncate(30), controller=crumbs['controller'], action=crumbs['action'], resource_id=crumbs['resource_id'], id=crumbs['id'] %}
+                        {% else %}
+                            <li>{% link_for crumbs['text']|truncate(30), controller=crumbs['controller'], action=crumbs['action'], id=crumbs['id'] %}
+                        {% endif %}
+
+                        {% endif %}
+
+
+                    {# existing resource #}
+                    {% elif crumbs['resource_id'] %}
+                        <li>{% link_for crumbs['text']|truncate(30), controller=crumbs['controller'], action=crumbs['action'], resource_id=crumbs['resource_id'], id=crumbs['id'] %}
+                    {% else %}
+                        {# something new #}
+                        {% if crumbs['action'] == 'new' %}
+                            <li>{% link_for crumbs['text']|truncate(30), controller="read", action=crumbs['action'] %}
+
+                            <li class="active"><a href="">{{ "Create " + crumbs['controller']|replace('package', 'a Dataset')|replace('organization', 'an Organization') }}</a>
+                        {% else %}
+                            {% if crumbs['action'] == 'register' %}
+                                <li class="active">{{ h.nav_link(_('Registration'), controller='user', action='register') }}</li>
+                            {% elif crumbs['action'] == 'login' %}
+                                <li class="active">{{ h.nav_link(_('Login'), controller='user', action='login') }}</li>
+                            {% elif crumbs['action'] == 'activity' %}
+                            {% else %}
+                                <li>{% link_for crumbs['text']|truncate(30), controller=crumbs['controller'], action=crumbs['action'] %}
+                            {% endif %}
+                        {% endif %}
+                    {% endif %}
+
+                {% endif %}
+            {% endblock %}
+          </ol>
+        {% endif %}
+      {% endblock %}
+    </div>
+    {% else %}
+        <span></span>
+    {% endif %}
+{% endblock %}
+        {% if h.normal_height() %}
+        <div id="edawax_nav_search">
+        {% else %}
+        <div id="edawax_nav_search" class="spacing">
+        {% endif %}
         {# ('blog', _('Blog')), #}
         {% block header_site_navigation %}
                 <nav class="section navigation">
+
                 <ul class="nav nav-pills">
+                    <li>
+                        {% block header_site_search %}
+                                <form class="section site-search simple-input" action="{% url_for controller='package', action='search' %}" method="get">
+                                  <div class="field">
+                                    <label for="field-sitewide-search">{% block header_site_search_label %}{{ _('Search Datasets') }}{% endblock %}</label>
+                                    <input id="field-sitewide-search" type="text" name="q" placeholder="{{ _('search') }}" />
+                                    <button class="btn-search" type="submit"><i class="icon-search"></i></button>
+                                  </div>
+                                </form>
+                        {% endblock %}
+                    </li>
                     {% block header_site_navigation_tabs %}
                     {{ h.build_nav_main(
-                    ('search', _('Datasets')),
-                    ('organizations_index', _('Journals')),
-                    ('info', _('Info')),
+                    ('search', _('datasets')),
+                    ('organizations_index', _('journals')),
+                    ('info', _('info')),
                     ) }}
                     {% endblock %}
                 </ul>
@@ -53,16 +155,11 @@
          {% endblock %}
 
 
-        {% block header_site_search %}
-            {{ super() }}
-        {% endblock %}
         </div>
         <div />
 
     </div>
         <!--</div> -->
     </header>
-
-
-
 {% endblock %}
+

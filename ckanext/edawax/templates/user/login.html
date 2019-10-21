@@ -1,0 +1,15 @@
+{% ckan_extends %}
+
+
+{% block primary_content %}
+  <section class="module">
+    <div class="module-content">
+    <div class="zbw-box box-full">
+      <h1 class="page-heading">{% block page_heading %}{{ _('Login') }}{% endblock %}</h1>
+      {% block form %}
+        {% snippet "user/snippets/login_form.html", action=c.login_handler, error_summary=error_summary %}
+      {% endblock %}
+    </div>
+    </div>
+  </section>
+{% endblock %}

@@ -42,21 +42,37 @@
     <meta property="schema:includedInDataCatalog" resource="{{ h.ckan_site_url() }}"
         typeof="schema:DataCatalog" />
 
+
   {% block package_description %}
 
+
+{#
 {% if DOI %}
+    <div class="doi_wrapper zbw-box" style="margin-bottom: 0;">
     {% snippet 'package/snippets/doi.html', DOI=DOI, test='false' %}
 {% endif %}
 
 {% if DOI_Test and not DOI and use_testserver %}
+    <div class="doi_wrapper zbw-box" style="margin-bottom: 0;">
     {% snippet 'package/snippets/doi.html', DOI=DOI_Test, test='true' %}
 {% endif %}
 
- {% if submission_id and is_admin %}
-   <p style="color:grey; text-decoration: underline">Article Submission ID: {{ submission_id }} </p>
- {% endif %}
+  {% if submission_id and is_admin %}
+    <div class="zbw-box" style="margin-bottom: 0; padding-top:5px !important;">
+     <p style="color:grey; text-decoration: underline;">Article Submission ID: {{ submission_id }} </p>
+    </div>
+  {% else %}
+    <div class="zbw-box" style="display: none;"></div>
+  {% endif %}
 
- {% snippet 'package/snippets/authors.html', dara_authors=dara_authors %}
+{% if DOI %}
+  </div>
+{% elif DOI_Test and not DOI and use_testserver %}
+  </div>
+{% endif %}
+#}
+
+ {% snippet 'package/snippets/authors.html', dara_authors=dara_authors, pkg=pkg %}
 
 {#
   <div class="authors_title">
@@ -123,7 +139,7 @@
 
 
 {% block package_tags %}
-    {{ super() }}
+    {% snippet "package/snippets/tags.html", tags=pkg.tags %}
   {% endblock %}
 
 
@@ -139,3 +155,16 @@
 
 </div>
 {% endblock %}
+
+
+{% block page_heading %}
+  {{ pkg.title|lower or pkg.name|lower }}
+  {% if pkg.state.startswith('draft') %}
+    [{{ _('Draft') }}]
+  {% endif %}
+  {% if pkg.state == 'deleted' %}
+    [{{ _('Deleted') }}]
+  {% endif %}
+{% endblock %}
+
+

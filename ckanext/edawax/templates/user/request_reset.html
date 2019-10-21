@@ -1,0 +1,21 @@
+{% ckan_extends %}
+
+
+{% block primary_content %}
+  <article class="module">
+    <div class="module-content">
+      {% block primary_content_inner %}
+      <h1 class="page-heading zbw-box box-top">{{ _('Reset your password') }}</h1>
+      {% block form %}
+        <form action="" method="post" class="form-inline control-medium zbw-box box-bottom">
+          <label for="field-username">{{ _('Username') }}</label>
+          <input id="field-username" name="user" value="" type="text" />
+          {% block form_button %}
+          <button class="btn btn-primary split" type="submit" name="reset">{{ _("Request reset") }}</button>
+          {% endblock %}
+        </form>
+      {% endblock %}
+      {% endblock %}
+    </div>
+  </article>
+{% endblock %}

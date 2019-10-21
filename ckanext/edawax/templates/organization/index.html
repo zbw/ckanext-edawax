@@ -8,15 +8,19 @@
 
 {% block page_header %}{% endblock %}
 
-{% block page_primary_action %}
-  {% if h.check_access('organization_create') %}
-    {% link_for _('Add Journal'), controller='organization', action='new', class_='btn btn-primary', icon='plus-sign-alt' %}
-  {% endif %}
-{% endblock %}
 
 {% block primary_content_inner %}
-  {# <h1 class="hide-heading">{% block page_heading %}{{ _('Journals') }}{% endblock %}</h1> #}
-  <h1>Journals</h1>
+  {# <h1 class="hide-heading zbw-font zbw-blue">{% block page_heading %}{{ _('Journals') }}{% endblock %}</h1> #}
+
+  <div class="zbw-box box-full">
+    <h1 class="zbw-font zbw-blue" style="display: inline;">{{ _('journals') }}</h1>
+
+    {% block page_primary_action %}
+      {% if h.check_access('organization_create') %}
+        {% link_for _('Add Journal'), controller='organization', action='new', class_='btn btn-primary split right', icon='plus-sign-alt' %}
+      {% endif %}
+    {% endblock %}
+  </div>
 
   {% block organizations_search_form %}
     {# {% snippet 'snippets/search_form.html', form_id='organization-search-form', type='organization', query=c.q, sorting_selected=c.sort_by_selected, count=c.page.item_count, placeholder=_('Search journals...'), show_empty=request.params, no_bottom_border=true if c.page.items %} #}

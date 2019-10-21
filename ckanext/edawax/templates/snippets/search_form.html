@@ -4,6 +4,15 @@
 {% set sorting = sorting if sorting else [(_('Name Ascending'), 'name asc'), (_('Name Descending'), 'name desc')] %}
 
 
+{% block search_input %}
+{% endblock %}
+
+{% block search_title %}
+  {#% if not no_title %}
+    <h2 class="zbw-font zbw-blue">{% snippet 'snippets/search_result_text.html', query=query, count=count, type=type %}</h2>
+  {% endif %#}
+{% endblock %}
+
 {% block search_sortby %}
     {% if sorting %}
     {% if h.is_admin() %}
@@ -14,18 +23,63 @@
       {#% set temp = sorting.append(('Private', 'private desc, metadata_modified desc')) %}
       {% set temp = sorting.append(('Review', 'dara_edawax_review desc, private acs')) %#}
     {% endif %}
-      <div class="form-select control-group control-order-by">
-        <label for="field-order-by">{{ _('Order by') }}</label>
-        <select id="field-order-by" name="sort">
-          {% for label, value in sorting %}
-            {% if label and value %}
-              <option value="{{ value }}"{% if sorting_selected == value %} selected="selected"{% endif %}>{{ label }}</option>
-            {% endif %}
-          {% endfor %}
-        </select>
+      <div class="form-select control-group control-order-by zbw-box box-top">
+        {% if not no_title %}
+          <h2 class="zbw-font zbw-blue" style="display: inline;">{% snippet 'snippets/search_result_text.html', query=query, count=count, type=type %}</h2>
+        {% endif %}
+
+        <div class="search-order" style="display: inline;">
+          <label for="field-order-by">{{ _('Order by') }}</label>
+          <select id="field-order-by" name="sort">
+            {% for label, value in sorting %}
+              {% if label and value %}
+                <option value="{{ value }}"{% if sorting_selected == value %} selected="selected"{% endif %}>{{ label }}</option>
+              {% endif %}
+            {% endfor %}
+          </select>
+        </div>
+
+        {% block page_primary_action %}
+          {% if h.check_access('package_create', {'owner_org': c.group_dict.id}) and 'dataset' not in request.url %}
+          {% set group = c.group_dict.id or None %}
+            <div class="page_primary_action add_data_button">
+              {% link_for _('Add Dataset'), controller='package', action='new', group=group, class_='btn btn-primary split', icon='plus-sign-alt' %}
+              <a class="show-filters btn">{{ _('Filter Results') }}</a>
+            </div>
+          {% endif %}
+        {% endblock %}
+
         {% block search_sortby_button %}
         <button class="btn js-hide" type="submit">{{ _('Go') }}</button>
         {% endblock %}
       </div>
     {% endif %}
+{% endblock %}
+
+
+{% block search_facets %}
+  {% if facets %}
+    <p class="filter-list">
+      {% for field in facets.fields %}
+        {% set search_facets_items = facets.search.get(field)['items'] %}
+
+        {% if field == 'tags' %}
+        <span class="facet">Tags:</span>
+        {% else %}
+        <span class="facet">{{ facets.titles.get(field) }}:</span>
+        {% endif %}
+        {% for value in facets.fields[field] %}
+          <span class="filtered pill">
+            {%- if facets.translated_fields and facets.translated_fields.has_key((field,value)) -%}
+              {{ facets.translated_fields[(field,value)] }}
+            {%- else -%}
+              {{ h.list_dict_filter(search_facets_items, 'name', 'display_name', value) }}
+            {%- endif %}
+            <a href="{{ facets.remove_field(field, value) }}" class="remove" title="{{ _('Remove') }}"><i class="icon-remove"></i></a>
+          </span>
+        {% endfor %}
+      {% endfor %}
+    </p>
+    {#<a class="show-filters btn">{{ _('Filter Results') }}</a>#}
+  {% endif %}
 {% endblock %}

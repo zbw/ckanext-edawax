@@ -1,9 +1,13 @@
 {% ckan_extends %}
 
 
+{% block social_title %}
+    <h2 class="module-heading social">{{ _('Share on Social Media') }}</h2>
+{% endblock %}
+
 {% block social_nav %}
   <ul class="nav nav-simple">
-    <li class="nav-item"><a href="https://twitter.com/share?url={{ current_url }}" target="_blank"><i class="icon-twitter-sign"></i> Twitter</a></li>
-    <li class="nav-item"><a href="https://www.facebook.com/sharer.php?u={{ current_url }}" target="_blank"><i class="icon-facebook-sign"></i> Facebook</a></li>
+    <li class="nav-item"><a href="https://twitter.com/share?url={{ current_url }}" target="_blank"><img src="/Twitter_Social_Icon_Rounded_Square_Color.png" height="20" width="20" ></img> Twitter</a></li>
+    <li class="nav-item"><a href="https://www.facebook.com/sharer.php?u={{ current_url }}" target="_blank"><img src="/f_logo_RGB-Blue_58.png" height="20" width="20" ></img> Facebook</a></li>
   </ul>
 {% endblock %}
