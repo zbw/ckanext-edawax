@@ -34,7 +34,9 @@
     {% endif %}
   {% endblock %}
   {% block page_pagination %}
+    {% if h.count_packages(c.page.items) > 20 or h.is_admin() or h.has_hammer() %}
     {{ c.page.pager(q=c.q) }}
+    {% endif %}
   {% endblock %}
 {% endblock %}
 
