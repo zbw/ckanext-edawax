@@ -4,8 +4,8 @@ body,
 [role=main],
 .main,
 .hero {
-  background-color: #f4f4f4;
-  /*background-image: none;*/
+  /*background-color: #f4f4f4;
+  background-image: none;*/
 }
 body,
 input,
@@ -88,7 +88,7 @@ h2 {
   -webkit-border-radius: 0px;
   -moz-border-radius: 0px;
   border-radius: 0px;
-  font-size: 16px;
+  font-size: 17px;
   /*float: right;*/
   float: none;
 }
@@ -100,7 +100,7 @@ h2 {
 .nav-pills > .active > a,
 .nav-pills > .active > a:hover,
 .nav-pills > .active > a:focus {
-  color: #505050;
+  /*color: #505050;*/
   font-weight: 400;
   background-color: transparent !important;
 }
@@ -220,7 +220,7 @@ label {
 }
 
 .breadcrumb a{
-  /*color: #505050 !important;*
+  /*color: #505050 !important;*/
 }
 
 
@@ -233,6 +233,6 @@ a[target="_blank"]:after {
 
 .label-review,
 .label-reauthor {
-  margin-left:10px;
+  /*margin-left:10px;*/
 }
 
