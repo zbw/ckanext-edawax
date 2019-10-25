@@ -10,7 +10,7 @@ Working with the tool is easy and time-saving for editorial offices:
 
 * The visibility of your journal and of the published articles with corresponding replication data increases.
 
-* By using the ZBW Journal Data Archive and by employing a mandatory data availability policy, your journal shows that it reflects the current debates in science politics. You also clarify that your journal is ready for the future of science and research.
+* By using the ZBW Journal Data Archive and by employing a data availability policy, your journal shows that it reflects the current debates in science politics. You also clarify that your journal is ready for the future of science and research.
 
 * You show that research ethics and replicable research are important topics for your journal. In addition, you guard the journal against scientific misconduct or fraud. Therefore readers feel more trust in the research findings published by your journal.
 
