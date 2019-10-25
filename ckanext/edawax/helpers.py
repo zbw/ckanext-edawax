@@ -436,37 +436,26 @@ def show_review_button(pkg):
 def show_publish_button(pkg):
     if not isinstance(pkg, dict):
         return False
-<<<<<<< HEAD
-    return (check_journal_role(pkg, 'admin') or has_hammer()) and in_review(pkg) in ['true', 'finished', 'editor', 'reviewers']
-=======
     return (check_journal_role(pkg, 'admin') or has_hammer()) and in_review(pkg) == 'true'
->>>>>>> master
+
 
 
 def show_retract_button(pkg):
     if not isinstance(pkg, dict):
         return False
-<<<<<<< HEAD
-    return (is_admin(pkg) or has_hammer()) and not pkg.get('private', True)
-=======
     return (check_journal_role(pkg, 'admin') or has_hammer())and not pkg.get('private', True)
->>>>>>> master
 
 
 def show_reauthor_button(pkg):
     if not isinstance(pkg, dict):
         return False
-<<<<<<< HEAD
     return (check_journal_role(pkg, 'admin') or has_hammer()) and in_review(pkg) in ['true', 'finished', 'editor', 'reviewers']
 
 
 def show_notify_editor_button(pkg):
     if not isinstance(pkg, dict):
         return False
-    return in_review(pkg) in ['true', 'reviewers'] and (has_hammer() or is_reviewer(pkg))
-=======
     return (check_journal_role(pkg, 'admin') or has_hammer()) and in_review(pkg) == 'true'
->>>>>>> master
 
 
 def res_abs_url(res):
