@@ -24,12 +24,20 @@
         }) %}
 
         {% set reviewers = false %}
+
+        {% if pkg['dara_edawax_review'] == 'editor' %}
+        <a title="Sends notification reviewers"
+              class="btn btn-warning" href="/dataset/{{pkg.id}}/review">
+           <i class="icon-envelope"></i>Send to Reviewers
+         </a>
+        {% else %}
          <a title="Sends notification to journal editors. You will be asked for confirmation and license acceptance."
               class="btn btn-warning" href="/dataset/{{pkg.id}}/review"
                           data-module="edawax-confirm"
                           data-module-i18n="{{ confirm }}">
            <i class="icon-envelope"></i>Send to Review
          </a>
+         {% endif %}
 
     {% endif %}
 

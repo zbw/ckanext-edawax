@@ -282,9 +282,9 @@ def is_edit_page():
     return False
 
 
-
-def is_admin():
+def is_admin(pkg=None):
     admins = c.group_admins
+
     if pkg:
         org_id = pkg['owner_org']
         admins = get_org_admin(org_id)
@@ -302,7 +302,6 @@ def is_admin():
     except AttributeError as e:
         pass
     return False
-
 
 
 def has_doi(pkg):
@@ -436,7 +435,7 @@ def show_review_button(pkg):
 def show_publish_button(pkg):
     if not isinstance(pkg, dict):
         return False
-    return (check_journal_role(pkg, 'admin') or has_hammer()) and in_review(pkg) == 'true'
+    return (check_journal_role(pkg, 'admin') or has_hammer()) and in_review(pkg) in ['true', 'reviewers', 'finished', 'editor']
 
 
 
@@ -455,7 +454,8 @@ def show_reauthor_button(pkg):
 def show_notify_editor_button(pkg):
     if not isinstance(pkg, dict):
         return False
-    return (check_journal_role(pkg, 'admin') or has_hammer()) and in_review(pkg) == 'true'
+    return in_review(pkg) in ['true', 'reviewers'] and (has_hammer() or \
+        is_reviewer(pkg))
 
 
 def res_abs_url(res):
