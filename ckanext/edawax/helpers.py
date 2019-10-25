@@ -79,7 +79,13 @@ def parse_authors(authors):
     if type(authors[0]) == dict:   #len(authors) > 1:
         return ' and '.join([u"{}, {}".format(author['lastname'].decode('unicode_escape'), author['firstname'].decode('unicode_escape')) for author in authors])
     if len(authors) > 5:
-        return ' and '.join([u"{}, {}".format(c[0], c[1]) for c in chunk(authors, 5)])
+        temp_list = []
+        for c in chunk(authors, 5):
+            if c[0] != '':
+                temp_list.append(u"{}, {}".format(c[0], c[1]))
+            else:
+                temp_list.append(u"{}".format(c[2]))
+        return ' and '.join(temp_list)
     return u"{}, {}".format(authors[0], authors[1])
 
 # redo with a dictionary that contains the order?
