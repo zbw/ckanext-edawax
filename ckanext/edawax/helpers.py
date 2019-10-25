@@ -147,7 +147,143 @@ def is_reviewer(pkg):
     return user in reviewers
 
 
-def is_admin(pkg=None):
+
+def count_packages(packages):
+    count = 0
+    for package in packages:
+        if not package['private'] or (package['private'] and is_admin()) or \
+            (package['private'] and \
+                get_user_id() == package['creator_user_id']):
+            count += 1
+    return count
+
+
+def get_page_type():
+    """
+        Get page type to make breadcrumbs
+    """
+    action = request.urlvars['action']
+    controller = request.urlvars['controller']
+    id_ = request.urlvars.get('id', None)
+    resource_id = request.urlvars.get('resource_id', None)
+
+    try:
+        pkg = tk.get_action('{}_show'.format(controller))(None, {'id': id_})
+    except:
+        pkg = None
+
+    if resource_id:
+        resource = tk.get_action('resource_show')(None, {'id': resource_id})
+        resource_name = resource['name']
+    else:
+        resource_name = 'Resource'
+
+    try:
+        if 'organization' in pkg.keys():
+            journal = pkg['organization']['title']
+            parent = pkg['organization']
+            resource = pkg
+        else:
+            parent = None
+            resource = None
+    except (AttributeError, TypeError):
+        parent = None
+    resource = pkg
+
+    ignore = False
+    if action == 'search':
+        text = "Datasets"
+    elif action == 'index':
+        if controller == 'organization':
+            text = 'Journals'
+        else:
+            text = 'Home'
+            ignore = True
+    elif action == 'read':
+        try:
+            text = pkg['title']
+        except KeyError:
+            # working with user name
+            text = id_
+    elif action == 'resource_read':
+        text = resource_name
+    elif action == 'new':
+        if controller == 'package':
+            text = 'Dataset'
+        elif controller == 'organization':
+            text = 'Journal'
+    elif action == 'dashboard_read':
+        text = 'Stats'
+    elif action in ['dashboard', 'dashboard_datasets', 'dashboard_organizations', 'logged_in']:
+        text = 'Dashboard'
+    elif action == 'edit':
+        if controller == 'user':
+            text = id_
+        elif controller == 'organization':
+            text = 'Admin'
+        else:
+            text = 'Edit'
+    elif action == 'resource_edit':
+        text = 'Edit'
+    elif action == 'login':
+        text = 'Login'
+    elif action == 'register':
+        text = 'Registration'
+    elif action == 'logged_out_page':
+        text = 'Logged Out'
+        ignore = True
+    elif action == 'request_reset':
+        text = 'Password reset'
+    elif action == 'activity':
+        text = 'Activity'
+    elif action == 'about':
+        text = 'About'
+    elif action == 'md_page':
+        text = 'Info'
+        ignore = True
+    elif action in ['resources', 'doi', 'new_resource']:
+        text = 'Resources'
+        ignore = True
+    elif action in ['bulk_process', 'members']:
+        text = 'Admin'
+        action = 'edit'
+    else:
+        text = ''
+        ignore = True
+        #raise ValueError('This wasnt accounted for: {}'.format(action))
+
+    return {'text': text,'action': action, 'controller': controller, 'id': id_, 'resource_id': resource_id, 'parent': parent, 'resource': resource,
+         'ignore': False}
+
+
+def normal_height():
+    path = request.upath_info
+    pages = ['/', '/user/login', '/user/logged_out_redirect', '/user/reset']
+    if path in pages:
+        return False
+    return True
+
+
+def tags_exist(data):
+    pkg = tk.get_action('package_show')(None, {'id': data.current_package_id})
+    if pkg['tags'] != []:
+        return True
+    return False
+
+def is_landing_page():
+    if 'edit' in request.url or '/dataset/resources' in request.url:
+        return False
+    return True
+
+def is_edit_page():
+    if ('edit' in request.url or 'views' in request.url) and not ('user/edit' in request.url or 'journals/edit' in request.url or 'dataset/edit' in request.url):
+        return True
+
+    return False
+
+
+
+def is_admin():
     admins = c.group_admins
     if pkg:
         org_id = pkg['owner_org']
@@ -300,18 +436,27 @@ def show_review_button(pkg):
 def show_publish_button(pkg):
     if not isinstance(pkg, dict):
         return False
+<<<<<<< HEAD
     return (check_journal_role(pkg, 'admin') or has_hammer()) and in_review(pkg) in ['true', 'finished', 'editor', 'reviewers']
+=======
+    return (check_journal_role(pkg, 'admin') or has_hammer()) and in_review(pkg) == 'true'
+>>>>>>> master
 
 
 def show_retract_button(pkg):
     if not isinstance(pkg, dict):
         return False
+<<<<<<< HEAD
     return (is_admin(pkg) or has_hammer()) and not pkg.get('private', True)
+=======
+    return (check_journal_role(pkg, 'admin') or has_hammer())and not pkg.get('private', True)
+>>>>>>> master
 
 
 def show_reauthor_button(pkg):
     if not isinstance(pkg, dict):
         return False
+<<<<<<< HEAD
     return (check_journal_role(pkg, 'admin') or has_hammer()) and in_review(pkg) in ['true', 'finished', 'editor', 'reviewers']
 
 
@@ -319,6 +464,9 @@ def show_notify_editor_button(pkg):
     if not isinstance(pkg, dict):
         return False
     return in_review(pkg) in ['true', 'reviewers'] and (has_hammer() or is_reviewer(pkg))
+=======
+    return (check_journal_role(pkg, 'admin') or has_hammer()) and in_review(pkg) == 'true'
+>>>>>>> master
 
 
 def res_abs_url(res):

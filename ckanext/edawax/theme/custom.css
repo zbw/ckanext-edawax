@@ -1,0 +1,222 @@
+/* Custom CSS based om main.css [default css from ckan]
+ * and changes.css [redesign] */
+article,
+aside,
+details,
+figcaption,
+figure,
+footer,
+header,
+hgroup,
+nav,
+section {
+  display: block;
+}
+
+html {
+  font-size: 100%;
+  -webkit-text-size-adjust: 100%;
+  -ms-text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  font-size: 14px;
+  line-height: 20px;
+  color: #444444;
+  background-color: #eeeeee;
+
+  background-repeat: no-repeat;
+    background-attachment: fixed;
+  background-image: linear-gradient(#95abc400 0%,#dde4ec9e 10%,rgb(0, 93, 150, 1) 100%), url('/background_temp.jpg') !important;
+    background-size: 100% auto;
+}
+
+a {
+  text-decoration: none;
+}
+
+.container,
+.navbar-static-top .container,
+.navbar-fixed-top .container,
+.navbar-fixed-bottom .container {
+  width: 940px;
+}
+
+.container {
+  margin-right: auto;
+  margin-left: auto;
+  *zoom: 1;
+}
+
+.unstyled {
+  margin: 0;
+  list-style: none;
+}
+
+ul.unstyled,
+ol.unstyled {
+  margin-left: 0;
+  list-style: none;
+}
+
+
+.account-masthead {
+  *zoom: 1;
+  min-height: 30px;
+  color: #ffffff;
+  background: #003647 url("../../../base/images/bg.png");
+}
+.account-masthead:before,
+.account-masthead:after {
+  display: table;
+  content: "";
+  line-height: 0;
+}
+.account-masthead:after {
+  clear: both;
+}
+.account-masthead .account {
+  float: right;
+}
+.account-masthead .account ul {
+  *zoom: 1;
+}
+.account-masthead .account ul:before,
+.account-masthead .account ul:after {
+  display: table;
+  content: "";
+  line-height: 0;
+}
+.account-masthead .account ul:after {
+  clear: both;
+}
+.account-masthead .account ul li {
+  display: block;
+  float: left;
+}
+.account-masthead .account ul li a {
+  display: block;
+  color: #bfd7de;
+  font-size: 13px;
+  font-weight: bold;
+  padding: 0 10px;
+  line-height: 31px;
+}
+.account-masthead .account ul li a span.username,
+.account-masthead .account ul li a span.text {
+  margin: 0 2px 0 4px;
+}
+.account-masthead .account ul li a span.text {
+  position: absolute;
+  top: -9999px;
+  left: -9999px;
+}
+.account-masthead .account ul li a:hover {
+  color: #d9e7eb;
+  background-color: #00232e;
+  text-decoration: none;
+}
+.account-masthead .account ul li a.sub {
+  font-weight: 300;
+}
+.account-masthead .account ul li a .btn {
+  vertical-align: 1px;
+  margin-left: 3px;
+}
+.account-masthead .account .notifications a span.badge {
+  font-size: 12px;
+  margin-left: 3px;
+  padding: 1px 6px;
+  background-color: #00232e;
+  -webkit-border-radius: 4px;
+  -moz-border-radius: 4px;
+  border-radius: 4px;
+  text-shadow: none;
+  color: #bfd7de;
+}
+.account-masthead .account .notifications a:hover span {
+  color: #ffffff;
+  background-color: #000f14;
+}
+.account-masthead .account .notifications.notifications-important a span.badge {
+  color: #ffffff;
+  background-color: #c9403a;
+}
+.account-masthead .account.authed .image {
+  padding: 0 6px;
+}
+.account-masthead .account.authed .image img {
+  vertical-align: -6px;
+  -webkit-border-radius: 4px;
+  -moz-border-radius: 4px;
+  border-radius: 4px;
+}
+
+
+/************* START Navigation *******************/
+ul,
+ol {
+  padding: 0;
+  margin: 0 0 10px 25px;
+}
+
+li {
+  line-height: 20px;
+}
+
+.nav {
+  list-style: none;
+  margin-left: 0;
+}
+
+#edawax_nav_search > nav.navigation > ul > li {
+  width: 24%;
+  background-color: rgb(0, 123, 180);
+  border-radius: 8px;
+  margin-left: 1%;
+  margin-bottom: 4px;
+  align-content: center;
+}
+
+.nav-tabs > li,
+.nav-pills > li{
+  float: left;
+}
+
+.simple-input label,
+.simple-input button {
+  display: none;
+}
+
+.simple-input .field .btn-search{
+  position: absolute;
+  display: block;
+  height: 17px;
+  width: 17px;
+  padding: 0;
+  top: 50%;
+  right: 0;
+  margin-top: -10px;
+  background-color: transparent;
+  border: none;
+  color: #999;
+  transition: color 0.2s ease-in;
+}
+
+.simple-input .field{
+  position: relative;
+}
+
+.simple-input .field input {
+  width: 100%;
+  height: 100%;
+  margin: 0 -7px;
+  padding: 7px 5px;
+
+}
+
+/************* END Navigation *******************/
+
+

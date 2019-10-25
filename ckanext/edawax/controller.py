@@ -25,6 +25,8 @@ from ckanext.dara.helpers import _parse_authors
 from ckanext.edawax.helpers import is_reviewer
 from ckanext.edawax.update import update_maintainer_field, email_exists, invite_reviewer, check_reviewer, add_user_to_journal
 
+import ckan.lib.base as base
+
 
 import ast
 from webob import Response, Request
@@ -51,7 +53,7 @@ class WorkflowController(PackageController):
     def _context(self):
         return {'model': model, 'session': model.Session,
                 'user': c.user or c.author, 'for_view': True,
-                'auth_user_obj': c.userobj}
+                'auth_user_obj': c.userobj, 'save': 'save' in request.params}
 
     def review(self, id):
         """
@@ -171,16 +173,24 @@ class WorkflowController(PackageController):
         c.pkg_dict = tk.get_action('package_show')(context, {'id': id})
 
         # validate the DOI, if any
-        doi = c.pkg_dict['dara_Publication_PID']
-        type_ = c.pkg_dict['dara_Publication_PIDType']
+        try:
+            doi = c.pkg_dict['dara_Publication_PID']
+            type_ = c.pkg_dict['dara_Publication_PIDType']
+        except KeyError:
+            doi = ''
+            type_ = ''
+
         if type_ == 'DOI':
             pattern = re.compile('^10.\d{4,9}/[-._;()/:a-zA-Z0-9]+$')
             match = pattern.match(doi)
             if match is None:
-                h.flash_error('DOI is invalid. Format should be: 10.xxxx/xxxx. Please update the DOI before trying again to publish this resource.')
-                redirect(id)
+                h.flash_error('DOI is invalid. Format should be: 10.xxxx/xxxx. Please update the DOI before trying again to publish this resource. <a href="#doi" style="color: blue;">Jump to field.</a>', True)
+                errors = {'dara_Publication_PID': ['DOI is invalid. Format should be: 10.xxxx/xxxx']}
+
+                tk.redirect_to(controller='package', action='edit', id=id)
 
         c.pkg_dict.update({'private': False, 'dara_edawax_review': 'reviewed'})
+        c.pkg = context.get('package')
         tk.get_action('package_update')(context, c.pkg_dict)
         h.flash_success('Dataset published')
         redirect(id)
@@ -299,7 +309,12 @@ class WorkflowController(PackageController):
                     'User-Agent': 'Ckan-Download-All Agent 1.0',
                     'From': 'f.osorio@zbw.eu'
                 }
-                r = requests.get(url, stream=True, headers=headers)
+                try:
+                    ca_file = config.get('ckan.cert_path')
+                    r = requests.get(url, stream=True, headers=headers,
+                            verify=ca_file)
+                except Exception:
+                    r = requests.get(url, stream=True, headers=headers)
                 if r.status_code != 200:
                     h.flash_error('Failed to download files.')
                     redirect(id)

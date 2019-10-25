@@ -9,20 +9,20 @@ The ZBW reserves the right to update this data protection notice from time to ti
 ## Contact information
 Responsible according to Art. 4 Clause 7 of the EU General Data Protection Regulation is the
 
-ZBW – Leibniz Information Centre for Economics  
-Düsternbrooker Weg 120  
-24105 Kiel  
-Email: [info@zbw.eu](mailto:info@zbw.eu)  
+ZBW – Leibniz Information Centre for Economics
+Düsternbrooker Weg 120
+24105 Kiel
+Email: [info@zbw.eu](mailto:info@zbw.eu)
 
-For more information please consult our imprint:  http://www.journaldata.zbw.eu/info/imprint
+For more information please consult our imprint:  https://journaldata.zbw.eu/info/imprint
 
 If you have any questions regarding data protection, please contact our data protection officer
 
-Sven Markgraf  
--Data protection officer-  
-Neuer Jungfernstieg 21  
-20354 Hamburg  
-Email: [datenschutz@zbw.eu](mailto:datenschutz@zbw.eu])  
+Sven Markgraf
+-Data protection officer-
+Neuer Jungfernstieg 21
+20354 Hamburg
+Email: [datenschutz@zbw.eu](mailto:datenschutz@zbw.eu])
 
 ## Your rights
 You have the right to obtain, upon request, information about the personal data which are stored about you free of charge. You also have the right to demand that false data be corrected or deleted. You have the right to restrict the processing of your data, the right to object to processing, and the right to data portability.

@@ -305,6 +305,12 @@ class EdawaxPlugin(plugins.SingletonPlugin):
                 'is_reviewer':  helpers.is_reviewer,
                 'show_notify_editor_button': helpers.show_notify_editor_button,
                 'format_resource_items_custom':helpers.format_resource_items_custom,
+                'is_edit_page': helpers.is_edit_page,
+                'is_landing_page': helpers.is_landing_page,
+                'tags_exist': helpers.tags_exist,
+                'get_page_type': helpers.get_page_type,
+                'normal_height': helpers.normal_height,
+                'count_packages': helpers.count_packages,
                 }
 
     def before_map(self, map):
