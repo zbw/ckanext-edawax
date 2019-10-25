@@ -926,6 +926,11 @@ form.blank {
     border-radius: 8px;
 }
 
+.form-horizontal:not(#dataset-edit):not(#resource-edit){
+    background-color: white;
+    padding: 10px;
+}
+
 .dataset-form.form-horizontal:not(#dataset-edit):not(#resource-edit){
     background-color: white;
     padding: 10px;
