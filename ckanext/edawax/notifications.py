@@ -7,7 +7,7 @@ from pylons import config, c
 import logging
 import ckan.plugins.toolkit as tk
 from ckan import __version__ as ckan_version
-
+from ckanext.edawax.helpers import pkg_status
 
 log = logging.getLogger(__name__)
 
@@ -94,11 +94,16 @@ best regards from ZBW--Journal Data Archive
         msg['X-Mailer'] = "CKAN {} [Plugin edawax]".format(ckan_version)
         return msg
 
-    # send email to journal admin and ckan admin
-    t = map(lambda a: sendmail(a, message_editor(a)), addresses)
-    if reviewers is not None:
-        for reviewer in reviewers:
-            r = sendmail(reviewer, message_reviewer(reviewer))
+    # send email
+    # to Admin
+    if pkg_status(dataset) in ['reauthor', 'false']:
+        t = map(lambda a: sendmail(a, message_editor(a)), addresses)
+    else:
+        # To Reviewer
+        if reviewers is not None:
+            for reviewer in reviewers:
+                if reviewer is not None:
+                    t = [sendmail(reviewer, message_reviewer(reviewer))]
 
     # success if we have at least one successful send
     return any(t)

@@ -76,8 +76,11 @@ def chunk(lst, n):
 
 def parse_authors(authors):
     out = ''
+    # information is coming from the dataset
     if type(authors[0]) == dict:   #len(authors) > 1:
         return ' and '.join([u"{}, {}".format(author['lastname'].decode('unicode_escape'), author['firstname'].decode('unicode_escape')) for author in authors])
+    # Information is specific for the resource, and there's more than one
+    # author
     if len(authors) > 5:
         temp_list = []
         for c in chunk(authors, 5):
@@ -269,6 +272,10 @@ def normal_height():
         return False
     return True
 
+
+def pkg_status(id):
+    pkg = tk.get_action('package_show')(None, {'id': id})
+    return pkg['dara_edawax_review']
 
 def tags_exist(data):
     pkg = tk.get_action('package_show')(None, {'id': data.current_package_id})

@@ -160,6 +160,9 @@ class WorkflowController(PackageController):
         if current_state == 'editor':
             pkg_dict['dara_edawax_review'] = 'reviewers'
 
+        if current_state == 'reauthor':
+            pkg_dict['dara_edawax_review'] = 'editor'
+
 
         return pkg_dict
 
@@ -228,7 +231,8 @@ class WorkflowController(PackageController):
         c.pkg_dict = tk.get_action('package_show')(context, {'id': id})
         creator_mail = model.User.get(c.pkg_dict['creator_user_id']).email
         admin_mail = model.User.get(c.user).email
-        note = n.reauthor(id, creator_mail, admin_mail, msg, context)
+        #note = n.reauthor(id, creator_mail, admin_mail, msg, context)
+        note = n.reauthor(id, creator_mail, msg, context)
 
         if note:
             c.pkg_dict.update({'private': True,

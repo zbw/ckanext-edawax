@@ -183,10 +183,10 @@ def package_update(context, data_dict):
 
     data, errors = lib_plugins.plugin_validate(
         package_plugin, context, data_dict, schema, 'package_update')
-    log.debug('package_update validate_errs=%r user=%s package=%s data=%r',
-              errors, context.get('user'),
-              context.get('package').name if context.get('package') else '',
-              data)
+    #log.debug('package_update validate_errs=%r user=%s package=%s data=%r',
+    #          errors, context.get('user'),
+    #          context.get('package').name if context.get('package') else '',
+    #          data)
 
     if errors:
         model.Session.rollback()
