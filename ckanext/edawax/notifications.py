@@ -96,6 +96,7 @@ best regards from ZBW--Journal Data Archive
 
     # send email
     # to Admin
+    t = []
     if pkg_status(dataset) in ['reauthor', 'false']:
         t = map(lambda a: sendmail(a, message_editor(a)), addresses)
     else:
@@ -103,7 +104,7 @@ best regards from ZBW--Journal Data Archive
         if reviewers is not None:
             for reviewer in reviewers:
                 if reviewer is not None:
-                    t = [sendmail(reviewer, message_reviewer(reviewer))]
+                    t.append(sendmail(reviewer, message_reviewer(reviewer)))
 
     # success if we have at least one successful send
     return any(t)
