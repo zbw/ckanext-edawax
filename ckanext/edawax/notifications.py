@@ -97,7 +97,8 @@ best regards from ZBW--Journal Data Archive
     # send email
     # to Admin
     t = []
-    if pkg_status(dataset) in ['reauthor', 'false']:
+    if pkg_status(dataset) in ['reauthor', 'false'] \
+        or reviewers == [None, None]:
         t = map(lambda a: sendmail(a, message_editor(a)), addresses)
     else:
         # To Reviewer
@@ -108,6 +109,43 @@ best regards from ZBW--Journal Data Archive
 
     # success if we have at least one successful send
     return any(t)
+
+
+def author_notify(dataset, author_mail, msg, context, status):
+    """
+    Notify the author that one of there submission has been published,
+    or that one has been retracted.
+    """
+    body = u"""
+Dear Author,
+
+A submission of yours to '{journal}' has been {status}. It is available here: {url}.
+
+{message}
+            """
+
+    def create_messate():
+        if msg:
+            return u"Message: \n==========\n\n{}".format(msg)
+        return u""
+
+    pkg = tk.get_action('package_show')(context, {'id': dataset})
+    org_id = pkg.get('owner_org', pkg.get('group_id', False))
+    org = tk.get_action('organization_show')(context, {'id': org_id})
+    d = {'journal': org['title'],
+         'url': package_url(dataset),
+         'title': pkg.get('name'),
+         'status': status,
+         'message': create_messate()}
+    body = body.format(**d)
+    message = MIMEText(body.encode('utf-8'), 'plain', 'utf-8')
+    message['Subject'] = Header(u'ZBW Journal Data Archive - Dataset Status Change')
+    message['From'] = config.get('smtp.mail_from')
+    message['To'] = Header(author_mail, 'utf-8')
+    message['Date'] = Utils.formatdate(time())
+    message['X-Mailer'] = "CKAN {} [Plugin edawax]".format(ckan_version)
+
+    return sendmail(author_mail, message)
 
 
 def editor_notify(dataset, author_mail, msg, context):

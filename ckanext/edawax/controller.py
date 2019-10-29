@@ -196,6 +196,10 @@ class WorkflowController(PackageController):
         c.pkg = context.get('package')
         tk.get_action('package_update')(context, c.pkg_dict)
         h.flash_success('Dataset published')
+
+        # notify the author
+        self.author_notify(id)
+
         redirect(id)
 
 
@@ -217,6 +221,10 @@ class WorkflowController(PackageController):
 
         c.pkg_dict.update({'private': True, 'dara_edawax_review': 'false'})
         tk.get_action('package_update')(context, c.pkg_dict)
+
+        # notify author about the retraction
+
+
         h.flash_success('Dataset retracted')
         redirect(id)
 
@@ -255,10 +263,25 @@ class WorkflowController(PackageController):
         if note:
             c.pkg_dict.update({'private': True, 'dara_edawax_review': 'editor'})
             tk.get_action('package_update')(context, c.pkg_dict)
-            h.flash_success('Notification sent. Journal editor will...')
+            h.flash_success('Notification sent. Journal editor will be notified.')
         else:
             h.flash_error('ERROR: Mail could not be sent. Please try again later or contact the site admin.')
         redirect(id)
+
+
+    def author_notify(self, id):
+        """ Send mail from the system to the author """
+        context = self._context()
+        msg = tk.request.params.get('msg', '')
+        c.pkg_dict = tk.get_action('package_show')(context, {'id': id})
+
+        if c.pkg_dict['dara_edawax_review'] == 'reviewed':
+            status = 'published'
+        else:
+            status = 'retracted'
+        # TODO: actually get the author's email
+        author_email = model.User.get(c.pkg_dict['creator_user_id']).email
+        note = n.author_notify(id, author_email, msg, context, status)
 
 
     def create_citataion_text(self, id):
