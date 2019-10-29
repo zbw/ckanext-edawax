@@ -467,7 +467,7 @@ def show_reauthor_button(pkg):
 def show_notify_editor_button(pkg):
     if not isinstance(pkg, dict):
         return False
-    return in_review(pkg) in ['true', 'reviewers'] and (has_hammer() or \
+    return in_review(pkg) in ['reviewers'] and (has_hammer() or \
         is_reviewer(pkg))
 
 
