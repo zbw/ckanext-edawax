@@ -26,10 +26,29 @@
         {% set reviewers = false %}
 
         {% if pkg['dara_edawax_review'] == 'editor' %}
+
+        {# seperate how this works betwen when there are reviewers and
+           when there are not #}
+
+        {# There are reviewers #}
+        {% if h.has_reviewers(pkg) %}
         <a title="Sends notification reviewers"
               class="btn btn-warning" href="/dataset/{{pkg.id}}/review">
-           <i class="icon-envelope"></i>Send to Reviewers
-         </a>
+           <i class="icon-envelope"></i>Send to Reviewers</a>
+
+        {% else %}
+        {# There are none #}
+        {# Don't Display a Button? #}
+
+          <a title="Sends notification reviewers"
+              class="btn btn-warning"
+              data-toggle="modal" data-target="#to_reviewers">
+          <i class="icon-envelope"></i>Send to Reviewers</a>
+          {% snippet 'package/snippets/to_reviewers.html', pkg=pkg %}
+
+        {% endif %}
+
+
         {% else %}
          <a title="Sends notification to journal editors. You will be asked for confirmation and license acceptance."
               class="btn btn-warning" href="/dataset/{{pkg.id}}/review"

@@ -1,0 +1,31 @@
+<!-- Modal -->
+<div class="modal fade" id="to_reviewers" tabindex="-1" role="dialog" aria-labelledby="retractConfirmLabel" style="display:none">
+  <div class="modal-dialog" role="document">
+
+    <form method="POST" action="/dataset/{{ pkg.id }}/review">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h2 class="modal-title" id="retractConfirmLabel">Reviewers Not Assigned</h2>
+      </div>
+
+      <div class="modal-body">
+
+          <p>There are no reviewers specified for this dataset. They can be added by <a href="/dataset/edit/{{ pkg.id }}#dataset_reviewers">clicking here</a>, or if the dataset doesn't need review, you can publish it instead.</p>
+
+            <div class="form-group">
+                <!-- Checkbox -->
+            </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+        {#<button type="submit" class="btn btn-primary">
+          Send to Reviewers
+        </button>#}
+      </div>
+
+    </div>
+    </form>
+
+  </div>
+</div>

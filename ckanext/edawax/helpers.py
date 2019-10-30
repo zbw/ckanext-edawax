@@ -123,6 +123,18 @@ def get_org_admin(org_id):
     return admin
 
 
+def has_reviewers(pkg):
+    reviewers = []
+    try:
+        reviewer = pkg.get('maintainer')
+        reviewers.append(reviewer)
+        reviewer = pkg.get('maintainer_email')
+        reviewers.append(reviewer)
+        return reviewers[0] is not None or reviewers[1] is not None
+    except AttributeError as e:
+        return False
+
+
 def is_reviewer(pkg):
     # if there are no reviewers check that the journal editor / sysadmin is the user and give access
     reviewers = []
