@@ -223,6 +223,7 @@ class WorkflowController(PackageController):
         tk.get_action('package_update')(context, c.pkg_dict)
 
         # notify author about the retraction
+        self.author_notify(id)
 
 
         h.flash_success('Dataset retracted')

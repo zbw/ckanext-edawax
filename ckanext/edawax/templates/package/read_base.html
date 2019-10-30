@@ -62,8 +62,9 @@
 
 
     {% if h.show_retract_button(pkg) %}
-    <a class="btn btn-danger" title="make dataset private" href="/dataset/{{ pkg.id }}/retract">
+    <a class="btn btn-danger" title="make dataset private" data-toggle="modal" data-target="#retract">
         <i class="icon-undo"></i>Retract</a>
+    {% snippet 'package/snippets/redact_confirmation.html', pkg=pkg %}
     {% endif %}
 
 
