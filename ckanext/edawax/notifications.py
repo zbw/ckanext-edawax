@@ -122,6 +122,8 @@ Dear Author,
 A submission of yours to '{journal}' has been {status}. It is available here: {url}.
 
 {message}
+
+best regards from ZBW--Journal Data Archive
             """
 
     def create_messate():
@@ -200,6 +202,8 @@ named '{title}' which you submitted to the ZBW--Journal Data Archive.
 URL: {url}
 
 {message}
+
+best regards from ZBW--Journal Data Archive
 """
 
     def create_message():
