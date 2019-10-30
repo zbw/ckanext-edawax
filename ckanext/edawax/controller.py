@@ -121,19 +121,25 @@ class WorkflowController(PackageController):
 
 
         # check that there are reivewers
+        flash_message = ""
         if reviewer_emails[0] is None and reviewer_emails[1] is None and c.pkg_dict['dara_edawax_review'] != 'false':
             if c.pkg_dict['dara_edawax_review'] == 'editor':
-                h.flash_error('This submission has no reviewers. The journal editor has been notified.')
+                flash_message = ('This submission has no reviewers. The journal editor has been notified.', 'error')
 
         note = n.review(addresses, user_name, id, reviewer_emails)
 
         if note:
             c.pkg_dict = self.update_review_status(c.pkg_dict)
             tk.get_action('package_update')(context, c.pkg_dict)
-            h.flash_success('Notification to Reviewers sent.')
+            if flash_message == "":
+                flash_message = ('Notification to Reviewers sent.', 'success')
         else:
-            h.flash_error('ERROR: Mail could not be sent. Please try again later or contact the site admin.')
+            flash_message = ('ERROR: Mail could not be sent. Please try again later or contact the site admin.', 'error')
 
+        if flash_message[1] == 'success':
+            h.flash_success(flash_message[0])
+        else:
+            h.flash_error(flash_message[0])
         redirect(id)
 
 
