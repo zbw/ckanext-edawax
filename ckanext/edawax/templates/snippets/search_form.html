@@ -25,11 +25,7 @@
     {% endif %}
       <div class="form-select control-group control-order-by zbw-box box-top">
         {% if not no_title %}
-          {% if h.is_admin() or h.has_hammer() %}
-            {% set count = count %}
-          {% else %}
-            {% set count = h.count_packages(c.page.items) %}
-          {% endif %}
+          {% set count = count %}
           <h2 class="zbw-font zbw-blue" style="display: inline;">{% snippet 'snippets/search_result_text.html', query=query, count=count, type=type %}</h2>
         {% endif %}
 
