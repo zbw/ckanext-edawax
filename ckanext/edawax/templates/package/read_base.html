@@ -30,23 +30,23 @@
         {# seperate how this works betwen when there are reviewers and
            when there are not #}
 
-        {# There are reviewers #}
-        {% if h.has_reviewers(pkg) %}
-        <a title="Sends notification reviewers"
-              class="btn btn-warning" href="/dataset/{{pkg.id}}/review">
-           <i class="icon-envelope"></i>Send to Reviewers</a>
-
-        {% else %}
-        {# There are none #}
-        {# Don't Display a Button? #}
-
+          {# There are reviewers #}
+          {% if h.has_reviewers(pkg) %}
           <a title="Sends notification reviewers"
-              class="btn btn-warning"
-              data-toggle="modal" data-target="#to_reviewers">
-          <i class="icon-envelope"></i>Send to Reviewers</a>
-          {% snippet 'package/snippets/to_reviewers.html', pkg=pkg %}
+                class="btn btn-warning" href="/dataset/{{pkg.id}}/review">
+             <i class="icon-envelope"></i>Send to Reviewers</a>
 
-        {% endif %}
+          {% else %}
+          {# There are none #}
+          {# Don't Display a Button? #}
+
+            <a title="Sends notification reviewers"
+                class="btn btn-warning"
+                data-toggle="modal" data-target="#to_reviewers">
+            <i class="icon-envelope"></i>Send to Reviewers</a>
+            {% snippet 'package/snippets/to_reviewers.html', pkg=pkg %}
+
+          {% endif %}
 
 
         {% else %}

@@ -315,7 +315,7 @@ def is_admin(pkg=None):
         admins = get_org_admin(org_id)
         try:
             user_id = c.userobj.name
-        except Exceptions:
+        except Exception:
             return False
         if user_id in admins:
             return True
@@ -463,11 +463,10 @@ def show_publish_button(pkg):
     return (check_journal_role(pkg, 'admin') or has_hammer()) and in_review(pkg) in ['true', 'reviewers', 'finished', 'editor']
 
 
-
 def show_retract_button(pkg):
     if not isinstance(pkg, dict):
         return False
-    return (check_journal_role(pkg, 'admin') or has_hammer())and not pkg.get('private', True)
+    return (check_journal_role(pkg, 'admin') or has_hammer()) and not pkg.get('private', True)
 
 
 def show_reauthor_button(pkg):
