@@ -6,7 +6,7 @@ To accept this invitation, please reset your password by clicking the link below
 
 {{ reset_link }}
 
-For advice, please consult the documentation of our service ({{ site_url }}/User_Manual-EN_V1.5.pdf) or get in touch with the product manager, Mr. Sven Vlaeminck (journaldata@zbw.eu).
+For advice, please consult the documentation of our service ({{ site_url }}/User_Manual-EN_V1.5.1.pdf or {{ site_url }}/User_Manual-DE-V1.5.1.pdf) or get in touch with the product manager, Mr. Sven Vlaeminck (journaldata@zbw.eu).
 
 Thank you in advance,
 

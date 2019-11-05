@@ -1,10 +1,11 @@
 You have been invited by the editor of the {{ journal_title }} to act as a reviewer for a new entry in the journal's data repository.
 
-To accept this invite, please reset your password at:
+To accept this invitation, please reset your password at:
 
 {{ reset_link }}
 
 The submission for review is available here: {{ url }}
 
 For advice, please consult the documentation of our service:
-{{ site_url }}/User_Manual-EN_V1.5.pdf
+{{ site_url }}/User_Manual-EN_V1.5.1.pdf
+{{ site_url }}/User_Manual-DE-V1.5.1.pdf

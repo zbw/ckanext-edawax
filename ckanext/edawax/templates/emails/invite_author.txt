@@ -7,3 +7,4 @@ To accept this invite, please reset your password at:
 
 For advice, please consult the documentation of our service:
 {{ site_url }}/User_Manual-EN_V1.5.1.pdf
+{{ site_url }}/User_Manual-DE-V1.5.1.pdf
