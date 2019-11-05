@@ -27,7 +27,7 @@ from email.mime.multipart import MIMEMultipart
 from email.mime.application import MIMEApplication
 
 from ckanext.edawax.notifications import package_url
-
+import ckanext.edawax.helpers as h
 
 log = logging.getLogger(__name__)
 
@@ -53,7 +53,10 @@ def get_invite_body(user, data=None):
        'user_name': user.name,
        'site_url': config.get('ckan.site_url'),
        'journal_title': data['journal_title'],
-       'url': url}
+       'url': url,
+       'man_eng': h.get_manual_file()[0],
+       'man_deu': h.get_manual_file()[1]}
+
 
     role = _get_user_role(user.name, data['group_id'])
     if role in ['editor', 'admin']:

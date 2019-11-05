@@ -17,6 +17,8 @@
 
 {% block secondary_content %}
 {% resource 'edawax/edawax.js' %}
+{% set man_eng = h.get_manual_file()[0] %}
+{% set man_deu = h.get_manual_file()[1] %}
 {# could be used for infopages navigation #}
 <div class="module module-narrow module-shallow info-panel">
     <!--h2 class="module-heading">
@@ -39,9 +41,9 @@
 
             <!--li class="nav-header">Support</li-->
 
-            <li class="about-info"><a href="/User_Manual-EN_V1.5.1.pdf">User Manual (PDF, en)</a>
+            <li class="about-info"><a href="/{{ man_eng }}">User Manual (PDF, en)</a>
             </li>
-            <li class="about-info"><a href="/User_Manual-DE-V1.5.1.pdf">User Manual (PDF, de)</a></li>
+            <li class="about-info"><a href="/{{ man_deu }}">User Manual (PDF, de)</a></li>
             <li class="about-info"><a href="/info/api-guide">API Overview</a></li>
 
             <!--li class="nav-header">Misc</li-->

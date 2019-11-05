@@ -21,6 +21,12 @@ from urlparse import urlparse
 from ckanext.dara.geography_coverage import geo
 
 
+def get_manual_file():
+    eng = config.get('ckan.doc_eng')
+    deu = config.get('ckan.doc_deu')
+    return (eng, deu)
+
+
 def find_geographic_name(abbr):
     for country in geo:
         if country['value'] == abbr:
