@@ -39,6 +39,8 @@ def get_page_type():
     resource_id = request.urlvars.get('resource_id', None)
 
     try:
+        if controller == 'ckanext.dara.controller:DaraController':
+            controller = 'package'
         pkg = tk.get_action('{}_show'.format(controller))(None, {'id': id_})
     except:
         pkg = None
@@ -112,9 +114,11 @@ def get_page_type():
     elif action == 'md_page':
         text = 'Info'
         ignore = True
-    elif action in ['resources', 'doi', 'new_resource']:
+    elif action in ['resources', 'new_resource']:
         text = 'Resources'
         ignore = True
+    elif action == 'doi':
+        text = 'DOI Registration'
     elif action in ['bulk_process', 'members']:
         text = 'Admin'
         action = 'edit'

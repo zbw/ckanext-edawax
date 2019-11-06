@@ -17,7 +17,11 @@ function checkErrorTop(){
 function checkErrorMid(){
     /* Error message trying to update with a bad DOI */
     var message_container = document.getElementsByClassName('error-explanation');
-    var list = message_container[0].childNodes[3];
+    try {
+        var list = message_container[0].childNodes[3];
+    } catch(error){
+        return false;
+    }
     var item = list.childNodes[1];
 
     if (item){

@@ -50,7 +50,7 @@
                 {% if crumbs['text'] != 'Home' %}
                     {# Resource exists #}
                     {% if crumbs['id'] %}
-                        {% if crumbs['controller'] in ['organization', 'package'] %}
+                        {% if crumbs['controller'] in ['organization', 'package', 'ckanext.dara.controller:DaraController'] %}
                             <li>{% link_for _('Journals'), controller=crumbs['controller'], action='index' %}
                         {% else %}
                             <li>{% link_for _('Users'), controller=crumbs['controller'], action='index' %}
@@ -61,6 +61,10 @@
                         {% endif %}
 
                         {% if crumbs['action'] == 'resource_read' %}
+                            <li>{% link_for crumbs['resource']['title']|truncate(30), controller='package', action='read', id=crumbs['resource']['name'] %}
+                        {% endif %}
+
+                        {% if crumbs['action'] in ['doi', 'resources'] %}
                             <li>{% link_for crumbs['resource']['title']|truncate(30), controller='package', action='read', id=crumbs['resource']['name'] %}
                         {% endif %}
 
@@ -84,6 +88,10 @@
 
                         {% if crumbs['resource_id'] %}
                             <li>{% link_for crumbs['text']|truncate(30), controller=crumbs['controller'], action=crumbs['action'], resource_id=crumbs['resource_id'], id=crumbs['id'] %}
+                        {% elif crumbs['action'] == 'doi' %}
+                            <li>
+                                <a class="active" href="/dataset/edit/{{ crumbs['id'] }}/dara_doi">DOI Registration</a>
+                            </li>
                         {% else %}
                             <li>{% link_for crumbs['text']|truncate(30), controller=crumbs['controller'], action=crumbs['action'], id=crumbs['id'] %}
                         {% endif %}

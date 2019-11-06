@@ -36,7 +36,7 @@ body {
   background-repeat: no-repeat;
   background-attachment: fixed;
   background-color: #005d95;
-  background-image: url('/background.jpg');
+  background-image: url('/background_image.jpg');
   background-size: cover;
   -webkit-background-size: cover;
   -moz-background-size: cover;
@@ -362,7 +362,7 @@ div#edawax_nav_search {
     color: #007bb4;
 }
 div#edawax_nav_search.spacing{
-    margin-bottom: 7%;
+    margin-bottom: 1%;
 }
 #edawax_nav_search > nav.navigation {
     margin-left: 0;
@@ -926,6 +926,11 @@ form.blank {
     border-radius: 8px;
 }
 
+.form-horizontal:not(#dataset-edit):not(#resource-edit){
+    background-color: white;
+    padding: 10px;
+}
+
 .dataset-form.form-horizontal:not(#dataset-edit):not(#resource-edit){
     background-color: white;
     padding: 10px;
@@ -961,7 +966,7 @@ header.page-header {
 }
 
 div#zbwfooter {
-    margin-top: 7%;
+    margin-top: 1%;
     padding-top: 0px;
     padding-left: 0px;
     padding-right: 0px;
