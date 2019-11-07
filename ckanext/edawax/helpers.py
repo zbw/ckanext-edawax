@@ -95,7 +95,9 @@ def parse_authors(authors):
             else:
                 temp_list.append(u"{}".format(c[2]))
         return ' and '.join(temp_list)
-    return u"{}, {}".format(authors[0], authors[1])
+    if authors[0] != u'':
+        return u"{}, {}".format(authors[0], authors[1])
+    return u"{}".format(authors[2])
 
 # redo with a dictionary that contains the order?
 # The dictionary would have the keys: position, field_name
