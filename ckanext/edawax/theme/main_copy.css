@@ -6181,7 +6181,7 @@ label {
   cursor: pointer;
   font-size: 14px;
 }
-label:after {
+label:after:not(#check_label) {
   content: ":";
 }
 label.radio:after,

@@ -101,7 +101,7 @@ class WorkflowController(PackageController):
                     # otherwise just notify them that they can review
                     try:
                         reviewer_emails.append(tk.get_action('user_show')(context, {'id': reviewer_1})['email'])
-                        add_user_to_journal(c.pkg_dict, c.pkg_dict['organization']['id'], "maintainer")
+                        add_user_to_journal(c.pkg_dict, c.pkg_dict['organization']['id'], "maintainer", "reviewer")
                     except Exception as e:
                         print('Error getting email for reveiwer 1')
                         reviewer_emails.append(None)
@@ -114,7 +114,7 @@ class WorkflowController(PackageController):
                     # otherwise just notify them that they can review
                     try:
                         reviewer_emails.append(tk.get_action('user_show')(context, {'id': reviewer_2})['email'])
-                        add_user_to_journal(c.pkg_dict, c.pkg_dict['organization']['id'], "maintainer_email")
+                        add_user_to_journal(c.pkg_dict, c.pkg_dict['organization']['id'], "maintainer_email", "reviewer")
                     except Exception as e:
                         print('Error getting email for reveiwer 2')
                         reviewer_emails.append(None)

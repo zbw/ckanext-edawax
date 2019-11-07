@@ -68,7 +68,7 @@ def check_reviewer(data_dict, reviewer, field, new=False):
     return data_dict
 
 
-def add_user_to_journal(data_dict, org_id, field):
+def add_user_to_journal(data_dict, org_id, field, role='member'):
     # add new user to journal if they aren't in already
     org_data = tk.get_action('organization_show')(None, {'id': org_id})
     maintainer = data_dict.get(field)
@@ -77,7 +77,7 @@ def add_user_to_journal(data_dict, org_id, field):
     if maintainer is not None and maintainer not in user_names:
         # if not in org, add them
         users = org_data['users']
-        users.append({'name': maintainer, 'capacity': 'member'})
+        users.append({'name': maintainer, 'capacity': role})
         updated = tk.get_action('organization_patch')({'ignore_auth': True}, {'id': org_id, 'users': users})
 
     return True
