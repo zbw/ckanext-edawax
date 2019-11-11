@@ -160,13 +160,16 @@ def is_reviewer(pkg):
         except Exception as e:
             return False
 
-    if reviewers[0] is None and reviewers[1] is None:
+    if reviewers[0] not in [None, u''] and reviewers[1] not in [None, u'']:
         # add sysadmin
         if is_admin():
             reviewers.append(c.userobj.name)
         else:
-            org_id = pkg['organization']['id']
-            reviewers = get_org_admin(org_id)
+            try:
+                org_id = pkg['organization']['id']
+                reviewers = get_org_admin(org_id)
+            except TypeError as e:
+                return False
 
     try:
         user = c.userobj.name
