@@ -125,7 +125,7 @@ def get_org_admin(org_id):
     try:
         org_data = tk.get_action('organization_show')(None, {'id': org_id})
     except Exception:
-        return False
+        return ''
     users = org_data['users']
     for user in users:
         if user['capacity'] == 'admin':
