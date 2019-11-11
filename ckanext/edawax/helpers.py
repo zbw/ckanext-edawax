@@ -147,7 +147,6 @@ def has_reviewers(pkg):
 
 
 def is_reviewer(pkg):
-    # if there are no reviewers check that the journal editor / sysadmin is the user and give access
     reviewers = []
     try:
         reviewer = getattr(pkg, 'maintainer')
@@ -162,17 +161,6 @@ def is_reviewer(pkg):
             reviewers.append(reviewer)
         except Exception as e:
             return False
-
-    if reviewers[0] not in [None, u''] and reviewers[1] not in [None, u'']:
-        # add sysadmin
-        if is_admin():
-            reviewers.append(c.userobj.name)
-        else:
-            try:
-                org_id = pkg['organization']['id']
-                reviewers = get_org_admin(org_id)
-            except TypeError as e:
-                return False
 
     try:
         user = c.userobj.name
@@ -483,10 +471,10 @@ def show_manage_button(pkg):
     if has_hammer() or is_admin(pkg):
         return True
     # authors should only be able to edit in first stage or reauthor
-    if in_review(pkg) not in ['false', 'reauthor']:
-        return not get_user_id() == pkg['creator_user_id']
-    else:
+    if in_review(pkg) in ['false', 'reauthor']:
         return get_user_id() == pkg['creator_user_id']
+    else:
+        return False
 
 
 def show_publish_button(pkg):
