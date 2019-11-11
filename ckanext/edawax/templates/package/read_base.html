@@ -86,8 +86,9 @@
     {% snippet 'package/snippets/redact_confirmation.html', pkg=pkg %}
     {% endif %}
 
-
-{{ super() }}
+    {% if h.check_access('package_update', {'id':pkg.id }) and (h.in_review(pkg) == 'editor' and (h.has_hammer() or h.is_admin(pkg)) ) %}
+      {% link_for _('Manage'), controller='package', action='edit', id=pkg.name, class_='btn', icon='wrench' %}
+    {% endif %}
 {% endblock %}
 
 
