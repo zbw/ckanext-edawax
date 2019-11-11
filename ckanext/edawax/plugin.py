@@ -313,6 +313,7 @@ class EdawaxPlugin(plugins.SingletonPlugin):
                 'count_packages': helpers.count_packages,
                 'has_reviewers': helpers.has_reviewers,
                 'get_manual_file': helpers.get_manual_file,
+                'show_manage_button': helpers.show_manage_button,
                 }
 
     def before_map(self, map):

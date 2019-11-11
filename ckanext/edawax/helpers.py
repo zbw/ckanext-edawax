@@ -471,6 +471,25 @@ def show_review_button(pkg):
     return (is_admin(pkg) and in_review(pkg) in ('reauthor', 'finished', 'editor'))  or (get_user_id() == pkg['creator_user_id'] and in_review(pkg) in ['false', 'reauthor']) or (has_hammer() and not in_review(pkg) in ['reviewers', 'reviewed']) and not pkg.get('private', True)
 
 
+def show_manage_button(pkg):
+    """
+        Show for:
+            * Admins/Editors always:
+            * Authors, before admins/editors have it
+    """
+    if not isinstance(pkg, dict):
+        return False
+    # always allow admins
+    if has_hammer() or is_admin(pkg):
+        return True
+    # authors should only be able to edit in first stage
+    if in_review(pkg) != 'false':
+        return not get_user_id() == pkg['creator_user_id']
+    elif in_review(pkg) == 'false':
+        return get_user_id() == pkg['creator_user_id']
+    return False
+
+
 def show_publish_button(pkg):
     if not isinstance(pkg, dict):
         return False
