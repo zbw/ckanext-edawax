@@ -482,12 +482,11 @@ def show_manage_button(pkg):
     # always allow admins
     if has_hammer() or is_admin(pkg):
         return True
-    # authors should only be able to edit in first stage
-    if in_review(pkg) != 'false':
+    # authors should only be able to edit in first stage or reauthor
+    if in_review(pkg) not in ['false', 'reauthor']:
         return not get_user_id() == pkg['creator_user_id']
-    elif in_review(pkg) == 'false':
+    else:
         return get_user_id() == pkg['creator_user_id']
-    return False
 
 
 def show_publish_button(pkg):
