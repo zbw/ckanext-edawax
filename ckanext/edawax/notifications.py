@@ -119,7 +119,7 @@ def author_notify(dataset, author_mail, msg, context, status):
     body = u"""
 Dear Author,
 
-A submission of yours to '{journal}' has been {status}. It is available here: {url}.
+Your submission, "{title}," to "{journal}" has been {status}. It is available here: {url}.
 
 {message}
 
@@ -136,7 +136,7 @@ best regards from ZBW--Journal Data Archive
     org = tk.get_action('organization_show')(context, {'id': org_id})
     d = {'journal': org['title'],
          'url': package_url(dataset),
-         'title': pkg.get('name'),
+         'title': pkg.get('title').title(),
          'status': status,
          'message': create_messate()}
     body = body.format(**d)
