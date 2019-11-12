@@ -177,7 +177,7 @@ A reviewer has finished reviewing a submission to '{journal}.' The submission is
          'message': create_message()}
     body = body.format(**d)
     message = MIMEText(body.encode('utf-8'), 'plain', 'utf-8')
-    message['Subject'] = Header(u"ZBW Journal Data Archive: Please revise your uploaded dataset")
+    message['Subject'] = Header(u"ZBW Journal Data Archive: Review Completed")
     message['From'] = reviewer_email
     message['To'] = Header(author_mail, 'utf-8')
     message['Cc'] = config.get('smtp.mail_from')
