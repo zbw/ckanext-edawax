@@ -120,14 +120,16 @@ class WorkflowController(PackageController):
                         reviewer_emails.append(None)
             else:
                 reviewer_emails = [reviewer_1, reviewer_2]
+        else:
+            reviewer_emails = [None, None]
         context['auth_user_obj'].sysadmin = sysadmin_status
-
 
         # check that there are reivewers
         flash_message = ""
         if reviewer_emails[0] is None and reviewer_emails[1] is None and c.pkg_dict['dara_edawax_review'] != 'false':
             if c.pkg_dict['dara_edawax_review'] == 'editor':
                 flash_message = ('This submission has no reviewers.', 'error')
+                redirect(id)
 
         note = n.review(addresses, user_name, id, reviewer_emails)
 

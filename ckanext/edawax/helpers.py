@@ -141,7 +141,7 @@ def has_reviewers(pkg):
         reviewers.append(reviewer)
         reviewer = pkg.get('maintainer_email')
         reviewers.append(reviewer)
-        return reviewers[0] is not None or reviewers[1] is not None
+        return reviewers[0] not in [None, ''] or reviewers[1] not in [None, '']
     except AttributeError as e:
         return False
 
