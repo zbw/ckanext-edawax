@@ -49,7 +49,7 @@ def review(addresses, author, dataset, reviewers=None):
         body = """
 Dear Editor,
 
-the author {user} has uploaded replication files to your journal's data archive.
+The author, {user}, has uploaded replication files, "{title}," to the data archive for your journal, the "{journal}."
 
 You can review it here: {url}
 
@@ -58,8 +58,16 @@ You can review it here: {url}
 best regards from ZBW--Journal Data Archive
 
 """
-        d = {'user': author, 'url': package_url(dataset),
-             'submission_id': subid()}
+        context = {}
+        context['ignore_auth'] = True
+        pkg = tk.get_action('package_show')(context, {'id': dataset})
+        org_id = pkg.get('owner_org', pkg.get('group_id', False))
+        org = tk.get_action('organization_show')(context, {'id': org_id})
+        d = {'user': author,
+             'url': package_url(dataset),
+             'submission_id': subid(),
+             'title': pkg.get('title').title(),
+             'journal': org['title']}
         body = body.format(**d)
         msg = MIMEText(body.encode('utf-8'), 'plain', 'utf-8')
         msg['Subject'] = Header(u"ZBW Journal Data Archive: Review Notification")
@@ -74,7 +82,7 @@ best regards from ZBW--Journal Data Archive
         body = """
 Dear Reviewer,
 
-Replication files in your journal's data archive are ready for review.
+Replication files, "{title}," have been added to the "{journal}" and are are ready for review.
 
 You can review them here: {url}
 
@@ -83,8 +91,16 @@ You can review them here: {url}
 best regards from ZBW--Journal Data Archive
 
 """
-        d = {'user': author, 'url': package_url(dataset),
-             'submission_id': subid()}
+        context = {}
+        context['ignore_auth'] = True
+        pkg = tk.get_action('package_show')(context, {'id': dataset})
+        org_id = pkg.get('owner_org', pkg.get('group_id', False))
+        org = tk.get_action('organization_show')(context, {'id': org_id})
+        d = {'user': author,
+             'url': package_url(dataset),
+             'submission_id': subid(),
+             'title': pkg.get('title').title(),
+             'journal': org['title']}
         body = body.format(**d)
         msg = MIMEText(body.encode('utf-8'), 'plain', 'utf-8')
         msg['Subject'] = Header(u"ZBW Journal Data Archive: Review Notification")
@@ -131,6 +147,7 @@ best regards from ZBW--Journal Data Archive
             return u"Message: \n==========\n\n{}".format(msg)
         return u""
 
+    context['ignore_auth'] = True
     pkg = tk.get_action('package_show')(context, {'id': dataset})
     org_id = pkg.get('owner_org', pkg.get('group_id', False))
     org = tk.get_action('organization_show')(context, {'id': org_id})
@@ -157,7 +174,7 @@ def editor_notify(dataset, author_mail, msg, context):
     body = u"""
 Dear Editor,
 
-A reviewer has finished reviewing a submission to '{journal}.' The submission is available here: {url}.
+A reviewer has finished reviewing "{title}" in your journal, the "{journal}." The submission is available here: {url}.
 
 {message}
     """
@@ -173,7 +190,9 @@ A reviewer has finished reviewing a submission to '{journal}.' The submission is
     pkg = tk.get_action('package_show')(context, {'id': dataset})
     org_id = pkg.get('owner_org', pkg.get('group_id', False))
     org = tk.get_action('organization_show')(context, {'id': org_id})
-    d = {'journal': org['title'], 'url': package_url(dataset), 'title': pkg.get('name'),
+    d = {'journal': org['title'],
+         'url': package_url(dataset),
+         'title': pkg.get('title').title(),
          'message': create_message()}
     body = body.format(**d)
     message = MIMEText(body.encode('utf-8'), 'plain', 'utf-8')
@@ -196,8 +215,7 @@ def reauthor(dataset, author_mail, msg, context):
     body = u"""
 Dear Author,
 
-the Editors of '{journal}' have requested that you revise the replication files
-named '{title}' which you submitted to the ZBW--Journal Data Archive.
+The Editors of the "{journal}" have requested that you revise your replication files "{title}" which you submitted to the ZBW--Journal Data Archive.
 
 URL: {url}
 
@@ -216,7 +234,9 @@ best regards from ZBW--Journal Data Archive
     pkg = tk.get_action('package_show')(context, {'id': dataset})
     org_id = pkg.get('owner_org', pkg.get('group_id', False))
     org = tk.get_action('organization_show')(context, {'id': org_id})
-    d = {'journal': org['title'], 'url': package_url(dataset), 'title': pkg.get('name'),
+    d = {'journal': org['title'],
+         'url': package_url(dataset),
+         'title': pkg.get('title'),
          'message': create_message()}
     body = body.format(**d)
     message = MIMEText(body.encode('utf-8'), 'plain', 'utf-8')
