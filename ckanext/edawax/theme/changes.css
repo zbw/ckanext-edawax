@@ -17,6 +17,7 @@
  * Before Breadcrumbs                                        *
  * Info Rollover                                             *
  * Responsive Settings                                       *
+ * Reviewers                                                 *
  *************************************************************/
 
 /* Limit Font */
@@ -1100,7 +1101,37 @@ h1.registration + form {
     width: 88px;
 }
 
-/************ Responseive Settings *****************/
+/************ Reviewers START ******************/
+.btn.btn-reviewer{
+    color: white;
+    border-color: #0062cc;
+    text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
+    background-color: #0069d9;
+    background-image: linear-gradient(to bottom, #0069d9, #0062cc);
+    background-repeat: repeat-x;
+}
+
+
+.btn.btn-reviewer:hover{
+    color: white;
+    background-color: #0062cc;
+}
+
+
+.reviewer-box{
+    color: white;
+    background-color: #0069d9;
+}
+
+.reviewer-box > legend{
+    color: white;
+}
+
+/************ Reviewers END ******************/
+
+
+
+/************ Responsive Settings *****************/
 
 /* Mobile Styles */
 @media (max-width: 980px){

@@ -5,13 +5,13 @@
 {% block basic_fields %}
     {{ super() }}
 
-    {% set is_admin = h.check_access('sysadmin') or
+    {#% set is_admin = h.check_access('sysadmin') or
                    h.check_journal_role(data, 'admin') %}
 
     {% if is_admin %}
         {% snippet "package/snippets/reviewer_fields.html", form=form,
         dara_type='dataset', errors=errors, data=data %}
-    {% endif %}
+    {% endif %#}
 {% endblock %}
 
 

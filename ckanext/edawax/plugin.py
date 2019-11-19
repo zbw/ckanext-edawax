@@ -268,10 +268,11 @@ class EdawaxPlugin(plugins.SingletonPlugin):
                }
 
     def get_auth_functions(self):
-        return {'package_update': journal_package_update,
-                'package_delete': journal_package_delete,
-                'resource_delete': journal_resource_delete,
-                'resource_create': journal_resource_create,
+        return {
+                    'package_update': journal_package_update,
+                    'package_delete': journal_package_delete,
+                    'resource_delete': journal_resource_delete,
+                    'resource_create': journal_resource_create,
                 }
 
     def get_helpers(self):

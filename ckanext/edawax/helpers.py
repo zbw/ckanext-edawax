@@ -456,7 +456,8 @@ def is_private(pkg):
 
 
 def show_review_button(pkg):
-    return (is_admin(pkg) and in_review(pkg) in ('reauthor', 'finished', 'editor'))  or (get_user_id() == pkg['creator_user_id'] and in_review(pkg) in ['false', 'reauthor']) or (has_hammer() and not in_review(pkg) in ['reviewers', 'reviewed']) and not pkg.get('private', True)
+    return (get_user_id() == pkg['creator_user_id'] and in_review(pkg) in ['false', 'reauthor'])
+#or (has_hammer() and not in_review(pkg) in ['reviewers', 'reviewed']) and not pkg.get('private', True) or (is_admin(pkg) and in_review(pkg) in ('reauthor', 'finished', 'editor'))
 
 
 def show_manage_button(pkg):

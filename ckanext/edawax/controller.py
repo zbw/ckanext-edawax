@@ -22,7 +22,7 @@ import zipfile
 import requests
 import StringIO
 from ckanext.dara.helpers import _parse_authors
-from ckanext.edawax.helpers import is_reviewer
+from ckanext.edawax.helpers import is_reviewer, in_review
 from ckanext.edawax.update import update_maintainer_field, email_exists, invite_reviewer, check_reviewer, add_user_to_journal
 
 import ckan.lib.base as base
@@ -63,15 +63,13 @@ class WorkflowController(PackageController):
         to the JDA as a reviewer - need a new invitation that includes a link
         to the dataset for review.
         """
-
         context = self._context()
+        c.pkg_dict = tk.get_action('package_show')(context, {'id': id})
 
         try:
             tk.check_access('package_update', context, {'id': id})
         except tk.NotAuthorized:
             tk.abort(403, 'Unauthorized')
-
-        c.pkg_dict = tk.get_action('package_show')(context, {'id': id})
 
         # avoid multiple notifications (eg. when someone calls review directly)
         if c.pkg_dict.get('dara_edawax_review', 'false') == 'true':
