@@ -1111,6 +1111,10 @@ h1.registration + form {
     background-repeat: repeat-x;
 }
 
+.btn.btn-reviewer:focus{
+    color: white;
+    background-color: #0069d9;
+}
 
 .btn.btn-reviewer:hover{
     color: white;
