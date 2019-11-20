@@ -84,9 +84,16 @@
                                         typeof="schema:Person" resource="{{
                                         author.url }}">
                     <a href="{{ author.url }}">
-                <span property="schema:name">
-                    {{ (author['firstname'], author['lastname']) | join(' ')}}
-                </span>
+                {% if not h.is_reviewer(pkg) %}
+                  <span property="schema:name">
+                  {{ (author['firstname'], author['lastname']) | join(' ')}}</span>
+                  </div>
+                  {% else %}
+                  <span property="schema:name" class="blurry">
+                    Witheld for Review
+                  </span>
+                  </div>
+                {% endif %}
                 </a>
             </div>
 

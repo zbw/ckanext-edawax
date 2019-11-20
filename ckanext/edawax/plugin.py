@@ -1,6 +1,7 @@
 # Hendrik Bunke <h.bunke@zbw.eu>
 # ZBW - Leibniz Information Centre for Economics
 
+import ckan
 import ckan.plugins as plugins
 import ckan.plugins.toolkit as tk
 from ckanext.edawax import helpers
@@ -10,6 +11,9 @@ from ckan.logic.auth.delete import package_delete as ckan_pkgdelete
 from ckan.logic.auth.delete import resource_delete as ckan_resourcedelete
 from ckan.logic.auth.create import resource_create as ckan_resourcecreate
 from ckan.config.middleware import TrackingMiddleware
+
+from ckan.logic.action.get import package_show, resource_show
+
 # from collections import OrderedDict
 import ckan.lib.helpers as h
 from ckan.common import c, request
@@ -176,6 +180,23 @@ def journal_resource_create(context, data_dict):
 
     return ckan_resourcecreate(context, data_dict)
 
+@ckan.logic.side_effect_free
+def package_show_filter(context, data_dict):
+    """ Strip out the authors' names if a reviewer is making the request"""
+    pkg = package_show(context, data_dict)
+    if helpers.is_reviewer(pkg):
+        pkg['dara_authors'] = [""]
+    return pkg
+
+@ckan.logic.side_effect_free
+def resource_show_filter(context, data_dict):
+    """ Strip out the authors' names if a reviewer is making the request"""
+    rsc = resource_show(context, data_dict)
+    pkg_id = rsc['package_id']
+    if helpers.is_reviewer(package_show(context, {"id": pkg_id})):
+        rsc['dara_authors'] = [""]
+    return rsc
+
 
 
 class NewTrackingMiddleware(TrackingMiddleware):
@@ -265,6 +286,8 @@ class EdawaxPlugin(plugins.SingletonPlugin):
         return {
                     "user_invite": invites.user_invite,
                     "package_update": package_update,
+                    "package_show": package_show_filter,
+                    "resource_show": resource_show_filter,
                }
 
     def get_auth_functions(self):

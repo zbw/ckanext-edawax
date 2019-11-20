@@ -34,6 +34,7 @@
 
   {% if dara_authors %}
       <div class="muted ellipsis" style="margin-bottom:1.25em; padding-left: 10px;">Creators:
+            {% if not h.is_reviewer(pkg) %}
             {% for author in dara_authors %}
                 <div property="schema:author" style="display:inline"
                         typeof="schema:Person"
@@ -52,6 +53,9 @@
                 {% endif %}
                 </div>
             {% endfor %}
+            {% else %}
+              <span class="blurry">Name Witheld for Review</span>
+            {% endif %}
         </div>
     {% endif %}
 
@@ -163,14 +167,19 @@
       </tr>#}
 
       {% for key, value in h.format_resource_items_custom(res.items()) %}
-        {% if key in ['Type', 'Version', 'Authors'] %}
-        <tr>
-        {% else %}
-        <tr class="toggle-more">
-        {% endif %}
-          <th scope="row">{{ key }}</th>
-          <td>{{ value }}</td>
-        </tr>
+          {% if key in ['Type', 'Version', 'Authors'] %}
+            <tr>
+          {% else %}
+            <tr class="toggle-more">
+          {% endif %}
+          {% if h.is_reviewer(pkg) and key == 'Authors' %}
+              <th scope="row">{{ key }}</th>
+              <td class="blurry">Witheld for Review</td>
+          {% else %}
+              <th scope="row">{{ key }}</th>
+              <td>{{ value }}</td>
+          {% endif %}
+            </tr>
       {% endfor %}
 
       <tr class="toggle-more">
