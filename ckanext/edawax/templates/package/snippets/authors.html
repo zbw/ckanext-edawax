@@ -30,14 +30,12 @@
                                       author.url }}">
                   <a href="{{ author.url }}">
               {% if not h.hide_from_reviewer(pkg) %}
-              <span property="schema:name">
-              {{ (author['firstname'], author['lastname']) | join(' ')}}</span>
-              </div>
+                <span property="schema:name">
+                {{ (author['firstname'], author['lastname']) | join(' ')}}</span>
               {% else %}
-              <span property="schema:name" class="blurry">
-                Witheld for Review
-              </span>
-              </div>
+                <span property="schema:name" class="blurry">
+                  Witheld for Review
+                </span>
               {% endif %}
               </a>
           </div>
@@ -46,14 +44,14 @@
           <div property="schema:author" style="display:inline"
                                       typeof="schema:Person">
           {% if not h.hide_from_reviewer(pkg) %}
-          <span property="schema:name">
-          {{ (author['firstname'], author['lastname']) | join(' ')}}</span>
-          </div>
+            <span property="schema:name">
+            {{ (author['firstname'], author['lastname']) | join(' ')}}</span>
+            </div>
           {% else %}
-          <span property="schema:name" class="blurry">
-            Witheld for Review
-          </span>
-          </div>
+            <span property="schema:name" class="blurry">
+              Witheld for Review
+            </span>
+            </div>
           {% endif %}
 
       {% endif %}
