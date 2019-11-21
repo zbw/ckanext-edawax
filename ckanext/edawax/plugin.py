@@ -186,6 +186,9 @@ def package_show_filter(context, data_dict):
     pkg = package_show(context, data_dict)
     if helpers.is_reviewer(pkg):
         pkg['dara_authors'] = [""]
+        # clear author from resources too
+        for resource in pkg['resources']:
+            resource['dara_authors'] = [""]
     return pkg
 
 @ckan.logic.side_effect_free
@@ -338,6 +341,7 @@ class EdawaxPlugin(plugins.SingletonPlugin):
                 'has_reviewers': helpers.has_reviewers,
                 'get_manual_file': helpers.get_manual_file,
                 'show_manage_button': helpers.show_manage_button,
+                'hide_from_reviewer': helpers.hide_from_reviewer,
                 }
 
     def before_map(self, map):

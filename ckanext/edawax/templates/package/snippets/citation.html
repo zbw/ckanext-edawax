@@ -32,7 +32,7 @@ convert the JSON String
     </div>
     {% if dara_authors %}
 
-    {% if not h.is_reviewer(pkg_dict) %}
+    {% if not h.hide_from_reviewer(pkg_dict) %}
         {% for author in dara_authors %}
             {% if author == dara_authors[-1] %}
                 {{ (author['lastname'], author['firstname']) | join(', ')}}

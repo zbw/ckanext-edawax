@@ -14,6 +14,8 @@ import ckan.lib.navl.dictization_functions
 import ckan.lib.plugins as lib_plugins
 from ckan.common import _, request
 
+import ckanext.edawax.helpers as h
+
 log = logging.getLogger(__name__)
 
 # Define some shortcuts
@@ -123,30 +125,32 @@ def package_update(context, data_dict):
     reviewer_1 = data_dict.get("maintainer", None)
     reviewer_2 = data_dict.get("maintainer_email", None)
 
-    if (reviewer_1 != '' or reviewer_2 != ''):
-        if (reviewer_1 is not None and reviewer_2 is not None) and ('@' in reviewer_1 or '@' in reviewer_2):
-            if reviewer_1 is not None and '@' in reviewer_1:
-                org_id = check_reviewer(data_dict, reviewer_1, "maintainer")
+    # if an admin is updating then process reviewers, otherwise ignore
+    if h.is_admin() or h.has_hammer():
+        if (reviewer_1 != '' or reviewer_2 != ''):
+            if (reviewer_1 is not None and reviewer_2 is not None) and ('@' in reviewer_1 or '@' in reviewer_2):
+                if reviewer_1 is not None and '@' in reviewer_1:
+                    org_id = check_reviewer(data_dict, reviewer_1, "maintainer")
 
-            if reviewer_2 is not None and '@' in reviewer_2:
-                org_id = check_reviewer(data_dict, reviewer_2, "maintainer_email")
+                if reviewer_2 is not None and '@' in reviewer_2:
+                    org_id = check_reviewer(data_dict, reviewer_2, "maintainer_email")
 
-        else:
-            # check that user is member of the organization
-            try:
-                org_id = data_dict['organization']['id']
-            except KeyError:
-                org_id = data_dict['owner_org']
-            org_data = tk.get_action('organization_show')(None, {'id': org_id})
-            maintainer = data_dict.get("maintainer")
-            users = org_data['users']
-            user_names = [user['name'] for user in users]
-            if maintainer is not None and maintainer not in user_names:
-                # if not in org, add them
+            else:
+                # check that user is member of the organization
+                try:
+                    org_id = data_dict['organization']['id']
+                except KeyError:
+                    org_id = data_dict['owner_org']
+                org_data = tk.get_action('organization_show')(None, {'id': org_id})
+                maintainer = data_dict.get("maintainer")
                 users = org_data['users']
+                user_names = [user['name'] for user in users]
+                if maintainer is not None and maintainer not in user_names:
+                    # if not in org, add them
+                    users = org_data['users']
 
-                users.append({'name': maintainer, 'capacity': 'member'})
-                updated = tk.get_action('organization_patch')({'ignore_auth': True}, {'id': org_id, 'users': users})
+                    users.append({'name': maintainer, 'capacity': 'member'})
+                    updated = tk.get_action('organization_patch')({'ignore_auth': True}, {'id': org_id, 'users': users})
 
     model = context['model']
     user = context['user']

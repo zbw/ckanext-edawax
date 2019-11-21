@@ -21,6 +21,10 @@ from urlparse import urlparse
 from ckanext.dara.geography_coverage import geo
 
 
+def hide_from_reviewer(pkg):
+    return is_reviewer(pkg) and is_private(pkg)
+
+
 def get_manual_file():
     eng = config.get('ckan.doc_eng')
     deu = config.get('ckan.doc_deu')
@@ -49,9 +53,13 @@ def format_resource_items_custom(items):
                 a = parse_authors(authors)
                 out.append(("3 Authors", a))
             else:
-                authors = item[1].decode('unicode_escape')
-                authors = ast.literal_eval(authors)
-                out.append(("3 Authors", parse_authors(authors)))
+                try:
+                    authors = item[1].decode('unicode_escape')
+                    authors = ast.literal_eval(authors)
+                    out.append(("3 Authors", parse_authors(authors)))
+                except AttributeError as e:
+                    authors = [""]
+                    out.append(("3 Authors", ""))
         elif item[0] == u'dara_geographicCoverage':
             countries = []
             try:

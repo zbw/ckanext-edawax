@@ -29,7 +29,7 @@
                                       typeof="schema:Person" resource="{{
                                       author.url }}">
                   <a href="{{ author.url }}">
-              {% if not h.is_reviewer(pkg) %}
+              {% if not h.hide_from_reviewer(pkg) %}
               <span property="schema:name">
               {{ (author['firstname'], author['lastname']) | join(' ')}}</span>
               </div>
@@ -45,7 +45,7 @@
       {% else %}
           <div property="schema:author" style="display:inline"
                                       typeof="schema:Person">
-          {% if not h.is_reviewer(pkg) %}
+          {% if not h.hide_from_reviewer(pkg) %}
           <span property="schema:name">
           {{ (author['firstname'], author['lastname']) | join(' ')}}</span>
           </div>
