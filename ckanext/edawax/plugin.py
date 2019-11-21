@@ -184,7 +184,7 @@ def journal_resource_create(context, data_dict):
 def package_show_filter(context, data_dict):
     """ Strip out the authors' names if a reviewer is making the request"""
     pkg = package_show(context, data_dict)
-    if helpers.is_reviewer(pkg):
+    if helpers.is_reviewer(pkg) and helpers.is_private(pkg):
         pkg['dara_authors'] = [""]
         # clear author from resources too
         for resource in pkg['resources']:
@@ -196,7 +196,8 @@ def resource_show_filter(context, data_dict):
     """ Strip out the authors' names if a reviewer is making the request"""
     rsc = resource_show(context, data_dict)
     pkg_id = rsc['package_id']
-    if helpers.is_reviewer(package_show(context, {"id": pkg_id})):
+    pkg = package_show(context, {"id": pkg_id})
+    if helpers.is_reviewer(pkg) and helpers.is_private(pkg):
         rsc['dara_authors'] = [""]
     return rsc
 
