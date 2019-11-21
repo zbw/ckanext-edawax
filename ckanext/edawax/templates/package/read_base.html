@@ -60,7 +60,6 @@
 
     {% endif %}
 
-
     {% if h.show_reauthor_button(pkg) %}
         <a class="btn btn-warning" title="Send dataset back to author"  data-toggle="modal" data-target="#reauthor_confirm">
             <i class="icon-reply"></i>Back to Author</a>
@@ -68,17 +67,15 @@
     {% endif %}
 
     {% if h.show_notify_editor_button(pkg) %}
-        <a class="btn btn-warning" title="Send notification to editor"  data-toggle="modal" data-target="#editor_notify">
+        <a class="btn btn-reviewer" title="Send notification to editor"  data-toggle="modal" data-target="#editor_notify">
             <i class="icon-reply"></i>Review Complete</a>
         {% snippet 'package/snippets/editor_notification.html', pkg=pkg %}
     {% endif %}
-
 
     {% if h.show_publish_button(pkg) %}
     <a class="btn btn-success" title="Make dataset public" href="/dataset/{{ pkg.id }}/publish">
         <i class="icon-ok"></i>Publish</a>
     {% endif %}
-
 
     {% if h.show_retract_button(pkg) %}
     <a class="btn btn-danger" title="make dataset private" data-toggle="modal" data-target="#retract">
