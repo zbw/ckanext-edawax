@@ -1721,7 +1721,7 @@ ul.nav-pills > li:first-child:hover{
 
 /* Selector fun */
 section.related_publication,
-.primary > article > .module-content > div > div:not(.modal),
+.primary > article > .module-content > div > div:not(.modal):not(.span6),
 .primary > article > .module-content > div > h1,
 .primary > article > .module-content > div > section#dataset-resources{
     padding-left: 25px;
