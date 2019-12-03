@@ -185,10 +185,24 @@ def package_show_filter(context, data_dict):
     """ Strip out the authors' names if a reviewer is making the request"""
     pkg = package_show(context, data_dict)
     if helpers.is_reviewer(pkg) and helpers.is_private(pkg):
-        pkg['dara_authors'] = [""]
+        pkg['dara_authors'] = """
+[{\"firstname\":\"Blank\",
+\"lastname\":\"Name\",
+\"url\": \"\",
+\"authorID\": \"\",
+\"affilID\": \"\",
+\"affil\": \"\",
+\"authorID_Type\": \"\"}]"""
         # clear author from resources too
         for resource in pkg['resources']:
-            resource['dara_authors'] = [""]
+            resource['dara_authors'] = """
+[{\"firstname\":\"Blank\",
+\"lastname\":\"Name\",
+\"url\": \"\",
+\"authorID\": \"\",
+\"affilID\": \"\",
+\"affil\": \"\",
+\"authorID_Type\": \"\"}]"""
     return pkg
 
 @ckan.logic.side_effect_free
@@ -198,7 +212,14 @@ def resource_show_filter(context, data_dict):
     pkg_id = rsc['package_id']
     pkg = package_show(context, {"id": pkg_id})
     if helpers.is_reviewer(pkg) and helpers.is_private(pkg):
-        rsc['dara_authors'] = [""]
+        rsc['dara_authors'] = """
+[{\"firstname\":\"Blank\",
+\"lastname\":\"Name\",
+\"url\": \"\",
+\"authorID\": \"\",
+\"affilID\": \"\",
+\"affil\": \"\",
+\"authorID_Type\": \"\"}]"""
     return rsc
 
 
