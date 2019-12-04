@@ -46,7 +46,7 @@ def review(addresses, author, dataset, reviewers=None):
 
     def message_editor(address):
 
-        body = """
+        body = u"""
 Dear Editor,
 
 The author, {user}, has uploaded replication files, "{title}," to the data archive for your journal, the "{journal}."
@@ -79,7 +79,7 @@ best regards from ZBW--Journal Data Archive
 
     def message_reviewer(address):
 
-        body = """
+        body = u"""
 Dear Reviewer,
 
 Replication files, "{title}," have been added to the "{journal}" and are are ready for review.

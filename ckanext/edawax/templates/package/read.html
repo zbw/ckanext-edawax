@@ -134,7 +134,7 @@
 
 
   {% block package_resources %}
-    {{ super () }}
+    {{ super() }}
   {% endblock %}
 
   {% snippet "package/snippets/citation.html", pkg_dict=pkg, data=data %}
@@ -146,10 +146,34 @@
 
 
 {% block package_tags %}
-    {% snippet "package/snippets/tags.html", tags=pkg.tags %}
-  {% endblock %}
+  {% snippet "package/snippets/tags.html", tags=pkg.tags %}
+{% endblock %}
 
 
+{#
+  Searching on this field doesn't work. The values are saved as a list, but
+  when searched for values are treated as one string so that if a dataset has
+  more than 1 JEL code, it isn't possible to return the dataset by searching
+  on only 1 of its JEL codes.
+
+  Need to make it into a tag vocabulary?
+#}
+{#% if pkg.dara_jels|length > 0 %}
+  <section>
+    <div class="zbw-box box-full">
+      <h3>JEL Codes</h3>
+      <ul class="tag-list">
+        {% for jel in pkg.dara_jels %}
+          <li>
+            <a class="tag" href="/dataset?dara_jels={{ jel }}">
+              {{ jel }}
+            </a>
+          </li>
+        {% endfor %}
+      </ul>
+    </div>
+  </section>
+{% endif %#}
 
 
   {% block package_additional_info %}
