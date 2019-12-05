@@ -99,3 +99,10 @@
   {{ h.build_nav_icon('dataset_activity', _('Activity Stream'), id=pkg.name) }}
   {#{ h.build_nav_icon('related_list', _('Related'), id=pkg.name) }#}
 {% endblock %}
+
+{% block package_social %}
+  {% if h.in_review(pkg) == 'reviewed' %}
+    {% snippet "snippets/social.html" %}
+  {% endif %}
+{% endblock %}
+
