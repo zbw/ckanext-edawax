@@ -20,7 +20,6 @@ from urlparse import urlparse
 
 from ckanext.dara.geography_coverage import geo
 
-
 def hide_from_reviewer(pkg):
     return is_reviewer(pkg) and is_private(pkg)
 
