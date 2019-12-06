@@ -184,42 +184,27 @@ def journal_resource_create(context, data_dict):
 def package_show_filter(context, data_dict):
     """ Strip out the authors' names if a reviewer is making the request"""
     pkg = package_show(context, data_dict)
-    if helpers.is_reviewer(pkg) and helpers.is_private(pkg):
-        pkg['dara_authors'] = """
-[{\"firstname\":\"Blank\",
-\"lastname\":\"Name\",
-\"url\": \"\",
-\"authorID\": \"\",
-\"affilID\": \"\",
-\"affil\": \"\",
-\"authorID_Type\": \"\"}]"""
-        # clear author from resources too
-        for resource in pkg['resources']:
-            resource['dara_authors'] = """
-[{\"firstname\":\"Blank\",
-\"lastname\":\"Name\",
-\"url\": \"\",
-\"authorID\": \"\",
-\"affilID\": \"\",
-\"affil\": \"\",
-\"authorID_Type\": \"\"}]"""
+    if context.get('api_version', None) == 3 and helpers.is_reviewer(pkg):
+        if helpers.is_reviewer(pkg) and helpers.is_private(pkg):
+            pkg['dara_authors'] = [""]
+            # clear author from resources too
+            for resource in pkg['resources']:
+                resource['dara_authors'] = [""]
+        return pkg
     return pkg
+
 
 @ckan.logic.side_effect_free
 def resource_show_filter(context, data_dict):
     """ Strip out the authors' names if a reviewer is making the request"""
     rsc = resource_show(context, data_dict)
-    pkg_id = rsc['package_id']
-    pkg = package_show(context, {"id": pkg_id})
-    if helpers.is_reviewer(pkg) and helpers.is_private(pkg):
-        rsc['dara_authors'] = """
-[{\"firstname\":\"Blank\",
-\"lastname\":\"Name\",
-\"url\": \"\",
-\"authorID\": \"\",
-\"affilID\": \"\",
-\"affil\": \"\",
-\"authorID_Type\": \"\"}]"""
+    if context.get('api_version', None) == 3:
+        rsc = resource_show(context, data_dict)
+        pkg_id = rsc['package_id']
+        pkg = package_show(context, {"id": pkg_id})
+        if helpers.is_reviewer(pkg) and helpers.is_private(pkg):
+            rsc['dara_authors'] = [""]
+        return rsc
     return rsc
 
 
