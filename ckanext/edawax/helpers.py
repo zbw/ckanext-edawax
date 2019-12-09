@@ -488,7 +488,7 @@ def show_manage_button(pkg):
 def show_publish_button(pkg):
     if not isinstance(pkg, dict):
         return False
-    return (check_journal_role(pkg, 'admin') or has_hammer()) and in_review(pkg) in ['true', 'reviewers', 'finished', 'editor']
+    return (check_journal_role(pkg, 'admin') or has_hammer()) and in_review(pkg) in ['true', 'reviewers', 'finished', 'editor', 'back']
 
 
 def show_retract_button(pkg):
@@ -500,7 +500,7 @@ def show_retract_button(pkg):
 def show_reauthor_button(pkg):
     if not isinstance(pkg, dict):
         return False
-    return (check_journal_role(pkg, 'admin') or has_hammer()) and in_review(pkg) in ['true', 'finished', 'editor', 'reviewers']
+    return (check_journal_role(pkg, 'admin') or has_hammer()) and in_review(pkg) in ['true', 'finished', 'editor', 'reviewers', 'back']
 
 
 def show_notify_editor_button(pkg):

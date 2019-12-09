@@ -155,18 +155,19 @@ class WorkflowController(PackageController):
                 - reviewers = reviewers have for review
                 - reviewed = review is finished
                 - reauthor = sent back to author
+                - back = back to editor from reviewers
 
             false -> editor
             editor -> reviewers || reauthor
-            reviewers -> editor
-            editor -> reviewed
+            reviewers -> back
+            back -> reviewed
         """
         current_state = pkg_dict['dara_edawax_review']
 
         if current_state == 'false':
             pkg_dict['dara_edawax_review'] = 'editor'
 
-        if current_state == 'editor':
+        if current_state in ['editor', 'back']:
             pkg_dict['dara_edawax_review'] = 'reviewers'
 
         if current_state == 'reauthor':
@@ -271,7 +272,7 @@ class WorkflowController(PackageController):
         note = n.editor_notify(id, creator_mail, msg, context)
 
         if note:
-            c.pkg_dict.update({'private': True, 'dara_edawax_review': 'editor'})
+            c.pkg_dict.update({'private': True, 'dara_edawax_review': 'back'})
             tk.get_action('package_update')(context, c.pkg_dict)
             h.flash_success('Notification sent. Journal editor will be notified.')
         else:
