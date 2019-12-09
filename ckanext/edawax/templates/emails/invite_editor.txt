@@ -6,9 +6,10 @@ To accept this invitation, please reset your password by clicking the link below
 
 {{ reset_link }}
 
-For advice, please consult the documentation of our service ({{ site_url }}/{{ man_eng }} or {{ site_url }}/{{ man_deu }}) or get in touch with the product manager, Mr. Sven Vlaeminck (journaldata@zbw.eu).
+For advice, please consult the documentation of our service ({{ site_url }}/Editors_Manual_EN.pdf / {{ site_url }}/Editors_Manual_DE.pdf) or get in touch with the product manager, Mr. Sven Vlaeminck (journaldata@zbw.eu).
 
 Thank you in advance,
 
 Sincerely,
 ZBW Journal Data Archive
+
