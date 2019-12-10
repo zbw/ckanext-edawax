@@ -10,9 +10,36 @@
     <legend>Dataset Reviewers</legend>
     {#{ form.input('maintainer', label=_('Reviewer'), id='field-maintainer', placeholder=_('Reviewer 1'), value=data.maintainer, error=errors.maintainer, classes=['control-medium'], attrs={'data-infotext': """Use this field if you'd like to add a reviewer. Select the name from the dropdown list if they already have JDA accounts, otherwise provide their email address and they will be invited to the platform. """, 'data-module': 'autocomplete', 'data-module-source': '/api/2/util/user/autocomplete?q=?'}) }#}
 
-    {{ form.input('maintainer', label=_('Reviewer'), id='field-maintainer', placeholder=_('Reviewer1@email.com'), value=data.maintainer, error=errors.maintainer, classes=['control-medium'], attrs={'data-infotext': """Use this field if you'd like to add a reviewer. Enter the email address of the reviewer."""}) }}
+    {{ form.input('maintainer', label=_('Reviewer'), id='field-maintainer', placeholder=_('Reviewer1@email.com'), value=data.maintainer, error=errors.maintainer, classes=['control-medium'], attrs={'data-infotext': """Use this field if you'd like to add a reviewer. Enter the email address of the reviewer.""", 'resource': data['name']}) }}
 
-    {{ form.input('maintainer_email', label=_('Reviewer'), id='field-maintainer-email', placeholder=_('Reviewer2@email.com'), value=data.maintainer_email, error=errors.maintainer_email, classes=['control-medium'], attrs={'data-infotext': """Use this field if you'd like to add a reviewer. Enter the email address of the reviewer."""}) }}
+    {{ form.input('maintainer_email', label=_('Reviewer'), id='field-maintainer-email', placeholder=_('Reviewer2@email.com'), value=data.maintainer_email, error=errors.maintainer_email, classes=['control-medium'], attrs={'data-infotext': """Use this field if you'd like to add a reviewer. Enter the email address of the reviewer.""", 'resource': data['name']}) }}
+
+    <script>
+        var reviewer_1 = document.getElementById('field-maintainer');
+        var reviewer_2 = document.getElementById('field-maintainer-email');
+
+        reviewer_1.addEventListener('change', updateCookie_1);
+        reviewer_2.addEventListener('change', updateCookie_2);
+
+        reviewer_1_old = reviewer_1.value;
+        reviewer_2_old = reviewer_2.value;
+
+        var time = new Date();
+        var now = time.getTime();
+        var expire = now +  (3600 * 1000);
+        time.setTime(expire);
+
+        function updateCookie_1(e){
+            console.log(reviewer_1_old);
+            document.cookie = "reviewerOnePrev_" + reviewer_1.getAttribute('resource') + "=" + reviewer_1_old + ";path=/;expires=" + time.toGMTString();
+        }
+
+        function updateCookie_2(e){
+            console.log(reviewer_2_old);
+            document.cookie = "reviewerTwoPrev_" + reviewer_2.getAttribute('resource') + "=" + reviewer_2_old + ";path=/;expires=" + time.toGMTString();
+        }
+    </script>
+
     </div>
     <a name="dataset_reviewers"></a>
 {% endif %}

@@ -349,6 +349,8 @@ class EdawaxPlugin(plugins.SingletonPlugin):
                 'get_manual_file': helpers.get_manual_file,
                 'show_manage_button': helpers.show_manage_button,
                 'hide_from_reviewer': helpers.hide_from_reviewer,
+                'check_reviewer_update': helpers.check_reviewer_update,
+                'show_change_reviewer': helpers.show_change_reviewer,
                 }
 
     def before_map(self, map):

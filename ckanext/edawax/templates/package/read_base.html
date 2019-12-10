@@ -3,7 +3,28 @@
 {% import 'macros/form.html' as form %}
 
 {% block content_action %}
-    {% resource 'edawax_fs/edawax-confirm.js' %}
+
+  {% if h.show_change_reviewer(pkg) %}
+    {% if not h.check_reviewer_update(pkg) %}
+      <a title="Update reviewers"
+          class="btn btn-reviewer"
+          href="/dataset/edit/{{ pkg.id }}#dataset_reviewers">
+        <i class="icon-plus"></i>
+        {%- if h.has_reviewers(pkg) -%}
+          Change Reviewers</a>
+        {%- else -%}
+          Add Reviewers</a>
+        {%- endif -%}
+    {% else %}
+      <a title="Update reviewers"
+          class="btn btn-reviewer"
+          href="/dataset/{{pkg.id}}/review">
+        <i class="icon-envelope"></i>Re-Send to Reviewers</a>
+    {% endif %}
+
+  {% endif %}
+
+  {% resource 'edawax_fs/edawax-confirm.js' %}
     {% if h.show_review_button(pkg) %}
         {% set confirm = h.dump_json({'content': '
         <p>This stores your dataset and
@@ -24,13 +45,6 @@
         }) %}
 
         {% set reviewers = false %}
-
-        {% if pkg['dara_edawax_review'] == 'reviewers' %}
-          <a title="Sends notification reviewers"
-                class="btn btn-reviewer"
-                href="/dataset/edit/{{ pkg.id }}#dataset_reviewers">
-              <i class="icon-plus"></i>Change Reviewers</a>
-        {% endif %}
 
         {% if pkg['dara_edawax_review'] in ['editor', 'back'] %}
 

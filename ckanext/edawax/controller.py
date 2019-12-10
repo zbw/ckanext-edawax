@@ -22,7 +22,7 @@ import zipfile
 import requests
 import StringIO
 from ckanext.dara.helpers import _parse_authors
-from ckanext.edawax.helpers import is_reviewer, in_review
+from ckanext.edawax.helpers import is_reviewer, in_review, delete_cookies
 from ckanext.edawax.update import update_maintainer_field, email_exists, invite_reviewer, check_reviewer, add_user_to_journal
 
 import ckan.lib.base as base
@@ -65,6 +65,8 @@ class WorkflowController(PackageController):
         """
         context = self._context()
         c.pkg_dict = tk.get_action('package_show')(context, {'id': id})
+
+        delete_cookies(c.pkg_dict)
 
         try:
             tk.check_access('package_update', context, {'id': id})

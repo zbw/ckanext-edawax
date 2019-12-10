@@ -20,6 +20,36 @@ from urlparse import urlparse
 
 from ckanext.dara.geography_coverage import geo
 
+
+def check_reviewer_update(pkg):
+    reviewer_1_old = request.cookies.get('reviewerOnePrev_{}'.format(pkg['name']), False)
+    reviewer_2_old = request.cookies.get('reviewerTwoPrev_{}'.format(pkg['name']), False)
+
+    reviewer_1_new = pkg['maintainer']
+    reviewer_2_new = pkg['maintainer_email']
+
+    if (reviewer_1_old and (reviewer_1_new != '') and reviewer_1_old != reviewer_1_new) or \
+        (reviewer_2_old and (reviewer_2_new != '') and reviewer_2_old != reviewer_2_new):
+        return True
+
+    return False
+
+
+def delete_cookies(pkg):
+    """ Clear Cookies - after resend """
+    try:
+        cookie = 'reviewerOnePrev_{}'.format(pkg['name'])
+        response.delete_cookie(cookie, '/')
+    except Exception as e:
+        print('Error: {}'.format(e))
+
+    try:
+        cookie = 'reviewerTwoPrev_{}'.format(pkg['name'])
+        response.delete_cookie(cookie, '/')
+    except Exception as e:
+        print('Error: {}'.format(e))
+
+
 def hide_from_reviewer(pkg):
     return is_reviewer(pkg) and is_private(pkg)
 
@@ -461,6 +491,9 @@ def is_private(pkg):
         return True
     return pkg.get('private', True)
 
+
+def show_change_reviewer(pkg):
+    return in_review(pkg) == 'reviewers' and (is_admin(pkg) or has_hammer())
 
 def show_review_button(pkg):
     return (get_user_id() == pkg['creator_user_id'] and in_review(pkg) in ['false', 'reauthor']) or ( (has_hammer() or is_admin(pkg)) and not in_review(pkg) in ['reviewers', 'reviewed'])
