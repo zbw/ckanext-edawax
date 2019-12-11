@@ -25,11 +25,14 @@ def check_reviewer_update(pkg):
     reviewer_1_old = request.cookies.get('reviewerOnePrev_{}'.format(pkg['name']), False)
     reviewer_2_old = request.cookies.get('reviewerTwoPrev_{}'.format(pkg['name']), False)
 
+    if reviewer_1_old is False and reviewer_2_old is False:
+        return False
+
     reviewer_1_new = pkg['maintainer']
     reviewer_2_new = pkg['maintainer_email']
 
-    if (reviewer_1_old and (reviewer_1_new != '') and reviewer_1_old != reviewer_1_new) or \
-        (reviewer_2_old and (reviewer_2_new != '') and reviewer_2_old != reviewer_2_new):
+    if (reviewer_1_new and (reviewer_1_new != '') and reviewer_1_old != reviewer_1_new) or \
+        (reviewer_2_new and (reviewer_2_new != '') and reviewer_2_old != reviewer_2_new):
         return True
 
     return False

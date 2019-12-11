@@ -250,6 +250,7 @@ class WorkflowController(PackageController):
         context = self._context()
         msg = tk.request.params.get('msg', '')
         c.pkg_dict = tk.get_action('package_show')(context, {'id': id})
+        delete_cookies(c.pkg_dict)
         creator_mail = model.User.get(c.pkg_dict['creator_user_id']).email
         admin_mail = model.User.get(c.user).email
         #note = n.reauthor(id, creator_mail, admin_mail, msg, context)
