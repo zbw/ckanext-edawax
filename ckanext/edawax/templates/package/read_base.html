@@ -9,10 +9,11 @@
       <a title="Update reviewers"
           class="btn btn-reviewer"
           href="/dataset/edit/{{ pkg.id }}#dataset_reviewers">
-        <i class="icon-plus"></i>
         {%- if h.has_reviewers(pkg) -%}
+          <i class="icon-refresh"></i>
           Change Reviewers</a>
         {%- else -%}
+          <i class="icon-plus"></i>
           Add Reviewers</a>
         {%- endif -%}
     {% else %}
@@ -110,7 +111,7 @@
       {% else %}
         <a title="Make dataset public."
                 class="btn btn-success" data-toggle="modal" data-target="#related_notify">
-             <i class="icon-envelope"></i>Publish</a>
+             <i class="icon-ok"></i>Publish</a>
         {% snippet 'package/snippets/related_notification.html', pkg=pkg %}
       {% endif %}
     {% endif %}
