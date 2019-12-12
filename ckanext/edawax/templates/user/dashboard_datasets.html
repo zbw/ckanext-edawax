@@ -2,7 +2,38 @@
 
 
 {% block page_primary_action %}
-  {% if h.check_access('package_create') %}
+  {#% if h.check_access('package_create') %}
     {% link_for _('Add Dataset'), controller='package', action='new', class_="btn btn-primary split", icon="plus-sign-alt" %}
+  {% endif %#}
+{% endblock %}
+
+
+{% block primary_content_inner %}
+  <h2 class="hide-heading">{{ _('My Datasets') }}</h2>
+  {% if c.user_dict.datasets %}
+    {% snippet 'snippets/package_list.html', packages=c.user_dict.datasets %}
+  {% else %}
+    {% set packages = h.find_reviewers_datasets(c.user_dict.name) %}
+    {% if packages|length > 0 %}
+        <div class="zbw-box box-bottom">
+            <h2 class="zbw-font zbw-blue">Waiting for Review:</h2>
+                <ul class="activity">
+            {% for package in packages %}
+                <li class="item">
+                    <i class="icon-arrow-right"></i>
+                    <a href="/dataset/{{ package['id'] }}">
+                        {{ package['name'] }}
+                    </a>
+                </li>
+            {% endfor %}
+                </ul>
+        </div>
+    {% endif %}
+    <p class="empty">
+        {{ _('You haven\'t created any datasets.') }}
+        {% if h.check_access('package_create') %}
+            {% link_for _('Create one now?'), controller='package', action='new' %}
+        {%endif %}
+    </p>
   {% endif %}
 {% endblock %}

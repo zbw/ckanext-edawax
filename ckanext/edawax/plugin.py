@@ -351,6 +351,7 @@ class EdawaxPlugin(plugins.SingletonPlugin):
                 'hide_from_reviewer': helpers.hide_from_reviewer,
                 'check_reviewer_update': helpers.check_reviewer_update,
                 'show_change_reviewer': helpers.show_change_reviewer,
+                'find_reviewers_datasets': helpers.find_reviewers_datasets,
                 }
 
     def before_map(self, map):

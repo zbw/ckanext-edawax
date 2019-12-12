@@ -636,6 +636,28 @@ def resource_downloads(resource):
     return results[0][0]
 
 
+def find_reviewers_datasets(name):
+    sql = """
+            SELECT package.id, package.title
+            FROM package
+            INNER JOIN "user" as u
+            ON package.maintainer = u.name
+            INNER JOIN member
+            ON member.table_id = u.id
+            INNER JOIN package_extra as pe
+            ON package.id = pe.package_id
+            WHERE member.capacity = 'reviewer'
+            AND u.name = %(name)s
+            AND package.private = 't'
+            AND pe.key = 'dara_edawax_review'
+            AND pe.value = 'reviewers'
+            GROUP BY package.id;
+          """
+    results = engine.execute(sql, {'name':name}).fetchall()
+    out = [{'id': result[0],
+            'name': result[1].title()} for result in results]
+    return out
+
 #===========================================================#
 # The following come from ckan/lib/cli.py                   #
 # They need to be changed to work with 'url' rather than ID #

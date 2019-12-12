@@ -94,6 +94,7 @@ class WorkflowController(PackageController):
                 # reviewer is an email address
                 if reviewer_1 is not None and '@' in reviewer_1:
                     data_dict = check_reviewer(data_dict,reviewer_1,"maintainer")
+                    reviewer_1 = data_dict['name']
                     reviewer_emails.append(None)
                     # don't notify them about the review, only send an
                     # invitation that says they can review
@@ -109,6 +110,7 @@ class WorkflowController(PackageController):
 
                 if reviewer_2 is not None and '@' in reviewer_2:
                     data_dict = check_reviewer(data_dict,reviewer_2,"maintainer_email")
+                    reviewer_2 = data_dict['name']
                     reviewer_emails.append(None)
                 else:
                     # otherwise just notify them that they can review
@@ -145,6 +147,7 @@ class WorkflowController(PackageController):
             h.flash_success(flash_message[0])
         else:
             h.flash_error(flash_message[0])
+
         redirect(id)
 
 

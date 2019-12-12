@@ -112,10 +112,17 @@
   </div>
 #}
   {% if h.in_review(pkg) in ['true', 'editor', 'reviewers'] %}
+    {% if h.is_reviewer(pkg) %}
+        <span class="dataset-private label pull-right label-reviewer">
+          <i class="icon-eye-open"></i>
+          {{ 'My Review' }}
+        </span>
+    {% else %}
         <span class="dataset-private label pull-right label-review">
           <i class="icon-lock"></i>
           {{ 'Review' }}
         </span>
+    {% endif %}
 
    {% endif %}
 

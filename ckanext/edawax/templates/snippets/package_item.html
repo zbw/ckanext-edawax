@@ -22,10 +22,17 @@
 
 {% block heading_private %}
   {% if h.in_review(package) in ['true', 'editor', 'reviewers'] %}
-      <span class="dataset-private label label-review">
-        <i class="icon-lock"></i>
-        {{ 'Review' }}
-      </span><br>
+      {% if h.is_reviewer(package) %}
+        <span class="dataset-private label label-reviewer">
+          <i class="icon-eye-open"></i>
+          {{ 'My Review' }}
+        </span><br>
+      {% else %}
+        <span class="dataset-private label label-review">
+          <i class="icon-lock"></i>
+          {{ 'Review' }}
+        </span><br>
+      {% endif %}
   {% elif h.in_review(package) == 'reauthor' %}
       <span class="dataset-private label label-reautho">
         <i class="icon-lock"></i>

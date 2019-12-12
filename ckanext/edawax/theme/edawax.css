@@ -178,6 +178,9 @@ label {
 .label-review {
   background-color: darkorange !important;
 }
+.label-reviewer {
+  background-color: #0069d9 !important;
+}
 .label-reauthor {
   background-color: #808096 !important;
 }
