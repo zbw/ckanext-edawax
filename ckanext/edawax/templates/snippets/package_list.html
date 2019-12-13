@@ -41,7 +41,7 @@ Example:
 
 {% block package_list %}
   {% if h.find_reviewers_datasets(c.userobj.name)|length > 0 %}
-    <div class="zbw-box box-bottom">
+    <div class="zbw-box box-full">
         <h2 class="zbw-font zbw-blue">Waiting for Review:</h2>
             <ul class="activity">
         {% for item in h.find_reviewers_datasets(c.userobj.name) %}
