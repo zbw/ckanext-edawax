@@ -40,6 +40,21 @@ Example:
 
 
 {% block package_list %}
+  {% if h.find_reviewers_datasets(c.userobj.name)|length > 0 %}
+    <div class="zbw-box box-bottom">
+        <h2 class="zbw-font zbw-blue">Waiting for Review:</h2>
+            <ul class="activity">
+        {% for item in h.find_reviewers_datasets(c.userobj.name) %}
+            <li class="item">
+                <i class="icon reviewer-icon icon-eye-open"></i>
+                <p class="reviewer_list"><a href="/dataset/{{ item['id'] }}">
+                    {{ item['name'] }}
+                </a></p>
+            </li>
+        {% endfor %}
+            </ul>
+    </div>
+  {% endif %}
   {% if packages %}
     <ul class="{{ list_class or 'dataset-list unstyled' }}">
     	{% block package_list_inner %}
@@ -55,7 +70,7 @@ Example:
                     #}
                     {{ package_list(jp.packages) }}
                 {% endfor %}
-                {% else %}
+            {% else %}
                     {{ package_list(packages) }}
             {% endif %}
 
