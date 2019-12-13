@@ -637,6 +637,8 @@ def resource_downloads(resource):
 
 
 def find_reviewers_datasets(name):
+    if not name:
+        return []
     sql = """
             SELECT package.id, package.title
             FROM package
