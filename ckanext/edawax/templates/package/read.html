@@ -120,10 +120,17 @@
     {% else %}
         <span class="dataset-private label pull-right label-review">
           <i class="icon-lock"></i>
-          {{ 'Review' }}
+          {% if pkg['dara_edawax_review'] != 'editor' %}
+            {{ 'Review' }}
+          {% else %}
+            {% if h.has_reviewers(pkg) %}
+              {{ 'Not Sent to Reviewers' }}
+            {% else %}
+              {{ 'No Reviewers' }}
+            {% endif %}
+          {% endif %}
         </span>
     {% endif %}
-
    {% endif %}
 
   {% if h.in_review(pkg) == 'reauthor' %}

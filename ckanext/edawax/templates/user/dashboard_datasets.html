@@ -20,10 +20,10 @@
                 <ul class="activity">
             {% for package in packages %}
                 <li class="item">
-                    <i class="icon-arrow-right"></i>
-                    <a href="/dataset/{{ package['id'] }}">
+                    <i class="icon reviewer-icon icon-eye-open"></i>
+                    <p class="reviewer_list"><a href="/dataset/{{ package['id'] }}">
                         {{ package['name'] }}
-                    </a>
+                    </a></p>
                 </li>
             {% endfor %}
                 </ul>

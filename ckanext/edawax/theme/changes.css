@@ -1859,3 +1859,12 @@ p.empty {
 .hidden_field{
     display: none;
 }
+
+
+.activity .item p.reviewer_list {
+    margin-left: 40px;
+}
+
+.activity .item i.reviewer-icon {
+    background-color: #0069d9;
+}
