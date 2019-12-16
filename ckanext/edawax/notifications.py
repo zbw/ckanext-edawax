@@ -113,7 +113,7 @@ best regards from ZBW--Journal Data Archive
     # send email
     # to Admin
     t = []
-    if pkg_status(dataset) in ['reauthor', 'false'] \
+    if pkg_status(dataset) in ['reauthor', 'false', 'reviewers'] \
         or reviewers == [None, None]:
         t = map(lambda a: sendmail(a, message_editor(a)), addresses)
     else:

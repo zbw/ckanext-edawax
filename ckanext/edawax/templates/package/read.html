@@ -122,6 +122,8 @@
           <i class="icon-lock"></i>
           {% if pkg['dara_edawax_review'] != 'editor' %}
             {{ 'Review' }}
+          {% elif h.is_reviewer(pkg) or h.is_author(pkg) %}
+            {{ 'In Review' }}
           {% else %}
             {% if h.has_reviewers(pkg) %}
               {{ 'Not Sent to Reviewers' }}

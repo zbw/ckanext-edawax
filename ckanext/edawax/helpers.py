@@ -495,6 +495,9 @@ def is_private(pkg):
     return pkg.get('private', True)
 
 
+def is_author(pkg):
+    return get_user_id() == pkg['creator_user_id']
+
 def show_change_reviewer(pkg):
     return in_review(pkg) == 'reviewers' and (is_admin(pkg) or has_hammer())
 
