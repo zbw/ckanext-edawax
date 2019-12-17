@@ -93,9 +93,13 @@ class WorkflowController(PackageController):
             if reviewer_1 is not None and reviewer_2 is not None:
                 # reviewer is an email address
                 if reviewer_1 is not None and '@' in reviewer_1:
-                    data_dict = check_reviewer(data_dict,reviewer_1,"maintainer")
+                    data_dict, old = check_reviewer(data_dict,reviewer_1,"maintainer")
+                    if old:
+                        reviewer_emails.append(reviewer_1)
+                    else:
+                        reviewer_emails.append(None)
                     reviewer_1 = data_dict['name']
-                    reviewer_emails.append(None)
+                    # if the reviewer is new
                     # don't notify them about the review, only send an
                     # invitation that says they can review
                 else:
@@ -109,9 +113,12 @@ class WorkflowController(PackageController):
 
 
                 if reviewer_2 is not None and '@' in reviewer_2:
-                    data_dict = check_reviewer(data_dict,reviewer_2,"maintainer_email")
+                    data_dict, old = check_reviewer(data_dict,reviewer_2,"maintainer_email")
+                    if old:
+                        reviewer_emails.append(reviewer_2)
+                    else:
+                        reviewer_emails.append(None)
                     reviewer_2 = data_dict['name']
-                    reviewer_emails.append(None)
                 else:
                     # otherwise just notify them that they can review
                     try:

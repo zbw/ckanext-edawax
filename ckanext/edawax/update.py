@@ -58,6 +58,7 @@ def check_reviewer(data_dict, reviewer, field, new=False):
         # new name
         if user_exists:
             data_dict = update_maintainer_field(user_exists, data_dict, field)
+            old = True
         # check if use is part of group, if not add them
         else:
             try:
@@ -66,8 +67,9 @@ def check_reviewer(data_dict, reviewer, field, new=False):
                 org_id = data_dict['owner_org']
             new_user = invite_reviewer(email, org_id)
             data_dict = update_maintainer_field(new_user['name'], data_dict, field)
+            old = False
 
-    return data_dict
+    return data_dict, False
 
 
 def add_user_to_journal(data_dict, org_id, field, role='member'):
