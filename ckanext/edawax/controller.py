@@ -86,6 +86,7 @@ class WorkflowController(PackageController):
         reviewer_1 = data_dict.get("maintainer", None)
         reviewer_2 = data_dict.get("maintainer_email", None)
         reviewer_emails = []
+        # Needs to be "system admin" inorder to get the unhashed email
         sysadmin_status = context['auth_user_obj'].sysadmin
         context['auth_user_obj'].sysadmin = True
 
