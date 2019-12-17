@@ -69,7 +69,7 @@ def check_reviewer(data_dict, reviewer, field, new=False):
             data_dict = update_maintainer_field(new_user['name'], data_dict, field)
             old = False
 
-    return data_dict, False
+    return data_dict, old
 
 
 def add_user_to_journal(data_dict, org_id, field, role='member'):
