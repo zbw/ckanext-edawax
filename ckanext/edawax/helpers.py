@@ -338,7 +338,7 @@ def tags_exist(data):
     return False
 
 def is_landing_page():
-    if 'edit' in request.url or '/dataset/resources' in request.url:
+    if '/edit/' in request.url or '/dataset/resources' in request.url:
         return False
     return True
 
