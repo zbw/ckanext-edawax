@@ -63,6 +63,7 @@ class WorkflowController(PackageController):
         to the JDA as a reviewer - need a new invitation that includes a link
         to the dataset for review.
         """
+        log.debug('Sending to reviewers')
         context = self._context()
         c.pkg_dict = tk.get_action('package_show')(context, {'id': id})
 
@@ -90,48 +91,64 @@ class WorkflowController(PackageController):
         sysadmin_status = context['auth_user_obj'].sysadmin
         context['auth_user_obj'].sysadmin = True
 
-        if (reviewer_1 != '' or reviewer_2 != ''):
-            if reviewer_1 is not None and reviewer_2 is not None:
-                # reviewer is an email address
-                if reviewer_1 is not None and '@' in reviewer_1:
-                    data_dict, old = check_reviewer(data_dict,reviewer_1,"maintainer")
-                    if old:
-                        reviewer_emails.append(reviewer_1)
-                    else:
-                        reviewer_emails.append(None)
-                    reviewer_1 = data_dict['name']
-                    # if the reviewer is new
-                    # don't notify them about the review, only send an
-                    # invitation that says they can review
-                else:
-                    # otherwise just notify them that they can review
-                    try:
-                        reviewer_emails.append(tk.get_action('user_show')(context, {'id': reviewer_1})['email'])
-                        add_user_to_journal(c.pkg_dict, c.pkg_dict['organization']['id'], "maintainer", "reviewer")
-                    except Exception as e:
-                        print('Error getting email for reveiwer 1')
-                        reviewer_emails.append(None)
+        log.debug("Reviewer 1: {}".format(reviewer_1))
+        log.debug("Reviewer 2: {}".format(reviewer_2))
 
-
-                if reviewer_2 is not None and '@' in reviewer_2:
-                    data_dict, old = check_reviewer(data_dict,reviewer_2,"maintainer_email")
-                    if old:
-                        reviewer_emails.append(reviewer_2)
+        try:
+            if (reviewer_1 != '' or reviewer_2 != ''):
+                if reviewer_1 is not None and reviewer_2 is not None:
+                    # reviewer is an email address
+                    if reviewer_1 is not None and '@' in reviewer_1:
+                        log.debug('Reviewer 1 is an email address')
+                        data_dict, old = check_reviewer(data_dict,reviewer_1,"maintainer")
+                        if old:
+                            log.debug('Reviewer 1 already exists')
+                            reviewer_emails.append(reviewer_1)
+                        else:
+                            log.debug('Reviewer 1 is new')
+                            reviewer_emails.append(None)
+                        reviewer_1 = data_dict['name']
+                        # if the reviewer is new
+                        # don't notify them about the review, only send an
+                        # invitation that says they can review
                     else:
-                        reviewer_emails.append(None)
-                    reviewer_2 = data_dict['name']
+                        log.debug('Reviewer 1 is a user name')
+                        # otherwise just notify them that they can review
+                        try:
+                            reviewer_emails.append(tk.get_action('user_show')(context, {'id': reviewer_1})['email'])
+                            add_user_to_journal(c.pkg_dict, c.pkg_dict['organization']['id'], "maintainer", "reviewer")
+                        except Exception as e:
+                            print('Error getting email for reveiwer 1')
+                            reviewer_emails.append(None)
+
+                    if reviewer_2 is not None and '@' in reviewer_2:
+                        log.debug('Reviewer 1 is an email address')
+                        data_dict, old = check_reviewer(data_dict,reviewer_2,"maintainer_email")
+                        if old:
+                            log.debug('Reviewer 2 already exists')
+                            reviewer_emails.append(reviewer_2)
+                        else:
+                            log.debug('Reviewer 2 is new')
+                            reviewer_emails.append(None)
+                        reviewer_2 = data_dict['name']
+                    else:
+                        log.debug('Reviewer 2 is a user name')
+                        # otherwise just notify them that they can review
+                        try:
+                            reviewer_emails.append(tk.get_action('user_show')(context, {'id': reviewer_2})['email'])
+                            add_user_to_journal(c.pkg_dict, c.pkg_dict['organization']['id'], "maintainer_email", "reviewer")
+                        except Exception as e:
+                            print('Error getting email for reveiwer 2')
+                            reviewer_emails.append(None)
                 else:
-                    # otherwise just notify them that they can review
-                    try:
-                        reviewer_emails.append(tk.get_action('user_show')(context, {'id': reviewer_2})['email'])
-                        add_user_to_journal(c.pkg_dict, c.pkg_dict['organization']['id'], "maintainer_email", "reviewer")
-                    except Exception as e:
-                        print('Error getting email for reveiwer 2')
-                        reviewer_emails.append(None)
+                    log.debug('Reviewers are empty')
+                    reviewer_emails = [reviewer_1, reviewer_2]
             else:
-                reviewer_emails = [reviewer_1, reviewer_2]
-        else:
-            reviewer_emails = [None, None]
+                log.debug('Reviewers are empty')
+                reviewer_emails = [None, None]
+        except Exception as e:
+            pass
+        # reset sysadmin status
         context['auth_user_obj'].sysadmin = sysadmin_status
 
         # check that there are reivewers
@@ -141,7 +158,9 @@ class WorkflowController(PackageController):
                 flash_message = ('This submission has no reviewers.', 'error')
                 redirect(id)
 
+        log.debug('Sending Notifications')
         note = n.review(addresses, user_name, id, reviewer_emails)
+        log.debug('Notifications sent to : {}'.format(reviewer_emails))
 
         if note:
             c.pkg_dict = self.update_review_status(c.pkg_dict)
