@@ -87,12 +87,10 @@ class WorkflowController(PackageController):
         reviewer_1 = data_dict.get("maintainer", None)
         reviewer_2 = data_dict.get("maintainer_email", None)
         reviewer_emails = []
-        # Needs to be "system admin" inorder to get the unhashed email
+
         sysadmin_status = context['auth_user_obj'].sysadmin
         log.debug("context: {}".format(context))
-        log.debug('Setting sysadmin to True')
-        context['auth_user_obj'].sysadmin = True
-
+        context['keep_email'] = True
 
         log.debug("Reviewer 1: {}".format(reviewer_1))
         log.debug("Reviewer 2: {}".format(reviewer_2))
@@ -122,6 +120,7 @@ class WorkflowController(PackageController):
                             add_user_to_journal(c.pkg_dict, c.pkg_dict['organization']['id'], "maintainer", "reviewer")
                         except Exception as e:
                             print('Error getting email for reveiwer 1')
+                            print(tk.get_action('user_show')(context, {'id': reviewer_1}))
                             reviewer_emails.append(None)
 
                     if reviewer_2 is not None and '@' in reviewer_2:
@@ -151,10 +150,6 @@ class WorkflowController(PackageController):
                 reviewer_emails = [None, None]
         except Exception as e:
             log.debug("Error with reviewer notifcations: {}".format(e))
-        # reset sysadmin status
-        log.debug('Resetting sysadmin to starting value')
-        context['auth_user_obj'].sysadmin = sysadmin_status
-        log.debug("context: {}".format(context))
 
         # check that there are reivewers
         flash_message = ""
