@@ -1868,3 +1868,8 @@ p.empty {
 .activity .item i.reviewer-icon {
     background-color: #0069d9;
 }
+
+
+.icon-reply.backwards:before{
+    transform: scale(-1, 1);
+}
