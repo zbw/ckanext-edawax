@@ -89,7 +89,10 @@ class WorkflowController(PackageController):
         reviewer_emails = []
         # Needs to be "system admin" inorder to get the unhashed email
         sysadmin_status = context['auth_user_obj'].sysadmin
+        log.debug("context: {}".format(context))
+        log.debug('Setting sysadmin to True')
         context['auth_user_obj'].sysadmin = True
+
 
         log.debug("Reviewer 1: {}".format(reviewer_1))
         log.debug("Reviewer 2: {}".format(reviewer_2))
@@ -147,9 +150,11 @@ class WorkflowController(PackageController):
                 log.debug('Reviewers are empty')
                 reviewer_emails = [None, None]
         except Exception as e:
-            pass
+            log.debug("Error with reviewer notifcations: {}".format(e))
         # reset sysadmin status
+        log.debug('Resetting sysadmin to starting value')
         context['auth_user_obj'].sysadmin = sysadmin_status
+        log.debug("context: {}".format(context))
 
         # check that there are reivewers
         flash_message = ""
@@ -158,7 +163,7 @@ class WorkflowController(PackageController):
                 flash_message = ('This submission has no reviewers.', 'error')
                 redirect(id)
 
-        log.debug('Sending Notifications')
+        log.debug('Sending Notifications to: {}'.format(reviewer_emails))
         note = n.review(addresses, user_name, id, reviewer_emails)
         log.debug('Notifications sent to : {}'.format(reviewer_emails))
 
