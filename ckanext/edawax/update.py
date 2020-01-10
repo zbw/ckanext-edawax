@@ -87,9 +87,6 @@ def add_user_to_journal(data_dict, org_id, field, role='member'):
     return True
 
 
-
-
-
 def package_update(context, data_dict):
     '''This is a modified version of the package_update that will create a
     reviewer and invite them to the JDA

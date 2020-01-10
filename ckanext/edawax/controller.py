@@ -120,7 +120,6 @@ class WorkflowController(PackageController):
                             add_user_to_journal(c.pkg_dict, c.pkg_dict['organization']['id'], "maintainer", "reviewer")
                         except Exception as e:
                             print('Error getting email for reveiwer 1')
-                            print(tk.get_action('user_show')(context, {'id': reviewer_1}))
                             reviewer_emails.append(None)
 
                     if reviewer_2 is not None and '@' in reviewer_2:
@@ -151,7 +150,7 @@ class WorkflowController(PackageController):
         except Exception as e:
             log.debug("Error with reviewer notifcations: {}".format(e))
 
-        # check that there are reivewers
+        # check that there are reviewers
         flash_message = ""
         if reviewer_emails[0] is None and reviewer_emails[1] is None and c.pkg_dict['dara_edawax_review'] != 'false':
             if c.pkg_dict['dara_edawax_review'] == 'editor':
