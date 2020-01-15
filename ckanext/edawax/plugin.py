@@ -353,6 +353,7 @@ class EdawaxPlugin(plugins.SingletonPlugin):
                 'show_change_reviewer': helpers.show_change_reviewer,
                 'find_reviewers_datasets': helpers.find_reviewers_datasets,
                 'is_author': helpers.is_author,
+                'update_citation': helpers.update_citation
                 }
 
     def before_map(self, map):

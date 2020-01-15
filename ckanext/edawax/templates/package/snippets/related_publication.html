@@ -14,15 +14,24 @@
  typeof="schema:ScholarlyArticle" resource="{{ url }}" property="dc:relation">
 
 <h3>Related Publication</h3>
-
-
-{% if url %}
-    <a href="{{ url }}" property="schema:url">
-        {{ prefix ~ pid }}
-    </a>
+{%- if url -%} {# DOI has been provided #}
+    {%- if pkg_dict['notes'] != "" -%} {# there is an existing citation #}
+        {%- if pid and pid not in pkg_dict['notes'] -%} {# check if citation's doi match provided #}
+            {%- set citation = h.update_citation(pkg_dict) -%}
+            {{- citation|safe -}}
+        {%- else -%}    {# citation matches given DOI #}
+            {{- pkg_dict['notes']|safe -}}
+        {%- endif -%}
+    {%- else -%} {# no DOI, try to add one #}
+        {%- set citation = h.update_citation(pkg_dict) -%}
+        {{- citation|safe -}}
+        <a href="{{ url }}" property="schema:url">
+            doi: {{pid}}
+        </a>
+    {%- endif -%}
 
 {% else %}
-{{ pid }}
+{{ pid_type }}: {{ pid }}
 
 {% endif %}
 
