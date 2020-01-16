@@ -43,60 +43,50 @@ subjects = {
            }
 
 msg_body = {
-            "review_editor": u"""
-Dear Editor,
-
-The author, {user}, has uploaded replication files, "{title}," to the data archive for your journal, the "{journal}."
-
-You can review it here: {url}
-
-{submission_id}
-
-best regards from ZBW--Journal Data Archive
-""",
-            "review_reviewer": u"""
-Dear Reviewer,
-
-Replication files, "{title}," have been added to the "{journal}" and are are ready for review.
-
-You can review them here: {url}
-
-{submission_id}
-
-best regards from ZBW--Journal Data Archive
-""",
-            "author": u"""
-Dear Author,
-
-Your submission, "{title}," to "{journal}" has been {status}. It is available here: {url}.
-
-{message}
-
-best regards from ZBW--Journal Data Archive
-""",
-            "editor": u"""
-Dear Editor,
-
-A reviewer has finished reviewing "{title}" in your journal, the "{journal}." The submission is available here: {url}.
-
-{message}
-""",
-            "reauthor": u"""
-Dear Author,
-
-The Editors of the "{journal}" have requested that you revise your replication files "{title}" which you submitted to the ZBW--Journal Data Archive.
-
-URL: {url}
-
-{message}
-
-best regards from ZBW--Journal Data Archive
-""",
+            "review_editor": (
+                u"Dear Editor,\n\n",
+                u"The author, {user}, has uploaded replication files,",
+                u" \"{title},\" to the data archive for your journal, the \"{journal}.\"",
+                u"\n\nYou can review it here: {url}",
+                u"\n{submission_id}",
+                u"\n\nbest regards from ZBW--Journal Data Archive",
+            ),
+            "review_reviewer": (
+                u"Dear Reviewer,\n\n",
+                u"Replication files, \"{title},\" have been added to the",
+                u" \"{journal}\" and are are ready for review.",
+                u"\n\nYou can review them here: {url}",
+                u"\n{submission_id}",
+                u"\n\nbest regards from ZBW--Journal Data Archive",
+            ),
+            "author": (
+                u"Dear Author,\n\n",
+                u"Your submission, \"{title},\" to \"{journal}\" has been",
+                u" {status}. It is available here: {url}.",
+                u"\n\n{message}",
+                u"\n\nbest regards from ZBW--Journal Data Archive",
+            ),
+            "editor": (
+                u"Dear Editor,\n\n",
+                u"A reviewer has finished reviewing \"{title}\" in your journal,",
+                u" the \"{journal}.\" The submission is available here: {url}.",
+                u"\n\n{message}",
+            ),
+            "reauthor": (
+                u"Dear Author,\n",
+                u"\nThe Editors of the \"{journal}\" have requested ",
+                u"that you revise your replication files \"{title}\""
+                u" which you submitted to the ZBW--Journal Data Archive.\n",
+                u"\nURL: {url}\n",
+                u"\n{message}\n",
+                u"\nbest regards from ZBW--Journal Data Archive"
+            )
            }
+
 
 def create_message(msg):
     if msg:
-        return u"Message: \n========\n\n{}".format(msg)
+        return u"Message: \n========\n{}".format(msg)
     return u""
 
 
@@ -119,7 +109,7 @@ def compose_message(typ, body, subject, config, send_to, context=None):
 def notify(typ, dataset, author_mail, msg, context, status=None):
     log.info('Notifing {}'.format(typ))
     context['ignore_auth'] = True
-    body = msg_body[typ]
+    body = "".join(msg_body[typ])
     pkg = tk.get_action('package_show')(context, {'id': dataset})
     org_id = pkg.get('owner_org', pkg.get('group_id', False))
     org = tk.get_action('organization_show')(context, {'id': org_id})
@@ -148,7 +138,7 @@ def review(addresses, author, dataset, reviewers=None):
         return u""
 
     def message(who, address):
-        body = msg_body[who]
+        body = "".join(msg_body[who])
         context = {}
         context['ignore_auth'] = True
         pkg = tk.get_action('package_show')(context, {'id': dataset})
@@ -162,8 +152,8 @@ def review(addresses, author, dataset, reviewers=None):
         body = body.format(**d)
         subject = subjects[who]
         return compose_message(who, body, subject, config, address)
-    # send email
-    # to Admin
+
+    # send email to Admin
     t = []
     if pkg_status(dataset) in ['reauthor', 'false', 'reviewers'] \
         or reviewers == [None, None]:
