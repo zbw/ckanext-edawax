@@ -815,4 +815,4 @@ def update_citation(data):
     except Exception as e:
         print('Error: {}'.format(e))
 
-    return citation
+    return new_citation
