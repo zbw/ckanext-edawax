@@ -55,6 +55,39 @@ class WorkflowController(PackageController):
                 'user': c.user or c.author, 'for_view': True,
                 'auth_user_obj': c.userobj, 'save': 'save' in request.params}
 
+
+    def evaluate_reviewer(self, reviewer, reviewer_list):
+        """ Check if reveiwer exists or not. Returns list of reviewer emails """
+        context = self._context()
+        context['keep_email'] = True
+        if reviewer is not None and '@' in reviewer:
+            log.debug('Reviewer is an email address')
+            data_dict, old = check_reviewer(data_dict,reviewer,"maintainer")
+            if old:
+                log.debug('Reviewer already exists')
+                reviewer_list.append(reviewer)
+            else:
+                log.debug('Reviewer is new')
+                reviewer_list.append(None)
+            reviewer = data_dict['name']
+            # if the reviewer is new
+            # don't notify them about the review, only send an
+            # invitation that says they can review
+        else:
+            log.debug('Reviewer is a user name')
+            # otherwise just notify them that they can review
+            try:
+                print('#############')
+                print(reviewer)
+                reviewer_list.append(tk.get_action('user_show')(context, {'id': reviewer})['email'])
+                print(lst)
+                add_user_to_journal(c.pkg_dict, c.pkg_dict['organization']['id'], "maintainer", "reviewer")
+            except Exception as e:
+                print('Error getting email for reveiwer: {}\n{}'.format(reviewer, e))
+                reviewer_list.append(None)
+        return reviewer_list
+
+
     def review(self, id):
         """
         sends review notification to all journal admins
@@ -88,7 +121,6 @@ class WorkflowController(PackageController):
         reviewer_2 = data_dict.get("maintainer_email", None)
         reviewer_emails = []
 
-        sysadmin_status = context['auth_user_obj'].sysadmin
         log.debug("context: {}".format(context))
         context['keep_email'] = True
 
@@ -99,48 +131,8 @@ class WorkflowController(PackageController):
             if (reviewer_1 != '' or reviewer_2 != ''):
                 if reviewer_1 is not None and reviewer_2 is not None:
                     # reviewer is an email address
-                    if reviewer_1 is not None and '@' in reviewer_1:
-                        log.debug('Reviewer 1 is an email address')
-                        data_dict, old = check_reviewer(data_dict,reviewer_1,"maintainer")
-                        if old:
-                            log.debug('Reviewer 1 already exists')
-                            reviewer_emails.append(reviewer_1)
-                        else:
-                            log.debug('Reviewer 1 is new')
-                            reviewer_emails.append(None)
-                        reviewer_1 = data_dict['name']
-                        # if the reviewer is new
-                        # don't notify them about the review, only send an
-                        # invitation that says they can review
-                    else:
-                        log.debug('Reviewer 1 is a user name')
-                        # otherwise just notify them that they can review
-                        try:
-                            reviewer_emails.append(tk.get_action('user_show')(context, {'id': reviewer_1})['email'])
-                            add_user_to_journal(c.pkg_dict, c.pkg_dict['organization']['id'], "maintainer", "reviewer")
-                        except Exception as e:
-                            print('Error getting email for reveiwer 1')
-                            reviewer_emails.append(None)
-
-                    if reviewer_2 is not None and '@' in reviewer_2:
-                        log.debug('Reviewer 1 is an email address')
-                        data_dict, old = check_reviewer(data_dict,reviewer_2,"maintainer_email")
-                        if old:
-                            log.debug('Reviewer 2 already exists')
-                            reviewer_emails.append(reviewer_2)
-                        else:
-                            log.debug('Reviewer 2 is new')
-                            reviewer_emails.append(None)
-                        reviewer_2 = data_dict['name']
-                    else:
-                        log.debug('Reviewer 2 is a user name')
-                        # otherwise just notify them that they can review
-                        try:
-                            reviewer_emails.append(tk.get_action('user_show')(context, {'id': reviewer_2})['email'])
-                            add_user_to_journal(c.pkg_dict, c.pkg_dict['organization']['id'], "maintainer_email", "reviewer")
-                        except Exception as e:
-                            print('Error getting email for reveiwer 2')
-                            reviewer_emails.append(None)
+                    reviewer_emails = self.evaluate_reviewer(reviewer_1, reviewer_emails)
+                    reviewer_emails = self.evaluate_reviewer(reviewer_2, reviewer_emails)
                 else:
                     log.debug('Reviewers are empty')
                     reviewer_emails = [reviewer_1, reviewer_2]
@@ -152,7 +144,9 @@ class WorkflowController(PackageController):
 
         # check that there are reviewers
         flash_message = ""
-        if reviewer_emails[0] is None and reviewer_emails[1] is None and c.pkg_dict['dara_edawax_review'] != 'false':
+        if reviewer_emails[0] is None \
+            and reviewer_emails[1] is None \
+                and c.pkg_dict['dara_edawax_review'] != 'false':
             if c.pkg_dict['dara_edawax_review'] == 'editor':
                 flash_message = ('This submission has no reviewers.', 'error')
                 redirect(id)
@@ -203,7 +197,6 @@ class WorkflowController(PackageController):
 
         if current_state == 'reauthor':
             pkg_dict['dara_edawax_review'] = 'editor'
-
 
         return pkg_dict
 
@@ -265,8 +258,6 @@ class WorkflowController(PackageController):
 
         # notify author about the retraction
         self.author_notify(id)
-
-
         h.flash_success('Dataset retracted')
         redirect(id)
 
@@ -283,7 +274,7 @@ class WorkflowController(PackageController):
         creator_mail = model.User.get(c.pkg_dict['creator_user_id']).email
         admin_mail = model.User.get(c.user).email
         #note = n.reauthor(id, creator_mail, admin_mail, msg, context)
-        note = n.reauthor(id, creator_mail, msg, context)
+        note = n.notify('reauthor', id, creator_mail, msg, context)
 
         if note:
             c.pkg_dict.update({'private': True,
@@ -301,7 +292,7 @@ class WorkflowController(PackageController):
         msg = tk.request.params.get('msg', '')
         c.pkg_dict = tk.get_action('package_show')(context, {'id': id})
         creator_mail = model.User.get(c.pkg_dict['creator_user_id']).email
-        note = n.editor_notify(id, creator_mail, msg, context)
+        note = n.notify('editor', id, creator_mail, msg, context)
 
         if note:
             c.pkg_dict.update({'private': True, 'dara_edawax_review': 'back'})
@@ -322,9 +313,8 @@ class WorkflowController(PackageController):
             status = 'published'
         else:
             status = 'retracted'
-        # TODO: actually get the author's email
         author_email = model.User.get(c.pkg_dict['creator_user_id']).email
-        note = n.author_notify(id, author_email, msg, context, status)
+        note = n.notify('author', id, author_email, msg, context, status)
 
 
     def create_citataion_text(self, id):
@@ -335,7 +325,12 @@ class WorkflowController(PackageController):
         data = tk.get_action('package_show')(context, {'id': id})
         citation = '{authors} ({year}): {dataset}. Version: {version}. {journal}. Dataset. {address}'
 
-        journal_map = {'GER': 'German Economic Review', 'AEQ': 'Applied Economics Quarterly', 'IREE': 'International Journal for Re-Views in Empirical Economics', 'VSWG': 'Vierteljahrschrift für Sozial- und Wirtschaftsgeschichte'}
+        journal_map = {
+                        'GER': 'German Economic Review',
+                        'AEQ': 'Applied Economics Quarterly',
+                        'IREE': 'International Journal for Re-Views in Empirical Economics',
+                        'VSWG': 'Vierteljahrschrift für Sozial- und Wirtschaftsgeschichte'
+                      }
 
         authors = _parse_authors(data['dara_authors'])
         year = data.get('dara_PublicationDate', '')
@@ -377,7 +372,7 @@ class WorkflowController(PackageController):
                 # custom user agent header so that downloads from here count
                 headers = {
                     'User-Agent': 'Ckan-Download-All Agent 1.0',
-                    'From': 'f.osorio@zbw.eu'
+                    'From': 'journaldata@zbw.eu'
                 }
                 try:
                     ca_file = config.get('ckan.cert_path')
@@ -412,9 +407,6 @@ class WorkflowController(PackageController):
         redirect(id)
 
 
-
-
-
 def redirect(id):
     tk.redirect_to(controller='package', action='read', id=id)
 
@@ -442,7 +434,6 @@ def parse_bibtex_authors(authors):
         return " and ".join(temp_list)
     else:
         return temp_list[0]
-
 
 
 def parse_ris_doi(doi):
@@ -484,7 +475,15 @@ def create_ris_record(id):
     else:
         jels = ''
 
-    contents = contents.format(title=title,authors=authors,doi=doi,date=date,journal=journal,url=url,version=version,abstract=abstract,jels=jels)
+    contents = contents.format(title=title,
+                               authors=authors,
+                               doi=doi,
+                               date=date,
+                               journal=journal,
+                               url=url,
+                               version=version,
+                               abstract=abstract,
+                               jels=jels)
 
     s = StringIO.StringIO()
     s.write(contents)

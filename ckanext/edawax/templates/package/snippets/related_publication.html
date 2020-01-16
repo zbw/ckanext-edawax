@@ -16,7 +16,7 @@
 <h3>Related Publication</h3>
 {%- if url -%} {# DOI has been provided #}
     {%- if pkg_dict['notes'] != "" -%} {# there is an existing citation #}
-        {%- if pid and pid not in pkg_dict['notes'] -%} {# check if citation's doi match provided #}
+        {%- if pid and pid not in pkg_dict['notes'] -%} {# if citation's doi match provided update the citation #}
             {%- set citation = h.update_citation(pkg_dict) -%}
             {{- citation|safe -}}
         {%- else -%}    {# citation matches given DOI #}
@@ -26,13 +26,11 @@
         {%- set citation = h.update_citation(pkg_dict) -%}
         {{- citation|safe -}}
         <a href="{{ url }}" property="schema:url">
-            doi: {{pid}}
+            doi: {{ pid }}
         </a>
     {%- endif -%}
-
-{% else %}
-{{ pid_type }}: {{ pid }}
-
+{% else %} {# provided Identifier is not a DOI or Handler #}
+    {{ pid_type }}: {{ pid }}
 {% endif %}
 
 </section>

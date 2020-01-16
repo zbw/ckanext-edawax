@@ -147,7 +147,6 @@ def package_update(context, data_dict):
                 if maintainer is not None and maintainer not in user_names:
                     # if not in org, add them
                     users = org_data['users']
-
                     users.append({'name': maintainer, 'capacity': 'member'})
                     updated = tk.get_action('organization_patch')({'ignore_auth': True}, {'id': org_id, 'users': users})
 
