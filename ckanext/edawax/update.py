@@ -47,7 +47,6 @@ def invite_reviewer(email, org_id):
 
 def check_reviewer(data_dict, reviewer, field, new=False):
     """ Check if a reviewer's email exsits. If so update field with name """
-
     if '@' in reviewer:
         email = reviewer
         # check that the email doesn't already belong to a user

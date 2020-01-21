@@ -226,6 +226,7 @@ def get_page_type():
     """
         Get page type to make breadcrumbs
     """
+    # TODO: refactor
     action = request.urlvars['action']
     controller = request.urlvars['controller']
     id_ = request.urlvars.get('id', None)
@@ -316,8 +317,9 @@ def get_page_type():
         ignore = True
         #raise ValueError('This wasnt accounted for: {}'.format(action))
 
-    return {'text': text,'action': action, 'controller': controller, 'id': id_, 'resource_id': resource_id, 'parent': parent, 'resource': resource,
-         'ignore': False}
+    return {'text': text,'action': action, 'controller': controller,
+            'id': id_, 'resource_id': resource_id, 'parent': parent,
+            'resource': resource, 'ignore': False}
 
 
 def normal_height():
@@ -344,7 +346,9 @@ def is_landing_page():
     return True
 
 def is_edit_page():
-    if ('/edit/' in request.url or 'views' in request.url) and not ('user/edit' in request.url or 'journals/edit' in request.url or 'dataset/edit' in request.url):
+    if ('/edit/' in request.url or 'views' in request.url) \
+        and not ('user/edit' in request.url or 'journals/edit' in request.url \
+            or 'dataset/edit' in request.url):
         return True
 
     return False
@@ -503,7 +507,9 @@ def show_change_reviewer(pkg):
     return in_review(pkg) == 'reviewers' and (is_admin(pkg) or has_hammer())
 
 def show_review_button(pkg):
-    return (get_user_id() == pkg['creator_user_id'] and in_review(pkg) in ['false', 'reauthor']) or ( (has_hammer() or is_admin(pkg)) and not in_review(pkg) in ['reviewers', 'reviewed'])
+    return (get_user_id() == pkg['creator_user_id'] \
+        and in_review(pkg) in ['false', 'reauthor']) or ( (has_hammer() \
+            or is_admin(pkg)) and not in_review(pkg) in ['reviewers', 'reviewed'])
 #or (has_hammer() and not in_review(pkg) in ['reviewers', 'reviewed']) and not pkg.get('private', True) or (is_admin(pkg) and in_review(pkg) in ('reauthor', 'finished', 'editor'))
 
 
@@ -779,7 +785,7 @@ def build_citation_crossref(doi):
         return x is not None
 
     data = query_crossref(doi)
-    citation = """{authors} ({year}). {title}. {journal}, {volume}({issue}). doi: <a href="https://doi.org/{doi}">{doi}</a>"""
+    citation = "{authors} ({year}). {title}. {journal}, {volume}({issue}). doi: <a href='https://doi.org/{doi}''>{doi}</a>"
     if data:
         try:
             fields = {

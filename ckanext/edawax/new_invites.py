@@ -34,6 +34,7 @@ log = logging.getLogger(__name__)
 class MailerException(Exception):
     pass
 
+
 def _get_user_role(user_name, org_id):
     data_dict = {'id': org_id}
     org_data = user_data = ckan.logic.get_action('organization_show')(data_dict=data_dict)
@@ -42,6 +43,7 @@ def _get_user_role(user_name, org_id):
         if user['name'] == user_name:
             return user['capacity']
     return False
+
 
 def get_invite_body(user, data=None):
     id_ = request.urlvars['id']
@@ -182,6 +184,7 @@ def _mail_recipient(recipient_name, recipient_email,
     finally:
         smtp_connection.quit()
 
+
 def mail_recipient(recipient_name, recipient_email, subject,
         body, headers={}, role=None):
     if role is not None:
@@ -189,6 +192,7 @@ def mail_recipient(recipient_name, recipient_email, subject,
             g.site_title, g.site_url, subject, body, headers=headers, role=role)
     return _mail_recipient(recipient_name, recipient_email,
             g.site_title, g.site_url, subject, body, headers=headers)
+
 
 def mail_user(recipient, subject, body, headers={}, role=None):
     if (recipient.email is None) or not len(recipient.email):

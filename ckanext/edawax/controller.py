@@ -56,7 +56,7 @@ class WorkflowController(PackageController):
                 'auth_user_obj': c.userobj, 'save': 'save' in request.params}
 
 
-    def evaluate_reviewer(self, reviewer, reviewer_list):
+    def evaluate_reviewer(self, reviewer, reviewer_list, data_dict):
         """ Check if reveiwer exists or not. Returns list of reviewer emails """
         context = self._context()
         context['keep_email'] = True
@@ -131,8 +131,8 @@ class WorkflowController(PackageController):
             if (reviewer_1 != '' or reviewer_2 != ''):
                 if reviewer_1 is not None and reviewer_2 is not None:
                     # reviewer is an email address
-                    reviewer_emails = self.evaluate_reviewer(reviewer_1, reviewer_emails)
-                    reviewer_emails = self.evaluate_reviewer(reviewer_2, reviewer_emails)
+                    reviewer_emails = self.evaluate_reviewer(reviewer_1, reviewer_emails, data_dict)
+                    reviewer_emails = self.evaluate_reviewer(reviewer_2, reviewer_emails, data_dict)
                 else:
                     log.debug('Reviewers are empty')
                     reviewer_emails = [reviewer_1, reviewer_2]
