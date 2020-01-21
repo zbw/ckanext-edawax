@@ -62,7 +62,7 @@ class WorkflowController(PackageController):
         context['keep_email'] = True
         if reviewer is not None and '@' in reviewer:
             log.debug('Reviewer is an email address')
-            data_dict, old = check_reviewer(data_dict,reviewer,"maintainer")
+            data_dict, old = check_reviewer(data_dict, reviewer, "maintainer")
             if old:
                 log.debug('Reviewer already exists')
                 reviewer_list.append(reviewer)
@@ -138,7 +138,7 @@ class WorkflowController(PackageController):
                 log.debug('Reviewers are empty')
                 reviewer_emails = [None, None]
         except Exception as e:
-            log.debug("Error with reviewer notifcations: {}".format(e))
+            log.debug("Error with reviewer notifications: {}-{}".format(e.message, e.args))
 
         # check that there are reviewers
         flash_message = ""

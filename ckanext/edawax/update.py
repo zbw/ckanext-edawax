@@ -28,7 +28,7 @@ ValidationError = logic.ValidationError
 
 
 def email_exists(email):
-    users = tk.get_action('user_list')({'ignore_auth': True}, {'all_fields': 'true'})
+    users = tk.get_action('user_list')({'ignore_auth': True, 'keep_email': True}, {'all_fields': 'true'})
     for user in users:
         if user['email'] == email:
             return user['name']
@@ -47,6 +47,7 @@ def invite_reviewer(email, org_id):
 
 def check_reviewer(data_dict, reviewer, field, new=False):
     """ Check if a reviewer's email exsits. If so update field with name """
+    log.debug('Checking Reviewer: {}'.format(reviewer))
     if '@' in reviewer:
         email = reviewer
         # check that the email doesn't already belong to a user
