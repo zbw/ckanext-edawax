@@ -77,12 +77,10 @@ class WorkflowController(PackageController):
             log.debug('Reviewer is a user name')
             # otherwise just notify them that they can review
             try:
-                print('#############')
-                print(reviewer)
                 reviewer_list.append(tk.get_action('user_show')(context, {'id': reviewer})['email'])
-                print(lst)
                 add_user_to_journal(c.pkg_dict, c.pkg_dict['organization']['id'], "maintainer", "reviewer")
             except Exception as e:
+                log.debug('Error getting email for reveiwer: {}\n{}'.format(reviewer, e))
                 print('Error getting email for reveiwer: {}\n{}'.format(reviewer, e))
                 reviewer_list.append(None)
         return reviewer_list
@@ -151,15 +149,18 @@ class WorkflowController(PackageController):
                 flash_message = ('This submission has no reviewers.', 'error')
                 redirect(id)
 
-        log.debug('Sending Notifications to: {}'.format(reviewer_emails))
+        log_msg = 'Sending Notifications to: Reviewers: {}\nRest: {}'
+        log.debug(log_msg.format(reviewer_emails, addresses))
         note = n.review(addresses, user_name, id, reviewer_emails)
-        log.debug('Notifications sent to : {}'.format(reviewer_emails))
+        log_msg = 'Notifications sent to : Reveiwers:{}\nRest: {}'
+        log.debug(log_msg.format(reviewer_emails, addresses))
 
         if note:
             c.pkg_dict = self.update_review_status(c.pkg_dict)
             tk.get_action('package_update')(context, c.pkg_dict)
             if flash_message == "":
                 flash_message = ('Notification sent to Reviewers.', 'success')
+                log.debug('Notifications successfully sent')
         else:
             flash_message = ('ERROR: Mail could not be sent. Please try again later or contact the site admin.', 'error')
 
