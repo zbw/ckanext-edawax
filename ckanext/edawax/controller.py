@@ -23,7 +23,7 @@ import requests
 import StringIO
 from ckanext.dara.helpers import _parse_authors
 from ckanext.edawax.helpers import is_reviewer, in_review, delete_cookies
-from ckanext.edawax.update import update_maintainer_field, email_exists, invite_reviewer, check_reviewer, add_user_to_journal
+from ckanext.edawax.update import update_maintainer_field, email_exists, invite_reviewer, add_user_to_journal
 
 import ckan.lib.base as base
 
@@ -58,43 +58,30 @@ class WorkflowController(PackageController):
 
     def evaluate_reviewer(self, reviewer, reviewer_list, data_dict):
         """ Check if reveiwer exists or not. Returns list of reviewer emails """
+        if reviewer == '':
+            return []
         context = self._context()
         context['keep_email'] = True
-        if reviewer is not None and '@' in reviewer:
-            log.debug('Reviewer is an email address')
-            data_dict, old = check_reviewer(data_dict, reviewer, "maintainer")
-            if old:
-                log.debug('Reviewer already exists')
-                reviewer_list.append(reviewer)
-            else:
-                log.debug('Reviewer is new')
-                reviewer_list.append(None)
-            reviewer = data_dict['name']
-            # if the reviewer is new
-            # don't notify them about the review, only send an
-            # invitation that says they can review
+        # must be an email address - check is handled in HTML with `pattern`
+        if '@' in reviewer:
+            # create a new user with "reviewer" role for the dataset
+            new_user = invite_reviewer(reviewer, data_dict['organization']['id'])
+            reviewer_list.append(reviewer)
         else:
-            log.debug('Reviewer is a user name')
-            # otherwise just notify them that they can review
-            try:
-                reviewer_list.append(tk.get_action('user_show')(context, {'id': reviewer})['email'])
-                add_user_to_journal(c.pkg_dict, c.pkg_dict['organization']['id'], "maintainer", "reviewer")
-            except Exception as e:
-                log.debug('Error getting email for reveiwer: {}\n{}'.format(reviewer, e))
-                print('Error getting email for reveiwer: {}\n{}'.format(reviewer, e))
-                reviewer_list.append(None)
+            h.flash_error("Reviewers must be given as email addresses.")
+            log.debug("Reviewer's aren't an email address: {}".format(reviewer))
+            redirect(id)
         return reviewer_list
 
 
     def review(self, id):
         """
-        sends review notification to all journal admins
+        Sends review notification to all journal admins
 
         Check the maintainers: if one is an email address, invite that person
         to the JDA as a reviewer - need a new invitation that includes a link
         to the dataset for review.
         """
-        log.debug('Sending to reviewers')
         context = self._context()
         c.pkg_dict = tk.get_action('package_show')(context, {'id': id})
 
@@ -119,26 +106,21 @@ class WorkflowController(PackageController):
         reviewer_2 = data_dict.get("maintainer_email", None)
         reviewer_emails = []
 
-        log.debug("context: {}".format(context))
         context['keep_email'] = True
-
-        log.debug("Reviewer 1: {}".format(reviewer_1))
-        log.debug("Reviewer 2: {}".format(reviewer_2))
 
         try:
             if (reviewer_1 != '' or reviewer_2 != ''):
                 if reviewer_1 is not None and reviewer_2 is not None:
                     # reviewer is an email address
-                    reviewer_emails = self.evaluate_reviewer(reviewer_1, reviewer_emails, data_dict)
-                    reviewer_emails = self.evaluate_reviewer(reviewer_2, reviewer_emails, data_dict)
+                    reviewer_emails.append(self.evaluate_reviewer(reviewer_1, reviewer_emails, data_dict))
+                    reviewer_emails.append(self.evaluate_reviewer(reviewer_2, reviewer_emails, data_dict))
                 else:
-                    log.debug('Reviewers are empty')
                     reviewer_emails = [reviewer_1, reviewer_2]
             else:
-                log.debug('Reviewers are empty')
                 reviewer_emails = [None, None]
         except Exception as e:
             log.debug("Error with reviewer notifications: {}-{}".format(e.message, e.args))
+            log.debug(reviewer_emails)
 
         # check that there are reviewers
         flash_message = ""
@@ -149,8 +131,6 @@ class WorkflowController(PackageController):
                 flash_message = ('This submission has no reviewers.', 'error')
                 redirect(id)
 
-        log_msg = 'Sending Notifications to: Reviewers: {}\nRest: {}'
-        log.debug(log_msg.format(reviewer_emails, addresses))
         note = n.review(addresses, user_name, id, reviewer_emails)
         log_msg = 'Notifications sent to : Reveiwers:{}\nRest: {}'
         log.debug(log_msg.format(reviewer_emails, addresses))
@@ -160,9 +140,9 @@ class WorkflowController(PackageController):
             tk.get_action('package_update')(context, c.pkg_dict)
             if flash_message == "":
                 flash_message = ('Notification sent to Reviewers.', 'success')
-                log.debug('Notifications successfully sent')
         else:
             flash_message = ('ERROR: Mail could not be sent. Please try again later or contact the site admin.', 'error')
+            log.debug('Failed to send notifications')
 
         if flash_message[1] == 'success':
             h.flash_success(flash_message[0])

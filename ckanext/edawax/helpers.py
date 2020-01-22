@@ -21,6 +21,9 @@ from urlparse import urlparse
 
 from ckanext.dara.geography_coverage import geo
 
+import logging
+log = logging.getLogger(__name__)
+
 
 def check_reviewer_update(pkg):
     reviewer_1_old = request.cookies.get('reviewerOnePrev_{}'.format(pkg['name']), False)
@@ -45,13 +48,13 @@ def delete_cookies(pkg):
         cookie = 'reviewerOnePrev_{}'.format(pkg['name'])
         response.delete_cookie(cookie, '/')
     except Exception as e:
-        print('Error: {}'.format(e))
+        log.debug('delete_cookies error: {} {} {}'.format(e, e.message, e.args))
 
     try:
         cookie = 'reviewerTwoPrev_{}'.format(pkg['name'])
         response.delete_cookie(cookie, '/')
     except Exception as e:
-        print('Error: {}'.format(e))
+        log.debug('delete_cookies error: {} {} {}'.format(e, e.message, e.args))
 
 
 def hide_from_reviewer(pkg):
@@ -165,7 +168,8 @@ def get_org_admin(org_id):
     admin = []
     try:
         org_data = tk.get_action('organization_show')(None, {'id': org_id})
-    except Exception:
+    except Exception as e:
+        log.debug('get_org_admin error: {} {} {}'.format(e, e.message, e.args))
         return ''
     users = org_data['users']
     for user in users:
@@ -184,6 +188,7 @@ def has_reviewers(pkg):
         reviewers.append(reviewer)
         return reviewers[0] not in [None, ''] or reviewers[1] not in [None, '']
     except AttributeError as e:
+        log.debug('has_reviewers error: {} {} {}'.format(e, e.message, e.args))
         return False
 
 
@@ -201,6 +206,7 @@ def is_reviewer(pkg):
             reviewer = pkg['maintainer_email']
             reviewers.append(reviewer)
         except Exception as e:
+            log.debug('is_reviewer error: {} {} {}'.format(e, e.message, e.args))
             return False
 
     try:
@@ -220,107 +226,6 @@ def count_packages(packages):
                 get_user_id() == package['creator_user_id']):
             count += 1
     return count
-
-
-def get_page_type():
-    """
-        Get page type to make breadcrumbs
-    """
-    # TODO: refactor
-    action = request.urlvars['action']
-    controller = request.urlvars['controller']
-    id_ = request.urlvars.get('id', None)
-    resource_id = request.urlvars.get('resource_id', None)
-
-    try:
-        pkg = tk.get_action('{}_show'.format(controller))(None, {'id': id_})
-    except:
-        pkg = None
-
-    if resource_id:
-        resource = tk.get_action('resource_show')(None, {'id': resource_id})
-        resource_name = resource['name']
-    else:
-        resource_name = 'Resource'
-
-    try:
-        if 'organization' in pkg.keys():
-            journal = pkg['organization']['title']
-            parent = pkg['organization']
-            resource = pkg
-        else:
-            parent = None
-            resource = None
-    except (AttributeError, TypeError):
-        parent = None
-    resource = pkg
-
-    ignore = False
-    if action == 'search':
-        text = "Datasets"
-    elif action == 'index':
-        if controller == 'organization':
-            text = 'Journals'
-        else:
-            text = 'Home'
-            ignore = True
-    elif action == 'read':
-        try:
-            text = pkg['title']
-        except KeyError:
-            # working with user name
-            text = id_
-    elif action == 'resource_read':
-        text = resource_name
-    elif action == 'new':
-        if controller == 'package':
-            text = 'Dataset'
-        elif controller == 'organization':
-            text = 'Journal'
-    elif action == 'dashboard_read':
-        text = 'Stats'
-    elif action in ['dashboard', 'dashboard_datasets', 'dashboard_organizations', 'logged_in']:
-        text = 'Dashboard'
-    elif action == 'edit':
-        if controller == 'user':
-            text = id_
-        elif controller == 'organization':
-            text = 'Admin'
-        else:
-            text = 'Edit'
-    elif action == 'resource_edit':
-        text = 'Edit'
-    elif action == 'login':
-        text = 'Login'
-    elif action == 'register':
-        text = 'Registration'
-    elif action == 'logged_out_page':
-        text = 'Logged Out'
-        ignore = True
-    elif action == 'request_reset':
-        text = 'Password reset'
-    elif action == 'activity':
-        text = 'Activity'
-    elif action == 'about':
-        text = 'About'
-    elif action == 'md_page':
-        text = 'Info'
-        ignore = True
-    elif action in ['resources', 'doi', 'new_resource']:
-        text = 'Resources'
-        ignore = True
-    elif action in ['bulk_process', 'members']:
-        text = 'Admin'
-        action = 'edit'
-    else:
-        text = ''
-        ignore = True
-        #raise ValueError('This wasnt accounted for: {}'.format(action))
-
-    return {'text': text,'action': action, 'controller': controller,
-            'id': id_, 'resource_id': resource_id, 'parent': parent,
-            'resource': resource, 'ignore': False}
-
 
 def normal_height():
     path = request.upath_info
@@ -372,6 +277,7 @@ def is_admin(pkg=None):
         if user_id in admins:
             return True
     except AttributeError as e:
+        log.debug('is_admin error: {} {} {}'.format(e, e.message, e.args))
         pass
     return False
 
@@ -386,7 +292,7 @@ def has_doi(pkg):
 
 
 def has_hammer():
-    return c.is_sysadmin
+    return c.is_sysadmin == True or c.userobj.sysadmin == True
 
 
 def is_published(url):
@@ -406,6 +312,7 @@ def is_published(url):
             return False
         return True
     except Exception as e:
+        log.debug('is_published error: {} {} {}'.format(e, e.message, e.args))
         return False
 
 
@@ -472,6 +379,7 @@ def transform_to_map(data):
             final.append(data)
         return final
     except Exception:
+        log.debug('transform_to_map error: {} {} {}'.format(e, e.message, e.args))
         pass
     return data
 
@@ -771,6 +679,7 @@ def query_crossref(doi):
                                     headers=headers,
                                     timeout=3.05)
         except requests.exceptions.Timeout as e:
+            log.debug('query_crossref error: {} {} {}'.format(e, e.message, e.args))
             return False
         if response.status_code == 200:
             return response.json()['message']
@@ -800,7 +709,7 @@ def build_citation_crossref(doi):
             }
             return citation.format(**fields)
         except KeyError as e:
-            print('Missing Key: {}'.format(e))
+            log.debug('build_citation_crossref error: {} {} {}'.format(e, e.message, e.args))
 
     return ""
 
@@ -819,6 +728,6 @@ def update_citation(data):
     try:
         tk.get_action('package_patch')(context, data)
     except Exception as e:
-        print('Error: {}'.format(e))
+        log.debug('update_citation error: {} {} {}'.format(e, e.message, e.args))
 
     return new_citation

@@ -24,7 +24,7 @@ def sendmail(address, msg):
         return True
     except Exception as e:
         log.error("Mail to {} could not be sent".format(address))
-        log.error(e)
+        log.error("{} {} {}".format(e, e.message, e.args))
         # raise Exception  # TODO raise more detailed exception
         return False
 
@@ -107,7 +107,6 @@ def compose_message(typ, body, subject, config, send_to, context=None):
 
 
 def notify(typ, dataset, author_mail, msg, context, status=None):
-    log.info('Notifing {}'.format(typ))
     context['ignore_auth'] = True
     body = "".join(msg_body[typ])
     pkg = tk.get_action('package_show')(context, {'id': dataset})

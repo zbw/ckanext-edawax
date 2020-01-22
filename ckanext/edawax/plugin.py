@@ -28,7 +28,7 @@ import urllib2
 import hashlib
 
 # package_update
-from update import package_update
+#from update import package_update
 
 
 
@@ -295,14 +295,12 @@ class EdawaxPlugin(plugins.SingletonPlugin):
     def get_actions(self):
         return {
                     "user_invite": invites.user_invite,
-                    "package_update": package_update,
                     "package_show": package_show_filter,
                     "resource_show": resource_show_filter,
                }
 
     def get_auth_functions(self):
         return {
-                    'package_update': journal_package_update,
                     'package_delete': journal_package_delete,
                     'resource_delete': journal_resource_delete,
                     'resource_create': journal_resource_create,
