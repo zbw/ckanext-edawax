@@ -206,7 +206,8 @@ def is_reviewer(pkg):
             reviewer = pkg['maintainer_email']
             reviewers.append(reviewer)
         except Exception as e:
-            log.debug('is_reviewer error: {} {} {}'.format(e, e.message, e.args))
+            if pkg:
+                log.debug('is_reviewer error: {} {} {}'.format(e, e.message, e.args))
             return False
 
     try:
@@ -299,7 +300,11 @@ def is_published(url):
     parts = urlparse(url)
     if '/journals/' in parts.path:
         return True
+
     start = 9
+    if '/edit/' in parts.path:
+        start += 5
+
     if len(parts.path) > 36:
         end = 36 + start
         dataset_name = parts.path[start:end]
@@ -312,7 +317,8 @@ def is_published(url):
             return False
         return True
     except Exception as e:
-        log.debug('is_published error: {} {} {}'.format(e, e.message, e.args))
+        log.debug('is_published error: {} {} {}'.format(e.__class__.__name__,
+                                                        e.message, e.args))
         return False
 
 
@@ -380,7 +386,7 @@ def transform_to_map(data):
         return final
     except Exception:
         log.debug('transform_to_map error: {} {} {}'.format(e, e.message, e.args))
-        pass
+
     return data
 
 
@@ -435,14 +441,15 @@ def show_manage_button(pkg):
     # authors should only be able to edit in first stage or reauthor
     if in_review(pkg) in ['false', 'reauthor']:
         return get_user_id() == pkg['creator_user_id']
-    else:
-        return False
+
+    return False
 
 
 def show_publish_button(pkg):
     if not isinstance(pkg, dict):
         return False
-    return (check_journal_role(pkg, 'admin') or has_hammer()) and in_review(pkg) in ['true', 'reviewers', 'finished', 'editor', 'back']
+    return (check_journal_role(pkg, 'admin') or has_hammer()) \
+        and in_review(pkg) in ['true', 'reviewers', 'finished', 'editor', 'back']
 
 
 def show_retract_button(pkg):
@@ -454,14 +461,15 @@ def show_retract_button(pkg):
 def show_reauthor_button(pkg):
     if not isinstance(pkg, dict):
         return False
-    return (check_journal_role(pkg, 'admin') or has_hammer()) and in_review(pkg) in ['true', 'finished', 'editor', 'reviewers', 'back']
+    return (check_journal_role(pkg, 'admin') or has_hammer()) \
+        and in_review(pkg) in ['true', 'finished', 'editor', 'reviewers', 'back']
 
 
 def show_notify_editor_button(pkg):
     if not isinstance(pkg, dict):
         return False
-    return in_review(pkg) in ['reviewers'] and (has_hammer() or \
-        is_reviewer(pkg))
+    return in_review(pkg) in ['reviewers'] and (has_hammer() \
+        or is_reviewer(pkg))
 
 
 def res_abs_url(res):
@@ -475,7 +483,7 @@ def pkg_abs_url(pkg):
 
 
 def ckan_site_url():
-    return config.get('ckan.site_url', 'http://journaldata.zbw.eu')
+    return config.get('ckan.site_url', 'https://journaldata.zbw.eu')
 
 
 def journal_volume_sorting(packages):

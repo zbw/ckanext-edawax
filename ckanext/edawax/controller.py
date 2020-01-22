@@ -57,7 +57,7 @@ class WorkflowController(PackageController):
 
 
     def evaluate_reviewer(self, reviewer, reviewer_list, data_dict):
-        """ Check if reveiwer exists or not. Returns list of reviewer emails """
+        """ Check if reviewer exists or not. Returns list of reviewer emails """
         if reviewer == '':
             return []
         context = self._context()
@@ -112,10 +112,8 @@ class WorkflowController(PackageController):
             if (reviewer_1 != '' or reviewer_2 != ''):
                 if reviewer_1 is not None and reviewer_2 is not None:
                     # reviewer is an email address
-                    reviewer_emails.append(self.evaluate_reviewer(reviewer_1, reviewer_emails, data_dict))
-                    reviewer_emails.append(self.evaluate_reviewer(reviewer_2, reviewer_emails, data_dict))
-                else:
-                    reviewer_emails = [reviewer_1, reviewer_2]
+                    self.evaluate_reviewer(reviewer_1, reviewer_emails, data_dict)
+                    self.evaluate_reviewer(reviewer_2, reviewer_emails, data_dict)
             else:
                 reviewer_emails = [None, None]
         except Exception as e:
@@ -131,8 +129,9 @@ class WorkflowController(PackageController):
                 flash_message = ('This submission has no reviewers.', 'error')
                 redirect(id)
 
-        note = n.review(addresses, user_name, id, reviewer_emails)
-        log_msg = 'Notifications sent to : Reveiwers:{}\nRest: {}'
+        # don't send to reviewers - they recieve and invation with the same info
+        note = n.review(addresses, user_name, id, None)
+        log_msg = 'Notifications sent to : Reviewers:{}\nRest: {}'
         log.debug(log_msg.format(reviewer_emails, addresses))
 
         if note:
@@ -211,7 +210,6 @@ class WorkflowController(PackageController):
         c.pkg = context.get('package')
         tk.get_action('package_update')(context, c.pkg_dict)
         h.flash_success('Dataset published')
-
         # notify the author
         self.author_notify(id)
 
@@ -245,7 +243,8 @@ class WorkflowController(PackageController):
 
     @admin_req
     def reauthor(self, id):
-        """reset dataset to private and leave review state.
+        """
+        Reset dataset to private and leave review state.
         Should also send email to author
         """
         context = self._context()
