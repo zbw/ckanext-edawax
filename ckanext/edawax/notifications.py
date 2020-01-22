@@ -54,7 +54,7 @@ msg_body = {
             "review_reviewer": (
                 u"Dear Reviewer,\n\n",
                 u"Replication files, \"{title},\" have been added to the",
-                u" \"{journal}\" and are are ready for review.",
+                u" \"{journal}\" and are ready for review.",
                 u"\n\nYou can review them here: {url}",
                 u"\n{submission_id}",
                 u"\n\nbest regards from ZBW--Journal Data Archive",
