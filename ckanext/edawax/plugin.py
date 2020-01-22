@@ -340,7 +340,6 @@ class EdawaxPlugin(plugins.SingletonPlugin):
                 'is_edit_page': helpers.is_edit_page,
                 'is_landing_page': helpers.is_landing_page,
                 'tags_exist': helpers.tags_exist,
-                'get_page_type': helpers.get_page_type,
                 'normal_height': helpers.normal_height,
                 'count_packages': helpers.count_packages,
                 'has_reviewers': helpers.has_reviewers,
