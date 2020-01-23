@@ -732,13 +732,23 @@ def parse_author(author):
 
 def update_citation(data):
     new_citation = build_citation_crossref(data['dara_Publication_PID'])
+    correct_citation = correct(new_citation)
     context = {'model': model, 'session': model.Session,
                 'user': c.user or c.author, 'for_view': True,
                 'auth_user_obj': c.userobj, 'ignore_auth': True}
-    data = {'id': data['id'], 'notes': new_citation}
+    data = {'id': data['id'], 'notes': correct_citation}
     try:
         tk.get_action('package_patch')(context, data)
     except Exception as e:
         log.debug('update_citation error: {} {} {}'.format(e, e.message, e.args))
 
-    return new_citation
+    return correct_citation
+
+def correct(citation):
+    """Correct known errors in CrossRef Data"""
+    #VSWG has an issue in CrossRef where the ü is replaced with ??
+    fixed = citation
+    if u'Vierteljahrschrift ' in citation and u'f??r' in citation:
+        fixed = citation.replace(u'f??r', u'für')
+
+    return fixed
