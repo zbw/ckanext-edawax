@@ -59,7 +59,8 @@ class WorkflowController(PackageController):
     def evaluate_reviewer(self, reviewer, reviewer_list, data_dict):
         """ Check if reviewer exists or not. Returns list of reviewer emails """
         if reviewer == '':
-            return []
+            reviewer_list.append('')
+            return reviewer_list
         context = self._context()
         context['keep_email'] = True
         # must be an email address - check is handled in HTML with `pattern`
@@ -69,7 +70,7 @@ class WorkflowController(PackageController):
             reviewer_list.append(reviewer)
         else:
             h.flash_error("Reviewers must be given as email addresses.")
-            log.debug("Reviewer's aren't an email address: {}".format(reviewer))
+            log.debug("Reviewers aren't an email address: '{}'".format(reviewer))
             redirect(id)
         return reviewer_list
 
@@ -104,7 +105,7 @@ class WorkflowController(PackageController):
         data_dict = c.pkg_dict
         reviewer_1 = data_dict.get("maintainer", None)
         reviewer_2 = data_dict.get("maintainer_email", None)
-        reviewer_emails = []
+        reviewer_emails = ['', '']
 
         context['keep_email'] = True
 
