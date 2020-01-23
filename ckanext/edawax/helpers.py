@@ -705,11 +705,11 @@ def build_citation_crossref(doi):
         return x is not None
 
     data = query_crossref(doi)
-    citation = "{authors} ({year}). {title}. {journal}, {volume}({issue}). doi: <a href='https://doi.org/{doi}''>{doi}</a>"
+    citation = u"{authors} ({year}). {title}. {journal}, {volume}({issue}). doi: <a href='https://doi.org/{doi}''>{doi}</a>"
     if data:
         try:
             fields = {
-                "authors": ", ".join(filter(not_none,
+                "authors": u", ".join(filter(not_none,
                                      map(parse_author, data['author']))),
                 "year"   : data['created']['date-parts'][0][0],
                 "title"  : data['title'][0],
@@ -727,7 +727,7 @@ def build_citation_crossref(doi):
 
 def parse_author(author):
     if 'given' in author.keys():
-        return "{}, {}.".format(author['family'], author['given'][0])
+        return u"{}, {}.".format(author['family'], author['given'][0])
 
 
 def update_citation(data):
