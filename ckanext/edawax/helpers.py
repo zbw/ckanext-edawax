@@ -744,11 +744,12 @@ def update_citation(data):
 
     return correct_citation
 
+
 def correct(citation):
     """Correct known errors in CrossRef Data"""
     #VSWG has an issue in CrossRef where the ü is replaced with ??
     fixed = citation
-    if u'Vierteljahrschrift ' in citation and u'f??r' in citation:
+    if u'Vierteljahrschrift' in citation and u'f??r' in citation:
         fixed = citation.replace(u'f??r', u'für')
 
     return fixed
