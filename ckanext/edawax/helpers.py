@@ -214,8 +214,11 @@ def is_reviewer(pkg):
         user = c.userobj.name
     except AttributeError as e:
         user = None
+        return False
 
-    return user in reviewers
+    email = model.User.get(user).email
+
+    return email in reviewers
 
 
 
@@ -568,25 +571,28 @@ def resource_downloads(resource):
 def find_reviewers_datasets(name):
     if not name:
         return []
+    email = model.User.get(name).email
     sql = """
             SELECT package.id, package.title
             FROM package
             INNER JOIN "user" as u
-            ON package.maintainer = u.name
+            ON package.maintainer = u.email
             INNER JOIN member
             ON member.table_id = u.id
             INNER JOIN package_extra as pe
             ON package.id = pe.package_id
             WHERE member.capacity = 'reviewer'
-            AND u.name = %(name)s
+            AND u.email = %(email)s
             AND package.private = 't'
             AND pe.key = 'dara_edawax_review'
             AND pe.value = 'reviewers'
             GROUP BY package.id;
           """
-    results = engine.execute(sql, {'name':name}).fetchall()
+    results = engine.execute(sql, {'email':email}).fetchall()
+
     out = [{'id': result[0],
             'name': result[1].title()} for result in results]
+
     return out
 
 #===========================================================#
