@@ -184,6 +184,11 @@ def journal_resource_create(context, data_dict):
 def package_show_filter(context, data_dict):
     """ Strip out the authors' names if a reviewer is making the request"""
     pkg = package_show(context, data_dict)
+    # Always remove maintainer and maintainer email for API calls
+    if context.get('api_version', None) == 3:
+        pkg['maintainer'] = ""
+        pkg['maintainer_email'] = ""
+
     if context.get('api_version', None) == 3 and helpers.is_reviewer(pkg):
         if helpers.is_reviewer(pkg) and helpers.is_private(pkg):
             pkg['dara_authors'] = [""]
@@ -198,10 +203,12 @@ def package_show_filter(context, data_dict):
 def resource_show_filter(context, data_dict):
     """ Strip out the authors' names if a reviewer is making the request"""
     rsc = resource_show(context, data_dict)
+
     if context.get('api_version', None) == 3:
         rsc = resource_show(context, data_dict)
         pkg_id = rsc['package_id']
         pkg = package_show(context, {"id": pkg_id})
+
         if helpers.is_reviewer(pkg) and helpers.is_private(pkg):
             rsc['dara_authors'] = [""]
         return rsc

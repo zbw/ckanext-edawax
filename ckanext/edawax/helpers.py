@@ -128,7 +128,7 @@ def parse_authors(authors):
     out = ''
     # information is coming from the dataset
     if type(authors[0]) == dict:   #len(authors) > 1:
-        return ' and '.join([u"{}, {}".format(author['lastname'].decode('unicode_escape'), author['firstname'].decode('unicode_escape')) for author in authors])
+        return u' and '.join([u"{}, {}".format(author['lastname'].decode('unicode_escape'), author['firstname'].decode('unicode_escape')) for author in authors])
     # Information is specific for the resource, and there's more than one
     # author
     if len(authors) > 5:
@@ -142,13 +142,6 @@ def parse_authors(authors):
     if authors[0] != u'':
         return u"{}, {}".format(authors[0], authors[1])
     return u"{}".format(authors[2])
-
-# redo with a dictionary that contains the order?
-# The dictionary would have the keys: position, field_name
-# Then go through the dictionary and insert tuples based on the postion given
-# in the dictionary? Too many moving parts?
-# will also need a way to process the few things than need to be
-# set - temporal coverage, authors, full geographic names
 
 field_mapping = {u"dara_res_preselection": "1 Type",
 u"dara_currentVersion": "2 Version",
