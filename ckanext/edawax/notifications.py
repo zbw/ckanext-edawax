@@ -106,6 +106,8 @@ def compose_message(typ, body, subject, config, send_to, context=None):
     msg = MIMEText(body.encode('utf-8'), 'plain', 'utf-8')
     msg['Subject'] = Header(subject)
     msg['From'] = config.get('smtp.mail_from')
+    if typ in ['editor', 'reauthor']:
+        msg['Cc'] = reviewer_email
     msg['To'] = Header(send_to, 'utf-8')
     msg['Date'] = Utils.formatdate(time())
     msg['X-Mailer'] = "CKAN {} [Plugin edawax]".format(ckan_version)
@@ -153,8 +155,9 @@ def review(addresses, author, dataset, reviewers=None, msg=None):
              'url': package_url(dataset),
              'submission_id': subid(),
              'title': pkg.get('title').title(),
-             'journal': org['title'],
-             'message': create_message(msg)}
+             'journal': org['title']}
+        if msg:
+            d['message'] = create_message(msg)
         body = body.format(**d)
         subject = subjects[who]
         return compose_message(who, body, subject, config, address)
