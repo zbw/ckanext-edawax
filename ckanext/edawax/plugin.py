@@ -185,7 +185,7 @@ def package_show_filter(context, data_dict):
     """ Strip out the authors' names if a reviewer is making the request"""
     pkg = package_show(context, data_dict)
     # Always remove maintainer and maintainer email for API calls
-    if context.get('api_version', None) == 3:
+    if context.get('api_version', None) == 3 and not helpers.has_hammer():
         pkg['maintainer'] = ""
         pkg['maintainer_email'] = ""
 

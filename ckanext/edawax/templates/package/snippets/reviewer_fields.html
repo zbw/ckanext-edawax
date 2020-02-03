@@ -12,14 +12,14 @@
 
     {{ form.input('maintainer', label=_('Reviewer'),
     id='field-maintainer', placeholder=_('Reviewer1@email.com'),
-    value=data.maintainer, error=errors.maintainer,
+    value=data.maintainer.split('/')[0] if data.maintainer != None else "", error=errors.maintainer,
     classes=['control-medium'], attrs={'data-infotext': """Use this field if you'd like to add a reviewer. Enter the email address of the reviewer. This will create a new reviewer account.""",
     'resource': data['name'],
     'pattern': ".+@.+"}) }}
 
     {{ form.input('maintainer_email', label=_('Reviewer'),
        id='field-maintainer-email', placeholder=_('Reviewer2@email.com'),
-       value=data.maintainer_email, error=errors.maintainer_email,
+       value=data.maintainer_email.split('/')[0] if data.maintainer_email != None else "", error=errors.maintainer_email,
        classes=['control-medium'], attrs={'data-infotext': """Use this field if you'd like to add a reviewer. Enter the email address of the reviewer. This will create a new reviewer account.""",
        'resource': data['name'],
        'pattern': '.+@.+'}) }}

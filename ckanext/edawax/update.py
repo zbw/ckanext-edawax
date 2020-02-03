@@ -12,7 +12,8 @@ import ckan.plugins.toolkit as tk
 import ckan.lib.dictization.model_save as model_save
 import ckan.lib.navl.dictization_functions
 import ckan.lib.plugins as lib_plugins
-from ckan.common import _, request
+from ckan.common import _, request, c
+from ckan import model
 
 import ckanext.edawax.helpers as h
 
@@ -35,9 +36,14 @@ def email_exists(email):
     return False
 
 
-def update_maintainer_field(user_name, data_dict, field):
-    data_dict[field] = user_name
-    return data_dict
+def update_maintainer_field(user_name, email, data_dict, field):
+    context = {'model': model, 'session': model.Session,
+                'user': c.user or c.author, 'for_view': True,
+                'auth_user_obj': c.userobj, 'ignore_auth': True}
+    data_dict[field] = "{}/{}".format(email, user_name)
+    updated_dict = tk.get_action('package_patch')(context, data_dict)
+
+    return updated_dict
 
 
 def invite_reviewer(email, org_id):

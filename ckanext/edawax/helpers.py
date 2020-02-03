@@ -26,6 +26,7 @@ log = logging.getLogger(__name__)
 
 
 def check_reviewer_update(pkg):
+    """Check if the reviewer is new or not"""
     reviewer_1_old = request.cookies.get('reviewerOnePrev_{}'.format(pkg['name']), False)
     reviewer_2_old = request.cookies.get('reviewerTwoPrev_{}'.format(pkg['name']), False)
 
@@ -187,32 +188,42 @@ def has_reviewers(pkg):
 
 def is_reviewer(pkg):
     reviewers = []
+
     try:
-        reviewer = getattr(pkg, 'maintainer')
-        reviewers.append(reviewer)
-        reviewer = getattr(pkg, 'maintainer_email')
-        reviewers.append(reviewer)
-    except AttributeError:
+        reviewer_1 = getattr(pkg, 'maintainer')
+        reviewer_2 = getattr(pkg, 'maintainer_email')
+    except AttributeError as e:
         try:
-            reviewer = pkg['maintainer']
-            reviewers.append(reviewer)
-            reviewer = pkg['maintainer_email']
-            reviewers.append(reviewer)
+            reviewer_1 = pkg['maintainer']
+            reviewer_2 = pkg['maintainer_email']
         except Exception as e:
             if pkg:
                 log.debug('is_reviewer error: {} {} {}'.format(e, e.message, e.args))
             return False
+
+    temp_rev = [reviewer_1, reviewer_2]
+    emails = []
+    names = []
+
+    if not any(temp_rev):
+        return False
+
+    for reviewer in temp_rev:
+        if '/' in reviewer:
+            email, name = reviewer.split('/')
+            emails.append(email)
+            names.append(name)
+        else:
+            email = reviewer
+            emails.append(email)
 
     try:
         user = c.userobj.name
     except AttributeError as e:
         user = None
         return False
-
-    email = model.User.get(user).email
-
-    return email in reviewers
-
+    #email = model.User.get(user).email
+    return user in names
 
 
 def count_packages(packages):
@@ -564,24 +575,24 @@ def resource_downloads(resource):
 def find_reviewers_datasets(name):
     if not name:
         return []
-    email = model.User.get(name).email
+    # the double %% are required by Python, otherwise it thinks is string formating
     sql = """
             SELECT package.id, package.title
             FROM package
             INNER JOIN "user" as u
-            ON package.maintainer = u.email
+            ON package.maintainer ILIKE '%%' || u.name || '%%'
             INNER JOIN member
             ON member.table_id = u.id
             INNER JOIN package_extra as pe
             ON package.id = pe.package_id
             WHERE member.capacity = 'reviewer'
-            AND u.email = %(email)s
+            AND u.name = %(name)s
             AND package.private = 't'
             AND pe.key = 'dara_edawax_review'
             AND pe.value = 'reviewers'
             GROUP BY package.id;
           """
-    results = engine.execute(sql, {'email':email}).fetchall()
+    results = engine.execute(sql, {'name':name}).fetchall()
 
     out = [{'id': result[0],
             'name': result[1].title()} for result in results]

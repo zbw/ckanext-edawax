@@ -14,6 +14,7 @@ from functools import wraps
 import notifications as n
 from ckanext.edawax.helpers import is_private, is_robot
 from pylons import config
+import ckanext.edawax.helpers as helpers
 
 # for download all
 import os
@@ -56,7 +57,7 @@ class WorkflowController(PackageController):
                 'auth_user_obj': c.userobj, 'save': 'save' in request.params}
 
 
-    def evaluate_reviewer(self, reviewer, reviewer_list, data_dict):
+    def evaluate_reviewer(self, reviewer, reviewer_list, data_dict, reviewer_pos):
         """ Check if reviewer exists or not. Returns list of reviewer emails """
         if reviewer == '':
             reviewer_list.append('')
@@ -64,10 +65,17 @@ class WorkflowController(PackageController):
         context = self._context()
         context['keep_email'] = True
         # must be an email address - check is handled in HTML with `pattern`
+        # dont create a new user if the "reviewer" is already a reviewer
+        new_reviewer = helpers.check_reviewer_update(data_dict)
         if '@' in reviewer:
-            # create a new user with "reviewer" role for the dataset
-            new_user = invite_reviewer(reviewer, data_dict['organization']['id'])
-            reviewer_list.append(reviewer)
+            if new_reviewer:
+                # create a new user with "reviewer" role for the dataset
+                new_user = invite_reviewer(reviewer, data_dict['organization']['id'])
+                field = 'maintainer'
+                if reviewer_pos == 'second':
+                    field += '_email'
+                update_maintainer_field(new_user['name'], reviewer, data_dict, field)
+            reviewer_list.insert(0, reviewer)
         else:
             h.flash_error("Reviewers must be given as email addresses.")
             log.debug("Reviewers aren't an email address: '{}'".format(reviewer))
@@ -113,8 +121,8 @@ class WorkflowController(PackageController):
             if (reviewer_1 != '' or reviewer_2 != ''):
                 if reviewer_1 is not None and reviewer_2 is not None:
                     # reviewer is an email address
-                    self.evaluate_reviewer(reviewer_1, reviewer_emails, data_dict)
-                    self.evaluate_reviewer(reviewer_2, reviewer_emails, data_dict)
+                    self.evaluate_reviewer(reviewer_1, reviewer_emails, data_dict, 'first')
+                    self.evaluate_reviewer(reviewer_2, reviewer_emails, data_dict, 'second')
             else:
                 reviewer_emails = [None, None]
         except Exception as e:
@@ -132,7 +140,7 @@ class WorkflowController(PackageController):
 
         # don't send to reviewers - they recieve and invation with the same info
         note = n.review(addresses, user_name, id, None)
-        log_msg = 'Notifications sent to : Reviewers:{}\nRest: {}'
+        log_msg = '\nNotifications sent to:\nReviewers:{}\nRest: {}'
         log.debug(log_msg.format(reviewer_emails, addresses))
 
         if note:
