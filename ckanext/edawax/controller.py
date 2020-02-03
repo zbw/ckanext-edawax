@@ -107,7 +107,7 @@ class WorkflowController(PackageController):
 
         user_name = tk.c.userobj.fullname or tk.c.userobj.email
         admins = get_group_or_org_admin_ids(c.pkg_dict['owner_org'])
-        addresses = map(lambda admin_id: model.User.get(admin_id).email,admins)
+        addresses = map(lambda admin_id: model.User.get(admin_id).email, admins)
 
         data_dict = c.pkg_dict
         reviewer_1 = data_dict.get("maintainer", None)
@@ -137,7 +137,10 @@ class WorkflowController(PackageController):
                 flash_message = ('This submission has no reviewers.', 'error')
                 redirect(id)
 
+        # strip out empty values
+        reviewer_emails = list(filter(lambda x: x != '', reviewer_emails))
         # don't send to reviewers - they recieve and invation with the same info
+        msg = tk.request.params.get('msg', '')
         note = n.review(addresses, user_name, id, reviewer_emails)
         log_msg = '\nNotifications sent to:\nReviewers:{}\nRest: {}'
         log.debug(log_msg.format(reviewer_emails, addresses))

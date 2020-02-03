@@ -80,6 +80,15 @@ msg_body = {
                 u"\nURL: {url}\n",
                 u"\n{message}\n",
                 u"\nbest regards from ZBW--Journal Data Archive"
+            ),
+            "reviewer_message": (
+                u"Dear Reviewer,\n\n",
+                u"The editor of \"{journal}\" would like you to ",
+                u"relook at the replications files for \"{title}.\"",
+                u"\n{message}\n",
+                u"\n\nYou can review them here: {url}",
+                u"\n{submission_id}",
+                u"\n\nbest regards from ZBW--Journal Data Archive",
             )
            }
 
@@ -96,10 +105,7 @@ def compose_message(typ, body, subject, config, send_to, context=None):
 
     msg = MIMEText(body.encode('utf-8'), 'plain', 'utf-8')
     msg['Subject'] = Header(subject)
-    if typ in ['editor', 'reauthor']:
-        msg['From'] = reviewer_email
-    else:
-        msg['From'] = config.get('smtp.mail_from')
+    msg['From'] = config.get('smtp.mail_from')
     msg['To'] = Header(send_to, 'utf-8')
     msg['Date'] = Utils.formatdate(time())
     msg['X-Mailer'] = "CKAN {} [Plugin edawax]".format(ckan_version)
@@ -125,7 +131,7 @@ def notify(typ, dataset, author_mail, msg, context, status=None):
     return sendmail(author_mail, message)
 
 
-def review(addresses, author, dataset, reviewers=None):
+def review(addresses, author, dataset, reviewers=None, msg=None):
     """
     notify admins on new or modified entities in their organization
     """
@@ -147,7 +153,8 @@ def review(addresses, author, dataset, reviewers=None):
              'url': package_url(dataset),
              'submission_id': subid(),
              'title': pkg.get('title').title(),
-             'journal': org['title']}
+             'journal': org['title'],
+             'message': create_message(msg)}
         body = body.format(**d)
         subject = subjects[who]
         return compose_message(who, body, subject, config, address)
