@@ -75,7 +75,7 @@ class WorkflowController(PackageController):
                 if reviewer_pos == 'second':
                     field += '_email'
                 update_maintainer_field(new_user['name'], reviewer, data_dict, field)
-            reviewer_list.insert(0, reviewer)
+            reviewer_list.insert(0, reviewer.split('/')[0])
         else:
             h.flash_error("Reviewers must be given as email addresses.")
             log.debug("Reviewers aren't an email address: '{}'".format(reviewer))
@@ -139,7 +139,7 @@ class WorkflowController(PackageController):
                 redirect(id)
 
         # don't send to reviewers - they recieve and invation with the same info
-        note = n.review(addresses, user_name, id, None)
+        note = n.review(addresses, user_name, id, reviewer_emails)
         log_msg = '\nNotifications sent to:\nReviewers:{}\nRest: {}'
         log.debug(log_msg.format(reviewer_emails, addresses))
 
