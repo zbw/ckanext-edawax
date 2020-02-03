@@ -12,9 +12,8 @@ from ckan.authz import get_group_or_org_admin_ids
 from ckanext.dara.helpers import check_journal_role
 from functools import wraps
 import notifications as n
-from ckanext.edawax.helpers import is_private, is_robot
+from ckanext.edawax.helpers import is_private, is_robot, is_reviewer, check_reviewer_update
 from pylons import config
-import ckanext.edawax.helpers as helpers
 
 # for download all
 import os
@@ -66,7 +65,7 @@ class WorkflowController(PackageController):
         context['keep_email'] = True
         # must be an email address - check is handled in HTML with `pattern`
         # dont create a new user if the "reviewer" is already a reviewer
-        new_reviewer = helpers.check_reviewer_update(data_dict)
+        new_reviewer = check_reviewer_update(data_dict)
         if '@' in reviewer:
             if new_reviewer:
                 # create a new user with "reviewer" role for the dataset
@@ -312,6 +311,7 @@ class WorkflowController(PackageController):
          """
         context = self._context()
         data = tk.get_action('package_show')(context, {'id': id})
+
         citation = '{authors} ({year}): {dataset}. Version: {version}. {journal}. Dataset. {address}'
 
         journal_map = {
@@ -321,7 +321,11 @@ class WorkflowController(PackageController):
                         'VSWG': 'Vierteljahrschrift für Sozial- und Wirtschaftsgeschichte'
                       }
 
-        authors = _parse_authors(data['dara_authors'])
+        if is_reviewer(data):
+            authors = "********"
+        else:
+            authors = _parse_authors(data['dara_authors'])
+
         year = data.get('dara_PublicationDate', '')
         dataset_name = data.get('title', '').encode('utf-8')
         dataset_version = data.get('dara_currentVersion', '')

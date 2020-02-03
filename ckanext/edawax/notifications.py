@@ -35,8 +35,8 @@ def package_url(dataset):
                           id=dataset))
 
 subjects = {
-            "review_editor": u"ZBW Journal Data Archive: Review Notification",
-            "review_reviewer": u"ZBW Journal Data Archive: Review Notification",
+            "review_editor": u"ZBW Journal Data Archive: Data Submission Notification",
+            "review_reviewer": u"ZBW Journal Data Archive: Data Submission Notification",
             "author": u"ZBW Journal Data Archive - Dataset Status Change",
             "editor": u"ZBW Journal Data Archive: Review Completed",
             "reauthor": u"ZBW Journal Data Archive: Please revise your uploaded dataset",
