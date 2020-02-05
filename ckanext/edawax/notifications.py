@@ -111,6 +111,7 @@ def compose_message(typ, body, subject, config, send_to, context=None):
     msg['To'] = Header(send_to, 'utf-8')
     msg['Date'] = Utils.formatdate(time())
     msg['X-Mailer'] = "CKAN {} [Plugin edawax]".format(ckan_version)
+
     return msg
 
 
@@ -130,6 +131,7 @@ def notify(typ, dataset, author_mail, msg, context, status=None):
     body = body.format(**d)
     subject = subjects[typ]
     message = compose_message(typ, body, subject, config, author_mail, context)
+
     return sendmail(author_mail, message)
 
 
