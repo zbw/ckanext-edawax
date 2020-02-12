@@ -11,15 +11,15 @@
     {#{ form.input('maintainer', label=_('Reviewer'), id='field-maintainer', placeholder=_('Reviewer 1'), value=data.maintainer, error=errors.maintainer, classes=['control-medium'], attrs={'data-infotext': """Use this field if you'd like to add a reviewer. Select the name from the dropdown list if they already have JDA accounts, otherwise provide their email address and they will be invited to the platform. """, 'data-module': 'autocomplete', 'data-module-source': '/api/2/util/user/autocomplete?q=?'}) }#}
 
     {{ form.input('maintainer', label=_('Reviewer'),
-    id='field-maintainer', placeholder=_('Reviewer1@email.com'),
-    value=data.maintainer.split('/')[0] if data.maintainer != None else "", error=errors.maintainer,
-    classes=['control-medium'], attrs={'data-infotext': """Use this field if you'd like to add a reviewer. Enter the email address of the reviewer. This will create a new reviewer account.""",
-    'resource': data['name'],
-    'pattern': ".+@.+"}) }}
+       id='field-maintainer', placeholder=_('Reviewer1@email.com'),
+       value=data.maintainer.split('/')[0] if data.maintainer and data.maintainer != None else "", error=errors.maintainer,
+       classes=['control-medium'], attrs={'data-infotext': """Use this field if you'd like to add a reviewer. Enter the email address of the reviewer. This will create a new reviewer account.""",
+       'resource': data['name'],
+       'pattern': ".+@.+"}) }}
 
     {{ form.input('maintainer_email', label=_('Reviewer'),
        id='field-maintainer-email', placeholder=_('Reviewer2@email.com'),
-       value=data.maintainer_email.split('/')[0] if data.maintainer_email != None else "", error=errors.maintainer_email,
+       value=data.maintainer_email.split('/')[0] if data.maintainer_email and data.maintainer_email != None else "", error=errors.maintainer_email,
        classes=['control-medium'], attrs={'data-infotext': """Use this field if you'd like to add a reviewer. Enter the email address of the reviewer. This will create a new reviewer account.""",
        'resource': data['name'],
        'pattern': '.+@.+'}) }}
