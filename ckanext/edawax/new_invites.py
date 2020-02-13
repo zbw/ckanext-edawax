@@ -46,8 +46,12 @@ def _get_user_role(user_name, org_id):
 
 
 def get_invite_body(user, data=None):
-    id_ = request.urlvars['id']
-    url = u"{}{}".format(config.get('ckan.site_url'),
+    # if it's an api request, don't need URL
+    if request.urlvars['controller'] == u'api':
+        url = None
+    else:
+        id_ = request.urlvars['id']
+        url = u"{}{}".format(config.get('ckan.site_url'),
                           tk.url_for(controller='package', action='read',
                           id=id_))
     extra_vars = {'reset_link': mailer.get_reset_link(user),
