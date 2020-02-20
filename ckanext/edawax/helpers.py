@@ -13,11 +13,14 @@ import datetime
 import collections
 from ckan.lib import cli
 import ast
+import requests
 
 import re
 import ckanext.edawax.robot_list as _list
 from urlparse import urlparse
 
+import logging
+log = logging.getLogger(__name__)
 
 def count_packages(packages):
     count = 0
@@ -484,3 +487,91 @@ def show_download_all(pkg):
         if rsc.get('url_type') == 'upload':
             count += 1
     return count > 1
+
+
+"""
+The following are used to create/update information regarding related
+publications. the information is stored in the package "notes" field
+which hasn't been utilized yet.
+"""
+def query_crossref(doi):
+    """
+        Plan to only run this if there's a DOI but the publication
+        metadata is incomplete.
+    """
+    if not is_robot(request.user_agent):  # don't run for bots to limit api usage
+        base_url = "https://api.crossref.org/works/{doi}"
+        headers = {
+            'User-Agent': 'ZBW-JDA (https://journaldata.zbw.eu); mailto:journaldata@zbw.eu',
+            'From': 'journaldata@zbw.eu'
+        }
+
+        try:
+            response = requests.get(base_url.format(doi=doi),
+                                    headers=headers,
+                                    timeout=3.05)
+        except requests.exceptions.Timeout as e:
+            log.debug('query_crossref error: {} {} {}'.format(e, e.message, e.args))
+            return False
+        if response.status_code == 200:
+            return response.json()['message']
+    return False
+
+
+def build_citation_crossref(doi):
+    """
+        build citation from CrossRef JSON
+    """
+    def not_none(x):
+        return x is not None
+
+    data = query_crossref(doi)
+    citation = u"{authors} ({year}). {title}. {journal}, {volume}({issue}). doi: <a href='https://doi.org/{doi}''>{doi}</a>"
+
+    if data:
+        try:
+            fields = {
+                "authors": u", ".join(filter(not_none,
+                                     map(parse_author, data['author']))),
+                "year"   : data['created']['date-parts'][0][0],
+                "title"  : data['title'][0],
+                "journal": data['container-title'][0],
+                "volume" : data['volume'],
+                "issue"  : data['issue'],
+                "doi"    : data['DOI']
+            }
+            return citation.format(**fields)
+        except KeyError as e:
+            log.debug('build_citation_crossref error: {} {} {}'.format(e, e.message, e.args))
+
+    return ""
+
+
+def parse_author(author):
+    if 'given' in author.keys():
+        return u"{}, {}.".format(author['family'], author['given'][0])
+
+
+def update_citation(data):
+    new_citation = build_citation_crossref(data['dara_Publication_PID'])
+    correct_citation = correct(new_citation)
+    context = {'model': model, 'session': model.Session,
+                'user': c.user or c.author, 'for_view': True,
+                'auth_user_obj': c.userobj, 'ignore_auth': True}
+    data = {'id': data['id'], 'notes': correct_citation}
+    try:
+        tk.get_action('package_patch')(context, data)
+    except Exception as e:
+        log.debug('update_citation error: {} {} {}'.format(e, e.message, e.args))
+
+    return correct_citation
+
+
+def correct(citation):
+    """Correct known errors in CrossRef Data"""
+    #VSWG has an issue in CrossRef where the ü is replaced with ??
+    fixed = citation
+    if u'Vierteljahrschrift' in citation and u'f??r' in citation:
+        fixed = citation.replace(u'f??r', u'für')
+
+    return fixed
