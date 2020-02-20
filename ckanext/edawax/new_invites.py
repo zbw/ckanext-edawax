@@ -45,7 +45,8 @@ def get_invite_body(user, data=None):
        'site_title': config.get('ckan.site_title'),
        'user_name': user.name,
        'site_url': config.get('ckan.site_url'),
-       'journal_title': data['journal_title']}
+       'journal_title': data['journal_title'],
+       'file_name': config.get('ckan.doc_eng', 'manual_EN.pdf')}
 
     role = _get_user_role(user.name, data['group_id'])
     if role in ['editor', 'admin']:

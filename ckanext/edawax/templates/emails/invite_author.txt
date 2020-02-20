@@ -6,4 +6,4 @@ To accept this invite, please reset your password at:
 {{ reset_link }}
 
 For advice, please consult the documentation of our service:
-{{ site_url }}/manual_EN.pdf
+{{ site_url }}/{{ file_name }}
