@@ -75,9 +75,16 @@ def get_invite_body(user, data=None):
 def send_invite(user, data):
     mailer.create_reset_key(user)
     body = get_invite_body(user, data=data)
-    subject = mailer._('Invite for {site_title}').format(site_title=mailer.g.site_title)
     # pass role to mail function to check if the attachement should be sent
     role = data['role']
+    if role == u'member':
+        role = "Author"
+    elif role == u'admin':
+        role = "Editor"
+    else:
+        role = "Reviewer"
+    sub = mailer.g.site_title
+    subject = mailer._('{site_title} Invite: {role}').format(site_title=sub, role=role)
     mail_user(user, subject, body, {}, role)
 
 
@@ -116,7 +123,7 @@ def _mail_recipient(recipient_name, recipient_email,
     if role:
         if role == u'member':
             recipient_name = "Author"
-        elif role == u'reviewer':
+        elif role == u'Reviewer':
             recipient_name = "Reviewer"
         else:
             recipient_name = "Editor"
