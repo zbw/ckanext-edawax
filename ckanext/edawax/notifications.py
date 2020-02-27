@@ -37,7 +37,7 @@ def package_url(dataset):
 subjects = {
             "review_editor": u"ZBW Journal Data Archive: Data Submission Notification",
             "review_reviewer": u"ZBW Journal Data Archive: Data Submission Notification",
-            "author": u"ZBW Journal Data Archive - Dataset Status Change",
+            "author": u"ZBW Journal Data Archive: Dataset Status Change",
             "editor": u"ZBW Journal Data Archive: Review Completed",
             "reauthor": u"ZBW Journal Data Archive: Please revise your uploaded dataset",
            }
@@ -47,9 +47,9 @@ msg_body = {
                 u"Dear Editor,\n\n",
                 u"The author, {user}, has uploaded replication files,",
                 u" \"{title},\" to the data archive for your journal, the \"{journal}.\"",
-                u"\n\nYou can review it here: {url}",
+                u"\n\nYou can review them here: {url}",
                 u"\n{submission_id}",
-                u"\n\nbest regards from ZBW--Journal Data Archive",
+                u"\n\nKind regards,\nZBW Journal Data Archive",
             ),
             "review_reviewer": (
                 u"Dear Reviewer,\n\n",
@@ -57,14 +57,14 @@ msg_body = {
                 u" \"{journal}\" and are ready for review.",
                 u"\n\nYou can review them here: {url}",
                 u"\n{submission_id}",
-                u"\n\nbest regards from ZBW--Journal Data Archive",
+                u"\n\nKind regards,\nZBW Journal Data Archive",
             ),
             "author": (
                 u"Dear Author,\n\n",
                 u"Your submission, \"{title},\" to \"{journal}\" has been",
                 u" {status}. It is available here: {url}.",
                 u"\n\n{message}",
-                u"\n\nbest regards from ZBW--Journal Data Archive",
+                u"\n\nKind regards,\nZBW Journal Data Archive",
             ),
             "editor": (
                 u"Dear Editor,\n\n",
@@ -76,10 +76,10 @@ msg_body = {
                 u"Dear Author,\n",
                 u"\nThe Editors of the \"{journal}\" have requested ",
                 u"that you revise your replication files \"{title}\""
-                u" which you submitted to the ZBW--Journal Data Archive.\n",
+                u" which you submitted to the ZBW Journal Data Archive.\n",
                 u"\nURL: {url}\n",
                 u"\n{message}\n",
-                u"\nbest regards from ZBW--Journal Data Archive"
+                u"\nKind regards,\nZBW Journal Data Archive"
             ),
             "reviewer_message": (
                 u"Dear Reviewer,\n\n",
@@ -88,7 +88,7 @@ msg_body = {
                 u"\n{message}\n",
                 u"\n\nYou can review them here: {url}",
                 u"\n{submission_id}",
-                u"\n\nbest regards from ZBW--Journal Data Archive",
+                u"\n\nKind regards,\nZBW Journal Data Archive",
             )
            }
 
