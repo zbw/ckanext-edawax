@@ -177,6 +177,10 @@ def review(addresses, author, dataset, reviewers=None, msg=None):
                 for reviewer in reviewers:
                     if reviewer not in [None, '', u'']:
                         t.append(sendmail(reviewer, message("review_reviewer", reviewer)))
+        else:
+            # want to return something so that there's no error message
+            # previously, this condition would have triggered an email to the editors
+            t.append(True)
 
     # success if we have at least one successful send
     return any(t)

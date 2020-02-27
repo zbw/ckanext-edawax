@@ -28,16 +28,20 @@ log = logging.getLogger(__name__)
 def check_reviewer_update(pkg):
     """Check if the reviewer is new or not"""
     reviewer_1_old = request.cookies.get('reviewerOnePrev_{}'.format(pkg['name']), False)
-    reviewer_2_old = request.cookies.get('reviewerTwoPrev_{}'.format(pkg['name']), False)
+    #reviewer_2_old = request.cookies.get('reviewerTwoPrev_{}'.format(pkg['name']), False)
 
-    if reviewer_1_old is False and reviewer_2_old is False:
+    #if reviewer_1_old is False and reviewer_2_old is False:
+    #    return False
+    if reviewer_1_old is False:
         return False
 
     reviewer_1_new = pkg['maintainer']
-    reviewer_2_new = pkg['maintainer_email']
+    #reviewer_2_new = pkg['maintainer_email']
 
-    if (reviewer_1_new and (reviewer_1_new != '') and reviewer_1_old != reviewer_1_new) or \
-        (reviewer_2_new and (reviewer_2_new != '') and reviewer_2_old != reviewer_2_new):
+    #if (reviewer_1_new and (reviewer_1_new != '') and reviewer_1_old != reviewer_1_new) or \
+    #    (reviewer_2_new and (reviewer_2_new != '') and reviewer_2_old != reviewer_2_new):
+    #    return True
+    if (reviewer_1_new and (reviewer_1_new != '') and reviewer_1_old != reviewer_1_new):
         return True
 
     return False

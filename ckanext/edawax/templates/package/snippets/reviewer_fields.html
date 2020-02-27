@@ -26,13 +26,13 @@
 
     <script>
         var reviewer_1 = document.getElementById('field-maintainer');
-        var reviewer_2 = document.getElementById('field-maintainer-email');
+        //var reviewer_2 = document.getElementById('field-maintainer-email');
 
         reviewer_1.addEventListener('change', updateCookie_1);
-        reviewer_2.addEventListener('change', updateCookie_2);
+        //reviewer_2.addEventListener('change', updateCookie_2);
 
         reviewer_1_old = reviewer_1.value;
-        reviewer_2_old = reviewer_2.value;
+        //reviewer_2_old = reviewer_2.value;
 
         var time = new Date();
         var now = time.getTime();
@@ -44,10 +44,12 @@
             document.cookie = "reviewerOnePrev_" + reviewer_1.getAttribute('resource') + "=" + reviewer_1_old + ";path=/;expires=" + time.toGMTString();
         }
 
+        /*
         function updateCookie_2(e){
             console.log(reviewer_2_old);
             document.cookie = "reviewerTwoPrev_" + reviewer_2.getAttribute('resource') + "=" + reviewer_2_old + ";path=/;expires=" + time.toGMTString();
         }
+        */
     </script>
 
     </div>
