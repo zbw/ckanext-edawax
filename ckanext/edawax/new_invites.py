@@ -119,7 +119,7 @@ def _mail_recipient(recipient_name, recipient_email,
         elif role == u'reviewer':
             recipient_name = "Reviewer"
         else:
-            recipient_name = Editor
+            recipient_name = "Administrator"
     else:
         recipient_name = recipient_name
     body = mailer.add_msg_niceties(recipient_name, body, sender_name, sender_url)
