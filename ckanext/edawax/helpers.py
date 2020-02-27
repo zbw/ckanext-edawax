@@ -63,8 +63,8 @@ def hide_from_reviewer(pkg):
 
 
 def get_manual_file():
-    eng = config.get('ckan.doc_eng')
-    deu = config.get('ckan.doc_deu')
+    eng = config.get('ckan.doc_eng', 'manual_EN.pdf')
+    deu = config.get('ckan.doc_deu', 'manual_DE.pdf')
     return (eng, deu)
 
 
@@ -757,7 +757,7 @@ def update_citation(data):
 
 def correct(citation):
     """Correct known errors in CrossRef Data"""
-    #VSWG has an issue in CrossRef where the ü is replaced with ??
+    #VSWG has an issue in CrossRef where the ü is with ??
     fixed = citation
     if u'Vierteljahrschrift' in citation and u'f??r' in citation:
         fixed = citation.replace(u'f??r', u'für')
