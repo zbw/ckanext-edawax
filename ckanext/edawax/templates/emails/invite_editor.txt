@@ -1,15 +1,17 @@
 You have been invited by the editor of the {{ journal_title }} to serve as an additional editor to manage data submissions within the ZBW Journal Data Archive.
+For this purpose, the {{ journal_title }} has created an account for you.
 
-The ZBW Journal Data Archive is the data archive for {{ journal_title }}.
+Your account name is: {{ user_name }}
 
-To accept this invitation, please reset your password by clicking the link below:
-
+To accept this invitation, please set your password by clicking the link below:
 {{ reset_link }}
 
-For advice, please consult the documentation of our service ({{ site_url }}/Editors_Manual_EN.pdf / {{ site_url }}/Editors_Manual_DE.pdf) or get in touch with the product manager, Mr. Sven Vlaeminck (journaldata@zbw.eu).
+For advice, please consult the documentation of our service:
+{{ site_url }}/{{ man_eng }}
+{{ site_url }}/{{ man_deu }}
 
-Thank you in advance,
+For any problems or questions, please feel free to get in touch with us.
 
-Sincerely,
+Kind regards,
 ZBW Journal Data Archive
 

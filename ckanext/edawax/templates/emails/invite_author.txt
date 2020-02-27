@@ -3,7 +3,7 @@ For this purpose, the {{ journal_title }} has created an account for you.
 
 Your account name is: {{ user_name }}
 
-To accept this invite, please reset your password at:
+To accept this invite, please set your password at:
 {{ reset_link }}
 
 To start the deposit of your replication files, please log in with the user name shown above and your password.
