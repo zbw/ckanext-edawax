@@ -1,4 +1,4 @@
-the editorial office of {{ journal_title }} invites you to review the replication data of a research article.
+the editorial office of the {{ journal_title }} invites you to review the replication data of a research article.
 For this purpose, the {{ journal_title }} has created a reviewer account for you.
 
 Your account name is: {{ user_name }}

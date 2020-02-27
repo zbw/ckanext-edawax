@@ -165,16 +165,18 @@ def review(addresses, author, dataset, reviewers=None, msg=None):
         return compose_message(who, body, subject, config, address)
 
     # send email to Admin
+    # this should never happen, because if there are no reviewers, there's no button
     t = []
-    if pkg_status(dataset) in ['reauthor', 'false', 'reviewers', 'editor'] \
-        or reviewers == [None, None]:
+    if reviewers == [None, None]:
+        # pkg_status(dataset) in ['reauthor', 'false', 'reviewers', 'editor']
         t = map(lambda a: sendmail(a, message("review_editor", a)), addresses)
     else:
-        # To Reviewer
-        if reviewers is not None:
-            for reviewer in reviewers:
-                if reviewer not in [None, '', u'']:
-                    t.append(sendmail(reviewer, message("review_reviewer", reviewer)))
+        if pkg_status(dataset) not in ['reauthor', 'false', 'reviewers', 'editor']:
+            # To Reviewer
+            if reviewers is not None:
+                for reviewer in reviewers:
+                    if reviewer not in [None, '', u'']:
+                        t.append(sendmail(reviewer, message("review_reviewer", reviewer)))
 
     # success if we have at least one successful send
     return any(t)
