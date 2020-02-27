@@ -1,11 +1,19 @@
-You have been invited by the editor of the {{ journal_title }} to act as a reviewer for a new entry in the journal's data repository.
+the editorial office of {{ journal_title }} invites you to review the replication data of a research article.
+For this purpose, the {{ journal_title }} has created a reviewer account for you.
+
+Your account name is: {{ user_name }}
 
 To accept this invitation, please reset your password at:
-
 {{ reset_link }}
 
-The submission for review is available here: {{ url }}
+To start the review, please log in with the user name shown above and your password. Once logged in, click "my datasets."
+The data ready for your review will be highlighted. Or follow the link here: {{ url }}
 
 For advice, please consult the documentation of our service:
 {{ site_url }}/{{ man_eng }}
 {{ site_url }}/{{ man_deu }}
+
+For any problems or questions, please feel free to get in touch with us.
+
+Kind regards,
+ZBW Journal Data Archive

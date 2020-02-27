@@ -113,6 +113,15 @@ def _mail_recipient(recipient_name, recipient_email,
         sender_name, sender_url, subject,
         body, headers={}, role=None):
     mail_from = config.get('smtp.mail_from')
+    if role:
+        if role == u'member':
+            recipient_name = "Author"
+        elif role == u'reviewer':
+            recipient_name = "Reviewer"
+        else:
+            recipient_name = Editor
+    else:
+        recipient_name = recipient_name
     body = mailer.add_msg_niceties(recipient_name, body, sender_name, sender_url)
     msg_body = MIMEText(body.encode('utf-8'), 'plain', 'utf-8')
     msg = MIMEMultipart()
