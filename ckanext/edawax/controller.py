@@ -22,7 +22,7 @@ import zipfile
 import requests
 import StringIO
 from ckanext.dara.helpers import _parse_authors
-from ckanext.edawax.helpers import is_reviewer, in_review, delete_cookies
+from ckanext.edawax.helpers import is_reviewer, in_review, delete_cookies, hide_from_reviewer
 from ckanext.edawax.update import update_maintainer_field, email_exists, invite_reviewer, add_user_to_journal
 
 import ckan.lib.base as base
@@ -470,6 +470,8 @@ def create_ris_record(id):
     else:
         jels = ''
 
+    if hide_from_reviewer(pkg_dict):
+        authors = 'AU  - ********\n'
     contents = contents.format(title=title,
                                authors=authors,
                                doi=doi,
@@ -530,6 +532,8 @@ def create_bibtex_record(id):
 
     contents = '@data{{{identifier},\nauthor = {{{authors}}},\npublisher = {{ZBW - Leibniz Informationszentrum Wirtschaft}},\ntitle = {{{title}}},\nyear = {{{date}}},\nversion = {{{version}}},\nurl = {{{url}}}{jels}{doi} \n}}'
 
+    if hide_from_reviewer(pkg_dict):
+        authors = "*********"
     contents = contents.format(identifier=identifier, authors=authors, title=title,date=date,version=version,url=url,doi=doi,jels=jels)
 
     s = StringIO.StringIO()
