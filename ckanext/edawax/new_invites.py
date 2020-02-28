@@ -121,9 +121,9 @@ def _mail_recipient(recipient_name, recipient_email,
         body, headers={}, role=None):
     mail_from = config.get('smtp.mail_from')
     if role:
-        if role == u'member':
+        if role in [u'member', 'Author']:
             recipient_name = "Author"
-        elif role == u'Reviewer':
+        elif role in [u'Reviewer', 'reviewer']:
             recipient_name = "Reviewer"
         else:
             recipient_name = "Editor"
