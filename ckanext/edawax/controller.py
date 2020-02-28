@@ -115,18 +115,17 @@ class WorkflowController(PackageController):
         reviewer_emails = ['', '']
 
         context['keep_email'] = True
-
         try:
             if (reviewer_1 != '' or reviewer_2 != ''):
-                if reviewer_1 is not None and reviewer_2 is not None:
+                if reviewer_1 is not None:
                     # reviewer is an email address
                     self.evaluate_reviewer(reviewer_1, reviewer_emails, data_dict, 'first')
-                    self.evaluate_reviewer(reviewer_2, reviewer_emails, data_dict, 'second')
+                    #self.evaluate_reviewer(reviewer_2, reviewer_emails, data_dict, 'second')
             else:
                 reviewer_emails = [None, None]
         except Exception as e:
-            log.debug("Error with reviewer notifications: {}-{}".format(e.message, e.args))
-            log.debug(reviewer_emails)
+            log.error("Error with reviewer notifications: {}-{}".format(e.message, e.args))
+            log.error(reviewer_emails)
 
         # check that there are reviewers
         flash_message = ""

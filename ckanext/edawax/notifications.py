@@ -45,7 +45,7 @@ subjects = {
 msg_body = {
             "review_editor": (
                 u"Dear Editor,\n\n",
-                u"The author, {user}, has uploaded replication files,",
+                u"the author, {user}, has uploaded replication files,",
                 u" \"{title},\" to the data archive for your journal, the \"{journal}.\"",
                 u"\n\nYou can review them here: {url}",
                 u"\n{submission_id}",
@@ -53,28 +53,28 @@ msg_body = {
             ),
             "review_reviewer": (
                 u"Dear Reviewer,\n\n",
-                u"Replication files, \"{title},\" have been added to the",
-                u" \"{journal}\" and are ready for review.",
-                u"\n\nYou can review them here: {url}",
+                u"the editorial office would like you to review\n",
+                u"\"{title},\" in the \"{journal}\".",
+                u"\n\nYou can review it here: {url}",
                 u"\n{submission_id}",
                 u"\n\nKind regards,\nZBW Journal Data Archive",
             ),
             "author": (
                 u"Dear Author,\n\n",
-                u"Your submission, \"{title},\" to \"{journal}\" has been",
+                u"your submission, \"{title},\" to \"{journal}\" has been",
                 u" {status}. It is available here: {url}.",
                 u"\n\n{message}",
                 u"\n\nKind regards,\nZBW Journal Data Archive",
             ),
             "editor": (
                 u"Dear Editor,\n\n",
-                u"A reviewer has finished reviewing \"{title}\" in your journal,",
+                u"a reviewer has finished reviewing \"{title}\" in your journal,",
                 u" the \"{journal}.\" The submission is available here: {url}.",
                 u"\n\n{message}",
             ),
             "reauthor": (
                 u"Dear Author,\n",
-                u"\nThe Editors of the \"{journal}\" have requested ",
+                u"\nthe Editors of the \"{journal}\" have requested ",
                 u"that you revise your replication files \"{title}\""
                 u" which you submitted to the ZBW Journal Data Archive.\n",
                 u"\nURL: {url}\n",
@@ -83,7 +83,7 @@ msg_body = {
             ),
             "reviewer_message": (
                 u"Dear Reviewer,\n\n",
-                u"The editor of \"{journal}\" would like you to ",
+                u"the editor of \"{journal}\" would like you to ",
                 u"relook at the replications files for \"{title}.\"",
                 u"\n{message}\n",
                 u"\n\nYou can review them here: {url}",
@@ -167,11 +167,11 @@ def review(addresses, author, dataset, reviewers=None, msg=None):
     # send email to Admin
     # this should never happen, because if there are no reviewers, there's no button
     t = []
-    if reviewers == [None, None]:
+    if pkg_status(dataset) in ['false', 'reauthor'] or reviewers == [None, None]:
         # pkg_status(dataset) in ['reauthor', 'false', 'reviewers', 'editor']
         t = map(lambda a: sendmail(a, message("review_editor", a)), addresses)
     else:
-        if pkg_status(dataset) not in ['reauthor', 'false', 'reviewers', 'editor']:
+        if pkg_status(dataset) not in ['reviewers', 'editor']:
             # To Reviewer
             if reviewers is not None:
                 for reviewer in reviewers:

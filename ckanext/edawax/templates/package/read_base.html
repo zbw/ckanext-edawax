@@ -6,21 +6,21 @@
 
   {% if h.show_change_reviewer(pkg) %}
     {% if not h.check_reviewer_update(pkg) %}
-      <a title="Update reviewers"
+      <a title="Update reviewer"
           class="btn btn-reviewer"
           href="/dataset/edit/{{ pkg.id }}#dataset_reviewers">
         {%- if h.has_reviewers(pkg) -%}
           <i class="icon-refresh"></i>
-          Change Reviewers</a>
+          Change Reviewer</a>
         {%- else -%}
           <i class="icon-plus"></i>
-          Add Reviewers</a>
+          Add Reviewer</a>
         {%- endif -%}
     {% else %}
-      <a title="Update reviewers"
+      <a title="Update reviewer"
           class="btn btn-reviewer"
           href="/dataset/{{pkg.id}}/review">
-        <i class="icon-envelope"></i>Re-Send to Reviewers</a>
+        <i class="icon-envelope"></i>Re-Send to Reviewer</a>
     {% endif %}
 
   {% endif %}
@@ -58,9 +58,9 @@
                 class="btn btn-reviewer" href="/dataset/{{pkg.id}}/review">
              <i class="icon-envelope"></i>
             {%- if pkg['dara_edawax_review'] == 'back' -%}
-              Renotify Reviewers
+              Renotify Reviewer
             {%- else -%}
-              Send to Reviewers
+              Send to Reviewer
             {%- endif -%}
           </a>
 

@@ -194,32 +194,28 @@ def is_reviewer(pkg):
     reviewers = []
 
     try:
-        reviewer_1 = getattr(pkg, 'maintainer')
-        reviewer_2 = getattr(pkg, 'maintainer_email')
+        reviewer = getattr(pkg, 'maintainer')
     except AttributeError as e:
         try:
-            reviewer_1 = pkg['maintainer']
-            reviewer_2 = pkg['maintainer_email']
+            reviewer = pkg['maintainer']
         except Exception as e:
             if pkg:
                 log.debug('is_reviewer error: {} {} {}'.format(e, e.message, e.args))
             return False
 
-    temp_rev = [reviewer_1, reviewer_2]
     emails = []
     names = []
 
-    if not any(temp_rev):
+    if not reviewer:
         return False
 
-    for reviewer in temp_rev:
-        if '/' in reviewer:
-            email, name = reviewer.split('/')
-            emails.append(email)
-            names.append(name)
-        else:
-            email = reviewer
-            emails.append(email)
+    if '/' in reviewer:
+        email, name = reviewer.split('/')
+        emails.append(email)
+        names.append(name)
+    else:
+        email = reviewer
+        emails.append(email)
 
     try:
         user = c.userobj.name
