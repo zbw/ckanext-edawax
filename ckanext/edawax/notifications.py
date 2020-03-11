@@ -171,7 +171,7 @@ def review(addresses, author, dataset, reviewers=None, msg=None):
         # pkg_status(dataset) in ['reauthor', 'false', 'reviewers', 'editor']
         t = map(lambda a: sendmail(a, message("review_editor", a)), addresses)
     else:
-        if pkg_status(dataset) not in ['reviewers', 'editor']:
+        if pkg_status(dataset) not in ['editor', 'back']:  # removed 'reviewers'
             # To Reviewer
             if reviewers is not None:
                 for reviewer in reviewers:
