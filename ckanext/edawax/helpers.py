@@ -736,6 +736,7 @@ def build_citation_crossref(doi):
 
 
 def parse_author(author):
+    # Differentiate between people and instutitions
     if 'given' in author.keys():
         return u"{}, {}.".format(author['family'], author['given'][0])
 
@@ -748,7 +749,8 @@ def update_citation(data):
                 'auth_user_obj': c.userobj, 'ignore_auth': True}
     data = {'id': data['id'], 'notes': correct_citation}
     try:
-        tk.get_action('package_patch')(context, data)
+        if correct_citation != '':
+            tk.get_action('package_patch')(context, data)
     except Exception as e:
         log.debug('update_citation error: {} {} {}'.format(e, e.message, e.args))
 
@@ -757,7 +759,7 @@ def update_citation(data):
 
 def correct(citation):
     """Correct known errors in CrossRef Data"""
-    #VSWG has an issue in CrossRef where the ü is with ??
+    #VSWG has an issue in CrossRef where the ü replaced is with ??
     fixed = citation
     if u'Vierteljahrschrift' in citation and u'f??r' in citation:
         fixed = citation.replace(u'f??r', u'für')
