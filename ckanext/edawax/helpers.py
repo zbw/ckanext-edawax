@@ -548,6 +548,7 @@ def build_citation_crossref(doi):
 
 
 def parse_author(author):
+    # differentiate between people and institutions
     if 'given' in author.keys():
         return u"{}, {}.".format(author['family'], author['given'][0])
 
@@ -560,7 +561,8 @@ def update_citation(data):
                 'auth_user_obj': c.userobj, 'ignore_auth': True}
     data = {'id': data['id'], 'notes': correct_citation}
     try:
-        tk.get_action('package_patch')(context, data)
+        if correct_citation != '':
+            tk.get_action('package_patch')(context, data)
     except Exception as e:
         log.debug('update_citation error: {} {} {}'.format(e, e.message, e.args))
 
