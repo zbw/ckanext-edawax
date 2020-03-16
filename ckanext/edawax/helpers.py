@@ -330,7 +330,7 @@ def pkg_abs_url(pkg):
 
 
 def ckan_site_url():
-    return config.get('ckan.site_url', 'http://journaldata.zbw.eu')
+    return config.get('ckan.site_url', 'https://journaldata.zbw.eu')
 
 
 def journal_volume_sorting(packages):
