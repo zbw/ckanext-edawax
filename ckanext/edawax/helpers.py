@@ -22,6 +22,11 @@ from urlparse import urlparse
 import logging
 log = logging.getLogger(__name__)
 
+
+def is_author(pkg):
+    return get_user_id() == pkg['creator_user_id']
+
+
 def count_packages(packages):
     count = 0
     for package in packages:
