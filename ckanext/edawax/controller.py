@@ -145,7 +145,10 @@ class WorkflowController(PackageController):
         if flash_message is None and reviewer_emails == ['', '']:
             note = n.review(addresses, user_name, id, reviewer_emails)
             if note:
-                flash_message = ('Notification sent to Reviewer.', 'success')
+                c.pkg_dict = self.update_review_status(c.pkg_dict)
+                tk.get_action('package_update')(context, c.pkg_dict)
+                if flash_message is None:
+                    flash_message = ('Notification sent to Reviewer.', 'success')
             else:
                 flash_message = ('Error: Mail could not be sent. Please try again later or contact the site admin.', 'error')
 
