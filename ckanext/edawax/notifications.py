@@ -165,7 +165,6 @@ def review(addresses, author, dataset, reviewers=None, msg=None):
         return compose_message(who, body, subject, config, address)
 
     # send email to Admin
-    # this should never happen, because if there are no reviewers, there's no button
     t = []
     if pkg_status(dataset) in ['false', 'reauthor'] or reviewers == [None, None]:
         # pkg_status(dataset) in ['reauthor', 'false', 'reviewers', 'editor']
