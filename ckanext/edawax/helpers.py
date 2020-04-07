@@ -37,108 +37,6 @@ def count_packages(packages):
     return count
 
 
-def get_page_type():
-    """
-        Get page type to make breadcrumbs
-    """
-    action = request.urlvars['action']
-    controller = request.urlvars['controller']
-    id_ = request.urlvars.get('id', None)
-    resource_id = request.urlvars.get('resource_id', None)
-
-    try:
-        if controller == 'ckanext.dara.controller:DaraController':
-            controller = 'package'
-        pkg = tk.get_action('{}_show'.format(controller))(None, {'id': id_})
-    except:
-        pkg = None
-
-    if resource_id:
-        resource = tk.get_action('resource_show')(None, {'id': resource_id})
-        resource_name = resource['name']
-    else:
-        resource_name = 'Resource'
-
-    try:
-        if 'organization' in pkg.keys():
-            journal = pkg['organization']['title']
-            parent = pkg['organization']
-            resource = pkg
-        else:
-            parent = None
-            resource = None
-    except (AttributeError, TypeError):
-        parent = None
-    resource = pkg
-
-    ignore = False
-    if action == 'search':
-        text = "Datasets"
-    elif action == 'index':
-        if controller == 'organization':
-            text = 'Journals'
-        else:
-            text = 'Home'
-            ignore = True
-    elif action == 'read':
-        try:
-            text = pkg['title']
-        except KeyError:
-            # working with user name
-            text = id_
-    elif action == 'resource_read':
-        text = resource_name
-    elif action == 'new':
-        if controller == 'package':
-            text = 'Dataset'
-        elif controller == 'organization':
-            text = 'Journal'
-    elif action == 'dashboard_read':
-        text = 'Stats'
-    elif action in ['dashboard', 'dashboard_datasets', 'dashboard_organizations', 'logged_in']:
-        text = 'Dashboard'
-    elif action == 'edit':
-        if controller == 'user':
-            text = id_
-        elif controller == 'organization':
-            text = 'Admin'
-        else:
-            text = 'Edit'
-    elif action == 'resource_edit':
-        text = 'Edit'
-    elif action == 'login':
-        text = 'Login'
-    elif action == 'register':
-        text = 'Registration'
-    elif action == 'logged_out_page':
-        text = 'Logged Out'
-        ignore = True
-    elif action == 'request_reset':
-        text = 'Password reset'
-    elif action == 'activity':
-        text = 'Activity'
-    elif action == 'about':
-        text = 'About'
-    elif action == 'md_page':
-        text = 'Info'
-        ignore = True
-    elif action in ['resources', 'new_resource']:
-        text = 'Resources'
-        ignore = True
-    elif action == 'doi':
-        text = 'DOI Registration'
-    elif action in ['bulk_process', 'members']:
-        text = 'Admin'
-        action = 'edit'
-    else:
-        text = ''
-        ignore = True
-        #raise ValueError('This wasnt accounted for: {}'.format(action))
-
-    return {'text': text,'action': action, 'controller': controller, 'id': id_, 'resource_id': resource_id, 'parent': parent, 'resource': resource,
-         'ignore': False}
-
-
 def normal_height():
     path = request.upath_info
     pages = ['/', '/user/login', '/user/logged_out_redirect', '/user/reset']
@@ -188,7 +86,7 @@ def has_doi(pkg):
 
 
 def has_hammer():
-    return c.is_sysadmin
+    return c.is_sysadmin == True or c.userobj.sysadmin == True
 
 
 def is_published(url):
