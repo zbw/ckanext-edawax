@@ -148,6 +148,7 @@ def parse_authors(authors):
         return u"{}, {}".format(authors[0], authors[1])
     return u"{}".format(authors[2])
 
+
 field_mapping = {u"dara_res_preselection": "1 Type",
 u"dara_currentVersion": "2 Version",
 u"dara_DOI": "4 DOI",
