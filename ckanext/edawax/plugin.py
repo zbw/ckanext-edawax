@@ -301,6 +301,7 @@ class EdawaxPlugin(plugins.SingletonPlugin):
                 'normal_height': helpers.normal_height,
                 'count_packages': helpers.count_packages,
                 'update_citation': helpers.update_citation,
+                'format_resource_items_custom': helpers.format_resource_items_custom
                 }
 
     def before_map(self, map):
