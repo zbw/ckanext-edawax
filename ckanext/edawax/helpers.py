@@ -25,6 +25,10 @@ import logging
 log = logging.getLogger(__name__)
 
 
+def pkg_status(id):
+    pkg = tk.get_action('package_show')(None, {'id': id})
+    return pkg['dara_edawax_review']
+
 def get_manual_file():
     eng = config.get('ckan.doc_eng', 'manual_EN.pdf')
     deu = config.get('ckan.doc_deu', 'manual_DE.pdf')

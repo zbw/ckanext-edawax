@@ -12,24 +12,28 @@ import ckan.lib.mailer as mailer
 import ckan.logic.action.create as logic
 from ckan.lib.base import render_jinja2
 
+import ckan.plugins.toolkit as tk
 #imports for expanded mailing
 import os
 import smtplib
 import logging
 from time import time
 from email import Utils
-from ckan.common import _, g
+from ckan.common import _, g, request
 from email.header import Header
 import paste.deploy.converters
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 from email.mime.application import MIMEApplication
 
+import ckanext.edawax.helpers as h
 
 log = logging.getLogger(__name__)
 
+
 class MailerException(Exception):
     pass
+
 
 def _get_user_role(user_name, org_id):
     data_dict = {'id': org_id}
@@ -40,26 +44,45 @@ def _get_user_role(user_name, org_id):
             return user['capacity']
     return False
 
+
 def get_invite_body(user, data=None):
+    # if it's an api request, don't need url
+    if request.urlvars['controller'] == u'api':
+        url = None
+    else:
+        id_ = request.urlvars['id']
+        url = u"{}{}".format(config.get('ckan.site_url'),
+                        tk.url_for(controller='package', action="read",
+                        id=id_))
+
     extra_vars = {'reset_link': mailer.get_reset_link(user),
        'site_title': config.get('ckan.site_title'),
        'user_name': user.name,
        'site_url': config.get('ckan.site_url'),
        'journal_title': data['journal_title'],
-       'file_name': config.get('ckan.doc_eng', 'manual_EN.pdf')}
+       'url': url,
+       'man_eng': h.get_manual_file()[0],
+       'man_deu': h.get_manual_file()[0]}
 
     role = _get_user_role(user.name, data['group_id'])
     if role in ['editor', 'admin']:
         return render_jinja2('emails/invite_editor.txt', extra_vars)
     return render_jinja2('emails/invite_author.txt', extra_vars)
+    # Add reviewer when needed REVIEWER
 
 
 def send_invite(user, data):
     mailer.create_reset_key(user)
     body = get_invite_body(user, data=data)
-    subject = mailer._('Invite for {site_title}').format(site_title=mailer.g.site_title)
     # pass role to mail function to check if the attachement should be sent
     role = data['role']
+    if role == u'member':
+        role = "Author"
+    else:
+        role = "Editor"
+    # REVIEWER
+    sub = mailer.g.site_title
+    subject = mailer._('{} Invite: {}'.format(sub, role))
     mail_user(user, subject, body, {}, role)
 
 
@@ -95,6 +118,14 @@ def _mail_recipient(recipient_name, recipient_email,
         sender_name, sender_url, subject,
         body, headers={}, role=None):
     mail_from = config.get('smtp.mail_from')
+    if role:
+        if role in [u'member', 'Author']:
+            recipient_name = 'Author'
+        else:
+            recipient_name = 'Editor'
+        # REVIEWER
+    else:
+        recipient_name = recipient_name
     body = mailer.add_msg_niceties(recipient_name, body, sender_name, sender_url)
     msg_body = MIMEText(body.encode('utf-8'), 'plain', 'utf-8')
     msg = MIMEMultipart()
