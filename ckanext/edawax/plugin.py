@@ -346,6 +346,7 @@ class EdawaxPlugin(plugins.SingletonPlugin):
         # TODO redirects are just temporary, since there are still some routes
         # and links with 'organizations' in ckan. It even might be easier, to
         # simply redirect any organization url and leave the above maps out...
+        map.redirect('/about', '/info')
         map.redirect('/organization', '/journals')
         map.redirect('/organization/{url:.*}', '/journals/{url}')
         map.redirect('/dashboard/organizations', '/dashboard/journals')
