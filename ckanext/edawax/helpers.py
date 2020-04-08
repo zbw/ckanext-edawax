@@ -84,8 +84,9 @@ def format_resource_items_custom(items):
                         int(item[1])
                         value = replacement_values[item[0]][item[1]]
                     except ValueError:
-                        pass
-                value = item[1]
+                        value = item[1]
+                else:
+                    value = item[1]
                 out.append(( field_mapping[item[0]], value ))
 
     sorted_list = sorted(out, key=lambda tup: tup[0])
