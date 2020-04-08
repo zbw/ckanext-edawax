@@ -122,21 +122,21 @@ replacement_values = {
                                         '1': 'Download',
                                         '2': 'OnSite'
                                     },
-    u'dara_unitType': '92 Unit Type': {
-                                        '1': 'Individual',
-                                        '2': 'Organization',
-                                        '3': 'Family',
-                                        '4': 'Family: Household Familiy',
-                                        '5': 'Household',
-                                        '6': 'Housing Unit',
-                                        '7': 'Event/Process',
-                                        '8': 'Geographic Unit',
-                                        '9': 'Time Unit',
-                                        '10': 'Text Unit',
-                                        '11': 'Group',
-                                        '12': 'Object',
-                                        '13': 'Other'
-                                    },
+    u'dara_unitType': {
+                        '1': 'Individual',
+                        '2': 'Organization',
+                        '3': 'Family',
+                        '4': 'Family: Household Familiy',
+                        '5': 'Household',
+                        '6': 'Housing Unit',
+                        '7': 'Event/Process',
+                        '8': 'Geographic Unit',
+                        '9': 'Time Unit',
+                        '10': 'Text Unit',
+                        '11': 'Group',
+                        '12': 'Object',
+                        '13': 'Other'
+                    },
 }
 
 field_mapping = {u"dara_res_preselection": "1 Type",
