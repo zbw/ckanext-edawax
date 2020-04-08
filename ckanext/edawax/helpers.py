@@ -79,6 +79,12 @@ def format_resource_items_custom(items):
             out.append(("7 Geographic Area (controlled)", ", ".join(countries)))
         else:
             if item[0] in field_mapping.keys():
+                if item[0] in replacement_list:
+                    try:
+                        int(item[1])
+                        item[1] = replacement_values[item[0]][item[1]]
+                    except ValueError:
+                        pass
                 out.append(( field_mapping[item[0]], item[1] ))
 
     sorted_list = sorted(out, key=lambda tup: tup[0])
@@ -106,6 +112,30 @@ def parse_authors(authors):
         return u"{}, {}".format(authors[0], authors[1])
     return u"{}".format(authors[2])
 
+# fields with number values in older records that need to be replaced by strings
+replacement_list = [
+    u'dara_Availabilitycontrolled',
+    u"dara_unitType": "92 Unit Type",
+]
+replacement_values = {
+    u'dara_Availabilitycontrolled': {'1': 'Download',
+                                     '2': 'OnSite'},
+    u'dara_unitType": "92 Unit Type': {
+                                        '1': 'Individual',
+                                        '2': 'Organization',
+                                        '3': 'Family',
+                                        '4': 'Family: Household Familiy',
+                                        '5': 'Household',
+                                        '6': 'Housing Unit',
+                                        '7': 'Event/Process',
+                                        '8': 'Geographic Unit',
+                                        '9': 'Time Unit',
+                                        '10': 'Text Unit',
+                                        '11': 'Group',
+                                        '12': 'Object',
+                                        '13': 'Other'
+                                    },
+}
 
 field_mapping = {u"dara_res_preselection": "1 Type",
 u"dara_currentVersion": "2 Version",
