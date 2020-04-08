@@ -115,7 +115,7 @@ def parse_authors(authors):
 # fields with number values in older records that need to be replaced by strings
 replacement_list = [
     u'dara_Availabilitycontrolled',
-    u'dara_unitType': '92 Unit Type'
+    u'dara_unitType'
 ]
 replacement_values = {
     u'dara_Availabilitycontrolled': {
