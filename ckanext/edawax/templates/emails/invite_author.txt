@@ -7,7 +7,7 @@ To accept this invite, please set your password at:
 {{ reset_link }}
 
 To start the deposit of your replication files, please log in with the user name shown above and your password.
-Attached, you will find a quick manual on how to work with the application.
+Below, you will find a quick manual on how to work with the application.
 
 For further advice, please consult the documentation of our service:
 {{ site_url }}/{{ man_eng }}
