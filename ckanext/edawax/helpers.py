@@ -563,7 +563,7 @@ def build_citation_crossref(doi):
         return x is not None
 
     data = query_crossref(doi)
-    citation = u"{authors} ({year}). {title}. {journal}, {volume}({issue}). doi: <a href='https://doi.org/{doi}''>{doi}</a>"
+    citation = u"{authors} ({year}). {title}. {journal}, {volume}({issue}). "
 
     if data:
         try:
@@ -591,6 +591,7 @@ def parse_author(author):
 
 
 def update_citation(data):
+    temp = data['dara_Publication_PID']
     new_citation = build_citation_crossref(data['dara_Publication_PID'])
     correct_citation = correct(new_citation)
     context = {'model': model, 'session': model.Session,
