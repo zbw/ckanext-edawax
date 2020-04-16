@@ -563,7 +563,7 @@ def build_citation_crossref(doi):
         return x is not None
 
     data = query_crossref(doi)
-    citation = u"{authors} ({year}). {title}. {journal}, {volume}({issue}). "
+    citation = u"{authors} ({year}). {title}. {journal}, {volume}({issue}). doi: <a href='https://doi.org/{doi}'>{doi}</a>"
 
     if data:
         try:
@@ -597,11 +597,10 @@ def update_citation(data):
     context = {'model': model, 'session': model.Session,
                 'user': c.user or c.author, 'for_view': True,
                 'auth_user_obj': c.userobj, 'ignore_auth': True}
-    data = {'id': data['id'], 'notes': correct_citation}
+    data = {'id': data['id'], 'dara_related_citation': correct_citation}
     try:
         if correct_citation != '':
-            #tk.get_action('package_patch')(context, data)
-            pass
+            tk.get_action('package_patch')(context, data)
     except Exception as e:
         log.debug('update_citation error: {} {} {}'.format(e, e.message, e.args))
 
