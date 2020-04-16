@@ -267,6 +267,13 @@ class EdawaxPlugin(plugins.SingletonPlugin):
                 'resource_delete': journal_resource_delete,
                 }
 
+    # Set default for sorting
+    def before_search(self, data_dict):
+        if not data_dict.get('sort'):
+            data_dict['sort'] = 'metadata_created desc'
+        return data_dict
+
+
     def get_helpers(self):
         return {'get_user_id': helpers.get_user_id,
                 'show_review_button': helpers.show_review_button,
