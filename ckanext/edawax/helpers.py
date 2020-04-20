@@ -218,7 +218,10 @@ def has_doi(pkg):
 
 
 def has_hammer():
-    return c.is_sysadmin == True or c.userobj.sysadmin == True
+    try:
+        return c.is_sysadmin == True or c.userobj.sysadmin == True
+    except AttributeError as e:
+        return False
 
 
 def is_published(url):
