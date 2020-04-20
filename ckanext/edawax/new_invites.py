@@ -141,7 +141,7 @@ def _mail_recipient(recipient_name, recipient_email,
     msg.attach(msg_body)
 
     # attach the file
-    if role is not None and role == u'member':
+    if role is not None and role in [u'member', 'Author']:
         attachment_file_name = "QuickManual_V1.5.pdf"
         directory = os.path.dirname(__file__)
         rel_path = 'public/{}'.format(attachment_file_name)
