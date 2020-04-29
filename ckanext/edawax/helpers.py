@@ -122,7 +122,7 @@ replacement_list = [
 replacement_values = {
     u'dara_Availabilitycontrolled': {
                                         '1': 'Download',
-                                        '2': 'OnSite'
+                                        '2': 'OnSite',
                                         '3': 'OnSite'
                                     },
     u'dara_unitType': {
