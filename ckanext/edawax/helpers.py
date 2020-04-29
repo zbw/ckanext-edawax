@@ -19,8 +19,145 @@ import re
 import ckanext.edawax.robot_list as _list
 from urlparse import urlparse
 
+from ckanext.dara.geography_coverage import geo
+
 import logging
 log = logging.getLogger(__name__)
+
+
+def pkg_status(id):
+    pkg = tk.get_action('package_show')(None, {'id': id})
+    return pkg['dara_edawax_review']
+
+def get_manual_file():
+    eng = config.get('ckan.doc_eng', 'manual_EN.pdf')
+    deu = config.get('ckan.doc_deu', 'manual_DE.pdf')
+    return (eng, deu)
+
+
+def find_geographic_name(abbr):
+    for country in geo:
+        if country['value'] == abbr:
+            return country['text'].capitalize()
+    return ''
+
+
+def format_resource_items_custom(items):
+    out = []
+    for item in items:
+        if item[0] == u"dara_temporalCoverageFormal" and item[1] != u"":
+            for thing in items:
+                if thing[0] == u'dara_temporalCoverageFormal_end':
+                    end = thing[1]
+            out.append(( "9 Temporal Coverage (controlled)", "{} to {}".format(item[1], end) ))
+        elif item[0] == u'dara_authors':
+            if item[1] in ["[u'', u'', u'', u'', u'']", "['']"]:
+                package = tk.get_action('package_show')(None, {'id': request.url.split('/')[4]})
+                authors = ast.literal_eval(package['dara_authors'])
+                a = parse_authors(authors)
+                out.append(("3 Authors", a))
+            else:
+                try:
+                    authors = item[1].decode('unicode_escape')
+                    authors = ast.literal_eval(authors)
+                    out.append(("3 Authors", parse_authors(authors)))
+                except AttributeError as e:
+                    authors = [""]
+                    out.append(("3 Authors", ""))
+        elif item[0] == u'dara_geographicCoverage':
+            countries = []
+            try:
+                parsed = ast.literal_eval(item[1])
+            except ValueError:
+                parsed = item[1]
+            if type(parsed) == list:
+                for country in parsed:
+                    name = find_geographic_name(country)
+                    countries.append(name)
+            else:
+                countries = [find_geographic_name(parsed)]
+            out.append(("7 Geographic Area (controlled)", ", ".join(countries)))
+        else:
+            if item[0] in field_mapping.keys():
+                if item[0] in replacement_list:
+                    try:
+                        int(item[1])
+                        value = replacement_values[item[0]][item[1]]
+                    except ValueError:
+                        value = item[1]
+                else:
+                    value = item[1]
+                out.append(( field_mapping[item[0]], value ))
+
+    sorted_list = sorted(out, key=lambda tup: tup[0])
+    # remove the numbers from the field names
+    clean_list = [(" ".join(x[0].split(" ")[1:]), x[1]) for x in sorted_list]
+    return clean_list
+
+
+def parse_authors(authors):
+    out = ''
+    # information is coming from the dataset
+    if type(authors[0]) == dict:   #len(authors) > 1:
+        return u' and '.join([u"{}, {}".format(author['lastname'].decode('unicode_escape'), author['firstname'].decode('unicode_escape')) for author in authors])
+    # Information is specific for the resource, and there's more than one
+    # author
+    if len(authors) > 5:
+        temp_list = []
+        for c in chunk(authors, 5):
+            if c[0] != '':
+                temp_list.append(u"{}, {}".format(c[0], c[1]))
+            else:
+                temp_list.append(u"{}".format(c[2]))
+        return ' and '.join(temp_list)
+    if authors[0] != u'':
+        return u"{}, {}".format(authors[0], authors[1])
+    return u"{}".format(authors[2])
+
+# fields with number values in older records that need to be replaced by strings
+replacement_list = [
+    u'dara_Availabilitycontrolled',
+    u'dara_unitType'
+]
+replacement_values = {
+    u'dara_Availabilitycontrolled': {
+                                        '1': 'Download',
+                                        '2': 'OnSite'
+                                    },
+    u'dara_unitType': {
+                        '1': 'Individual',
+                        '2': 'Organization',
+                        '3': 'Family',
+                        '4': 'Family: Household Familiy',
+                        '5': 'Household',
+                        '6': 'Housing Unit',
+                        '7': 'Event/Process',
+                        '8': 'Geographic Unit',
+                        '9': 'Time Unit',
+                        '10': 'Text Unit',
+                        '11': 'Group',
+                        '12': 'Object',
+                        '13': 'Other'
+                    },
+}
+
+field_mapping = {u"dara_res_preselection": "1 Type",
+u"dara_currentVersion": "2 Version",
+u"dara_DOI": "4 DOI",
+u"dara_PublicationDate": "5 Publication Date",
+u"dara_Availabilitycontrolled": "6 Availability",
+u"dara_geographicCoverageFree": "8 Geographic Area (free)",
+u"dara_temporalCoverageFree": "91 Temporal Coverage (free)",
+u"dara_unitType": "92 Unit Type",
+u"dara_numberUnits": "93 Number of Units",
+u"dara_universeSampled": "94 Sampled Universe",
+u"dara_numberVariables": "95 Number of Variables",
+u"url": "96 URL"}
+
+
+def is_author(pkg):
+    return get_user_id() == pkg['creator_user_id']
+
 
 def count_packages(packages):
     count = 0
@@ -30,108 +167,6 @@ def count_packages(packages):
                 get_user_id() == package['creator_user_id']):
             count += 1
     return count
-
-
-def get_page_type():
-    """
-        Get page type to make breadcrumbs
-    """
-    action = request.urlvars['action']
-    controller = request.urlvars['controller']
-    id_ = request.urlvars.get('id', None)
-    resource_id = request.urlvars.get('resource_id', None)
-
-    try:
-        if controller == 'ckanext.dara.controller:DaraController':
-            controller = 'package'
-        pkg = tk.get_action('{}_show'.format(controller))(None, {'id': id_})
-    except:
-        pkg = None
-
-    if resource_id:
-        resource = tk.get_action('resource_show')(None, {'id': resource_id})
-        resource_name = resource['name']
-    else:
-        resource_name = 'Resource'
-
-    try:
-        if 'organization' in pkg.keys():
-            journal = pkg['organization']['title']
-            parent = pkg['organization']
-            resource = pkg
-        else:
-            parent = None
-            resource = None
-    except (AttributeError, TypeError):
-        parent = None
-    resource = pkg
-
-    ignore = False
-    if action == 'search':
-        text = "Datasets"
-    elif action == 'index':
-        if controller == 'organization':
-            text = 'Journals'
-        else:
-            text = 'Home'
-            ignore = True
-    elif action == 'read':
-        try:
-            text = pkg['title']
-        except KeyError:
-            # working with user name
-            text = id_
-    elif action == 'resource_read':
-        text = resource_name
-    elif action == 'new':
-        if controller == 'package':
-            text = 'Dataset'
-        elif controller == 'organization':
-            text = 'Journal'
-    elif action == 'dashboard_read':
-        text = 'Stats'
-    elif action in ['dashboard', 'dashboard_datasets', 'dashboard_organizations', 'logged_in']:
-        text = 'Dashboard'
-    elif action == 'edit':
-        if controller == 'user':
-            text = id_
-        elif controller == 'organization':
-            text = 'Admin'
-        else:
-            text = 'Edit'
-    elif action == 'resource_edit':
-        text = 'Edit'
-    elif action == 'login':
-        text = 'Login'
-    elif action == 'register':
-        text = 'Registration'
-    elif action == 'logged_out_page':
-        text = 'Logged Out'
-        ignore = True
-    elif action == 'request_reset':
-        text = 'Password reset'
-    elif action == 'activity':
-        text = 'Activity'
-    elif action == 'about':
-        text = 'About'
-    elif action == 'md_page':
-        text = 'Info'
-        ignore = True
-    elif action in ['resources', 'new_resource']:
-        text = 'Resources'
-        ignore = True
-    elif action == 'doi':
-        text = 'DOI Registration'
-    elif action in ['bulk_process', 'members']:
-        text = 'Admin'
-        action = 'edit'
-    else:
-        text = ''
-        ignore = True
-        #raise ValueError('This wasnt accounted for: {}'.format(action))
-
-    return {'text': text,'action': action, 'controller': controller, 'id': id_, 'resource_id': resource_id, 'parent': parent, 'resource': resource,
-         'ignore': False}
 
 
 def normal_height():
@@ -183,7 +218,10 @@ def has_doi(pkg):
 
 
 def has_hammer():
-    return c.is_sysadmin
+    try:
+        return c.is_sysadmin == True or c.userobj.sysadmin == True
+    except AttributeError as e:
+        return False
 
 
 def is_published(url):
@@ -304,7 +342,8 @@ def show_review_button(pkg):
 def show_publish_button(pkg):
     if not isinstance(pkg, dict):
         return False
-    return (check_journal_role(pkg, 'admin') or has_hammer()) and in_review(pkg) == 'true'
+    return (check_journal_role(pkg, 'admin') or has_hammer()) \
+        and in_review(pkg) in ['true', 'reviewers', 'finished', 'editor', 'back']
 
 
 def show_retract_button(pkg):
@@ -316,7 +355,8 @@ def show_retract_button(pkg):
 def show_reauthor_button(pkg):
     if not isinstance(pkg, dict):
         return False
-    return (check_journal_role(pkg, 'admin') or has_hammer()) and in_review(pkg) == 'true'
+    return (check_journal_role(pkg, 'admin') or has_hammer()) \
+        and in_review(pkg) in ['true', 'finished', 'editor', 'reviewers', 'back']
 
 
 def res_abs_url(res):
@@ -526,7 +566,7 @@ def build_citation_crossref(doi):
         return x is not None
 
     data = query_crossref(doi)
-    citation = u"{authors} ({year}). {title}. {journal}, {volume}({issue}). doi: <a href='https://doi.org/{doi}''>{doi}</a>"
+    citation = u"{authors} ({year}). {title}. {journal}, {volume}({issue}). doi: <a href='https://doi.org/{doi}'>{doi}</a>"
 
     if data:
         try:
@@ -554,12 +594,13 @@ def parse_author(author):
 
 
 def update_citation(data):
+    temp = data['dara_Publication_PID']
     new_citation = build_citation_crossref(data['dara_Publication_PID'])
     correct_citation = correct(new_citation)
     context = {'model': model, 'session': model.Session,
                 'user': c.user or c.author, 'for_view': True,
                 'auth_user_obj': c.userobj, 'ignore_auth': True}
-    data = {'id': data['id'], 'notes': correct_citation}
+    data = {'id': data['id'], 'dara_related_citation': correct_citation}
     try:
         if correct_citation != '':
             #tk.get_action('package_patch')(context, data)

@@ -1,9 +1,19 @@
-You have been invited by the editor of the {{ journal_title }} to deposit the replication files of your paper in ZBW's Journal Data Archive.
+the editorial office of the {{ journal_title }} invites you to deposit the replication files of your paper in ZBW's Journal Data Archive.
+For this purpose, the {{ journal_title }} has created an account for you.
 
+Your account name is: {{ user_name }}
 
-To accept this invite, please reset your password at:
-
+To accept this invite, please set your password at:
 {{ reset_link }}
 
-For advice, please consult the documentation of our service:
-{{ site_url }}/{{ file_name }}
+To start the deposit of your replication files, please log in with the user name shown above and your password.
+Below, you will find a quick manual on how to work with the application.
+
+For further advice, please consult the documentation of our service:
+{{ site_url }}/{{ man_eng }}
+{{ site_url }}/{{ man_deu }}
+
+For any problems or questions, please feel free to get in touch with us.
+
+Kind regards,
+ZBW Journal Data Archive

@@ -104,7 +104,7 @@
     {% endif %}
   </div>
 #}
-  {% if h.in_review(pkg) == 'true' %}
+  {% if h.in_review(package) in ['true', 'editor'] %} {# REVIEWER#}
         <span class="dataset-private label pull-right label-review">
           <i class="icon-lock"></i>
           {{ 'Review' }}

@@ -10,6 +10,8 @@
   %}
   {% set org = h.get_request_param('organization') %}
   {% set sorting = [
+    ('Newest', 'metadata_created desc'),
+    ('Oldest', 'metadata_created asc'),
     (_('Relevance'), 'score desc, metadata_modified desc'),
     (_('Name Ascending'), 'title_string asc'),
     (_('Name Descending'), 'title_string desc'),

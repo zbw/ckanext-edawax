@@ -267,6 +267,13 @@ class EdawaxPlugin(plugins.SingletonPlugin):
                 'resource_delete': journal_resource_delete,
                 }
 
+    # Set default for sorting
+    def before_search(self, data_dict):
+        if not data_dict.get('sort'):
+            data_dict['sort'] = 'metadata_created desc'
+        return data_dict
+
+
     def get_helpers(self):
         return {'get_user_id': helpers.get_user_id,
                 'show_review_button': helpers.show_review_button,
@@ -298,10 +305,10 @@ class EdawaxPlugin(plugins.SingletonPlugin):
                 'is_edit_page': helpers.is_edit_page,
                 'is_landing_page': helpers.is_landing_page,
                 'tags_exist': helpers.tags_exist,
-                'get_page_type': helpers.get_page_type,
                 'normal_height': helpers.normal_height,
                 'count_packages': helpers.count_packages,
                 'update_citation': helpers.update_citation,
+                'format_resource_items_custom': helpers.format_resource_items_custom
                 }
 
     def before_map(self, map):
@@ -346,6 +353,7 @@ class EdawaxPlugin(plugins.SingletonPlugin):
         # TODO redirects are just temporary, since there are still some routes
         # and links with 'organizations' in ckan. It even might be easier, to
         # simply redirect any organization url and leave the above maps out...
+        map.redirect('/about', '/info')
         map.redirect('/organization', '/journals')
         map.redirect('/organization/{url:.*}', '/journals/{url}')
         map.redirect('/dashboard/organizations', '/dashboard/journals')

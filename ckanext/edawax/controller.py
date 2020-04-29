@@ -53,19 +53,48 @@ class WorkflowController(PackageController):
                 'user': c.user or c.author, 'for_view': True,
                 'auth_user_obj': c.userobj, 'save': 'save' in request.params}
 
+    def evaluate_reviewer(self, reviewer, reviewer_list, data_dict, reviewer_pos):
+        """ Check if reviewer exists or not. Returns list of reviewer emails """
+        if reviewer == '':
+            reviewer_list.append('')
+            return reviewer_list
+        context = self._context()
+        context['keep_email'] = True
+        # must be an email address - check is handled in HTML with `pattern`
+        # dont create a new user if the "reviewer" is already a reviewer
+        new_reviewer = check_reviewer_update(data_dict)
+        if '@' in reviewer:
+            if new_reviewer:
+                # create a new user with "reviewer" role for the dataset
+                new_user = invite_reviewer(reviewer, data_dict['organization']['id'])
+                field = 'maintainer'
+                if reviewer_pos == 'second':
+                    field += '_email'
+                update_maintainer_field(new_user['name'], reviewer, data_dict, field)
+            reviewer_list.insert(0, reviewer.split('/')[0])
+        else:
+            h.flash_error("Reviewers must be given as email addresses.")
+            log.debug("Reviewers aren't an email address: '{}'".format(reviewer))
+            redirect(id)
+        return reviewer_list
+
+
     def review(self, id):
         """
-        sends review notification to all journal admins
+        Sends review notification to all journal admins
+        Check the maintainers: if one is an email address, invite that person
+        to the JDA as a reviewer - need a new invitation that includes a link
+        to the dataset for review.
         """
-
         context = self._context()
+        c.pkg_dict = tk.get_action('package_show')(context, {'id': id})
+
+        # delete_cookies(c.pkg_dict)  # REVEIWER
 
         try:
             tk.check_access('package_update', context, {'id': id})
         except tk.NotAuthorized:
             tk.abort(403, 'Unauthorized')
-
-        c.pkg_dict = tk.get_action('package_show')(context, {'id': id})
 
         # avoid multiple notifications (eg. when someone calls review directly)
         if c.pkg_dict.get('dara_edawax_review', 'false') == 'true':
@@ -75,16 +104,86 @@ class WorkflowController(PackageController):
         user_name = tk.c.userobj.fullname or tk.c.userobj.email
         admins = get_group_or_org_admin_ids(c.pkg_dict['owner_org'])
         addresses = map(lambda admin_id: model.User.get(admin_id).email, admins)
-        note = n.review(addresses, user_name, id)
 
-        if note:
-            c.pkg_dict['dara_edawax_review'] = 'true'
-            tk.get_action('package_update')(context, c.pkg_dict)
-            h.flash_success('Notification to Editors sent.')
+        data_dict = c.pkg_dict
+        reviewer_1 = data_dict.get("maintainer", None)
+        reviewer_emails = ['', '']
+        flash_message = None
+
+        context['keep_email'] = True
+
+        try:
+            if reviewer_1 != '':
+                if reviewer_1 is not None:
+                    # reviewer is an email address
+                    try:
+                        reviewer_list = self.evaluate_reviewer(reviewer_1, reviewer_emails, data_dict, 'first')
+                        flash_message = ('Notification sent to Reviewers.', 'success')
+                        log_msg = '\nNotifications sent to:\nReviewers:{}\nRest: {}'
+                        log.debug(log_msg.format(reviewer_emails, addresses))
+                    except:
+                        flash_message = ('ERROR: Mail could not be sent. Please try again later or contact the site admin.', 'error')
+                        log.debug('Failed to send notifications')
+            else:
+                reviewer_emails = [None, None]
+        except Exception as e:
+            log.error("Error with reviewer notifications: {}-{}".format(e.message, e.args))
+            log.error(reviewer_emails)
+
+        # check that there are reviewers
+        if reviewer_emails[0] is None \
+            and c.pkg_dict['dara_edawax_review'] != 'false':
+            if c.pkg_dict['dara_edawax_review'] == 'editor':
+                flash_message = ('This submission has no reviewers.', 'error')
+                redirect(id)
+
+        # the author is sending the dataset to the editor
+        if flash_message is None and reviewer_emails == ['', '']:
+            note = n.review(addresses, user_name, id, reviewer_emails)
+            if note:
+                c.pkg_dict = self.update_review_status(c.pkg_dict)
+                tk.get_action('package_update')(context, c.pkg_dict)
+                if flash_message is None:
+                    flash_message = ('Notification sent to Reviewer.', 'success')
+            else:
+                flash_message = ('Error: Mail could not be sent. Please try again later or contact the site admin.', 'error')
+
+        if flash_message[1] == 'success':
+            h.flash_success(flash_message[0])
         else:
-            h.flash_error('ERROR: Mail could not be sent. Please try again later or contact the site admin.')
+            h.flash_error(flash_message[0])
 
         redirect(id)
+
+
+    def update_review_status(self, pkg_dict, action=None):
+        """
+            Update the status of "dara_edawax_review"
+            Status:
+                - false = beginning of review phase
+                - editor = editor has for review
+                - reviewers = reviewers have for review
+                - reviewed = review is finished
+                - reauthor = sent back to author
+                - back = back to editor from reviewers
+            false -> editor
+            editor -> reviewers || reauthor
+            reviewers -> back
+            back -> reviewed
+        """
+        current_state = pkg_dict['dara_edawax_review']
+
+        if current_state == 'false':
+            pkg_dict['dara_edawax_review'] = 'editor'
+
+        if current_state in ['editor', 'back']:
+            pkg_dict['dara_edawax_review'] = 'reviewers'
+
+        if current_state == 'reauthor':
+            pkg_dict['dara_edawax_review'] = 'editor'
+
+        return pkg_dict
+
 
     @admin_req
     def publish(self, id):
@@ -115,6 +214,8 @@ class WorkflowController(PackageController):
         c.pkg = context.get('package')
         tk.get_action('package_update')(context, c.pkg_dict)
         h.flash_success('Dataset published')
+        self.author_notify(id)
+
         redirect(id)
 
 
@@ -137,20 +238,24 @@ class WorkflowController(PackageController):
 
         c.pkg_dict.update({'private': True, 'dara_edawax_review': 'true'})
         tk.get_action('package_update')(context, c.pkg_dict)
+        self.author_notify(id)
         h.flash_success('Dataset retracted')
         redirect(id)
 
+
     @admin_req
     def reauthor(self, id):
-        """reset dataset to private and leave review state.
+        """
+        Reset dataset to private and leave review state.
         Should also send email to author
         """
         context = self._context()
         msg = tk.request.params.get('msg', '')
         c.pkg_dict = tk.get_action('package_show')(context, {'id': id})
+        #delete_cookies(c.pkg_dict)  # REVIEWER
         creator_mail = model.User.get(c.pkg_dict['creator_user_id']).email
         admin_mail = model.User.get(c.user).email
-        note = n.reauthor(id, creator_mail, admin_mail, msg, context)
+        note = n.notify('reauthor', id, creator_mail, msg, context)
 
         if note:
             c.pkg_dict.update({'private': True,
@@ -161,6 +266,40 @@ class WorkflowController(PackageController):
             h.flash_error('ERROR: Mail could not be sent. Please try again later or contact the site admin.')
         redirect(id)
 
+
+    def editor_notify(self, id):
+        """
+        Send from reviewer back to editor
+        """
+        context- self._context()
+        msg = tk.request.params.get('msg', '')
+        c.pkg_dict = tk.get_action('package_show')(context, {'id': id})
+        creator_mail = model.User.get(c.pkg_dict['creator_user_id']).email
+        note = n.notify('editor', id, creator_mail, msg, context)
+
+        if note:
+            c.pkg_dict.update({'private': True, 'dara_edawax_review': 'back'})
+            tk.get_action('package_update')(context, c.pkg_dict)
+            h.flash_success('Notification sent. Journal Editor will be notified.')
+        else:
+            h.flash_error('ERROR: Mail could not be sent. Please try again later or contact the site admin.')
+        redirect(id)
+
+
+    def author_notify(self, id):
+        """
+        Send mail from the system to the author
+        """
+        context = self._context()
+        msg = tk.request.params.get('msg', '')
+        c.pkg_dict = tk.get_action('package_show')(context, {'id': id})
+
+        if c.pkg_dict['dara_edawax_review'] == 'reviewed':
+            status = 'published'
+        else:
+            status = 'retracted'
+        author_email = model.User.get(c.pkg_dict['creator_user_id']).email
+        note = n.notify('author', id, author_email, msg, context, status)
 
 
     def create_citataion_text(self, id):

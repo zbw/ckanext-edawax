@@ -9390,3 +9390,9 @@ iframe {
 .ie7 .media-overlay .media-heading {
   background-color: #000;
 }
+
+p.extra {
+  background-color: white;
+  border-radius: 8px;
+  padding: 5px;
+}
