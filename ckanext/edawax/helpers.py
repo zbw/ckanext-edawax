@@ -53,7 +53,7 @@ def format_resource_items_custom(items):
         elif item[0] == u'dara_authors':
             if item[1] in ["[u'', u'', u'', u'', u'']", "['']"]:
                 package = tk.get_action('package_show')(None, {'id': request.url.split('/')[4]})
-                authors = ast.literal_eval(package['dara_authors'])
+                authors = ast.literal_eval(package['dara_authors'].replace("null", '""'))
                 a = parse_authors(authors)
                 out.append(("3 Authors", a))
             else:
