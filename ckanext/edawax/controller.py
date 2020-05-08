@@ -55,10 +55,6 @@ class WorkflowController(PackageController):
                 'user': c.user or c.author, 'for_view': True,
                 'auth_user_obj': c.userobj, 'save': 'save' in request.params}
 
-<<<<<<< HEAD
-
-=======
->>>>>>> master
     def evaluate_reviewer(self, reviewer, reviewer_list, data_dict, reviewer_pos):
         """ Check if reviewer exists or not. Returns list of reviewer emails """
         if reviewer == '':

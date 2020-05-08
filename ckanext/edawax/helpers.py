@@ -156,12 +156,123 @@ u"dara_numberVariables": "95 Number of Variables",
 u"url": "96 URL"}
 
 
+def delete_cookies(pkg):
+    """ Clear Cookies - after resend """
+    try:
+        cookie = 'reviewerOnePrev_{}'.format(pkg['name'])
+        response.delete_cookie(cookie, '/')
+    except Exception as e:
+        log.debug('delete_cookies error: {} {} {}'.format(e, e.message, e.args))
+
+    try:
+        cookie = 'reviewerTwoPrev_{}'.format(pkg['name'])
+        response.delete_cookie(cookie, '/')
+    except Exception as e:
+        log.debug('delete_cookies error: {} {} {}'.format(e, e.message, e.args))
+
+
+
+def check_reviewer_update(pkg):
+    """Check if the reviewer is new or not"""
+    reviewer_1_old = request.cookies.get('reviewerOnePrev_{}'.format(pkg['name']), False)
+    #reviewer_2_old = request.cookies.get('reviewerTwoPrev_{}'.format(pkg['name']), False)
+
+    #if reviewer_1_old is False and reviewer_2_old is False:
+    #    return False
+    if reviewer_1_old is False:
+        return False
+
+    reviewer_1_new = pkg['maintainer']
+    #reviewer_2_new = pkg['maintainer_email']
+
+    #if (reviewer_1_new and (reviewer_1_new != '') and reviewer_1_old != reviewer_1_new) or \
+    #    (reviewer_2_new and (reviewer_2_new != '') and reviewer_2_old != reviewer_2_new):
+    #    return True
+    if (reviewer_1_new and (reviewer_1_new != '') and reviewer_1_old != reviewer_1_new):
+        return True
+
+    return False
+
+
+def get_org_admin(org_id):
+    admin = []
+    try:
+        org_data = tk.get_action('organization_show')(None, {'id': org_id})
+    except Exception as e:
+        log.debug('get_org_admin error: {} {} {}'.format(e, e.message, e.args))
+        return ''
+    users = org_data['users']
+    for user in users:
+        if user['capacity'] == 'admin':
+            admin.append(user['name'])
+
+    return admin
+
+
+def hide_from_reviewer(pkg):
+    return is_reviewer(pkg) and is_private(pkg)
+
+
+def has_reviewers(pkg):
+    reviewers = []
+    try:
+        reviewer = pkg.get('maintainer')
+        reviewers.append(reviewer)
+        reviewer = pkg.get('maintainer_email')
+        reviewers.append(reviewer)
+        return reviewers[0] not in [None, ''] or reviewers[1] not in [None, '']
+    except AttributeError as e:
+        log.debug('has_reviewers error: {} {} {}'.format(e, e.message, e.args))
+        return False
+
+
+def is_reviewer(pkg):
+    reviewers = []
+
+    try:
+        reviewer = getattr(pkg, 'maintainer')
+    except AttributeError as e:
+        try:
+            reviewer = pkg['maintainer']
+        except Exception as e:
+            if pkg:
+                log.debug('is_reviewer error: {} {} {}'.format(e, e.message, e.args))
+            return False
+
+    emails = []
+    names = []
+
+    if not reviewer:
+        return False
+
+    if '/' in reviewer:
+        email, name = reviewer.split('/')
+        emails.append(email)
+        names.append(name)
+    else:
+        email = reviewer
+        emails.append(email)
+
+    try:
+        user = c.userobj.name
+    except AttributeError as e:
+        user = None
+        return False
+    #email = model.User.get(user).email
+    return user in names
+
 def is_author(pkg):
     return get_user_id() == pkg['creator_user_id']
 
 
-import logging
-log = logging.getLogger(__name__)
+def count_packages(packages):
+    count = 0
+    for package in packages:
+        if not package['private'] or (package['private'] and is_admin()) or \
+            (package['private'] and \
+                get_user_id() == package['creator_user_id']):
+            count += 1
+    return count
 
 
 def normal_height():

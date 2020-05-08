@@ -16,7 +16,6 @@ Example:
 #}
 
 {% macro package_list(packages) -%}
-
     {% for package in packages %}
       {% set is_admin = h.check_journal_role(package, 'admin') or h.check_access('sysadmin') %}
       {% set is_reviewer = h.is_reviewer(package) %}
