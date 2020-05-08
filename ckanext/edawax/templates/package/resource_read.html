@@ -167,10 +167,10 @@
         <th scope="row">{{ _('Format') }}</th>
         <td>{{ res.mimetype_inner or res.mimetype or res.format or _('unknown') }}</td>
       </tr>
-      {#<tr>
+      <tr>
         <th scope="row">{{ _('License') }}</th>
         <td>{% snippet "snippets/license.html", pkg_dict=pkg, text_only=True %}</td>
-      </tr>#}
+      </tr>
 
       {% for key, value in h.format_resource_items_custom(res.items()) %}
           {% if key in ['Type', 'Version', 'Authors'] %}

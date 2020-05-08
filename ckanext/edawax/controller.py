@@ -55,7 +55,10 @@ class WorkflowController(PackageController):
                 'user': c.user or c.author, 'for_view': True,
                 'auth_user_obj': c.userobj, 'save': 'save' in request.params}
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> master
     def evaluate_reviewer(self, reviewer, reviewer_list, data_dict, reviewer_pos):
         """ Check if reviewer exists or not. Returns list of reviewer emails """
         if reviewer == '':
@@ -85,7 +88,6 @@ class WorkflowController(PackageController):
     def review(self, id):
         """
         Sends review notification to all journal admins
-
         Check the maintainers: if one is an email address, invite that person
         to the JDA as a reviewer - need a new invitation that includes a link
         to the dataset for review.
@@ -170,7 +172,6 @@ class WorkflowController(PackageController):
                 - reviewed = review is finished
                 - reauthor = sent back to author
                 - back = back to editor from reviewers
-
             false -> editor
             editor -> reviewers || reauthor
             reviewers -> back
@@ -219,10 +220,9 @@ class WorkflowController(PackageController):
         c.pkg = context.get('package')
         tk.get_action('package_update')(context, c.pkg_dict)
         h.flash_success('Dataset published')
-        # notify the author
         self.author_notify(id)
-
         redirect(id)
+
 
 
     @admin_req
@@ -276,8 +276,10 @@ class WorkflowController(PackageController):
 
 
     def editor_notify(self, id):
-        """ Send from reviewer back to editor """
-        context = self._context()
+        """
+        Send from reviewer back to editor
+        """
+        context- self._context()
         msg = tk.request.params.get('msg', '')
         c.pkg_dict = tk.get_action('package_show')(context, {'id': id})
         creator_mail = model.User.get(c.pkg_dict['creator_user_id']).email
@@ -286,7 +288,7 @@ class WorkflowController(PackageController):
         if note:
             c.pkg_dict.update({'private': True, 'dara_edawax_review': 'back'})
             tk.get_action('package_update')(context, c.pkg_dict)
-            h.flash_success('Notification sent. Journal editor will be notified.')
+            h.flash_success('Notification sent. Journal Editor will be notified.')
         else:
             h.flash_error('ERROR: Mail could not be sent. Please try again later or contact the site admin.')
         redirect(id)

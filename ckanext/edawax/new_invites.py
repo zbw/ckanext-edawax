@@ -26,10 +26,10 @@ from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 from email.mime.application import MIMEApplication
 
-from ckanext.edawax.notifications import package_url
 import ckanext.edawax.helpers as h
 
 log = logging.getLogger(__name__)
+
 
 class MailerException(Exception):
     pass
@@ -46,14 +46,15 @@ def _get_user_role(user_name, org_id):
 
 
 def get_invite_body(user, data=None):
-    # if it's an api request, don't need URL
+    # if it's an api request, don't need url
     if request.urlvars['controller'] == u'api':
         url = None
     else:
         id_ = request.urlvars['id']
         url = u"{}{}".format(config.get('ckan.site_url'),
-                          tk.url_for(controller='package', action='read',
-                          id=id_))
+                        tk.url_for(controller='package', action="read",
+                        id=id_))
+
     extra_vars = {'reset_link': mailer.get_reset_link(user),
        'site_title': config.get('ckan.site_title'),
        'user_name': user.name,
@@ -70,6 +71,7 @@ def get_invite_body(user, data=None):
     elif role == 'reviewer':
         return render_jinja2('emails/invite_reviewer.txt', extra_vars)
     return render_jinja2('emails/invite_author.txt', extra_vars)
+    # Add reviewer when needed REVIEWER
 
 
 def send_invite(user, data):
@@ -144,7 +146,7 @@ def _mail_recipient(recipient_name, recipient_email,
     msg.attach(msg_body)
 
     # attach the file
-    if role is not None and role == u'member':
+    if role is not None and role in [u'member', 'Author']:
         attachment_file_name = "QuickManual_V1.5.pdf"
         directory = os.path.dirname(__file__)
         rel_path = 'public/{}'.format(attachment_file_name)

@@ -18,7 +18,13 @@
     {%- if pkg_dict['notes'] != "" -%}                              {# there is an existing citation #}
         {%- if pid and pid not in pkg_dict['notes'] -%}             {# if citation's doi match provided update the citation #}
             {%- set citation = h.update_citation(pkg_dict) -%}
-            {{- citation|safe -}}
+            {% if citation == '' %}
+                <a href="{{ url }}" property="schema:url">
+                    {{ prefix }} {{ pid }}
+                </a>
+            {% else %}
+                {{- citation|safe -}}
+            {% endif %}
         {%- else -%}                                                {# citation matches given DOI #}
             {{- pkg_dict['notes']|safe -}}
         {%- endif -%}
@@ -26,7 +32,7 @@
         {%- set citation = h.update_citation(pkg_dict) -%}
         {{- citation|safe -}}
         <a href="{{ url }}" property="schema:url">
-            doi: {{ pid }}
+            {{ prefix }} {{ pid }}
         </a>
     {%- endif -%}
 {% else %} {# provided Identifier is not a DOI or Handler #}

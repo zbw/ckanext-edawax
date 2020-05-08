@@ -8,6 +8,10 @@ import logging
 import ckan.plugins.toolkit as tk
 from ckan import __version__ as ckan_version
 from ckanext.edawax.helpers import pkg_status
+<<<<<<< HEAD
+=======
+
+>>>>>>> master
 
 log = logging.getLogger(__name__)
 
