@@ -175,19 +175,10 @@ def delete_cookies(pkg):
 def check_reviewer_update(pkg):
     """Check if the reviewer is new or not"""
     reviewer_1_old = request.cookies.get('reviewerOnePrev_{}'.format(pkg['name']), False)
-    #reviewer_2_old = request.cookies.get('reviewerTwoPrev_{}'.format(pkg['name']), False)
-
-    #if reviewer_1_old is False and reviewer_2_old is False:
-    #    return False
     if reviewer_1_old is False:
         return False
 
     reviewer_1_new = pkg['maintainer']
-    #reviewer_2_new = pkg['maintainer_email']
-
-    #if (reviewer_1_new and (reviewer_1_new != '') and reviewer_1_old != reviewer_1_new) or \
-    #    (reviewer_2_new and (reviewer_2_new != '') and reviewer_2_old != reviewer_2_new):
-    #    return True
     if (reviewer_1_new and (reviewer_1_new != '') and reviewer_1_old != reviewer_1_new):
         return True
 
@@ -218,9 +209,7 @@ def has_reviewers(pkg):
     try:
         reviewer = pkg.get('maintainer')
         reviewers.append(reviewer)
-        reviewer = pkg.get('maintainer_email')
-        reviewers.append(reviewer)
-        return reviewers[0] not in [None, ''] or reviewers[1] not in [None, '']
+        return reviewers[0] not in [None, '']
     except AttributeError as e:
         log.debug('has_reviewers error: {} {} {}'.format(e, e.message, e.args))
         return False

@@ -73,6 +73,9 @@ class WorkflowController(PackageController):
                 if reviewer_pos == 'second':
                     field += '_email'
                 update_maintainer_field(new_user['name'], reviewer, data_dict, field)
+                # Update review status
+                c.pkg_dict = self.update_review_status(c.pkg_dict)
+                tk.get_action('package_update')(context, c.pkg_dict)
             reviewer_list.insert(0, reviewer.split('/')[0])
         else:
             h.flash_error("Reviewers must be given as email addresses.")
@@ -140,7 +143,7 @@ class WorkflowController(PackageController):
                 redirect(id)
 
         # the author is sending the dataset to the editor
-        if flash_message is None and reviewer_emails == ['', '']:
+        if flash_message is None and (reviewer_emails == ['', ''] or reviewer_emails == [None, None]):
             note = n.review(addresses, user_name, id, reviewer_emails)
             if note:
                 c.pkg_dict = self.update_review_status(c.pkg_dict)
@@ -275,7 +278,7 @@ class WorkflowController(PackageController):
         """
         Send from reviewer back to editor
         """
-        context- self._context()
+        context = self._context()
         msg = tk.request.params.get('msg', '')
         c.pkg_dict = tk.get_action('package_show')(context, {'id': id})
         creator_mail = model.User.get(c.pkg_dict['creator_user_id']).email
