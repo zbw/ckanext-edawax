@@ -12,9 +12,11 @@ You can review them, assign a DOI to them, and publish the data.
 For all of these actions, please log in with the user name shown above and your password. Once logged in click "my journals" to see which journals you are an editor for. From there you can click on a journal to see all submissions.
 All data submissions in the state "Review" are ready for your review.
 
-For further advice, please consult the documentation of our service or contact us for a short introduction via Skype or other web conference tool:
-{{ site_url }}/{{ man_eng }}
-{{ site_url }}/{{ man_deu }}
+For further advice, please consult the documentation of our service (attached) or contact us for a short introduction via Skype or other web conference tools.
+
+The documentation is also available here:
+{{ site_url }}/Editors_Manual-EN_V1.5.1.pdf
+{{ site_url }}/Editors_Manual-DE_V1.5.1.pdf
 
 Please feel free to get in touch with us for any questions or comments.
 
