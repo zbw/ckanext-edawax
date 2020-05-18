@@ -8,6 +8,7 @@ import logging
 import ckan.plugins.toolkit as tk
 from ckan import __version__ as ckan_version
 from ckanext.edawax.helpers import pkg_status
+import ckan.lib.mailer as mailer
 
 log = logging.getLogger(__name__)
 
@@ -35,11 +36,11 @@ def package_url(dataset):
                           id=dataset))
 
 subjects = {
-            "review_editor": u"ZBW Journal Data Archive: Data Submission Notification",
-            "review_reviewer": u"ZBW Journal Data Archive: Review Request",
-            "author": u"ZBW Journal Data Archive: Dataset Status Change",
-            "editor": u"ZBW Journal Data Archive: Review Completed",
-            "reauthor": u"ZBW Journal Data Archive: Please revise your uploaded dataset",
+            "review_editor": u": Data Submission Notification",
+            "review_reviewer": u": Review Request",
+            "author": u": Dataset Status Change",
+            "editor": u": Review Completed",
+            "reauthor": u": Please revise your uploaded dataset",
            }
 
 msg_body = {
@@ -129,7 +130,7 @@ def notify(typ, dataset, author_mail, msg, context, status=None):
     if status:
         d['status'] = status
     body = body.format(**d)
-    subject = subjects[typ]
+    subject = "{}{}".format(mailer.g.site_title, subjects[typ])
     message = compose_message(typ, body, subject, config, author_mail, context)
 
     return sendmail(author_mail, message)
@@ -161,7 +162,7 @@ def review(addresses, author, dataset, reviewers=None, msg=None):
         if msg:
             d['message'] = create_message(msg)
         body = body.format(**d)
-        subject = subjects[who]
+        subject = "{}{}".format(mailer.g.site_title, subjects[who])
         return compose_message(who, body, subject, config, address)
 
     # send email to Admin
