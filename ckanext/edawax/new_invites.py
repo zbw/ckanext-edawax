@@ -86,8 +86,7 @@ def send_invite(user, data):
     else:
         role = "Reviewer"
     sub = mailer.g.site_title
-    source = config.get('ckan.email_source', '')
-    subject = mailer._('{site_title} Invite: {role} {source}').format(site_title=sub, role=role, source=source)
+    subject = mailer._('{site_title} Invite: {role}').format(site_title=sub, role=role)
     mail_user(user, subject, body, {}, role)
 
 
