@@ -86,7 +86,8 @@ def send_invite(user, data):
     else:
         role = "Reviewer"
     sub = mailer.g.site_title
-    subject = mailer._('{site_title} Invite: {role}').format(site_title=sub, role=role)
+    source = config.get('ckan.email_source', '')
+    subject = mailer._('{site_title} Invite: {role} {source}').format(site_title=sub, role=role, source=source)
     mail_user(user, subject, body, {}, role)
 
 
@@ -146,8 +147,13 @@ def _mail_recipient(recipient_name, recipient_email,
     msg.attach(msg_body)
 
     # attach the file
-    if role is not None and role in [u'member', 'Author']:
-        attachment_file_name = "QuickManual_V1.5.pdf"
+    if role is not None and role in [u'member', 'Author', 'Editor', 'Reviewer']:
+        if role in [u'member', 'Author']:
+            attachment_file_name = "QuickManual_V1.5.pdf"
+        elif role in ['Reviewer']:
+            attachment_file_name = "Manual_for_reviewers_V1-1.5.2.pdf"
+        else:
+            attachment_file_name = "Editors_Manual-EN_V1.5.1.pdf"
         directory = os.path.dirname(__file__)
         rel_path = 'public/{}'.format(attachment_file_name)
         with open(os.path.join(directory, rel_path), 'rb') as file:
