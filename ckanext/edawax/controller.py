@@ -94,6 +94,14 @@ class WorkflowController(PackageController):
         context = self._context()
         c.pkg_dict = tk.get_action('package_show')(context, {'id': id})
 
+         # Ensure a 'draft' isn't sent for review
+        state = c.pkg_dict['state']
+        if state == 'draft':
+            data = {'id': c.pkg_dict['id'], u'state': u'active'}
+            context['ignore_auth'] = True
+            t = tk.get_action('package_patch')(context, data)
+            c.pkg_dict['state'] = 'active'
+
         delete_cookies(c.pkg_dict)
 
         try:
