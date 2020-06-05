@@ -118,17 +118,21 @@
           {{ 'My Review' }}
         </span>
     {% else %}
-        <span class="dataset-private label pull-right label-review">
-          <i class="icon-lock"></i>
           {% if pkg['dara_edawax_review'] != 'editor' %}
+            <span class="dataset-private label pull-right label-review">
+              <i class="icon-lock"></i>
             {{ 'Review' }}
           {% elif h.is_reviewer(pkg) or h.is_author(pkg) %}
+            <span class="dataset-private label pull-right label-review">
+              <i class="icon-lock"></i>
             {{ 'In Review' }}
           {% else %}
+          <span class="dataset-private label pull-right label-reviewer">
+            <i class="icon-lock"></i>
             {% if h.has_reviewers(pkg) %}
-              {{ 'Not Sent to Reviewers' }}
+              {{ 'Not Sent to Reviewer' }}
             {% else %}
-              {{ 'No Reviewers' }}
+              {{ 'No Reviewer' }}
             {% endif %}
           {% endif %}
         </span>
