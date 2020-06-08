@@ -119,11 +119,11 @@
         </span>
     {% else %}
           {% if pkg['dara_edawax_review'] != 'editor' %}
-            <span class="dataset-private label pull-right label-review">
+            <span class="dataset-private label pull-right label-reviewer">
               <i class="icon-lock"></i>
             {{ 'Review' }}
           {% elif h.is_reviewer(pkg) or h.is_author(pkg) %}
-            <span class="dataset-private label pull-right label-review">
+            <span class="dataset-private label pull-right label-reviewer">
               <i class="icon-lock"></i>
             {{ 'In Review' }}
           {% else %}

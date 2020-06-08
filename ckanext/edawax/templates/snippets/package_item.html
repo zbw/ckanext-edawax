@@ -28,13 +28,13 @@
           {{ 'My Review' }}
         </span><br>
       {% else %}
-        <span class="dataset-private label label-review">
+        <span class="dataset-private label label-reviewer">
           <i class="icon-lock"></i>
           {{ 'Review' }}
         </span><br>
       {% endif %}
   {% elif h.in_review(package) == 'reauthor' %}
-      <span class="dataset-private label label-reautho">
+      <span class="dataset-private label label-reauthor">
         <i class="icon-lock"></i>
         {{ 'Re-Author' }}
       </span><br>
