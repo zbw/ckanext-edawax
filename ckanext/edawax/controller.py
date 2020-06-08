@@ -74,8 +74,8 @@ class WorkflowController(PackageController):
                     field += '_email'
                 update_maintainer_field(new_user['name'], reviewer, data_dict, field)
                 # Update review status
-                c.pkg_dict = self.update_review_status(c.pkg_dict)
-                tk.get_action('package_update')(context, c.pkg_dict)
+            c.pkg_dict = self.update_review_status(c.pkg_dict)
+            tk.get_action('package_update')(context, c.pkg_dict)
             reviewer_list.insert(0, reviewer.split('/')[0])
         else:
             h.flash_error("Reviewers must be given as email addresses.")
