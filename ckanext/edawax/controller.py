@@ -73,7 +73,10 @@ class WorkflowController(PackageController):
                 if reviewer_pos == 'second':
                     field += '_email'
                 update_maintainer_field(new_user['name'], reviewer, data_dict, field)
-                # Update review status
+            # Notify reviewer - Status: editor = Editor has it, Status:back = renotify reviewer
+            elif data_dict['dara_edawax_review'] in ['editor', 'back']:
+                user_name = tk.c.userobj.fullname or tk.c.userobj.email
+                note = n.review(None, user_name, c.pkg_dict['id'], [reviewer])
             c.pkg_dict = self.update_review_status(c.pkg_dict)
             tk.get_action('package_update')(context, c.pkg_dict)
             reviewer_list.insert(0, reviewer.split('/')[0])
@@ -157,7 +160,7 @@ class WorkflowController(PackageController):
                 c.pkg_dict = self.update_review_status(c.pkg_dict)
                 tk.get_action('package_update')(context, c.pkg_dict)
                 if flash_message is None:
-                    flash_message = ('Notification sent to Reviewer.', 'success')
+                    flash_message = ('Notification sent to Editor.', 'success')
             else:
                 flash_message = ('Error: Mail could not be sent. Please try again later or contact the site admin.', 'error')
 

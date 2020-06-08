@@ -53,7 +53,7 @@ msg_body = {
                 u"\n\nKind regards,\nZBW Journal Data Archive",
             ),
             "review_reviewer": (
-                u"Dear Reviewer,\n\n",
+                u"Dear Reviewer ({reviewer_name}),\n\n",
                 u"the editorial office would like you to review\n",
                 u"\"{title},\" in the \"{journal}\".",
                 u"\n\nYou can review it here: {url}",
@@ -72,6 +72,7 @@ msg_body = {
                 u"a reviewer has finished reviewing \"{title}\" in your journal,",
                 u" the \"{journal}.\" The submission is available here: {url}.",
                 u"\n\n{message}",
+                u"\nKind regards,\nZBW Journal Data Archive"
             ),
             "reauthor": (
                 u"Dear Author,\n",
@@ -154,11 +155,16 @@ def review(addresses, author, dataset, reviewers=None, msg=None):
         pkg = tk.get_action('package_show')(context, {'id': dataset})
         org_id = pkg.get('owner_org', pkg.get('group_id', False))
         org = tk.get_action('organization_show')(context, {'id': org_id})
+        if pkg['maintainer'] and '/' in pkg['maintainer']:
+            _, reviewer_name = pkg['maintainer'].split('/')
+        else:
+            reviewer_name = ''
         d = {'user': author,
              'url': package_url(dataset),
              'submission_id': subid(),
              'title': pkg.get('title').title(),
-             'journal': org['title']}
+             'journal': org['title'],
+             'reviewer_name': reviewer_name}
         if msg:
             d['message'] = create_message(msg)
         body = body.format(**d)
@@ -171,12 +177,12 @@ def review(addresses, author, dataset, reviewers=None, msg=None):
         # pkg_status(dataset) in ['reauthor', 'false', 'reviewers', 'editor']
         t = map(lambda a: sendmail(a, message("review_editor", a)), addresses)
     else:
-        if pkg_status(dataset) not in ['editor', 'back']:  # removed 'reviewers'
-            # To Reviewer
-            if reviewers is not None:
-                for reviewer in reviewers:
-                    if reviewer not in [None, '', u'']:
-                        t.append(sendmail(reviewer, message("review_reviewer", reviewer)))
+        #if pkg_status(dataset) not in ['back']:  # removed 'reviewers' and editor
+        # To Reviewer
+        if reviewers is not None:
+            for reviewer in reviewers:
+                if reviewer not in [None, '', u'']:
+                    t.append(sendmail(reviewer.split('/')[0], message("review_reviewer", reviewer.split('/')[0])))
         else:
             # want to return something so that there's no error message
             # previously, this condition would have triggered an email to the editors
