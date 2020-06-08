@@ -47,6 +47,7 @@ def update_maintainer_field(user_name, email, data_dict, field):
 
 
 def invite_reviewer(email, org_id):
+    log.debug("Inviting: {}".format(email))
     new_user = tk.get_action('user_invite')(None, {'email': email, 'group_id': org_id, 'role': 'reviewer'})
     return new_user
 
