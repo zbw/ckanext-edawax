@@ -36,11 +36,11 @@ def email_exists(email):
     return False
 
 
-def update_maintainer_field(user_name, email, data_dict, field):
+def update_maintainer_field(user_name, email, data_dict):
     context = {'model': model, 'session': model.Session,
                 'user': c.user or c.author, 'for_view': True,
                 'auth_user_obj': c.userobj, 'ignore_auth': True}
-    data_dict[field] = "{}/{}".format(email, user_name)
+    data_dict['maintainer'] = "{}/{}".format(email, user_name)
     updated_dict = tk.get_action('package_patch')(context, data_dict)
 
     return updated_dict
@@ -51,33 +51,6 @@ def invite_reviewer(email, org_id):
     new_user = tk.get_action('user_invite')(None, {'email': email, 'group_id': org_id, 'role': 'reviewer'})
     return new_user
 
-"""
-def check_reviewer(data_dict, reviewer, field, new=False):
-    #Check if a reviewer's email exsits. If so update field with name
-    log.debug('Checking Reviewer: {}'.format(reviewer))
-    if '@' in reviewer:
-        email = reviewer
-        # check that the email doesn't already belong to a user
-        user_exists = email_exists(email)
-
-        # if user exists, update field to contain user name
-        # otherwise create the user and update the 'maintainer field. with
-        # new name
-        if user_exists:
-            data_dict = update_maintainer_field(user_exists, data_dict, field)
-            old = True
-        # check if use is part of group, if not add them
-        else:
-            try:
-                org_id = data_dict['organization']['id']
-            except KeyError:
-                org_id = data_dict['owner_org']
-            new_user = invite_reviewer(email, org_id)
-            data_dict = update_maintainer_field(new_user['name'], data_dict, field)
-            old = False
-
-    return data_dict, old
-"""
 
 def add_user_to_journal(data_dict, org_id, field, role='member'):
     # add new user to journal if they aren't in already

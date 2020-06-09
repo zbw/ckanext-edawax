@@ -55,13 +55,11 @@ class WorkflowController(PackageController):
                 'user': c.user or c.author, 'for_view': True,
                 'auth_user_obj': c.userobj, 'save': 'save' in request.params}
 
-    def evaluate_reviewer(self, reviewer, reviewer_list, data_dict, reviewer_pos):
+    def evaluate_reviewer(self, reviewer, reviewer_list, data_dict):
         """ Check if reviewer exists or not. Returns list of reviewer emails """
         if reviewer == '':
-            reviewer_list.append('')
             return reviewer_list
-        context = self._context()
-        context['keep_email'] = True
+
         # must be an email address - check is handled in HTML with `pattern`
         # dont create a new user if the "reviewer" is already a reviewer
         new_reviewer = check_reviewer_update(data_dict)
@@ -69,17 +67,13 @@ class WorkflowController(PackageController):
             if new_reviewer:
                 # create a new user with "reviewer" role for the dataset
                 new_user = invite_reviewer(reviewer, data_dict['organization']['id'])
-                field = 'maintainer'
-                if reviewer_pos == 'second':
-                    field += '_email'
-                update_maintainer_field(new_user['name'], reviewer, data_dict, field)
-            # Notify reviewer - Status: editor = Editor has it, Status:back = renotify reviewer
-            elif data_dict['dara_edawax_review'] in ['editor', 'back']:
-                user_name = tk.c.userobj.fullname or tk.c.userobj.email
-                note = n.review(None, user_name, c.pkg_dict['id'], [reviewer])
-            c.pkg_dict = self.update_review_status(c.pkg_dict)
-            tk.get_action('package_update')(context, c.pkg_dict)
-            reviewer_list.insert(0, reviewer.split('/')[0])
+                update_maintainer_field(new_user['name'], reviewer, data_dict)
+                # New reviewer, just send the invite
+                reviewer_list = []
+            else:
+                # Reviewer has already been invited, a notification will be sent
+                reviewer_list.append(reviewer)
+
         else:
             h.flash_error("Reviewers must be given as email addresses.")
             log.debug("Reviewers aren't an email address: '{}'".format(reviewer))
@@ -122,47 +116,51 @@ class WorkflowController(PackageController):
         addresses = map(lambda admin_id: model.User.get(admin_id).email, admins)
 
         data_dict = c.pkg_dict
-        reviewer_1 = data_dict.get("maintainer", None)
-        reviewer_emails = ['', '']
+        reviewer = data_dict.get("maintainer", None)
+        reviewer_emails = []
         flash_message = None
-
         context['keep_email'] = True
 
         try:
-            if reviewer_1 != '':
-                if reviewer_1 is not None:
+            # If there is a reviewer
+            if reviewer != '':
+                if reviewer is not None:
+                    reviewer = reviewer.split('/')[0]
                     # reviewer is an email address
                     try:
-                        reviewer_list = self.evaluate_reviewer(reviewer_1, reviewer_emails, data_dict, 'first')
+                        reviewer_list = self.evaluate_reviewer(reviewer, reviewer_emails, data_dict)
                         flash_message = ('Notification sent to Reviewers.', 'success')
                         log_msg = '\nNotifications sent to:\nReviewers:{}\nRest: {}'
                         log.debug(log_msg.format(reviewer_emails, addresses))
                     except:
                         flash_message = ('ERROR: Mail could not be sent. Please try again later or contact the site admin.', 'error')
                         log.debug('Failed to send notifications')
-            else:
-                reviewer_emails = [None, None]
         except Exception as e:
             log.error("Error with reviewer notifications: {}-{}".format(e.message, e.args))
             log.error(reviewer_emails)
 
-        # check that there are reviewers
-        if reviewer_emails[0] is None \
-            and c.pkg_dict['dara_edawax_review'] != 'false':
-            if c.pkg_dict['dara_edawax_review'] == 'editor':
-                flash_message = ('This submission has no reviewers.', 'error')
-                redirect(id)
-
-        # the author is sending the dataset to the editor
-        if flash_message is None and (reviewer_emails == ['', ''] or reviewer_emails == [None, None]):
+        # the author is sending the dataset to the editor, there are no reviewers
+        # Or it is coming back from being reworked by the author
+        if flash_message is None \
+            and (reviewer_emails == []) \
+                or data_dict['dara_edawax_review'] == 'reauthor':
             note = n.review(addresses, user_name, id, reviewer_emails)
-            if note:
-                c.pkg_dict = self.update_review_status(c.pkg_dict)
-                tk.get_action('package_update')(context, c.pkg_dict)
-                if flash_message is None:
-                    flash_message = ('Notification sent to Editor.', 'success')
-            else:
-                flash_message = ('Error: Mail could not be sent. Please try again later or contact the site admin.', 'error')
+        elif len(reviewer_emails) > 0:
+            # There is a reviewer, notify them
+            note = n.review(None, user_name, id, reviewer_emails)
+        elif flash_message and (reviewer_emails == []):
+            # if there is a flash message and no reviewers, an invitation was sent
+            note = True
+        else:
+            note = False
+
+        if note:
+            c.pkg_dict = self.update_review_status(c.pkg_dict)
+            tk.get_action('package_update')(context, c.pkg_dict)
+            if flash_message is None:
+                flash_message = ('Notification sent to Editor.', 'success')
+        else:
+            flash_message = ('Error: Mail could not be sent. Please try again later or contact the site admin.', 'error')
 
         if flash_message[1] == 'success':
             h.flash_success(flash_message[0])

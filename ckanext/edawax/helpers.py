@@ -174,12 +174,12 @@ def delete_cookies(pkg):
 
 def check_reviewer_update(pkg):
     """Check if the reviewer is new or not"""
-    reviewer_1_old = request.cookies.get('reviewerOnePrev_{}'.format(pkg['name']), False)
-    if reviewer_1_old is False:
+    reviewer_old = request.cookies.get('reviewerOnePrev_{}'.format(pkg['name']), False)
+    if reviewer_old is False:
         return False
 
-    reviewer_1_new = pkg['maintainer']
-    if (reviewer_1_new and (reviewer_1_new != '') and reviewer_1_old != reviewer_1_new):
+    reviewer_new = pkg['maintainer']
+    if (reviewer_new and (reviewer_1_new != '') and reviewer_old != reviewer_new):
         return True
 
     return False
