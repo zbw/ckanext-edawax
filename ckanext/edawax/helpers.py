@@ -179,7 +179,7 @@ def check_reviewer_update(pkg):
         return False
 
     reviewer_new = pkg['maintainer']
-    if (reviewer_new and (reviewer_1_new != '') and reviewer_old != reviewer_new):
+    if (reviewer_new and (reviewer_new != '') and reviewer_old != reviewer_new):
         return True
 
     return False
