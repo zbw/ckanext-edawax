@@ -95,6 +95,11 @@ def format_resource_items_custom(items):
     return clean_list
 
 
+def chunk(lst, n):
+    for i in range(0, len(lst), n):
+        yield lst[i:i + n]
+
+
 def parse_authors(authors):
     out = ''
     # information is coming from the dataset
