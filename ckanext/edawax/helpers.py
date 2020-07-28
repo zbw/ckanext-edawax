@@ -472,9 +472,9 @@ def show_review_button(pkg):
         for author-after initial creation
     """
     return (get_user_id() == pkg['creator_user_id'] \
-        and in_review(pkg) in ['false', 'reauthor', 'back']) or (has_hammer() \
+        and in_review(pkg) in ['false', 'reauthor']) or (has_hammer() \
             and not in_review(pkg) in ['reviewers', 'reviewed']) or (is_admin(pkg) \
-                and not (in_review(pkg) == 'false'))
+                and not (in_review(pkg) in ['false', 'reauthor', 'reviewers', 'reviewed']))
 
 
 
