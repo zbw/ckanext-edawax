@@ -466,9 +466,9 @@ def show_change_reviewer(pkg):
 
 def show_review_button(pkg):
     return (get_user_id() == pkg['creator_user_id'] \
-        and in_review(pkg) in ['false', 'reauthor']) or ( (has_hammer() \
-            or is_admin(pkg)) and not in_review(pkg) in ['reviewers', 'reviewed'])
-#or (has_hammer() and not in_review(pkg) in ['reviewers', 'reviewed']) and not pkg.get('private', True) or (is_admin(pkg) and in_review(pkg) in ('reauthor', 'finished', 'editor'))
+        and in_review(pkg) in ['false', 'reauthor']) or ( (has_hammer()) \
+            and not in_review(pkg) in ['reviewers', 'reviewed'])
+
 
 
 def show_manage_button(pkg):
