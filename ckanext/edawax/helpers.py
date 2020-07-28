@@ -465,9 +465,16 @@ def show_change_reviewer(pkg):
     return in_review(pkg) == 'reviewers' and (is_admin(pkg) or has_hammer())
 
 def show_review_button(pkg):
+    """
+    When to show:
+        For sys admin-always
+        for journal admin-once sent to admin by author
+        for author-after initial creation
+    """
     return (get_user_id() == pkg['creator_user_id'] \
-        and in_review(pkg) in ['false', 'reauthor']) or ( (has_hammer()) \
-            and not in_review(pkg) in ['reviewers', 'reviewed'])
+        and in_review(pkg) in ['false', 'reauthor', 'back']) or (has_hammer() \
+            and not in_review(pkg) in ['reviewers', 'reviewed']) or (is_admin(pkg) \
+                and not (in_review(pkg) == 'false'))
 
 
 
