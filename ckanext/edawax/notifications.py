@@ -97,7 +97,7 @@ msg_body = {
 
 def create_message(msg):
     if msg:
-        return u"Message: \n========\n{}".format(msg)
+        return u"Message: \n========\n{}\n".format(msg)
     return u""
 
 
