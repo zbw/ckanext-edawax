@@ -63,10 +63,6 @@ def get_invite_body(user, data=None):
        'url': url,
        'man_eng': h.get_manual_file()[0],
        'man_deu': h.get_manual_file()[1]}
-<<<<<<< HEAD
-=======
-
->>>>>>> reviewer_role_self_contained
 
     role = _get_user_role(user.name, data['group_id'])
     if role in ['editor', 'admin']:
@@ -149,17 +145,11 @@ def _mail_recipient(recipient_name, recipient_email,
     msg.attach(msg_body)
 
     # attach the file
-<<<<<<< HEAD
-    if role is not None and role in [u'member', 'Author', 'Editor']:
-        if role in [u'member', 'Author']:
-            attachment_file_name = "QuickManual_V1.5.pdf"
-=======
     if role is not None and role in [u'member', 'Author', 'Editor', 'Reviewer']:
         if role in [u'member', 'Author']:
             attachment_file_name = "QuickManual_V1.5.pdf"
         elif role in ['Reviewer']:
             attachment_file_name = "Manual_for_reviewers_V1-1.5.2.pdf"
->>>>>>> reviewer_role_self_contained
         else:
             attachment_file_name = "Editors_Manual-EN_V1.5.1.pdf"
         directory = os.path.dirname(__file__)
