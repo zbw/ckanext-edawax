@@ -151,7 +151,7 @@ def _mail_recipient(recipient_name, recipient_email,
         elif role in ['Reviewer']:
             attachment_file_name = "Manual_for_reviewers_V1-1.5.2.pdf"
         else:
-            attachment_file_name = "Editors_Manual-EN_V1.5.1.pdf"
+            attachment_file_name = "Editors_Manual-EN-2020-07-31_V1.6.pdf"
         directory = os.path.dirname(__file__)
         rel_path = 'public/{}'.format(attachment_file_name)
         with open(os.path.join(directory, rel_path), 'rb') as file:
