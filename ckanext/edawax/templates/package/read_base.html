@@ -75,19 +75,12 @@
             {#% snippet 'package/snippets/to_reviewers.html', pkg=pkg %#}
           {% endif %}
         {% else %}
-          {% if h.in_review(pkg) == 'false' %}
             <a title="Sends notification to journal editors. You will be asked for confirmation and license acceptance."
                 class="btn btn-reviewer" href="/dataset/{{pkg.id}}/review"
                             data-module="edawax-confirm"
                             data-module-i18n="{{ confirm }}">
              <i class="icon-envelope"></i>Send to Review
             </a>
-          {% else %}
-            <a title="Sends notification to journal editors. You will be asked for confirmation and license acceptance."
-                class="btn btn-reviewer" href="/dataset/{{pkg.id}}/review">
-             <i class="icon-envelope"></i>Send to Review
-            </a>
-          {% endif %}
         {% endif %}
     {% endif %}
 
