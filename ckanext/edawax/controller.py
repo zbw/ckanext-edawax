@@ -143,7 +143,7 @@ class WorkflowController(PackageController):
         # Or it is coming back from being reworked by the author
         if flash_message is None \
             and (reviewer_emails == []) \
-                or data_dict['dara_edawax_review'] == 'reauthor':
+                or data_dict['dara_edawax_review'] in ['reauthor', 'false']:
             note = n.review(addresses, user_name, id, reviewer_emails)
         elif len(reviewer_emails) > 0:
             # There is a reviewer, notify them
