@@ -29,17 +29,30 @@
                                       typeof="schema:Person" resource="{{
                                       author.url }}">
                   <a href="{{ author.url }}">
-              <span property="schema:name">
-                  {{ (author['firstname'], author['lastname']) | join(' ')}}
-              </span>
+              {% if not h.hide_from_reviewer(pkg) %}
+                <span property="schema:name">
+                {{ (author['firstname'], author['lastname']) | join(' ')}}</span>
+              {% else %}
+                <span property="schema:name" class="blurry">
+                  Witheld for Review
+                </span>
+              {% endif %}
               </a>
           </div>
 
       {% else %}
           <div property="schema:author" style="display:inline"
                                       typeof="schema:Person">
-          <span property="schema:name">{{ (author['firstname'], author['lastname']) | join(' ')}}</span>
-          </div>
+          {% if not h.hide_from_reviewer(pkg) %}
+            <span property="schema:name">
+            {{ (author['firstname'], author['lastname']) | join(' ')}}</span>
+            </div>
+          {% else %}
+            <span property="schema:name" class="blurry">
+              Witheld for Review
+            </span>
+            </div>
+          {% endif %}
 
       {% endif %}
       {% if not author == dara_authors[-1] %}

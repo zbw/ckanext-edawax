@@ -10,8 +10,7 @@ To start the review, please log in with the user name shown above and your passw
 The data ready for your review will be highlighted. Or follow the link here: {{ url }}
 
 For advice, please consult the documentation of our service:
-{{ site_url }}/{{ man_eng }}
-{{ site_url }}/{{ man_deu }}
+{{ site_url }}/Manual_for_reviewers_V1-1.5.2.pdf
 
 For any problems or questions, please feel free to get in touch with us.
 

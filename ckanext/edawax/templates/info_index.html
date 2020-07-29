@@ -17,6 +17,8 @@
 
 {% block secondary_content %}
 {% resource 'edawax/edawax.js' %}
+{% set man_eng = h.get_manual_file()[0] %}
+{% set man_deu = h.get_manual_file()[1] %}
 {# could be used for infopages navigation #}
 <div class="module module-narrow module-shallow info-panel">
     <!--h2 class="module-heading">

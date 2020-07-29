@@ -1,6 +1,7 @@
 # Hendrik Bunke <h.bunke@zbw.eu>
 # ZBW - Leibniz Information Centre for Economics
 
+import ckan
 import ckan.plugins as plugins
 import ckan.plugins.toolkit as tk
 from ckanext.edawax import helpers
@@ -10,6 +11,9 @@ from ckan.logic.auth.delete import package_delete as ckan_pkgdelete
 from ckan.logic.auth.delete import resource_delete as ckan_resourcedelete
 from ckan.logic.auth.create import resource_create as ckan_resourcecreate
 from ckan.config.middleware import TrackingMiddleware
+
+from ckan.logic.action.get import package_show, resource_show
+
 # from collections import OrderedDict
 import ckan.lib.helpers as h
 from ckan.common import c, request
@@ -22,6 +26,9 @@ import sqlalchemy as sa
 import new_invites as invites
 import urllib2
 import hashlib
+
+# package_update
+#from update import package_update
 
 
 
@@ -93,7 +100,7 @@ def str_to_int(string):
 def journal_package_update(context, data_dict):
     """override ckan package_update. allow creator to update package if
     package is private and not in review. 'create_dataset' permission must be
-    set in  CKAN """
+    set in CKAN """
 
     def ir():
         if pkg_obj.state == 'draft':
@@ -103,6 +110,7 @@ def journal_package_update(context, data_dict):
 
     user = context.get('auth_user_obj')
     pkg_obj = get_package_object(context, data_dict)
+
     is_private = getattr(pkg_obj, 'private', False)
     is_admin = check_journal_role({'owner_org': pkg_obj.owner_org}, 'admin')
     is_owner = user.id == getattr(pkg_obj, 'creator_user_id', False)
@@ -163,13 +171,48 @@ def journal_resource_create(context, data_dict):
     """
     Don't allow new resources to be added if there is a DOI for the package
     """
-    data_dict['id'] = data_dict['package_id']
-    pkg_dict = tk.get_action('package_show')(context, data_dict)
+    pkg_dict = tk.get_action('package_show')(context, {'id': data_dict['package_id']})
     if pkg_dict.get('dara_DOI', False) or _ctest(pkg_dict):
         return {'success': False, 'msg': "Package can not be created because\
                 it has a DOI assigned"}
+    if helpers.is_reviewer(pkg_dict):
+        return {'success': False, 'msg': "Reviewers cannot create resources."}
 
     return ckan_resourcecreate(context, data_dict)
+
+@ckan.logic.side_effect_free
+def package_show_filter(context, data_dict):
+    """ Strip out the authors' names if a reviewer is making the request"""
+    pkg = package_show(context, data_dict)
+    # Always remove maintainer and maintainer email for API calls
+    if context.get('api_version', None) == 3 and not helpers.has_hammer():
+        pkg['maintainer'] = ""
+        pkg['maintainer_email'] = ""
+
+    if context.get('api_version', None) == 3 and helpers.is_reviewer(pkg):
+        if helpers.is_reviewer(pkg) and helpers.is_private(pkg):
+            pkg['dara_authors'] = [""]
+            # clear author from resources too
+            for resource in pkg['resources']:
+                resource['dara_authors'] = [""]
+        return pkg
+    return pkg
+
+
+@ckan.logic.side_effect_free
+def resource_show_filter(context, data_dict):
+    """ Strip out the authors' names if a reviewer is making the request"""
+    rsc = resource_show(context, data_dict)
+
+    if context.get('api_version', None) == 3:
+        rsc = resource_show(context, data_dict)
+        pkg_id = rsc['package_id']
+        pkg = package_show(context, {"id": pkg_id})
+
+        if helpers.is_reviewer(pkg) and helpers.is_private(pkg):
+            rsc['dara_authors'] = [""]
+        return rsc
+    return rsc
 
 
 
@@ -258,13 +301,17 @@ class EdawaxPlugin(plugins.SingletonPlugin):
 
     def get_actions(self):
         return {
-                    "user_invite": invites.user_invite
+                    "user_invite": invites.user_invite,
+                    "package_show": package_show_filter,
+                    "resource_show": resource_show_filter,
                }
 
     def get_auth_functions(self):
-        return {'package_update': journal_package_update,
-                'package_delete': journal_package_delete,
-                'resource_delete': journal_resource_delete,
+        return {
+                    'package_delete': journal_package_delete,
+                    'resource_delete': journal_resource_delete,
+                    'resource_create': journal_resource_create,
+                    'package_update': journal_package_update,
                 }
 
     # Set default for sorting
@@ -302,14 +349,23 @@ class EdawaxPlugin(plugins.SingletonPlugin):
                 'has_doi': helpers.has_doi,
                 'has_hammer': helpers.has_hammer,
                 'is_admin': helpers.is_admin,
+                'is_reviewer':  helpers.is_reviewer,
+                'show_notify_editor_button': helpers.show_notify_editor_button,
+                'format_resource_items_custom':helpers.format_resource_items_custom,
                 'is_edit_page': helpers.is_edit_page,
                 'is_landing_page': helpers.is_landing_page,
                 'tags_exist': helpers.tags_exist,
                 'normal_height': helpers.normal_height,
                 'count_packages': helpers.count_packages,
-                'update_citation': helpers.update_citation,
-                'format_resource_items_custom': helpers.format_resource_items_custom,
+                'has_reviewers': helpers.has_reviewers,
                 'get_manual_file': helpers.get_manual_file,
+                'show_manage_button': helpers.show_manage_button,
+                'hide_from_reviewer': helpers.hide_from_reviewer,
+                'check_reviewer_update': helpers.check_reviewer_update,
+                'show_change_reviewer': helpers.show_change_reviewer,
+                'find_reviewers_datasets': helpers.find_reviewers_datasets,
+                'is_author': helpers.is_author,
+                'update_citation': helpers.update_citation
                 }
 
     def before_map(self, map):
@@ -378,6 +434,11 @@ class EdawaxPlugin(plugins.SingletonPlugin):
         map.connect('/dataset/{id}/reauthor',
                     controller="ckanext.edawax.controller:WorkflowController",
                     action="reauthor",)
+
+        # notify editor dataset review is complete
+        map.connect('/dataset/{id}/editor_notify',
+                    controller="ckanext.edawax.controller:WorkflowController",
+                    action="editor_notify",)
 
         # download all resources
         map.connect('/dataset/{id}/download_all',

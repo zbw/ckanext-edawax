@@ -2,7 +2,7 @@
 """
 Robots checked by Counter Project. List is mainted at github.com/atmire/COUNTER-Robots
 """
-
+# TODO: check for updates
 robots = [
   {
     "pattern": "bot",

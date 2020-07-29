@@ -34,6 +34,7 @@
 
   {% if dara_authors %}
       <div class="muted ellipsis" style="margin-bottom:1.25em; padding-left: 10px;">Creators:
+            {% if not h.hide_from_reviewer(pkg) %}
             {% for author in dara_authors %}
                 <div property="schema:author" style="display:inline"
                         typeof="schema:Person"
@@ -52,6 +53,9 @@
                 {% endif %}
                 </div>
             {% endfor %}
+            {% else %}
+              <span class="blurry">Witheld for Review</span>
+            {% endif %}
         </div>
     {% endif %}
 
@@ -136,6 +140,12 @@
       </a>
     </li>
   {% endif %}
+  <li>
+    <a class="btn btn-primary" href="/dataset/{{ pkg.id }}">
+      <i class="icon-circle-arrow-left"></i>
+      Back to Dataset
+    </a>
+  </li>
   {% if 'datastore' in g.plugins %}
     <li>{% snippet 'package/snippets/data_api_button.html', resource=res, datastore_root_url=c.datastore_api %}</li>
   {% endif %}
@@ -168,17 +178,13 @@
           {% else %}
             <tr class="toggle-more">
           {% endif %}
-          {#
-            {% if h.is_reviewer(pkg) and key == 'Authors' %}
+          {% if h.is_reviewer(pkg) and key == 'Authors' %}
               <th scope="row">{{ key }}</th>
-              <td class="blurry">Withheld for Review</td>
-            {% else %}
-          #}
-          <th scope="row">{{ key }}</th>
-          <td>{{ value }}</td>
-          {#
-            {% endif %}
-          #}
+              <td class="blurry">Witheld for Review</td>
+          {% else %}
+              <th scope="row">{{ key }}</th>
+              <td>{{ value }}</td>
+          {% endif %}
             </tr>
       {% endfor %}
 

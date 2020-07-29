@@ -8,7 +8,7 @@ import logging
 import ckan.plugins.toolkit as tk
 from ckan import __version__ as ckan_version
 from ckanext.edawax.helpers import pkg_status
-
+import ckan.lib.mailer as mailer
 
 log = logging.getLogger(__name__)
 
@@ -36,11 +36,11 @@ def package_url(dataset):
                           id=dataset))
 
 subjects = {
-            "review_editor": u"ZBW Journal Data Archive: Data Submission Notification",
-            "review_reviewer": u"ZBW Journal Data Archive: Review Request",
-            "author": u"ZBW Journal Data Archive: Dataset Status Change",
-            "editor": u"ZBW Journal Data Archive: Review Completed",
-            "reauthor": u"ZBW Journal Data Archive: Please revise your uploaded dataset",
+            "review_editor": u": Data Submission Notification",
+            "review_reviewer": u": Review Request",
+            "author": u": Dataset Status Change",
+            "editor": u": Review Completed",
+            "reauthor": u": Please revise your uploaded dataset",
            }
 
 msg_body = {
@@ -53,7 +53,7 @@ msg_body = {
                 u"\n\nKind regards,\nZBW Journal Data Archive",
             ),
             "review_reviewer": (
-                u"Dear Reviewer,\n\n",
+                u"Dear Reviewer ({reviewer_name}),\n\n",
                 u"the editorial office would like you to review\n",
                 u"\"{title},\" in the \"{journal}\".",
                 u"\n\nYou can review it here: {url}",
@@ -72,6 +72,7 @@ msg_body = {
                 u"a reviewer has finished reviewing \"{title}\" in your journal,",
                 u" the \"{journal}.\" The submission is available here: {url}.",
                 u"\n\n{message}",
+                u"\nKind regards,\nZBW Journal Data Archive"
             ),
             "reauthor": (
                 u"Dear Author,\n",
@@ -130,7 +131,7 @@ def notify(typ, dataset, author_mail, msg, context, status=None):
     if status:
         d['status'] = status
     body = body.format(**d)
-    subject = subjects[typ]
+    subject = "{}{}".format(mailer.g.site_title, subjects[typ])
     message = compose_message(typ, body, subject, config, author_mail, context)
 
     return sendmail(author_mail, message)
@@ -154,29 +155,32 @@ def review(addresses, author, dataset, reviewers=None, msg=None):
         pkg = tk.get_action('package_show')(context, {'id': dataset})
         org_id = pkg.get('owner_org', pkg.get('group_id', False))
         org = tk.get_action('organization_show')(context, {'id': org_id})
+        if pkg['maintainer'] and '/' in pkg['maintainer']:
+            _, reviewer_name = pkg['maintainer'].split('/')
+        else:
+            reviewer_name = ''
         d = {'user': author,
              'url': package_url(dataset),
              'submission_id': subid(),
              'title': pkg.get('title').title(),
-             'journal': org['title']}
+             'journal': org['title'],
+             'reviewer_name': reviewer_name}
         if msg:
             d['message'] = create_message(msg)
         body = body.format(**d)
-        subject = subjects[who]
+        subject = "{}{}".format(mailer.g.site_title, subjects[who])
         return compose_message(who, body, subject, config, address)
 
     # send email to Admin
     t = []
     if pkg_status(dataset) in ['false', 'reauthor'] or reviewers == [None, None]:
-        # pkg_status(dataset) in ['reauthor', 'false', 'reviewers', 'editor']
         t = map(lambda a: sendmail(a, message("review_editor", a)), addresses)
     else:
-        if pkg_status(dataset) not in ['editor', 'back']:  # removed 'reviewers'
-            # To Reviewer
-            if reviewers is not None:
-                for reviewer in reviewers:
-                    if reviewer not in [None, '', u'']:
-                        t.append(sendmail(reviewer, message("review_reviewer", reviewer)))
+        # To Reviewer
+        if reviewers is not None:
+            for reviewer in reviewers:
+                if reviewer not in [None, '', u'']:
+                    t.append(sendmail(reviewer.split('/')[0], message("review_reviewer", reviewer.split('/')[0])))
         else:
             # want to return something so that there's no error message
             # previously, this condition would have triggered an email to the editors

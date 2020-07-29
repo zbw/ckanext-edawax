@@ -63,10 +63,16 @@ def get_invite_body(user, data=None):
        'url': url,
        'man_eng': h.get_manual_file()[0],
        'man_deu': h.get_manual_file()[1]}
+<<<<<<< HEAD
+=======
+
+>>>>>>> reviewer_role_self_contained
 
     role = _get_user_role(user.name, data['group_id'])
     if role in ['editor', 'admin']:
         return render_jinja2('emails/invite_editor.txt', extra_vars)
+    elif role == 'reviewer':
+        return render_jinja2('emails/invite_reviewer.txt', extra_vars)
     return render_jinja2('emails/invite_author.txt', extra_vars)
     # Add reviewer when needed REVIEWER
 
@@ -78,11 +84,12 @@ def send_invite(user, data):
     role = data['role']
     if role == u'member':
         role = "Author"
-    else:
+    elif role == u'admin':
         role = "Editor"
-    # REVIEWER
+    else:
+        role = "Reviewer"
     sub = mailer.g.site_title
-    subject = mailer._('{} Invite: {}'.format(sub, role))
+    subject = mailer._('{site_title} Invite: {role}').format(site_title=sub, role=role)
     mail_user(user, subject, body, {}, role)
 
 
@@ -104,8 +111,8 @@ def user_invite(context, data_dict):
     user_dict = logic._get_action('user_create')(context, data)
     user = ckan.model.User.get(user_dict['id'])
     member_dict = {'username': user.id,
-       'id': data['group_id'],
-       'role': data['role']}
+                   'id': data['group_id'],
+                   'role': data['role']}
     org_info = logic._get_action('organization_show')(context, member_dict)
     data['journal_title'] = org_info['display_name']
     logic._get_action('group_member_create')(context, member_dict)
@@ -120,10 +127,11 @@ def _mail_recipient(recipient_name, recipient_email,
     mail_from = config.get('smtp.mail_from')
     if role:
         if role in [u'member', 'Author']:
-            recipient_name = 'Author'
+            recipient_name = "Author"
+        elif role in [u'Reviewer', 'reviewer']:
+            recipient_name = "Reviewer"
         else:
-            recipient_name = 'Editor'
-        # REVIEWER
+            recipient_name = "Editor"
     else:
         recipient_name = recipient_name
     body = mailer.add_msg_niceties(recipient_name, body, sender_name, sender_url)
@@ -141,9 +149,17 @@ def _mail_recipient(recipient_name, recipient_email,
     msg.attach(msg_body)
 
     # attach the file
+<<<<<<< HEAD
     if role is not None and role in [u'member', 'Author', 'Editor']:
         if role in [u'member', 'Author']:
             attachment_file_name = "QuickManual_V1.5.pdf"
+=======
+    if role is not None and role in [u'member', 'Author', 'Editor', 'Reviewer']:
+        if role in [u'member', 'Author']:
+            attachment_file_name = "QuickManual_V1.5.pdf"
+        elif role in ['Reviewer']:
+            attachment_file_name = "Manual_for_reviewers_V1-1.5.2.pdf"
+>>>>>>> reviewer_role_self_contained
         else:
             attachment_file_name = "Editors_Manual-EN_V1.5.1.pdf"
         directory = os.path.dirname(__file__)
@@ -204,6 +220,7 @@ def _mail_recipient(recipient_name, recipient_email,
     finally:
         smtp_connection.quit()
 
+
 def mail_recipient(recipient_name, recipient_email, subject,
         body, headers={}, role=None):
     if role is not None:
@@ -212,8 +229,12 @@ def mail_recipient(recipient_name, recipient_email, subject,
     return _mail_recipient(recipient_name, recipient_email,
             g.site_title, g.site_url, subject, body, headers=headers)
 
+
 def mail_user(recipient, subject, body, headers={}, role=None):
     if (recipient.email is None) or not len(recipient.email):
         raise MailerException(_("No recipient email address available!"))
-    mail_recipient(recipient.display_name, recipient.email, subject,
+    name = recipient.display_name
+
+
+    mail_recipient(name, recipient.email, subject,
             body, headers=headers, role=role)

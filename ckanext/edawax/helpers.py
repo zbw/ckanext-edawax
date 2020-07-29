@@ -95,6 +95,11 @@ def format_resource_items_custom(items):
     return clean_list
 
 
+def chunk(lst, n):
+    for i in range(0, len(lst), n):
+        yield lst[i:i + n]
+
+
 def parse_authors(authors):
     out = ''
     # information is coming from the dataset
@@ -156,6 +161,100 @@ u"dara_numberVariables": "95 Number of Variables",
 u"url": "96 URL"}
 
 
+def delete_cookies(pkg):
+    """ Clear Cookies - after resend """
+    try:
+        cookie = 'reviewerOnePrev_{}'.format(pkg['name'])
+        response.delete_cookie(cookie, '/')
+    except Exception as e:
+        log.debug('delete_cookies error: {} {} {}'.format(e, e.message, e.args))
+
+    try:
+        cookie = 'reviewerTwoPrev_{}'.format(pkg['name'])
+        response.delete_cookie(cookie, '/')
+    except Exception as e:
+        log.debug('delete_cookies error: {} {} {}'.format(e, e.message, e.args))
+
+
+
+def check_reviewer_update(pkg):
+    """Check if the reviewer is new or not"""
+    reviewer_old = request.cookies.get('reviewerOnePrev_{}'.format(pkg['name']), False)
+    if reviewer_old is False:
+        return False
+
+    reviewer_new = pkg['maintainer']
+    if (reviewer_new and (reviewer_new != '') and reviewer_old != reviewer_new):
+        return True
+
+    return False
+
+
+def get_org_admin(org_id):
+    admin = []
+    try:
+        org_data = tk.get_action('organization_show')(None, {'id': org_id})
+    except Exception as e:
+        log.debug('get_org_admin error: {} {} {}'.format(e, e.message, e.args))
+        return ''
+    users = org_data['users']
+    for user in users:
+        if user['capacity'] == 'admin':
+            admin.append(user['name'])
+
+    return admin
+
+
+def hide_from_reviewer(pkg):
+    return is_reviewer(pkg) and is_private(pkg)
+
+
+def has_reviewers(pkg):
+    reviewers = []
+    try:
+        reviewer = pkg.get('maintainer')
+        reviewers.append(reviewer)
+        return reviewers[0] not in [None, '']
+    except AttributeError as e:
+        log.debug('has_reviewers error: {} {} {}'.format(e, e.message, e.args))
+        return False
+
+
+def is_reviewer(pkg):
+    reviewers = []
+
+    try:
+        reviewer = getattr(pkg, 'maintainer')
+    except AttributeError as e:
+        try:
+            reviewer = pkg['maintainer']
+        except Exception as e:
+            if pkg:
+                log.debug('is_reviewer error: {} {} {}'.format(e, e.message, e.args))
+            return False
+
+    emails = []
+    names = []
+
+    if not reviewer:
+        return False
+
+    if '/' in reviewer:
+        email, name = reviewer.split('/')
+        emails.append(email)
+        names.append(name)
+    else:
+        email = reviewer
+        emails.append(email)
+
+    try:
+        user = c.userobj.name
+    except AttributeError as e:
+        user = None
+        return False
+    #email = model.User.get(user).email
+    return user in names
+
 def is_author(pkg):
     return get_user_id() == pkg['creator_user_id']
 
@@ -178,6 +277,10 @@ def normal_height():
     return True
 
 
+def pkg_status(id):
+    pkg = tk.get_action('package_show')(None, {'id': id})
+    return pkg['dara_edawax_review']
+
 def tags_exist(data):
     pkg = tk.get_action('package_show')(None, {'id': data.current_package_id})
     if pkg['tags'] != []:
@@ -185,28 +288,40 @@ def tags_exist(data):
     return False
 
 def is_landing_page():
-    if 'edit' in request.url or '/dataset/resources' in request.url:
+    if '/edit/' in request.url or '/dataset/resources' in request.url:
         return False
     return True
 
 def is_edit_page():
-    if ('edit' in request.url or 'views' in request.url) and not ('user/edit' in request.url or 'journals/edit' in request.url or 'dataset/edit' in request.url):
+    if ('/edit/' in request.url or 'views' in request.url) \
+        and not ('user/edit' in request.url or 'journals/edit' in request.url \
+            or 'dataset/edit' in request.url):
         return True
 
     return False
 
 
-
-def is_admin():
+def is_admin(pkg=None):
     admins = c.group_admins
-    try:
-       user_id = c.userobj.id
-       if user_id in admins:
-          return True
-    except AttributeError as e:
-       pass
-    return False
 
+    if pkg:
+        org_id = pkg['owner_org']
+        admins = get_org_admin(org_id)
+        try:
+            user_id = c.userobj.name
+        except Exception:
+            return False
+        if user_id in admins:
+            return True
+
+    try:
+        user_id = c.userobj.id
+        if user_id in admins:
+            return True
+    except AttributeError as e:
+        log.debug('is_admin error: {} {} {}'.format(e, e.message, e.args))
+        pass
+    return False
 
 
 def has_doi(pkg):
@@ -229,7 +344,11 @@ def is_published(url):
     parts = urlparse(url)
     if '/journals/' in parts.path:
         return True
+
     start = 9
+    if '/edit/' in parts.path:
+        start += 5
+
     if len(parts.path) > 36:
         end = 36 + start
         dataset_name = parts.path[start:end]
@@ -242,6 +361,8 @@ def is_published(url):
             return False
         return True
     except Exception as e:
+        log.debug('is_published error: {} {} {}'.format(e.__class__.__name__,
+                                                        e.message, e.args))
         return False
 
 
@@ -308,7 +429,8 @@ def transform_to_map(data):
             final.append(data)
         return final
     except Exception:
-        pass
+        log.debug('transform_to_map error: {} {} {}'.format(e, e.message, e.args))
+
     return data
 
 
@@ -336,8 +458,42 @@ def is_private(pkg):
     return pkg.get('private', True)
 
 
+def is_author(pkg):
+    return get_user_id() == pkg['creator_user_id']
+
+def show_change_reviewer(pkg):
+    return in_review(pkg) == 'reviewers' and (is_admin(pkg) or has_hammer())
+
 def show_review_button(pkg):
-    return get_user_id() == pkg['creator_user_id'] and in_review(pkg) in ('false', 'reauthor')
+    """
+    When to show:
+        For sys admin-always
+        for journal admin-once sent to admin by author
+        for author-after initial creation
+    """
+    return (get_user_id() == pkg['creator_user_id'] \
+        and in_review(pkg) in ['false', 'reauthor']) or (has_hammer() \
+            and not in_review(pkg) in ['reviewers', 'reviewed']) or (is_admin(pkg) \
+                and not (in_review(pkg) in ['false', 'reauthor', 'reviewers', 'reviewed']))
+
+
+
+def show_manage_button(pkg):
+    """
+        Show for:
+            * Admins/Editors always:
+            * Authors, before admins/editors have it
+    """
+    if not isinstance(pkg, dict):
+        return False
+    # always allow admins
+    if has_hammer() or is_admin(pkg):
+        return True
+    # authors should only be able to edit in first stage or reauthor
+    if in_review(pkg) in ['false', 'reauthor']:
+        return get_user_id() == pkg['creator_user_id']
+
+    return False
 
 
 def show_publish_button(pkg):
@@ -350,7 +506,7 @@ def show_publish_button(pkg):
 def show_retract_button(pkg):
     if not isinstance(pkg, dict):
         return False
-    return (check_journal_role(pkg, 'admin') or has_hammer())and not pkg.get('private', True)
+    return (check_journal_role(pkg, 'admin') or has_hammer()) and not pkg.get('private', True)
 
 
 def show_reauthor_button(pkg):
@@ -358,6 +514,13 @@ def show_reauthor_button(pkg):
         return False
     return (check_journal_role(pkg, 'admin') or has_hammer()) \
         and in_review(pkg) in ['true', 'finished', 'editor', 'reviewers', 'back']
+
+
+def show_notify_editor_button(pkg):
+    if not isinstance(pkg, dict):
+        return False
+    return in_review(pkg) in ['reviewers'] and (has_hammer() \
+        or is_reviewer(pkg))
 
 
 def res_abs_url(res):
@@ -450,6 +613,33 @@ def resource_downloads(resource):
     return results[0][0]
 
 
+def find_reviewers_datasets(name):
+    if not name:
+        return []
+    # the double %% are required by Python, otherwise it thinks is string formating
+    sql = """
+            SELECT package.id, package.title
+            FROM package
+            INNER JOIN "user" as u
+            ON package.maintainer ILIKE '%%' || u.name || '%%'
+            INNER JOIN member
+            ON member.table_id = u.id
+            INNER JOIN package_extra as pe
+            ON package.id = pe.package_id
+            WHERE member.capacity = 'reviewer'
+            AND u.name = %(name)s
+            AND package.private = 't'
+            AND pe.key = 'dara_edawax_review'
+            AND pe.value = 'reviewers'
+            GROUP BY package.id;
+          """
+    results = engine.execute(sql, {'name':name}).fetchall()
+
+    out = [{'id': result[0],
+            'name': result[1].title()} for result in results]
+
+    return out
+
 #===========================================================#
 # The following come from ckan/lib/cli.py                   #
 # They need to be changed to work with 'url' rather than ID #
@@ -529,7 +719,6 @@ def show_download_all(pkg):
             count += 1
     return count > 1
 
-
 """
 The following are used to create/update information regarding related
 publications. the information is stored in the package "notes" field
@@ -604,8 +793,7 @@ def update_citation(data):
     data = {'id': data['id'], 'dara_related_citation': correct_citation}
     try:
         if correct_citation != '':
-            #tk.get_action('package_patch')(context, data)
-            pass
+            tk.get_action('package_patch')(context, data)
     except Exception as e:
         log.debug('update_citation error: {} {} {}'.format(e, e.message, e.args))
 

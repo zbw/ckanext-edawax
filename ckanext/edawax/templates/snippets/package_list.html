@@ -16,12 +16,13 @@ Example:
 #}
 
 {% macro package_list(packages) -%}
-
     {% for package in packages %}
       {% set is_admin = h.check_journal_role(package, 'admin') or h.check_access('sysadmin') %}
+      {% set is_reviewer = h.is_reviewer(package) %}
       {% if not package.private or
           (package.private and is_admin) or
-          (package.private and h.get_user_id() == package.creator_user_id)
+          (package.private and h.get_user_id() == package.creator_user_id) or
+          (package.dara_edawax_review == 'reviewers' and is_reviewer)
       %}
 
           {% snippet 'snippets/package_item.html',
@@ -38,6 +39,21 @@ Example:
 
 
 {% block package_list %}
+  {% if h.find_reviewers_datasets(c.userobj.name)|length > 0 %}
+    <div class="zbw-box box-full">
+        <h2 class="zbw-font zbw-blue">Waiting for Review:</h2>
+            <ul class="activity">
+        {% for item in h.find_reviewers_datasets(c.userobj.name) %}
+            <li class="item">
+                <i class="icon reviewer-icon icon-eye-open"></i>
+                <p class="reviewer_list"><a href="/dataset/{{ item['id'] }}">
+                    {{ item['name'] }}
+                </a></p>
+            </li>
+        {% endfor %}
+            </ul>
+    </div>
+  {% endif %}
   {% if packages %}
     <ul class="{{ list_class or 'dataset-list unstyled' }}">
     	{% block package_list_inner %}
@@ -53,7 +69,7 @@ Example:
                     #}
                     {{ package_list(jp.packages) }}
                 {% endfor %}
-                {% else %}
+            {% else %}
                     {{ package_list(packages) }}
             {% endif %}
 

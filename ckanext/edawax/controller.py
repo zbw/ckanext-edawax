@@ -12,7 +12,7 @@ from ckan.authz import get_group_or_org_admin_ids
 from ckanext.dara.helpers import check_journal_role
 from functools import wraps
 import notifications as n
-from ckanext.edawax.helpers import is_private, is_robot
+from ckanext.edawax.helpers import is_private, is_robot, is_reviewer, check_reviewer_update
 from pylons import config
 
 # for download all
@@ -22,6 +22,8 @@ import zipfile
 import requests
 import StringIO
 from ckanext.dara.helpers import _parse_authors
+from ckanext.edawax.helpers import is_reviewer, in_review, delete_cookies, hide_from_reviewer
+from ckanext.edawax.update import update_maintainer_field, email_exists, invite_reviewer, add_user_to_journal
 
 import ckan.lib.base as base
 
@@ -53,13 +55,11 @@ class WorkflowController(PackageController):
                 'user': c.user or c.author, 'for_view': True,
                 'auth_user_obj': c.userobj, 'save': 'save' in request.params}
 
-    def evaluate_reviewer(self, reviewer, reviewer_list, data_dict, reviewer_pos):
+    def evaluate_reviewer(self, reviewer, reviewer_list, data_dict):
         """ Check if reviewer exists or not. Returns list of reviewer emails """
         if reviewer == '':
-            reviewer_list.append('')
             return reviewer_list
-        context = self._context()
-        context['keep_email'] = True
+
         # must be an email address - check is handled in HTML with `pattern`
         # dont create a new user if the "reviewer" is already a reviewer
         new_reviewer = check_reviewer_update(data_dict)
@@ -67,11 +67,13 @@ class WorkflowController(PackageController):
             if new_reviewer:
                 # create a new user with "reviewer" role for the dataset
                 new_user = invite_reviewer(reviewer, data_dict['organization']['id'])
-                field = 'maintainer'
-                if reviewer_pos == 'second':
-                    field += '_email'
-                update_maintainer_field(new_user['name'], reviewer, data_dict, field)
-            reviewer_list.insert(0, reviewer.split('/')[0])
+                update_maintainer_field(new_user['name'], reviewer, data_dict)
+                # New reviewer, just send the invite
+                reviewer_list = []
+            else:
+                # Reviewer has already been invited, a notification will be sent
+                reviewer_list.append(reviewer)
+
         else:
             h.flash_error("Reviewers must be given as email addresses.")
             log.debug("Reviewers aren't an email address: '{}'".format(reviewer))
@@ -89,7 +91,15 @@ class WorkflowController(PackageController):
         context = self._context()
         c.pkg_dict = tk.get_action('package_show')(context, {'id': id})
 
-        # delete_cookies(c.pkg_dict)  # REVEIWER
+         # Ensure a 'draft' isn't sent for review
+        state = c.pkg_dict['state']
+        if state == 'draft':
+            data = {'id': c.pkg_dict['id'], u'state': u'active'}
+            context['ignore_auth'] = True
+            t = tk.get_action('package_patch')(context, data)
+            c.pkg_dict['state'] = 'active'
+
+        delete_cookies(c.pkg_dict)
 
         try:
             tk.check_access('package_update', context, {'id': id})
@@ -106,47 +116,51 @@ class WorkflowController(PackageController):
         addresses = map(lambda admin_id: model.User.get(admin_id).email, admins)
 
         data_dict = c.pkg_dict
-        reviewer_1 = data_dict.get("maintainer", None)
-        reviewer_emails = ['', '']
+        reviewer = data_dict.get("maintainer", None)
+        reviewer_emails = []
         flash_message = None
-
         context['keep_email'] = True
 
         try:
-            if reviewer_1 != '':
-                if reviewer_1 is not None:
+            # If there is a reviewer
+            if reviewer != '':
+                if reviewer is not None:
+                    reviewer = reviewer.split('/')[0]
                     # reviewer is an email address
                     try:
-                        reviewer_list = self.evaluate_reviewer(reviewer_1, reviewer_emails, data_dict, 'first')
+                        reviewer_list = self.evaluate_reviewer(reviewer, reviewer_emails, data_dict)
                         flash_message = ('Notification sent to Reviewers.', 'success')
                         log_msg = '\nNotifications sent to:\nReviewers:{}\nRest: {}'
                         log.debug(log_msg.format(reviewer_emails, addresses))
                     except:
                         flash_message = ('ERROR: Mail could not be sent. Please try again later or contact the site admin.', 'error')
                         log.debug('Failed to send notifications')
-            else:
-                reviewer_emails = [None, None]
         except Exception as e:
             log.error("Error with reviewer notifications: {}-{}".format(e.message, e.args))
             log.error(reviewer_emails)
 
-        # check that there are reviewers
-        if reviewer_emails[0] is None \
-            and c.pkg_dict['dara_edawax_review'] != 'false':
-            if c.pkg_dict['dara_edawax_review'] == 'editor':
-                flash_message = ('This submission has no reviewers.', 'error')
-                redirect(id)
-
-        # the author is sending the dataset to the editor
-        if flash_message is None and reviewer_emails == ['', '']:
+        # the author is sending the dataset to the editor, there are no reviewers
+        # Or it is coming back from being reworked by the author
+        if flash_message is None \
+            and (reviewer_emails == []) \
+                or data_dict['dara_edawax_review'] == 'reauthor':
             note = n.review(addresses, user_name, id, reviewer_emails)
-            if note:
-                c.pkg_dict = self.update_review_status(c.pkg_dict)
-                tk.get_action('package_update')(context, c.pkg_dict)
-                if flash_message is None:
-                    flash_message = ('Notification sent to Reviewer.', 'success')
-            else:
-                flash_message = ('Error: Mail could not be sent. Please try again later or contact the site admin.', 'error')
+        elif len(reviewer_emails) > 0:
+            # There is a reviewer, notify them
+            note = n.review(None, user_name, id, reviewer_emails)
+        elif flash_message and (reviewer_emails == []):
+            # if there is a flash message and no reviewers, an invitation was sent
+            note = True
+        else:
+            note = False
+
+        if note:
+            c.pkg_dict = self.update_review_status(c.pkg_dict)
+            tk.get_action('package_update')(context, c.pkg_dict)
+            if flash_message is None:
+                flash_message = ('Notification sent to Editor.', 'success')
+        else:
+            flash_message = ('Error: Mail could not be sent. Please try again later or contact the site admin.', 'error')
 
         if flash_message[1] == 'success':
             h.flash_success(flash_message[0])
@@ -215,7 +229,6 @@ class WorkflowController(PackageController):
         tk.get_action('package_update')(context, c.pkg_dict)
         h.flash_success('Dataset published')
         self.author_notify(id)
-
         redirect(id)
 
 
@@ -236,8 +249,10 @@ class WorkflowController(PackageController):
             h.flash_error("ERROR: DOI already assigned, dataset can't be retracted")
             redirect(id)
 
-        c.pkg_dict.update({'private': True, 'dara_edawax_review': 'true'})
+        c.pkg_dict.update({'private': True, 'dara_edawax_review': 'false'})
         tk.get_action('package_update')(context, c.pkg_dict)
+
+        # notify author about the retraction
         self.author_notify(id)
         h.flash_success('Dataset retracted')
         redirect(id)
@@ -252,9 +267,10 @@ class WorkflowController(PackageController):
         context = self._context()
         msg = tk.request.params.get('msg', '')
         c.pkg_dict = tk.get_action('package_show')(context, {'id': id})
-        #delete_cookies(c.pkg_dict)  # REVIEWER
+        delete_cookies(c.pkg_dict)
         creator_mail = model.User.get(c.pkg_dict['creator_user_id']).email
         admin_mail = model.User.get(c.user).email
+        #note = n.reauthor(id, creator_mail, admin_mail, msg, context)
         note = n.notify('reauthor', id, creator_mail, msg, context)
 
         if note:
@@ -271,7 +287,7 @@ class WorkflowController(PackageController):
         """
         Send from reviewer back to editor
         """
-        context- self._context()
+        context = self._context()
         msg = tk.request.params.get('msg', '')
         c.pkg_dict = tk.get_action('package_show')(context, {'id': id})
         creator_mail = model.User.get(c.pkg_dict['creator_user_id']).email
@@ -287,9 +303,7 @@ class WorkflowController(PackageController):
 
 
     def author_notify(self, id):
-        """
-        Send mail from the system to the author
-        """
+        """ Send mail from the system to the author """
         context = self._context()
         msg = tk.request.params.get('msg', '')
         c.pkg_dict = tk.get_action('package_show')(context, {'id': id})
@@ -308,11 +322,21 @@ class WorkflowController(PackageController):
          """
         context = self._context()
         data = tk.get_action('package_show')(context, {'id': id})
+
         citation = '{authors} ({year}): {dataset}. Version: {version}. {journal}. Dataset. {address}'
 
-        journal_map = {'GER': 'German Economic Review', 'AEQ': 'Applied Economics Quarterly', 'IREE': 'International Journal for Re-Views in Empirical Economics', 'VSWG': 'Vierteljahrschrift für Sozial- und Wirtschaftsgeschichte'}
+        journal_map = {
+                        'GER': 'German Economic Review',
+                        'AEQ': 'Applied Economics Quarterly',
+                        'IREE': 'International Journal for Re-Views in Empirical Economics',
+                        'VSWG': 'Vierteljahrschrift für Sozial- und Wirtschaftsgeschichte'
+                      }
 
-        authors = _parse_authors(data['dara_authors'])
+        if is_reviewer(data):
+            authors = "********"
+        else:
+            authors = _parse_authors(data['dara_authors'])
+
         year = data.get('dara_PublicationDate', '')
         dataset_name = data.get('title', '').encode('utf-8')
         dataset_version = data.get('dara_currentVersion', '')
@@ -352,7 +376,7 @@ class WorkflowController(PackageController):
                 # custom user agent header so that downloads from here count
                 headers = {
                     'User-Agent': 'Ckan-Download-All Agent 1.0',
-                    'From': 'f.osorio@zbw.eu'
+                    'From': 'journaldata@zbw.eu'
                 }
                 try:
                     ca_file = config.get('ckan.cert_path')
@@ -387,9 +411,6 @@ class WorkflowController(PackageController):
         redirect(id)
 
 
-
-
-
 def redirect(id):
     tk.redirect_to(controller='package', action='read', id=id)
 
@@ -417,7 +438,6 @@ def parse_bibtex_authors(authors):
         return " and ".join(temp_list)
     else:
         return temp_list[0]
-
 
 
 def parse_ris_doi(doi):
@@ -459,7 +479,17 @@ def create_ris_record(id):
     else:
         jels = ''
 
-    contents = contents.format(title=title,authors=authors,doi=doi,date=date,journal=journal,url=url,version=version,abstract=abstract,jels=jels)
+    if hide_from_reviewer(pkg_dict):
+        authors = 'AU  - ********\n'
+    contents = contents.format(title=title,
+                               authors=authors,
+                               doi=doi,
+                               date=date,
+                               journal=journal,
+                               url=url,
+                               version=version,
+                               abstract=abstract,
+                               jels=jels)
 
     s = StringIO.StringIO()
     s.write(contents)
@@ -511,6 +541,8 @@ def create_bibtex_record(id):
 
     contents = '@data{{{identifier},\nauthor = {{{authors}}},\npublisher = {{ZBW - Leibniz Informationszentrum Wirtschaft}},\ntitle = {{{title}}},\nyear = {{{date}}},\nversion = {{{version}}},\nurl = {{{url}}}{jels}{doi} \n}}'
 
+    if hide_from_reviewer(pkg_dict):
+        authors = "*********"
     contents = contents.format(identifier=identifier, authors=authors, title=title,date=date,version=version,url=url,doi=doi,jels=jels)
 
     s = StringIO.StringIO()
