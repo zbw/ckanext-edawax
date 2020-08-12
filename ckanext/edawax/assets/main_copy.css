@@ -9319,6 +9319,7 @@ iframe {
   /* IE7 inline-block hack */
   *zoom: 1;
 }
+.ie7 .masthead .header-text-logo-tagline,
 .ie7 .masthead .header-image {
   display: block;
 }

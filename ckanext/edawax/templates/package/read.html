@@ -9,8 +9,9 @@
 {% set is_admin = h.check_journal_role(pkg, 'admin') or h.check_access('sysadmin') %}
 {% set use_testserver = h.dara_use_testserver() %}
 {% resource 'dara/dara.css' %}
-{% resource 'edawax/edawax.js' %}
 {% resource 'dara/dara.js' %}
+{#% resource 'edawax/edawax.js' %#}
+{% resource 'edawax/edawax-js' %}
 
 
 {% set pkg_url = h.full_current_url() %}

@@ -25,7 +25,7 @@
           <ul class="nav nav-pills">
               <li>
                   {% block header_site_search %}
-                          <form class="section site-search simple-input" action="{% url_for controller='package', action='search' %}" method="get">
+                          <form class="section site-search simple-input" action="{% url_for 'dataset.search' %}" method="get">
                             <div class="field">
                               <label for="field-sitewide-search">{% block header_site_search_label %}{{ _('Search Datasets') }}{% endblock %}</label>
                               <input id="field-sitewide-search" type="text" name="q" placeholder="{{ _('search') }}" />
@@ -36,9 +36,9 @@
               </li>
               {% block header_site_navigation_tabs %}
               {{ h.build_nav_main(
-              ('search', _('datasets')),
-              ('organizations_index', _('journals')),
-              ('info', _('info')),
+                ('dataset.search', _('datasets')),
+                ('journals.index', _('journals')),
+                ('info.index', _('info')),
               ) }}
               {% endblock %}
           </ul>
