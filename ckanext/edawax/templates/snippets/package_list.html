@@ -45,7 +45,7 @@ Example:
             <ul class="activity">
         {% for item in h.find_reviewers_datasets(c.userobj.name) %}
             <li class="item">
-                <i class="icon reviewer-icon icon-eye-open"></i>
+                <i class="fa reviewer-icon fa-eye"></i>
                 <p class="reviewer_list"><a href="/dataset/{{ item['id'] }}">
                     {{ item['name'] }}
                 </a></p>
