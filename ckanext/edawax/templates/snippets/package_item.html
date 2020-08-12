@@ -50,8 +50,11 @@
 {% block heading_title %}
     {{ super() }}
     {# Imports for popup with download information #}
-    {% resource 'edawax/edawax_download_count_popup.js' %}
-    {% resource 'edawax/edawax_download_count_popup.css' %}
+    {#% asset 'edawax/edawax_download_count_popup.js' %}
+    {% asset 'edawax/edawax_download_count_popup.css' %#}
+
+    {% asset 'edawax/popup-js' %}
+    {% asset 'edawax/popup-css' %}
     {% set resources = h.get_resource_name(package) %}
     <span data-module="edawax_download_count_popup"
             data-module-id="{{ package.id }}"

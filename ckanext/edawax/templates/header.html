@@ -1,12 +1,17 @@
 {% ckan_extends %}
 {% block header_wrapper %}
-{% resource 'edawax/edawax.css' %}
-{% resource 'edawax/changes.css' %}
-{% resource 'edawax/font.css' %}
+{#% asset 'edawax/edawax.css' %}
+{% asset 'edawax/changes.css' %}
+{% asset 'edawax/font.css' %#}
+{% asset 'edawax/edawax-css' %}
+{% asset 'edawax/changes-css' %}
+{% asset 'edawax/font-css' %}
 
     {% block header_account %}
-        {% resource 'edawax/browser_check.js' %}
-        {% resource 'edawax/doi_error.js' %}
+        {#% asset 'edawax/browser_check.js' %}
+        {% asset 'edawax/doi_error.js' %#}
+        {% asset 'edawax/edawax-js' %}
+        {% asset 'edawax/doi-js' %}
         <span data-module="browser_check"
               id="browser_popover"></span>
 

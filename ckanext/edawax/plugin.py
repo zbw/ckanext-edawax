@@ -10,25 +10,27 @@ from ckan.logic.auth.update import package_update as ckan_pkgupdate
 from ckan.logic.auth.delete import package_delete as ckan_pkgdelete
 from ckan.logic.auth.delete import resource_delete as ckan_resourcedelete
 from ckan.logic.auth.create import resource_create as ckan_resourcecreate
-from ckan.config.middleware import TrackingMiddleware
+from ckan.config.middleware.common_middleware import TrackingMiddleware
 
 from ckan.logic.action.get import package_show, resource_show
 
 # from collections import OrderedDict
 import ckan.lib.helpers as h
-from ckan.common import c, request
+from ckan.common import c, request, config
 from toolz.functoolz import compose
 from functools import partial
-from pylons import config
 from ckanext.dara.helpers import check_journal_role
 
 import sqlalchemy as sa
-import new_invites as invites
-import urllib2
+import ckanext.edawax.new_invites as invites
+#import urllib2
 import hashlib
 
-# package_update
-#from update import package_update
+from flask import Blueprint
+import ckanext.edawax.views as views
+
+import six
+from six.moves.urllib.parse import unquote, urlparse
 
 
 
@@ -256,7 +258,7 @@ class NewTrackingMiddleware(TrackingMiddleware):
                 ])
             except KeyError as e:
                 return self.app(environ, start_response)
-            key = hashlib.md5(key).hexdigest()
+            key = hashlib.md5(six.ensure_binary(key)).hexdigest()
             if helpers.is_robot(environ['HTTP_USER_AGENT']):
                 return self.app(environ, start_response)
             # store key/data here
@@ -277,12 +279,13 @@ class EdawaxPlugin(plugins.SingletonPlugin):
     plugins.implements(plugins.ITemplateHelpers, inherit=True)
     plugins.implements(plugins.IPackageController, inherit=True)
     plugins.implements(plugins.IFacets, inherit=True)
-    plugins.implements(plugins.IRoutes, inherit=True)
+    #plugins.implements(plugins.IRoutes, inherit=True)
     # plugins.implements(plugins.interfaces.IDomainObjectModification,
     #        inherit=True)  # XXX necessary?
     plugins.implements(plugins.IAuthFunctions)
     plugins.implements(plugins.IActions)
     plugins.implements(plugins.IMiddleware, inherit=True)
+    plugins.implements(plugins.IBlueprint)
 
 
     def make_middleware(self, app, config):
@@ -293,9 +296,10 @@ class EdawaxPlugin(plugins.SingletonPlugin):
     def update_config(self, config):
         tk.add_template_directory(config, 'templates')
         tk.add_public_directory(config, 'public')
+        tk.add_public_directory(config, 'assets')
         tk.add_public_directory(config, 'jdainfo/static')
         tk.add_template_directory(config, 'jdainfo/md')
-        tk.add_resource('theme', 'edawax')
+        tk.add_resource('assets', 'edawax')
         tk.add_resource('fanstatic', 'edawax_fs')
         h.get_facet_items_dict = get_facet_items_dict
 
@@ -368,41 +372,67 @@ class EdawaxPlugin(plugins.SingletonPlugin):
                 'update_citation': helpers.update_citation
                 }
 
-    def before_map(self, map):
+    def get_blueprint(self):
+        from ckan.views import group
+
+        info = Blueprint(u'info', self.__module__, url_prefix=u"/info")
+        info.add_url_rule(u'',
+                          view_func=views.index,
+                          methods=[u'GET'])
+        info.add_url_rule(u'/<id>',
+                          view_func=views.md_page,
+                          methods=[u'GET'])
+
+        cite = Blueprint(u'citation', self.__module__, url_prefix=u"")
+        cite.add_url_rule(u'/citation/<type>/<id>',
+                            view_func=views.create_citation,
+                            methods=[u'GET', u'POST'])
+
+        actions = [
+            u'member_delete', u'history', u'followers', u'follow',
+            u'unfollow', u'admins', u'activity'
+        ]
+        journals = Blueprint(u'journals', self.__module__, url_prefix=u"/journals",
+                                url_defaults={u'group_type': u'organization',
+                                              u'is_organization': True})
+        journals.add_url_rule(u'', strict_slashes=False,
+                              view_func=group.index)
+        journals.add_url_rule(u'/new',
+                              methods=[u'GET', u'POST'],
+                              view_func=group.CreateGroupView.as_view(str(u'new')))
+        journals.add_url_rule(u'/activity/<id>',
+                              view_func=group.activity,
+                              methods=[u'GET'])
+        journals.add_url_rule(u'/about/<id>',
+                              view_func=group.about,
+                              methods=[u'GET'])
+        journals.add_url_rule(u'/<id>',
+                              view_func=group.read,
+                              methods=[u'GET'])
+        for action in actions:
+            journals.add_url_rule(
+                u'/{0}/<id>'.format(action),
+                methods=[u'GET', u'POST'],
+                view_func=getattr(group, action))
+
+        dataset = Blueprint(u'datasets', self.__module__, url_prefix=u"/dataset")
+        dataset.add_url_rule(u'/<id>/review',
+                              view_func=views.review)
+        dataset.add_url_rule(u'/<id>/publish',
+                              view_func=views.publish)
+        dataset.add_url_rule(u'/<id>/retract',
+                              view_func=views.retract)
+        dataset.add_url_rule(u'/<id>/reauthor',
+                              view_func=views.reauthor)
+        dataset.add_url_rule(u'/<id>/editor_notify',
+                              view_func=views.editor_notify)
+        dataset.add_url_rule(u'/<id>/download_all',
+                              view_func=views.download_all)
+
+
+        return [info, cite, journals, dataset]
+
         """
-        replacing all organization urls with 'journal'
-        """
-        map.connect('organizations_index', '/journals', action='index',
-                    controller='organization')
-
-        map.connect('/journals/list', action='list', controller="organization")
-        map.connect('/journals/new', action='new', controller="organization")
-
-        map.connect('/journals/{action}/{id}',
-                    requirements=dict(action='|'.join([
-                        'edit',
-                        'delete',
-                        'admins',
-                        'members',
-                        'member_new',
-                        'member_delete',
-                        'history',
-                        'bulk_process',
-                        'about']
-                    )),
-                    controller="organization")
-
-        map.connect('organization_activity', '/journals/activity/{id}',
-                    action='activity', ckan_icon='time',
-                    controller="organization")
-
-        map.connect('organization_about', '/journals/about/{id}',
-                    action='about', ckan_icon='info-sign',
-                    controller="organization")
-
-        map.connect('organization_read', '/journals/{id}', action='read',
-                    ckan_icon='sitemap', controller="organization")
-
         map.connect('user_dashboard_organizations', '/dashboard/journals',
                     action='dashboard_organizations', ckan_icon='building',
                     controller="user")
@@ -415,56 +445,12 @@ class EdawaxPlugin(plugins.SingletonPlugin):
         map.redirect('/organization/{url:.*}', '/journals/{url}')
         map.redirect('/dashboard/organizations', '/dashboard/journals')
 
-        # review mail to editor
-        map.connect('/dataset/{id}/review',
-                    controller="ckanext.edawax.controller:WorkflowController",
-                    action="review",)
-
-        # publish dataset
-        map.connect('/dataset/{id}/publish',
-                    controller="ckanext.edawax.controller:WorkflowController",
-                    action="publish",)
-
-        # retract dataset
-        map.connect('/dataset/{id}/retract',
-                    controller="ckanext.edawax.controller:WorkflowController",
-                    action="retract",)
-
-        # reauthor dataset
-        map.connect('/dataset/{id}/reauthor',
-                    controller="ckanext.edawax.controller:WorkflowController",
-                    action="reauthor",)
-
-        # notify editor dataset review is complete
-        map.connect('/dataset/{id}/editor_notify',
-                    controller="ckanext.edawax.controller:WorkflowController",
-                    action="editor_notify",)
-
-        # download all resources
-        map.connect('/dataset/{id}/download_all',
-                    controller="ckanext.edawax.controller:WorkflowController",
-                    action="download_all", )
-
-        # infopages
-        controller = 'ckanext.edawax.controller:InfoController'
-        map.connect('info', '/info',
-                    action="index",
-                    controller=controller,)
-        map.connect('/info/{id}',
-                    action="md_page",
-                    controller=controller,)
-
-        # export citations
-        map.connect('/citation/{type}/{id}',
-                    action="create_citation",
-                    controller=controller,)
-
         # resource_delete
         #map.connect('/dataset/{id}/resource_delete/{resource_id}',
         #            controller="ckanext.edawax.controller:WorkflowController",
         #            action="resource_delete")
 
-        return map
+        """
 
     def organization_facets(self, facets_dict, organization_type,package_type):
         # for some reason CKAN does not accept a new OrderedDict here (does

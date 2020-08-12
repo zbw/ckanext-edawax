@@ -1,0 +1,71 @@
+main-css:
+  contents:
+    - main_copy.css
+  output: edawax/%(version)s_main.css
+  filters: cssrewrite
+
+changes-css:
+  contents:
+    - changes.css
+  output: edawax/%(version)s_changes.css
+  filters: cssrewrite
+
+custom-css:
+  contents:
+    - custom.css
+  output: edawax/%(version)s_custom.css
+  filters: cssrewrite
+
+popup-css:
+  contents:
+    - edawax_download_count_popup.css
+  output: edawax/%(version)s_popup.css
+  filters: cssrewrite
+
+edawax-css:
+  contents:
+    - edawax.css
+  output: edawax/%(version)s_edawax.css
+  filters: cssrewrite
+
+font-css:
+  contents:
+    - font.css
+  output: edawax/%(version)s_font.css
+  filters: cssrewrite
+
+browser-js:
+  contents:
+    - browser_check.js
+  output: edawax/%(version)s_browser.js
+  filters: rjsmin
+
+confirm-js:
+  contents:
+    - confirm-action.js
+  output: edawax/%(version)s_confirm.js
+  filters: rjsmin
+
+doi-js:
+  contents:
+    - doi_error.js
+  output: edawax/%(version)s_doi.js
+  filters: rjsmin
+
+popup-js:
+  contents:
+    - edawax_download_count_popup.js
+  output: edawax/%(version)s_popup.js
+  filters: rjsmin
+
+edawax-js:
+  contents:
+    - edawax.js
+  output: edawax/%(version)s_edawax.js
+  filters: rjsmin
+
+side-js:
+  contents:
+    - side.js
+  output: edawax/%(version)s_side.js
+  filters: rjsmin

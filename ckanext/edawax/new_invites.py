@@ -7,7 +7,7 @@ Role of the new user gets passed down to functions so that a decision can
 be made about which template to use of the email.
 """
 import ckan, random
-from pylons import config
+from ckan.common import config
 import ckan.lib.mailer as mailer
 import ckan.logic.action.create as logic
 from ckan.lib.base import render_jinja2
@@ -18,7 +18,7 @@ import os
 import smtplib
 import logging
 from time import time
-from email import Utils
+from email import utils
 from ckan.common import _, g, request
 from email.header import Header
 import paste.deploy.converters
@@ -140,7 +140,7 @@ def _mail_recipient(recipient_name, recipient_email,
     msg['From'] = _("%s <%s>") % (sender_name, mail_from)
     recipient = u"%s <%s>" % (recipient_name, recipient_email)
     msg['To'] = Header(recipient, 'utf-8')
-    msg['Date'] = Utils.formatdate(time())
+    msg['Date'] = utils.formatdate(time())
     msg['X-Mailer'] = "CKAN %s" % ckan.__version__
 
     msg.attach(msg_body)
@@ -204,7 +204,7 @@ def _mail_recipient(recipient_name, recipient_email,
         smtp_connection.sendmail(mail_from, [recipient_email], msg.as_string())
         log.info("Sent email to {0}".format(recipient_email))
 
-    except smtplib.SMTPException, e:
+    except smtplib.SMTPException as e:
         msg = '%r' % e
         log.exception(msg)
         raise MailerException(msg)

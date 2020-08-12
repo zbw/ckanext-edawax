@@ -234,6 +234,7 @@ div.span9 div.module-content,
     margin-left: 5px;
 }
 
+hgroup.header-text-logo-tagline,
 hgroup.header-image {
     position: relative;
     height: 35px;
@@ -244,6 +245,7 @@ hgroup.header-image {
     margin-bottom: 5px;
 }
 
+.header-text-logo-tagline img,
 .header-image img {
     position: absolute;
     margin:auto;
@@ -1489,6 +1491,7 @@ h1.registration + form {
         line-height: 35px
     }
 
+    .header-text-logo-tagline + .container,
     .header-image + .container{
         margin-top: 32px;
     }
@@ -1603,6 +1606,7 @@ h1.registration + form {
     #zbwfooter > ul#sitelinks > li {
         width: unset;
     }
+    .header-text-logo-tagline + .container,
     .header-image + .container{
         margin-top: 32px;
     }
