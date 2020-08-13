@@ -50,8 +50,15 @@ def format_resource_items_custom(items):
             out.append(( "9 Temporal Coverage (controlled)", "{} to {}".format(item[1], end) ))
         elif item[0] == u'dara_authors':
             if item[1] in ["[u'', u'', u'', u'', u'']", "['']"]:
-                package = tk.get_action('package_show')(None, {'id': request.url.split('/')[4]})
-                authors = ast.literal_eval(package['dara_authors'].replace("null", '""'))
+                print('#######################################################################################')
+                print('#######################################################################################')
+                print('#######################################################################################')
+                package = tk.get_action('package_show')({'use_cache': False}, {'id': request.url.split('/')[4]})
+                print(package.keys())
+                print(package['extras'])
+                items = [item for item in package['extras']]
+
+                authors = ast.literal_eval(package['extras_dara_authors'].replace("null", '""'))
                 a = parse_authors(authors)
                 out.append(("3 Authors", a))
             else:
@@ -530,7 +537,7 @@ def res_abs_url(res):
 
 def pkg_abs_url(pkg):
     site_url = config.get('ckan.site_url')
-    pkg_url = tk.url_for(controller='package', action='read', id=pkg['name'])
+    pkg_url = tk.url_for('dataset.read', id=pkg['name'])
     return site_url + pkg_url
 
 
