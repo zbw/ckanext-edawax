@@ -1,9 +1,8 @@
 # -*- coding: utf-8 -*-
 import ckan.plugins.toolkit as tk
 import ckan.model as model
-from ckan.common import c, response, _, request
+from ckan.common import c, _, request, config  # deleted `response`
 from ckanext.dara.helpers import check_journal_role
-from pylons import config
 from toolz.itertoolz import unique
 from collections import namedtuple
 import os
@@ -11,13 +10,12 @@ from ckan.lib import helpers as h
 # from functools import wraps
 import datetime
 import collections
-from ckan.lib import cli
 import ast
 import requests
 
 import re
 import ckanext.edawax.robot_list as _list
-from urlparse import urlparse
+from urllib.parse import urlparse
 
 from ckanext.dara.geography_coverage import geo
 

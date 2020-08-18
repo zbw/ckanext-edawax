@@ -10,21 +10,19 @@ from ckan.logic.auth.update import package_update as ckan_pkgupdate
 from ckan.logic.auth.delete import package_delete as ckan_pkgdelete
 from ckan.logic.auth.delete import resource_delete as ckan_resourcedelete
 from ckan.logic.auth.create import resource_create as ckan_resourcecreate
-from ckan.config.middleware import TrackingMiddleware
+from ckan.config.middleware.common_middleware import TrackingMiddleware
 
 from ckan.logic.action.get import package_show, resource_show
 
 # from collections import OrderedDict
 import ckan.lib.helpers as h
-from ckan.common import c, request
+from ckan.common import c, request, config
 from toolz.functoolz import compose
 from functools import partial
-from pylons import config
 from ckanext.dara.helpers import check_journal_role
 
 import sqlalchemy as sa
-import new_invites as invites
-import urllib2
+import ckanext.edawax.new_invites as invites
 import hashlib
 
 # package_update
