@@ -24,23 +24,23 @@
   {% if h.in_review(package) in ['true', 'editor', 'reviewers'] %}
       {% if h.is_reviewer(package) %}
         <span class="dataset-private label label-reviewer">
-          <i class="icon-eye-open"></i>
+          <i class="fa fa-eye"></i>
           {{ 'My Review' }}
         </span><br>
       {% else %}
         <span class="dataset-private label label-reviewer">
-          <i class="icon-lock"></i>
+          <i class="fa fa-lock"></i>
           {{ 'Review' }}
         </span><br>
       {% endif %}
   {% elif h.in_review(package) == 'reauthor' %}
       <span class="dataset-private label label-reauthor">
-        <i class="icon-lock"></i>
+        <i class="fa fa-lock"></i>
         {{ 'Re-Author' }}
       </span><br>
   {% elif package.private %}
         <span class="dataset-private label label-inverse">
-        <i class="icon-lock"></i>
+        <i class="fa fa-lock"></i>
         {{ _('Private') }}
         </span><br>
   {% endif %}
@@ -50,8 +50,11 @@
 {% block heading_title %}
     {{ super() }}
     {# Imports for popup with download information #}
-    {% resource 'edawax/edawax_download_count_popup.js' %}
-    {% resource 'edawax/edawax_download_count_popup.css' %}
+    {#% asset 'edawax/edawax_download_count_popup.js' %}
+    {% asset 'edawax/edawax_download_count_popup.css' %#}
+
+    {% asset 'edawax/popup-js' %}
+    {% asset 'edawax/popup-css' %}
     {% set resources = h.get_resource_name(package) %}
     <span data-module="edawax_download_count_popup"
             data-module-id="{{ package.id }}"
@@ -61,6 +64,6 @@
             data-module-num_resources="{{ package.num_resources }}"
             class="ib info_popover"
             id="{{ package.id }}_popup">
-        <i class="icon-info-sign"></i>
+        <i class="fa fa-info-circle"></i>
     </span>
 {% endblock %}

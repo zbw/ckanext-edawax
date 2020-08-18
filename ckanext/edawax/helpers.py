@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 import ckan.plugins.toolkit as tk
 import ckan.model as model
-from ckan.common import c, _, request, config  # deleted `response`
+from ckan.common import c, g, streaming_response, _, request, config  ## streaming_response was response might need some work
 from ckanext.dara.helpers import check_journal_role
 from toolz.itertoolz import unique
 from collections import namedtuple
@@ -246,7 +246,7 @@ def is_reviewer(pkg):
         emails.append(email)
 
     try:
-        user = c.userobj.name
+        user = g.userobj.name
     except AttributeError as e:
         user = None
         return False
@@ -268,7 +268,7 @@ def count_packages(packages):
 
 
 def normal_height():
-    path = request.upath_info
+    path = request.path
     pages = ['/', '/user/login', '/user/logged_out_redirect', '/user/reset']
     if path in pages:
         return False
@@ -300,20 +300,22 @@ def is_edit_page():
 
 
 def is_admin(pkg=None):
-    admins = c.group_admins
+    if g.userobj is None:
+        return False
 
     if pkg:
         org_id = pkg['owner_org']
         admins = get_org_admin(org_id)
         try:
-            user_id = c.userobj.name
+            user_id = g.userobj.name
         except Exception:
             return False
         if user_id in admins:
             return True
 
+    #admins = g.group_admins
     try:
-        user_id = c.userobj.id
+        user_id = g.userobj.id
         if user_id in admins:
             return True
     except AttributeError as e:
@@ -333,7 +335,7 @@ def has_doi(pkg):
 
 def has_hammer():
     try:
-        return c.is_sysadmin == True or c.userobj.sysadmin == True
+        return g.is_sysadmin == True or g.userobj.sysadmin == True
     except AttributeError as e:
         return False
 
@@ -435,13 +437,14 @@ def transform_to_map(data):
 def get_user_id():
     def context():
         return {'model': model, 'session': model.Session,
-                'user': c.user or c.author, 'for_view': True,
-                'auth_user_obj': c.userobj}
-    user = tk.c.user
+                'user': g.user or g.author, 'for_view': True,
+                'auth_user_obj': g.userobj}
+    #user = tk.c.user
+    user = g.user
     if not user:
         return
     converter = tk.get_converter('convert_user_name_or_id_to_id')
-    return converter(tk.c.user, context())
+    return converter(user, context())
 
 
 def in_review(pkg):
@@ -556,9 +559,9 @@ def journal_volume_sorting(packages):
 
 
 def render_infopage(page):
-    template_paths = config['pylons.app_globals'].template_paths
+    template_paths = config['computed_template_paths']
     for path in template_paths:
-        if os.path.exists(os.path.join(path, page.encode('utf-8'))):
+        if os.path.exists(os.path.join(path, page)):
             return h.render_markdown(tk.render(page), allow_html=True)
     tk.abort(404, "Markdown file not found")
 
@@ -786,8 +789,8 @@ def update_citation(data):
     new_citation = build_citation_crossref(data['dara_Publication_PID'])
     correct_citation = correct(new_citation)
     context = {'model': model, 'session': model.Session,
-                'user': c.user or c.author, 'for_view': True,
-                'auth_user_obj': c.userobj, 'ignore_auth': True}
+                'user': g.user or g.author, 'for_view': True,
+                'auth_user_obj': g.userobj, 'ignore_auth': True}
     data = {'id': data['id'], 'dara_related_citation': correct_citation}
     try:
         if correct_citation != '':

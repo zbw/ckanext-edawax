@@ -1,12 +1,17 @@
 {% ckan_extends %}
 {% block header_wrapper %}
-{% resource 'edawax/edawax.css' %}
-{% resource 'edawax/changes.css' %}
-{% resource 'edawax/font.css' %}
+{#% asset 'edawax/edawax.css' %}
+{% asset 'edawax/changes.css' %}
+{% asset 'edawax/font.css' %#}
+{% asset 'edawax/edawax-css' %}
+{% asset 'edawax/changes-css' %}
+{% asset 'edawax/font-css' %}
 
     {% block header_account %}
-        {% resource 'edawax/browser_check.js' %}
-        {% resource 'edawax/doi_error.js' %}
+        {#% asset 'edawax/browser_check.js' %}
+        {% asset 'edawax/doi_error.js' %#}
+        {% asset 'edawax/edawax-js' %}
+        {% asset 'edawax/doi-js' %}
         <span data-module="browser_check"
               id="browser_popover"></span>
 
@@ -66,7 +71,7 @@
                             <div class="field">
                             <label for="field-sitewide-search">{% block header_site_search_label %}{{ _('Search Datasets') }}{% endblock %}</label>
                             <input id="field-sitewide-search" type="text" name="q" placeholder="{{ _('search') }}" />
-                            <button class="btn-search" type="submit"><i class="icon-search"></i></button>
+                            <button class="btn-search" type="submit"><i class="fa fa-search"></i></button>
                             </div>
                         </form>
                 {% endblock %}

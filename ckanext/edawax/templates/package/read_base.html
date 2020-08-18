@@ -10,22 +10,22 @@
           class="btn btn-reviewer"
           href="/dataset/edit/{{ pkg.id }}#dataset_reviewers">
         {%- if h.has_reviewers(pkg) -%}
-          <i class="icon-refresh"></i>
+          <i class="fa fa-refresh"></i>
           Change Reviewer</a>
         {%- else -%}
-          <i class="icon-plus"></i>
+          <i class="fa fa-plus-square"></i>
           Add Reviewer</a>
         {%- endif -%}
     {% else %}
       <a title="Update reviewer"
           class="btn btn-reviewer"
           href="/dataset/{{pkg.id}}/review">
-        <i class="icon-envelope"></i>Re-Send to Reviewer</a>
+        <i class="fa fa-envelope"></i>Re-Send to Reviewer</a>
     {% endif %}
 
   {% endif %}
 
-  {% resource 'edawax_fs/edawax-confirm.js' %}
+  {% asset 'econfirm-js' %}
     {% if h.show_review_button(pkg) %}
         {% set confirm = h.dump_json({'content': '
         <p>This stores your dataset and
@@ -56,7 +56,7 @@
           {% if h.has_reviewers(pkg) %}
           <a title="Sends notification reviewers"
                 class="btn btn-reviewer" href="/dataset/{{pkg.id}}/review">
-             <i class="icon-envelope"></i>
+             <i class="fa fa-envelope"></i>
             {%- if pkg['dara_edawax_review'] == 'back' -%}
               Renotify Reviewer
             {%- else -%}
@@ -71,7 +71,7 @@
             <a title="Sends notification reviewers"
                 class="btn btn-reviewer"
                 href="/dataset/edit/{{ pkg.id }}#dataset_reviewers">
-              <i class="icon-plus"></i>Add Reviewer</a>
+              <i class="fa fa-plus-square"></i>Add Reviewer</a>
             {#% snippet 'package/snippets/to_reviewers.html', pkg=pkg %#}
           {% endif %}
         {% else %}
@@ -79,20 +79,20 @@
                 class="btn btn-reviewer" href="/dataset/{{pkg.id}}/review"
                             data-module="edawax-confirm"
                             data-module-i18n="{{ confirm }}">
-             <i class="icon-envelope"></i>Send to Review
+             <i class="fa fa-envelope"></i>Send to Review
             </a>
         {% endif %}
     {% endif %}
 
     {% if h.show_reauthor_button(pkg) %}
         <a class="btn btn-warning" title="Send dataset back to author"  data-toggle="modal" data-target="#reauthor_confirm">
-            <i class="icon-reply"></i>Back to Author</a>
+            <i class="fa fa-reply"></i>Back to Author</a>
         {% snippet 'package/snippets/reauthor_confirmation.html', pkg=pkg %}
     {% endif %}
 
     {% if h.show_notify_editor_button(pkg) %}
         <a class="btn btn-reviewer" title="Send notification to editor"  data-toggle="modal" data-target="#editor_notify">
-            <i class="icon-reply backwards"></i>Submit Review</a>
+            <i class="fa fa-reply backwards"></i>Submit Review</a>
         {% snippet 'package/snippets/editor_notification.html', pkg=pkg %}
     {% endif %}
 
@@ -100,18 +100,18 @@
       {% set pid = pkg['dara_Publication_PID'] %}
       {% if pid %}
         <a class="btn btn-success" title="Make dataset public" href="/dataset/{{ pkg.id }}/publish">
-        <i class="icon-ok"></i>Publish</a>
+        <i class="fa fa-check"></i>Publish</a>
       {% else %}
         <a title="Make dataset public."
                 class="btn btn-success" data-toggle="modal" data-target="#related_notify">
-             <i class="icon-ok"></i>Publish</a>
+             <i class="fa fa-check"></i>Publish</a>
         {% snippet 'package/snippets/related_notification.html', pkg=pkg %}
       {% endif %}
     {% endif %}
 
     {% if h.show_retract_button(pkg) %}
     <a class="btn btn-danger" title="make dataset private" data-toggle="modal" data-target="#retract">
-        <i class="icon-undo"></i>Retract</a>
+        <i class="fa fa-undo"></i>Retract</a>
     {% snippet 'package/snippets/redact_confirmation.html', pkg=pkg %}
     {% endif %}
 

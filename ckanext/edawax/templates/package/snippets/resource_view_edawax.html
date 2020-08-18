@@ -8,7 +8,7 @@
      data-module="resource-view-embed"
      data-module-id="{{ resource_view['id'] }}"
      data-module-url="{{ h.url('resource_view', id=package['name'], resource_id=resource['id'], view_id=resource_view['id'], qualified=True) }}">
-    <i class="icon-code"></i>
+    <i class="fa fa-code"></i>
     {{ _("Embed") }}
   </a>
   <p class="desc">{{ resource_view['description'] }}</p>
@@ -21,13 +21,13 @@
     {% else %}
       <div class="data-viewer-error js-hide">
         <p class="text-error">
-          <i class="icon-info-sign"></i>
+          <i class="fa fa-info-circle"></i>
           {{ _('This file cannot be previewed. Please download the file instead.') }}
         </p>
         <p id="data-view-error" class="collapse"></p>
         <p>
           <a href="{{ res['url'] }}" class="btn btn-large resource-url-analytics" target="_blank">
-            <i class="icon-large icon-download"></i>
+            <i class="fa fa-download"></i>
             {{ _('Download file') }}
           </a>
         </p>

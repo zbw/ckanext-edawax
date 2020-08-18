@@ -9,8 +9,9 @@
 {% set is_admin = h.check_journal_role(pkg, 'admin') or h.check_access('sysadmin') %}
 {% set use_testserver = h.dara_use_testserver() %}
 {% resource 'dara/dara.css' %}
-{% resource 'edawax/edawax.js' %}
 {% resource 'dara/dara.js' %}
+{#% resource 'edawax/edawax.js' %#}
+{% resource 'edawax/edawax-js' %}
 
 
 {% set pkg_url = h.full_current_url() %}
@@ -114,21 +115,21 @@
   {% if h.in_review(pkg) in ['true', 'editor', 'reviewers'] %}
     {% if h.is_reviewer(pkg) %}
         <span class="dataset-private label pull-right label-reviewer">
-          <i class="icon-eye-open"></i>
+          <i class="fa fa-eye"></i>
           {{ 'My Review' }}
         </span>
     {% else %}
           {% if pkg['dara_edawax_review'] != 'editor' %}
             <span class="dataset-private label pull-right label-reviewer">
-              <i class="icon-lock"></i>
+              <i class="fa fa-lock"></i>
             {{ 'Review' }}
           {% elif h.is_reviewer(pkg) or h.is_author(pkg) %}
             <span class="dataset-private label pull-right label-reviewer">
-              <i class="icon-lock"></i>
+              <i class="fa fa-lock"></i>
             {{ 'In Review' }}
           {% else %}
           <span class="dataset-private label pull-right label-reviewer">
-            <i class="icon-lock"></i>
+            <i class="fa fa-lock"></i>
             {% if h.has_reviewers(pkg) %}
               {{ 'Not Sent to Reviewer' }}
             {% else %}
@@ -142,7 +143,7 @@
   {% if h.in_review(pkg) == 'reauthor' %}
       <span class="dataset-private label pull-right label-reauthor"
           title="Dataset has been resend to author">
-        <i class="icon-lock"></i>
+        <i class="fa fa-lock"></i>
         {{ 'Re-Author' }}
       </span>
 
