@@ -117,7 +117,7 @@
 
     {#% if h.check_access('package_update', {'id':pkg.id }) %#}
     {% if h.show_manage_button(pkg) %}
-      {% link_for _('Manage'), controller='package', action='edit', id=pkg.name, class_='btn', icon='wrench' %}
+      {% link_for _('Manage'), named_route='dataset.edit', id=pkg.name, class_='btn', icon='wrench' %}
     {% endif %}
 {% endblock %}
 
