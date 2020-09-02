@@ -16,11 +16,9 @@
 {% endblock %}
 
 {% block secondary_content %}
-{#% asset 'edawax/edawax.js' %#}
 {% asset 'edawax/edawax-js' %}
 {% set man_eng = h.get_manual_file()[0] %}
 {% set man_deu = h.get_manual_file()[1] %}
-{# could be used for infopages navigation #}
 <div class="module module-narrow module-shallow info-panel">
     <div class="module-content">
         <ul class="nav nav-tabs nav-stacked infonav">
@@ -52,6 +50,5 @@
         </ul>
     </div>
  </div>
-
 
 {% endblock %}

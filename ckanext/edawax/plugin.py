@@ -23,11 +23,11 @@ from ckanext.dara.helpers import check_journal_role
 
 import sqlalchemy as sa
 import ckanext.edawax.new_invites as invites
-#import urllib2
 import hashlib
 
 from flask import Blueprint
 import ckanext.edawax.views as views
+import ckan.views.dashboard as dash
 
 import six
 from six.moves.urllib.parse import unquote, urlparse
@@ -409,6 +409,18 @@ class EdawaxPlugin(plugins.SingletonPlugin):
         journals.add_url_rule(u'/<id>',
                               view_func=group.read,
                               methods=[u'GET'])
+        journals.add_url_rule(u'/edit/<id>',
+                              view_func=group.EditGroupView.as_view(str(u'edit')),
+                              methods=[u'GET'])
+        journals.add_url_rule(u'/bulk_process/<id>',
+                              view_func=group.BulkProcessView.as_view(str(u'bulk_process')),
+                              methods=[u'GET'])
+        journals.add_url_rule(u'/members/<id>',
+                              view_func=group.members,
+                              methods=[u'GET'])
+        journals.add_url_rule(u'/member_new/<id>',
+                              view_func=group.MembersGroupView.as_view(str(u'member_new')),
+                              methods=[u'GET'])
         for action in actions:
             journals.add_url_rule(
                 u'/{0}/<id>'.format(action),
@@ -429,34 +441,17 @@ class EdawaxPlugin(plugins.SingletonPlugin):
         dataset.add_url_rule(u'/<id>/download_all',
                               view_func=views.download_all)
 
+        dashboard = Blueprint(u'dashboards', self.__module__, url_prefix=u"/dashboard")
+        dashboard.add_url_rule(u'/journals',
+                                 view_func=dash.organizations)
 
-        return [info, cite, journals, dataset]
 
-        """
-        map.connect('user_dashboard_organizations', '/dashboard/journals',
-                    action='dashboard_organizations', ckan_icon='building',
-                    controller="user")
+        return [info, cite, journals, dataset, dashboard]
 
-        # TODO redirects are just temporary, since there are still some routes
-        # and links with 'organizations' in ckan. It even might be easier, to
-        # simply redirect any organization url and leave the above maps out...
-        map.redirect('/about', '/info')
-        map.redirect('/organization', '/journals')
-        map.redirect('/organization/{url:.*}', '/journals/{url}')
-        map.redirect('/dashboard/organizations', '/dashboard/journals')
-
-        # resource_delete
-        #map.connect('/dataset/{id}/resource_delete/{resource_id}',
-        #            controller="ckanext.edawax.controller:WorkflowController",
-        #            action="resource_delete")
-
-        """
-
-    def organization_facets(self, facets_dict, organization_type,package_type):
+    def group_facets(self, facets_dict, organization_type, package_type):
         # for some reason CKAN does not accept a new OrderedDict here (does
         # not happen with datasets facets!). So we have to modify the original
         # facets_dict
-
         KEY_VOLUME = 'dara_Publication_Volume'
         KEY_ISSUES = 'dara_Publication_Issue'
 

@@ -117,16 +117,14 @@
 
     {#% if h.check_access('package_update', {'id':pkg.id }) %#}
     {% if h.show_manage_button(pkg) %}
-      {% link_for _('Manage'), controller='package', action='edit', id=pkg.name, class_='btn', icon='wrench' %}
+      {% link_for _('Manage'), named_route='dataset.edit', id=pkg.name, class_='btn', icon='wrench' %}
     {% endif %}
 {% endblock %}
 
 
 {% block content_primary_nav %}
-  {{ h.build_nav_icon('dataset.read', _('Dataset'), id=pkg.name) }}
-  {#  {{ h.build_nav_icon('dataset_groups', _('Groups'), id=pkg.name) }} #}
-  {{ h.build_nav_icon('dataset.activity', _('Activity Stream'), id=pkg.name) }}
-  {#{ h.build_nav_icon('related_list', _('Related'), id=pkg.name) }#}
+  {{ h.build_nav_icon('dataset_read', _('Dataset'), id=pkg.name, icon='sitemap') }}
+  {{ h.build_nav_icon('dataset_activity', _('Activity Stream'), id=pkg.name,icon='clock-o') }}
 {% endblock %}
 
 {% block package_social %}

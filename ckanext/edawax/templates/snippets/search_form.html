@@ -42,9 +42,9 @@
         {% block page_primary_action %}
           {#% if h.check_access('package_create', {'owner_org': group_dict.id}) and 'dataset' not in request.url %#}
           {% if h.check_access('package_create') and 'dataset' not in request.url %}
-          {% set group = group_dict.id or None %}
+          {% set group = g.group_dict.id or None %}
             <div class="page_primary_action add_data_button">
-              {% link_for _('Add Dataset'), named_route='dataset.new', group=group, class_='btn btn-primary split', icon='plus-quare' %}
+              {% link_for _('Add Dataset'), named_route='dataset.new', group=group, class_='btn btn-primary split', icon='plus-square' %}
               <a class="show-filters btn">{{ _('Filter Results') }}</a>
             </div>
           {% endif %}

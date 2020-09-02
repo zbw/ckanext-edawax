@@ -118,7 +118,12 @@
                         </ul>
                       </header>
                     {% endblock %}
-                    <div class="module-content">
+
+                    {% if request.endpoint in ['admin.config', 'journals.activity'] %}
+                      <div class="module-content zbw-box box-bottom">
+                    {% else %}
+                      <div class="module-content">
+                    {% endif %}
                       {% if self.page_primary_action() | trim and 'dataset/resources' in request.url %}
                         <div class="page_primary_action zbw-box box-bottom">
                           {% block page_primary_action %}{% endblock %}

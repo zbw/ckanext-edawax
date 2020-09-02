@@ -1197,138 +1197,138 @@ input[type="radio"][readonly],
 input[type="checkbox"][readonly] {
   background-color: transparent;
 }
-.control-group.warning .control-label,
-.control-group.warning .help-block,
-.control-group.warning .help-inline {
+.form-group.warning .control-label,
+.form-group.warning .help-block,
+.form-group.warning .help-inline {
   color: #c09853;
 }
-.control-group.warning .checkbox,
-.control-group.warning .radio,
-.control-group.warning input,
-.control-group.warning select,
-.control-group.warning textarea {
+.form-group.warning .checkbox,
+.form-group.warning .radio,
+.form-group.warning input,
+.form-group.warning select,
+.form-group.warning textarea {
   color: #c09853;
 }
-.control-group.warning input,
-.control-group.warning select,
-.control-group.warning textarea {
+.form-group.warning input,
+.form-group.warning select,
+.form-group.warning textarea {
   border-color: #c09853;
   -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
   -moz-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
   box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
 }
-.control-group.warning input:focus,
-.control-group.warning select:focus,
-.control-group.warning textarea:focus {
+.form-group.warning input:focus,
+.form-group.warning select:focus,
+.form-group.warning textarea:focus {
   border-color: #a47e3c;
   -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 6px #dbc59e;
   -moz-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 6px #dbc59e;
   box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 6px #dbc59e;
 }
-.control-group.warning .input-prepend .add-on,
-.control-group.warning .input-append .add-on {
+.form-group.warning .input-prepend .add-on,
+.form-group.warning .input-append .add-on {
   color: #c09853;
   background-color: #fcf8e3;
   border-color: #c09853;
 }
-.control-group.error .control-label,
-.control-group.error .help-block,
-.control-group.error .help-inline {
+.form-group.error .control-label,
+.form-group.error .help-block,
+.form-group.error .help-inline {
   color: #b55457;
 }
-.control-group.error .checkbox,
-.control-group.error .radio,
-.control-group.error input,
-.control-group.error select,
-.control-group.error textarea {
+.form-group.error .checkbox,
+.form-group.error .radio,
+.form-group.error input,
+.form-group.error select,
+.form-group.error textarea {
   color: #b55457;
 }
-.control-group.error input,
-.control-group.error select,
-.control-group.error textarea {
+.form-group.error input,
+.form-group.error select,
+.form-group.error textarea {
   border-color: #b55457;
   -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
   -moz-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
   box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
 }
-.control-group.error input:focus,
-.control-group.error select:focus,
-.control-group.error textarea:focus {
+.form-group.error input:focus,
+.form-group.error select:focus,
+.form-group.error textarea:focus {
   border-color: #954143;
   -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 6px #d49b9d;
   -moz-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 6px #d49b9d;
   box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 6px #d49b9d;
 }
-.control-group.error .input-prepend .add-on,
-.control-group.error .input-append .add-on {
+.form-group.error .input-prepend .add-on,
+.form-group.error .input-append .add-on {
   color: #b55457;
   background-color: #f8f0f0;
   border-color: #b55457;
 }
-.control-group.success .control-label,
-.control-group.success .help-block,
-.control-group.success .help-inline {
+.form-group.success .control-label,
+.form-group.success .help-block,
+.form-group.success .help-inline {
   color: #468847;
 }
-.control-group.success .checkbox,
-.control-group.success .radio,
-.control-group.success input,
-.control-group.success select,
-.control-group.success textarea {
+.form-group.success .checkbox,
+.form-group.success .radio,
+.form-group.success input,
+.form-group.success select,
+.form-group.success textarea {
   color: #468847;
 }
-.control-group.success input,
-.control-group.success select,
-.control-group.success textarea {
+.form-group.success input,
+.form-group.success select,
+.form-group.success textarea {
   border-color: #468847;
   -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
   -moz-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
   box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
 }
-.control-group.success input:focus,
-.control-group.success select:focus,
-.control-group.success textarea:focus {
+.form-group.success input:focus,
+.form-group.success select:focus,
+.form-group.success textarea:focus {
   border-color: #356635;
   -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 6px #7aba7b;
   -moz-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 6px #7aba7b;
   box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 6px #7aba7b;
 }
-.control-group.success .input-prepend .add-on,
-.control-group.success .input-append .add-on {
+.form-group.success .input-prepend .add-on,
+.form-group.success .input-append .add-on {
   color: #468847;
   background-color: #dff0d8;
   border-color: #468847;
 }
-.control-group.info .control-label,
-.control-group.info .help-block,
-.control-group.info .help-inline {
+.form-group.info .control-label,
+.form-group.info .help-block,
+.form-group.info .help-inline {
   color: #3a87ad;
 }
-.control-group.info .checkbox,
-.control-group.info .radio,
-.control-group.info input,
-.control-group.info select,
-.control-group.info textarea {
+.form-group.info .checkbox,
+.form-group.info .radio,
+.form-group.info input,
+.form-group.info select,
+.form-group.info textarea {
   color: #3a87ad;
 }
-.control-group.info input,
-.control-group.info select,
-.control-group.info textarea {
+.form-group.info input,
+.form-group.info select,
+.form-group.info textarea {
   border-color: #3a87ad;
   -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
   -moz-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
   box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
 }
-.control-group.info input:focus,
-.control-group.info select:focus,
-.control-group.info textarea:focus {
+.form-group.info input:focus,
+.form-group.info select:focus,
+.form-group.info textarea:focus {
   border-color: #2d6987;
   -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 6px #7ab5d3;
   -moz-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 6px #7ab5d3;
   box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 6px #7ab5d3;
 }
-.control-group.info .input-prepend .add-on,
-.control-group.info .input-append .add-on {
+.form-group.info .input-prepend .add-on,
+.form-group.info .input-append .add-on {
   color: #3a87ad;
   background-color: #d9edf7;
   border-color: #3a87ad;
@@ -1558,25 +1558,25 @@ input.search-query {
 }
 .form-search input,
 .form-inline input,
-.form-horizontal input,
+.dataset-form input,
 .form-search textarea,
 .form-inline textarea,
-.form-horizontal textarea,
+.dataset-form textarea,
 .form-search select,
 .form-inline select,
-.form-horizontal select,
+.dataset-form select,
 .form-search .help-inline,
 .form-inline .help-inline,
-.form-horizontal .help-inline,
+.dataset-form .help-inline,
 .form-search .uneditable-input,
 .form-inline .uneditable-input,
-.form-horizontal .uneditable-input,
+.dataset-form .uneditable-input,
 .form-search .input-prepend,
 .form-inline .input-prepend,
-.form-horizontal .input-prepend,
+.dataset-form .input-prepend,
 .form-search .input-append,
 .form-inline .input-append,
-.form-horizontal .input-append {
+.dataset-form .input-append {
   display: inline-block;
   *display: inline;
   /* IE7 inline-block hack */
@@ -1586,7 +1586,7 @@ input.search-query {
 }
 .form-search .hide,
 .form-inline .hide,
-.form-horizontal .hide {
+.dataset-form .hide {
   display: none;
 }
 .form-search label,
@@ -1617,52 +1617,52 @@ input.search-query {
   margin-right: 3px;
   margin-left: 0;
 }
-.control-group {
+.form-group {
   margin-bottom: 10px;
 }
-legend + .control-group {
+legend + .form-group {
   margin-top: 20px;
   -webkit-margin-top-collapse: separate;
 }
-.form-horizontal .control-group {
+.dataset-form .form-group {
   margin-bottom: 20px;
   *zoom: 1;
 }
-.form-horizontal .control-group:before,
-.form-horizontal .control-group:after {
+.dataset-form .form-group:before,
+.dataset-form .form-group:after {
   display: table;
   content: "";
   line-height: 0;
 }
-.form-horizontal .control-group:after {
+.dataset-form .form-group:after {
   clear: both;
 }
-.form-horizontal .control-label {
+.dataset-form .control-label {
   float: left;
   padding-top: 5px;
   text-align: right;
 }
-.form-horizontal .controls {
+.dataset-form .controls {
   *display: inline-block;
   *padding-left: 20px;
   margin-left: 180px;
   *margin-left: 0;
 }
-.form-horizontal .controls:first-child {
+.dataset-form .controls:first-child {
   *padding-left: 180px;
 }
-.form-horizontal .help-block {
+.dataset-form .help-block {
   margin-bottom: 0;
 }
-.form-horizontal input + .help-block,
-.form-horizontal select + .help-block,
-.form-horizontal textarea + .help-block,
-.form-horizontal .uneditable-input + .help-block,
-.form-horizontal .input-prepend + .help-block,
-.form-horizontal .input-append + .help-block {
+.dataset-form input + .help-block,
+.dataset-form select + .help-block,
+.dataset-form textarea + .help-block,
+.dataset-form .uneditable-input + .help-block,
+.dataset-form .input-prepend + .help-block,
+.dataset-form .input-append + .help-block {
   margin-top: 10px;
 }
-.form-horizontal .form-actions {
+.dataset-form .form-actions {
   padding-left: 180px;
 }
 table {
@@ -2222,8 +2222,8 @@ button.close {
   -moz-box-shadow: inset 0 1px 0 rgba(255,255,255,.2), 0 1px 2px rgba(0,0,0,.05);
   box-shadow: inset 0 1px 0 rgba(255,255,255,.2), 0 1px 2px rgba(0,0,0,.05);
 }
-.btn:focus,
 .btn:hover,
+.btn:focus,
 .btn:active,
 .btn.active,
 .btn.disabled,
@@ -2785,7 +2785,7 @@ input[type="submit"].btn.btn-mini {
 }
 .alert {
   padding: 8px 35px 8px 14px;
-  margin-bottom: 5px;
+  margin-bottom: 20px;
   text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);
   background-color: #fcf8e3;
   border: 1px solid #fbeed5;
@@ -5231,19 +5231,19 @@ a.badge:focus {
   input[type="radio"] {
     border: 1px solid #ccc;
   }
-  .form-horizontal .control-label {
+  .dataset-form .control-label {
     float: none;
     width: auto;
     padding-top: 0;
     text-align: left;
   }
-  .form-horizontal .controls {
+  .dataset-form .controls {
     margin-left: 0;
   }
-  .form-horizontal .control-list {
+  .dataset-form .control-list {
     padding-top: 0;
   }
-  .form-horizontal .form-actions {
+  .dataset-form .form-actions {
     padding-left: 10px;
     padding-right: 10px;
   }
@@ -6178,10 +6178,11 @@ label {
   padding-right: 15px;
 }
 label {
-  cursor: pointer;
-  font-size: 14px;
+  display: inline;
+  max-width: 100%;
+  margin-bottom: 5px;
 }
-label:after:not(#check_label) {
+label:after {
   content: ":";
 }
 label.radio:after,
@@ -6205,7 +6206,7 @@ select {
 textarea {
   max-width: 100%;
 }
-.control-group .btn {
+.form-group .btn {
   position: relative;
   top: -2px;
 }
@@ -6284,15 +6285,15 @@ textarea {
     margin-top: 5px;
   }
 }
-.form-horizontal .control-label {
+.dataset-form .control-label {
   width: 120px;
 }
 @media (min-width: 768px) {
-  .form-horizontal .controls {
+  .dataset-form .controls {
     margin-left: 130px;
   }
 }
-.form-horizontal .info-block {
+.dataset-form .info-block {
   position: relative;
   display: block;
   font-size: 11px;
@@ -6300,36 +6301,36 @@ textarea {
   line-height: 1.3;
   margin-top: 6px;
 }
-.form-horizontal .info-help {
+.dataset-form .info-help {
   padding: 6px 0;
 }
-.form-horizontal .info-help:before {
+.dataset-form .info-help:before {
   display: none;
 }
-.form-horizontal .info-help-tight {
+.dataset-form .info-help-tight {
   margin-top: -10px;
 }
 @media (min-width: 980px) {
-  .form-horizontal .info-block {
+  .dataset-form .info-block {
     padding: 6px 0 6px 25px;
   }
-  .form-horizontal .info-inline {
+  .dataset-form .info-inline {
     float: right;
     width: 265px;
     margin-top: 0;
     padding-bottom: 0;
   }
 }
-.form-horizontal .control-medium .info-block.info-inline {
+.dataset-form .control-medium .info-block.info-inline {
   width: 165px;
 }
-.form-horizontal .info-block:before {
+.dataset-form .info-block:before {
   font-size: 2.2em;
   position: absolute;
   left: 0;
   top: 2px;
 }
-.form-horizontal .info-inline:before {
+.dataset-form .info-inline:before {
   top: 8px;
 }
 .info-block .icon-large,
@@ -6338,11 +6339,11 @@ textarea {
   font-size: 22px;
   margin-right: 15px;
 }
-.form-horizontal .info-block a {
+.dataset-form .info-block a {
   color: #aaaaaa;
   text-decoration: underline;
 }
-.form-horizontal .form-actions {
+.dataset-form .form-actions {
   padding-left: 25px;
   padding-right: 25px;
 }
@@ -6550,11 +6551,11 @@ textarea {
 .alert-error a {
   color: #b55457;
 }
-.control-group.error input,
-.control-group.error select,
-.control-group.error textarea,
-.control-group.error .input-prepend .add-on,
-.control-group.error .input-append .add-on {
+.form-group.error input,
+.form-group.error select,
+.form-group.error textarea,
+.form-group.error .input-prepend .add-on,
+.form-group.error .input-append .add-on {
   border-color: #c6898b;
 }
 .error-inline {
@@ -6581,7 +6582,7 @@ textarea {
 .control-full .error-block {
   width: auto;
 }
-.control-group.error .input-prepend .error-block,
+.form-group.error .input-prepend .error-block,
 .control-custom.error .error-block {
   width: auto;
 }
@@ -6817,9 +6818,9 @@ textarea {
 .control-full .select2-container {
   max-width: 100%;
 }
-.control-group.error .select2-container input:focus,
-.control-group.error .select2-container select:focus,
-.control-group.error .select2-container textarea:focus {
+.form-group.error .select2-container input:focus,
+.form-group.error .select2-container select:focus,
+.form-group.error .select2-container textarea:focus {
   -webkit-box-shadow: none;
   -moz-box-shadow: none;
   box-shadow: none;
@@ -6880,7 +6881,7 @@ textarea {
   color: #999999;
   font-weight: bold;
 }
-.add-member-form .row-fluid .control-group {
+.add-member-form .row-fluid .form-group {
   float: left;
   width: 45%;
 }
@@ -7763,183 +7764,69 @@ h4 small {
   background: url("../../../base/images/sprite-resource-icons.png") no-repeat 0 0;
 }
 .format-label {
-  width: 60px;
-  height: 65px;
-  background-position: -1720px -220px;
-  transform: scale(0.53);
-  margin: -14px 0 0 -14px;
-}
-.format-label[data-format=html],
-.format-label[data-format*=html] {
-  width: 60px;
-  height: 65px;
-  background-position: -120px -220px;
-  transform: scale(0.53);
-  margin: -14px 0 0 -14px;
-}
-.format-label[data-format=json],
-.format-label[data-format*=json] {
-  width: 60px;
-  height: 65px;
-  background-position: -220px -220px;
-  transform: scale(0.53);
-  margin: -14px 0 0 -14px;
-}
-.format-label[data-format=xml],
-.format-label[data-format*=xml] {
-  width: 60px;
-  height: 65px;
-  background-position: -320px -220px;
-  transform: scale(0.53);
-  margin: -14px 0 0 -14px;
-}
-.format-label[data-format=txt],
-.format-label[data-format*=txt] {
-  width: 60px;
-  height: 65px;
-  background-position: -420px -220px;
-  transform: scale(0.53);
-  margin: -14px 0 0 -14px;
-}
-.format-label[data-format=doc],
-.format-label[data-format*=doc],
-.format-label[data-format=docx],
-.format-label[data-format*=docx] {
-  width: 60px;
-  height: 65px;
-  background-position: -520px -220px;
-  transform: scale(0.53);
-  margin: -14px 0 0 -14px;
-}
-.format-label[data-format=odt],
-.format-label[data-format*=odt] {
-  width: 60px;
-  height: 65px;
-  background-position: -620px -220px;
-  transform: scale(0.53);
-  margin: -14px 0 0 -14px;
-}
-.format-label[data-format=csv],
-.format-label[data-format*=csv] {
-  width: 60px;
-  height: 65px;
-  background-position: -720px -220px;
-  transform: scale(0.53);
-  margin: -14px 0 0 -14px;
-}
-.format-label[data-format=xls],
-.format-label[data-format*=xls] {
-  width: 60px;
-  height: 65px;
-  background-position: -820px -220px;
-  transform: scale(0.53);
-  margin: -14px 0 0 -14px;
-}
-.format-label[data-format=zip],
-.format-label[data-format*=zip] {
-  width: 60px;
-  height: 65px;
-  background-position: -920px -220px;
-  transform: scale(0.53);
-  margin: -14px 0 0 -14px;
-}
-.format-label[data-format=api],
-.format-label[data-format*=api] {
-  width: 60px;
-  height: 65px;
-  background-position: -1020px -220px;
-  transform: scale(0.53);
-  margin: -14px 0 0 -14px;
-}
-.format-label[data-format=pdf],
-.format-label[data-format*=pdf] {
-  width: 60px;
-  height: 65px;
-  background-position: -1120px -220px;
-  transform: scale(0.53);
-  margin: -14px 0 0 -14px;
+  width: 32px;
+  height: 35px;
+  background-position: 0px -62px;
 }
 .format-label[data-format=rdf],
 .format-label[data-format*=rdf] {
-  width: 60px;
-  height: 65px;
-  background-position: -1220px -220px;
-  transform: scale(0.53);
-  margin: -14px 0 0 -14px;
+  width: 32px;
+  height: 35px;
+  background-position: -32px -62px;
 }
-.format-label[data-format=wms],
-.format-label[data-format*=wms] {
-  width: 60px;
-  height: 65px;
-  background-position: -1320px -220px;
-  transform: scale(0.53);
-  margin: -14px 0 0 -14px;
+.format-label[data-format=pdf],
+.format-label[data-format*=pdf] {
+  width: 32px;
+  height: 35px;
+  background-position: -64px -62px;
 }
-.format-label[data-format=png],
-.format-label[data-format*=png] {
-  width: 60px;
-  height: 65px;
-  background-position: -1420px -220px;
-  transform: scale(0.53);
-  margin: -14px 0 0 -14px;
+.format-label[data-format=api],
+.format-label[data-format*=api] {
+  width: 32px;
+  height: 35px;
+  background-position: -96px -62px;
 }
-.format-label[data-format=jpg],
-.format-label[data-format*=jpg],
-.format-label[data-format=jpeg],
-.format-label[data-format*=jpeg] {
-  width: 60px;
-  height: 65px;
-  background-position: -1520px -220px;
-  transform: scale(0.53);
-  margin: -14px 0 0 -14px;
+.format-label[data-format=zip],
+.format-label[data-format*=zip] {
+  width: 32px;
+  height: 35px;
+  background-position: -128px -62px;
 }
-.format-label[data-format=gif],
-.format-label[data-format*=gif] {
-  width: 60px;
-  height: 65px;
-  background-position: -1620px -220px;
-  transform: scale(0.53);
-  margin: -14px 0 0 -14px;
+.format-label[data-format=xls],
+.format-label[data-format*=xls] {
+  width: 32px;
+  height: 35px;
+  background-position: -160px -62px;
 }
-.format-label[data-format=wfs],
-.format-label[data-format*=wfs] {
-  width: 60px;
-  height: 65px;
-  background-position: -1820px -220px;
-  transform: scale(0.53);
-  margin: -14px 0 0 -14px;
+.format-label[data-format=csv],
+.format-label[data-format*=csv] {
+  width: 32px;
+  height: 35px;
+  background-position: -192px -62px;
 }
-.format-label[data-format=gml],
-.format-label[data-format*=gml] {
-  width: 60px;
-  height: 65px;
-  background-position: -1920px -220px;
-  transform: scale(0.53);
-  margin: -14px 0 0 -14px;
+.format-label[data-format=txt],
+.format-label[data-format*=txt] {
+  width: 32px;
+  height: 35px;
+  background-position: -224px -62px;
 }
-.format-label[data-format=wmts],
-.format-label[data-format*=wmts] {
-  width: 60px;
-  height: 65px;
-  background-position: -2020px -220px;
-  transform: scale(0.53);
-  margin: -14px 0 0 -14px;
+.format-label[data-format=xml],
+.format-label[data-format*=xml] {
+  width: 32px;
+  height: 35px;
+  background-position: -256px -62px;
 }
-.format-label[data-format=kml],
-.format-label[data-format*=kml] {
-  width: 60px;
-  height: 65px;
-  background-position: -2120px -220px;
-  transform: scale(0.53);
-  margin: -14px 0 0 -14px;
+.format-label[data-format=json],
+.format-label[data-format*=json] {
+  width: 32px;
+  height: 35px;
+  background-position: -288px -62px;
 }
-.format-label[data-format=geo],
-.format-label[data-format*=geo] {
-  width: 60px;
-  height: 65px;
-  background-position: -2220px -220px;
-  transform: scale(0.53);
-  margin: -14px 0 0 -14px;
+.format-label[data-format=html],
+.format-label[data-format*=html] {
+  width: 32px;
+  height: 35px;
+  background-position: -320px -62px;
 }
 [class^="icon-"],
 [class*=" icon-"] {
@@ -9392,7 +9279,7 @@ iframe {
   top: 0;
   right: 0;
 }
-.ie7 .form-horizontal .controls {
+.ie7 .dataset-form .controls {
   margin-left: 0;
 }
 .ie7 .control-custom .checkbox {
@@ -9433,8 +9320,9 @@ iframe {
   /* IE7 inline-block hack */
   *zoom: 1;
 }
-.ie7 .masthead .header-text-logo-tagline,
-.ie7 .masthead .header-image {
+.ie7 .masthaed .header-text-logo-tagline,
+.ie7 .masthead .header-image,
+.ie7 .masthead .header-text-logo-tagline {
   display: block;
 }
 .ie7 .masthead .account .dropdown-menu {
@@ -9504,10 +9392,4 @@ iframe {
 }
 .ie7 .media-overlay .media-heading {
   background-color: #000;
-}
-
-p.extra {
-  background-color: white;
-  border-radius: 8px;
-  padding: 5px;
 }

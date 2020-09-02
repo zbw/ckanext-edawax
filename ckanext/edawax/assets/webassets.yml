@@ -1,8 +1,14 @@
-main-css:
-  contents:
-    - main_copy.css
-  output: edawax/%(version)s_main.css
-  filters: cssrewrite
+#main-css:
+#  contents:
+#    - main_copy.css
+#  output: edawax/%(version)s_main.css
+#  filters: cssrewrite
+
+#diff-css:
+#  contents:
+#    - diff.css
+#  output: edawax/%(version)s_diff.css
+#  filters: cssrewrite
 
 changes-css:
   contents:
@@ -34,6 +40,12 @@ font-css:
   output: edawax/%(version)s_font.css
   filters: cssrewrite
 
+jquery:
+  contents:
+    - jquery.js
+  filters: rjsmin
+  output: edawax/%(version)s_jquery.js
+
 browser-js:
   contents:
     - browser_check.js
@@ -63,6 +75,9 @@ edawax-js:
     - edawax.js
   output: edawax/%(version)s_edawax.js
   filters: rjsmin
+  extra:
+    preload:
+      - edawax/jquery
 
 side-js:
   contents:

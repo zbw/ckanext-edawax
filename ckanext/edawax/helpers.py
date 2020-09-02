@@ -109,7 +109,8 @@ def parse_authors(authors):
     out = ''
     # information is coming from the dataset
     if type(authors[0]) == dict:   #len(authors) > 1:
-        return u' and '.join([u"{}, {}".format(author['lastname'].decode('unicode_escape'), author['firstname'].decode('unicode_escape')) for author in authors])
+        #return u' and '.join([u"{}, {}".format(author['lastname'].decode('unicode_escape'), author['firstname'].decode('unicode_escape')) for author in authors])
+        return u' and '.join([u"{}, {}".format(author['lastname'], author['firstname']) for author in authors])
     # Information is specific for the resource, and there's more than one
     # author
     if len(authors) > 5:
@@ -309,6 +310,8 @@ def is_edit_page():
 def is_admin(pkg=None):
     if g.userobj is None:
         return False
+    if has_hammer():
+        return True
 
     if pkg:
         org_id = pkg['owner_org']
@@ -320,10 +323,13 @@ def is_admin(pkg=None):
         if user_id in admins:
             return True
 
-    #admins = g.group_admins
+    from sqlalchemy import and_
+    admins = model.Session.query(model.Member).filter(and_(model.Member.capacity == 'admin',
+                            model.Member.group_id == g.group.id)).all()
+
     try:
         user_id = g.userobj.id
-        if user_id in admins:
+        if user_id in [a.table_id for a in admins]:
             return True
     except AttributeError as e:
         log.debug('is_admin error: {} {} {}'.format(e, e.message, e.args))
@@ -342,7 +348,7 @@ def has_doi(pkg):
 
 def has_hammer():
     try:
-        return g.is_sysadmin == True or g.userobj.sysadmin == True
+        return g.userobj.sysadmin == True
     except AttributeError as e:
         return False
 
@@ -385,7 +391,7 @@ def is_robot(user_agent):
     robots = _list.robots
     for robot in robots:
         pattern = re.compile(robot['pattern'], re.IGNORECASE)
-        if pattern.search(user_agent):
+        if pattern.search(str(user_agent)):
             return True
     return False
 

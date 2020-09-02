@@ -7,7 +7,6 @@ Role of the new user gets passed down to functions so that a decision can
 be made about which template to use of the email.
 """
 import ckan, random
-from ckan.common import config
 import ckan.lib.mailer as mailer
 import ckan.logic.action.create as logic
 from ckan.lib.base import render_jinja2
@@ -19,7 +18,7 @@ import smtplib
 import logging
 from time import time
 from email import utils
-from ckan.common import _, g, request
+from ckan.common import _, g, request, config
 from email.header import Header
 import paste.deploy.converters
 from email.mime.text import MIMEText

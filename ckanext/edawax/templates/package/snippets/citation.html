@@ -32,19 +32,19 @@ convert the JSON String
     </div>
     {% if dara_authors %}
 
-    {% if not h.hide_from_reviewer(pkg_dict) %}
-        {% for author in dara_authors %}
-            {% if author == dara_authors[-1] %}
-                {{ (author['lastname'], author['firstname']) | join(', ')}}
-            {% else %}
-                {{ author['lastname'] ~ ', ' ~ author['firstname']  }};
-            {% endif %}
-        {% endfor %}
-    {% else %}
-        <span class="blurry">
-        Witheld for Review
-        </span>
-    {% endif %}
+        {% if not h.hide_from_reviewer(pkg_dict) %}
+            {% for author in dara_authors %}
+                {% if author == dara_authors[-1] %}
+                    {{ (author['lastname'], author['firstname']) | join(', ')}}
+                {% else %}
+                    {{ author['lastname'] ~ ', ' ~ author['firstname']  }};
+                {% endif %}
+            {% endfor %}
+        {% else %}
+            <span class="blurry">
+            Witheld for Review
+            </span>
+        {% endif %}
 
 {% endif %}
 
@@ -54,7 +54,7 @@ convert the JSON String
 
 {{ pkg_dict.title }}.
 {% if pkg_dict.dara_currentVersion %}
-Version: {{ pkg_dict.dara_currentVersion }}.
+    Version: {{ pkg_dict.dara_currentVersion }}.
 {% endif %}
 
 {% set journal_map = {'GER': 'German Economic Review', 'AEQ': 'Applied Economics Quarterly', 'IREE': 'International Journal for Re-Views in Empirical Economics', 'VSWG': 'Vierteljahrschrift für Sozial- und Wirtschaftsgeschichte'}%}

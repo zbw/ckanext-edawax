@@ -1,23 +1,27 @@
 {% ckan_extends %}
 
 {% block breadcrumb_content %}
-  <li>{% link_for _('Journals'), controller='organization', action='index' %}</li>
+  <li>{% link_for _('Journals'), named_route='journals.index' %}</li>
   {% block breadcrumb_content_inner %}
-    <li>{% link_for organization.display_name|truncate(35), controller='organization', action='read', id=organization.name %}</li>
-    <li class="active">{% link_for _('Admin'), controller='organization', action='edit', id=organization.name %}</li>
+    <li>{% link_for organization.display_name|truncate(35), named_route='journals.read', id=organization.name %}</li>
+    <li class="active">{% link_for _('Admin'), named_route='journals.edit', id=organization.name %}</li>
   {% endblock %}
 {% endblock %}
 
 {% block actions_content %}
   {% if organization and h.check_access('organization_update', {'id': organization.id}) %}
-    <li>{% link_for _('View Journal Datasets'), controller='organization', action='read', id=organization.name, class_='btn', icon='eye-open' %}</li>
+    <li>{% link_for _('View Journal Datasets'), named_route='journals.read', id=organization.name, class_='btn', icon='eye' %}</li>
   {% endif %}
-  {# <li>{% link_for _('History'), controller='organization', action='history', id=organization.name, class_='btn', icon='undo' %}</li> #}
 {% endblock %}
 
 {% block content_action %}
   {% if organization and h.check_access('organization_update', {'id': organization.id}) %}
-    {% link_for _('View Journal'), controller='organization', action='read', id=organization.name, class_='btn', icon='eye-open' %}
+    {% link_for _('View Journal'), named_route='journals.read', id=organization.name, class_='btn', icon='eye' %}
   {% endif %}
-  {# <li>{% link_for _('History'), controller='organization', action='history', id=organization.name, class_='btn', icon='undo' %}</li> #}
+{% endblock %}
+
+{% block content_primary_nav %}
+  {{ h.build_nav_icon('journals.edit', _('Edit'), id=c.group_dict.name, icon='pencil-square-o') }}
+  {{ h.build_nav_icon('journals.bulk_process', _('Datasets'), id=c.group_dict.name, icon='sitemap') }}
+  {{ h.build_nav_icon('journals.members', _('Members'), id=c.group_dict.name, icon='users') }}
 {% endblock %}
