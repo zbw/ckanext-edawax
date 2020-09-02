@@ -384,7 +384,7 @@ def is_robot(user_agent):
     robots = _list.robots
     for robot in robots:
         pattern = re.compile(robot['pattern'], re.IGNORECASE)
-        if pattern.search(user_agent):
+        if pattern.search(str(user_agent)):
             return True
     return False
 

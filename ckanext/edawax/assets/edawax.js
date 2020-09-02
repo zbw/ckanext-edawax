@@ -2,8 +2,7 @@
 //ZBW - Leibniz Information Centre for Economics
 //
 
-"use strict";
-
+"use strict"
 // XXX obsolete using data-module now
 
 $('#review_button' ).click(function () {

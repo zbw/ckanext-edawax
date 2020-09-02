@@ -3,7 +3,7 @@
 {% block subtitle %}{{ _('Journals') }}{% endblock %}
 
 {% block breadcrumb_content %}
-  <li class="active">{% link_for _('Journals'), controller='organization', action='index' %}</li>
+  <li class="active">{% link_for _('Journals'), 'journals.index' %}</li>
 {% endblock %}
 
 {% block page_header %}{% endblock %}
@@ -17,7 +17,7 @@
 
     {% block page_primary_action %}
       {% if h.check_access('organization_create') %}
-        {% link_for _('Add Journal'), controller='organization', action='new', class_='btn btn-primary split right', icon='plus-sign-alt' %}
+        {% link_for _('Add Journal'), named_route='journals.new', class_='btn btn-primary split right', icon='plus-square' %}
       {% endif %}
     {% endblock %}
   </div>

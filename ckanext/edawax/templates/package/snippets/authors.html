@@ -15,11 +15,11 @@
   {% endif %}
 
   {% if DOI_Test and not DOI and use_testserver %}
-        {% snippet 'package/snippets/doi.html', DOI=DOI_Test, test='true' %}
+      {% snippet 'package/snippets/doi.html', DOI=DOI_Test, test='true' %}
   {% endif %}
 
   {% if submission_id and is_admin %}
-     <p style="color:grey; text-decoration: underline; margin-top: 0;">Article Submission ID: {{ submission_id }} </p>
+    <p style="color:grey; text-decoration: underline; margin-top: 0;">Article Submission ID: {{ submission_id }} </p>
   {% endif %}
 
   {% if dara_authors %}

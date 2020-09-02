@@ -10,10 +10,10 @@
 
 {% block primary_content_inner %}
   <h2 class="hide-heading">{{ _('My Datasets') }}</h2>
-  {% if c.user_dict.datasets %}
-    {% snippet 'snippets/package_list.html', packages=c.user_dict.datasets %}
+  {% if user_dict.datasets %}
+    {% snippet 'snippets/package_list.html', packages=user_dict.datasets %}
   {% else %}
-    {% set packages = h.find_reviewers_datasets(c.user_dict.name) %}
+    {% set packages = h.find_reviewers_datasets(user_dict.name) %}
     {% if packages|length > 0 %}
         <div class="zbw-box box-bottom">
             <h2 class="zbw-font zbw-blue">Waiting for Review:</h2>
