@@ -1,9 +1,9 @@
 import smtplib
 from email.header import Header
-from email import Utils
+from email import utils
 from email.mime.text import MIMEText
 from time import time
-from pylons import config, c
+from ckan.common import config, g
 import logging
 import ckan.plugins.toolkit as tk
 from ckan import __version__ as ckan_version
@@ -25,15 +25,14 @@ def sendmail(address, msg):
         return True
     except Exception as e:
         log.error("Mail to {} could not be sent".format(address))
-        log.error("{} {} {}".format(e, e.message, e.args))
+        log.error("{}".format(e))
         # raise Exception  # TODO raise more detailed exception
         return False
 
 
 def package_url(dataset):
     return u"{}{}".format(config.get('ckan.site_url'),
-                          tk.url_for(controller='package', action='read',
-                          id=dataset))
+                          tk.url_for('dataset.read', id=dataset))
 
 subjects = {
             "review_editor": u": Data Submission Notification",
@@ -103,15 +102,18 @@ def create_message(msg):
 
 def compose_message(typ, body, subject, config, send_to, context=None):
     # used by editor and reauthor
-    reviewer_email = tk.get_action('user_show')(context, {'id': c.user})['email']
+    reviewer_email = tk.get_action('user_show')(context, {'id': g.user})['email']
 
     msg = MIMEText(body.encode('utf-8'), 'plain', 'utf-8')
+    print('------------------------------------')
+    print(subject)
     msg['Subject'] = Header(subject)
+    print(msg['Subject'])
     msg['From'] = config.get('smtp.mail_from')
     if typ in ['editor', 'reauthor']:
         msg['Cc'] = reviewer_email
     msg['To'] = Header(send_to, 'utf-8')
-    msg['Date'] = Utils.formatdate(time())
+    msg['Date'] = utils.formatdate(time())
     msg['X-Mailer'] = "CKAN {} [Plugin edawax]".format(ckan_version)
 
     return msg
@@ -131,7 +133,7 @@ def notify(typ, dataset, author_mail, msg, context, status=None):
     if status:
         d['status'] = status
     body = body.format(**d)
-    subject = "{}{}".format(mailer.g.site_title, subjects[typ])
+    subject = '{}{}'.format(config.get('ckan.site_title'), subjects[typ])
     message = compose_message(typ, body, subject, config, author_mail, context)
 
     return sendmail(author_mail, message)
@@ -168,7 +170,7 @@ def review(addresses, author, dataset, reviewers=None, msg=None):
         if msg:
             d['message'] = create_message(msg)
         body = body.format(**d)
-        subject = "{}{}".format(mailer.g.site_title, subjects[who])
+        subject = '{}{}'.format(config.get('ckan.site_title'), subjects[who])
         return compose_message(who, body, subject, config, address)
 
     # send email to Admin

@@ -13,7 +13,12 @@ this.ckan.module('edawax-confirm', function (jQuery, _) {
         cancel: _('Cancel')
       },
       template: [
-        '<div class="modal">modal-body"></div>',
+        '<div class="modal">',
+        '<div class="modal-header">',
+        '<button type="button" class="close" data-dismiss="modal">×</button>',
+        '<h3 class="modal-title"></h3>',
+        '</div>',
+        '<div class="modal-body"></div>',
         '<div class="modal-footer">',
         '<button class="btn btn-cancel"></button>',
         '<button class="btn btn-primary"></button>',
@@ -81,17 +86,18 @@ this.ckan.module('edawax-confirm', function (jQuery, _) {
 
         element.find('h3').text(this.i18n('heading'));
         element.find('.modal-b',
-        '<div class="modal-header">',
-        '<button type="button" class="close" data-dismiss="modal">×</button>',
-        '<h3></h3>',
-        '</div>',
-        '<div class="modal-body"></div>',
-        '<div class="modal-footer">',
-        '<button class="btn btn-cancel"></button>',
-        '<button class="btn btn-primary"></button>',
-        '</div>',
-        '</div>'
-      ).join('\n')
+                     '<div class="modal-header">',
+                     '<button type="button" class="close" data-dismiss="modal">×</button>',
+                     '<h3></h3>',
+                     '</div>',
+                     '<div class="modal-body"></div>',
+                     '<div class="modal-footer">',
+                     '<button class="btn btn-cancel"></button>',
+                     '<button class="btn btn-primary"></button>',
+                     '</div>',
+                     '</div>'
+        ).join('\n')
+      }
     },
 
     /* Sets up the event listeners for the object. Called internally by

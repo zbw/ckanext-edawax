@@ -1,10 +1,22 @@
 import ast
+import logging
 from ckan import model
 from ckan.common import g, request
 import ckan.lib.helpers as h
 import ckan.plugins.toolkit as tk
 
+import ckanext.edawax.notifications as n
+
+from ckan.authz import get_group_or_org_admin_ids
+from ckanext.edawax.helpers import is_reviewer, in_review, delete_cookies, hide_from_reviewer, is_private, is_robot, check_reviewer_update
+from ckanext.edawax.update import update_maintainer_field, email_exists, invite_reviewer, add_user_to_journal
+
+from ckanext.dara.helpers import check_journal_role
+
 from functools import wraps
+
+log = logging.getLogger(__name__)
+
 
 """
 START Workflow
@@ -46,7 +58,7 @@ def evaluate_reviewer(reviewer, reviewer_list, data_dict):
     else:
         h.flash_error("Reviewers must be given as email addresses.")
         log.debug("Reviewers aren't an email address: '{}'".format(reviewer))
-        redirect(id)
+        return redirect(id)
     return reviewer_list
 
 
@@ -58,17 +70,17 @@ def review(id):
     to the dataset for review.
     """
     context = _context()
-    c.pkg_dict = tk.get_action('package_show')(context, {'id': id})
+    pkg_dict = tk.get_action('package_show')(context, {'id': id})
 
         # Ensure a 'draft' isn't sent for review
-    state = c.pkg_dict['state']
+    state = pkg_dict['state']
     if state == 'draft':
-        data = {'id': c.pkg_dict['id'], u'state': u'active'}
+        data = {'id': pkg_dict['id'], u'state': u'active'}
         context['ignore_auth'] = True
         t = tk.get_action('package_patch')(context, data)
-        c.pkg_dict['state'] = 'active'
+        pkg_dict['state'] = 'active'
 
-    delete_cookies(c.pkg_dict)
+    delete_cookies(pkg_dict)
 
     try:
         tk.check_access('package_update', context, {'id': id})
@@ -76,15 +88,15 @@ def review(id):
         tk.abort(403, 'Unauthorized')
 
     # avoid multiple notifications (eg. when someone calls review directly)
-    if c.pkg_dict.get('dara_edawax_review', 'false') == 'true':
+    if pkg_dict.get('dara_edawax_review', 'false') == 'true':
         h.flash_error("Package has already been sent to review")
-        redirect(id)
+        return redirect(id)
 
     user_name = tk.c.userobj.fullname or tk.c.userobj.email
-    admins = get_group_or_org_admin_ids(c.pkg_dict['owner_org'])
-    addresses = map(lambda admin_id: model.User.get(admin_id).email, admins)
+    admins = get_group_or_org_admin_ids(pkg_dict['owner_org'])
+    addresses = list(map(lambda admin_id: model.User.get(admin_id).email, admins))
 
-    data_dict = c.pkg_dict
+    data_dict = pkg_dict
     reviewer = data_dict.get("maintainer", None)
     reviewer_emails = []
     flash_message = None
@@ -101,9 +113,10 @@ def review(id):
                     flash_message = ('Notification sent to Reviewers.', 'success')
                     log_msg = '\nNotifications sent to:\nReviewers:{}\nRest: {}'
                     log.debug(log_msg.format(reviewer_emails, addresses))
-                except:
+                except Exception as e:
                     flash_message = ('ERROR: Mail could not be sent. Please try again later or contact the site admin.', 'error')
                     log.debug('Failed to send notifications')
+                    log.error(f'ERROR: {e}')
     except Exception as e:
         log.error("Error with reviewer notifications: {}-{}".format(e.message, e.args))
         log.error(reviewer_emails)
@@ -124,8 +137,8 @@ def review(id):
         note = False
 
     if note:
-        c.pkg_dict = update_review_status(c.pkg_dict)
-        tk.get_action('package_update')(context, c.pkg_dict)
+        pkg_dict = update_review_status(pkg_dict)
+        tk.get_action('package_update')(context, pkg_dict)
         if flash_message is None:
             flash_message = ('Notification sent to Editor.', 'success')
     else:
@@ -136,7 +149,7 @@ def review(id):
     else:
         h.flash_error(flash_message[0])
 
-    redirect(id)
+    return redirect(id)
 
 
 def update_review_status(pkg_dict, action=None):
@@ -174,12 +187,12 @@ def publish(id):
     publish dataset
     """
     context = _context()
-    c.pkg_dict = tk.get_action('package_show')(context, {'id': id})
+    pkg_dict = tk.get_action('package_show')(context, {'id': id})
 
     # validate the DOI, if any
     try:
-        doi = c.pkg_dict['dara_Publication_PID']
-        type_ = c.pkg_dict['dara_Publication_PIDType']
+        doi = pkg_dict['dara_Publication_PID']
+        type_ = pkg_dict['dara_Publication_PIDType']
     except KeyError:
         doi = ''
         type_ = ''
@@ -191,14 +204,14 @@ def publish(id):
             h.flash_error('DOI is invalid. Format should be: 10.xxxx/xxxx. Please update the DOI before trying again to publish this resource. <a href="#doi" style="color: blue;">Jump to field.</a>', True)
             errors = {'dara_Publication_PID': ['DOI is invalid. Format should be: 10.xxxx/xxxx']}
 
-            tk.redirect_to(controller='package', action='edit', id=id)
+            return h.redirect_to('dataset.edit', id=id)
 
-    c.pkg_dict.update({'private': False, 'dara_edawax_review': 'reviewed'})
-    c.pkg = context.get('package')
-    tk.get_action('package_update')(context, c.pkg_dict)
+    pkg_dict.update({'private': False, 'dara_edawax_review': 'reviewed'})
+    pkg = context.get('package')
+    tk.get_action('package_update')(context, pkg_dict)
     h.flash_success('Dataset published')
     author_notify(id)
-    redirect(id)
+    return redirect(id)
 
 
 
@@ -212,11 +225,11 @@ def retract(id):
 
     if c.pkg_dict.get('dara_DOI_Test', False) and not h.check_access('sysadmin'):
         h.flash_error("ERROR: DOI (Test) already assigned, dataset can't be retracted")
-        redirect(id)
+        return redirect(id)
 
     if c.pkg_dict.get('dara_DOI', False):
         h.flash_error("ERROR: DOI already assigned, dataset can't be retracted")
-        redirect(id)
+        return redirect(id)
 
     c.pkg_dict.update({'private': True, 'dara_edawax_review': 'false'})
     tk.get_action('package_update')(context, c.pkg_dict)
@@ -224,7 +237,7 @@ def retract(id):
     # notify author about the retraction
     author_notify(id)
     h.flash_success('Dataset retracted')
-    redirect(id)
+    return redirect(id)
 
 
 @admin_req
@@ -235,21 +248,21 @@ def reauthor(id):
     """
     context = _context()
     msg = tk.request.params.get('msg', '')
-    c.pkg_dict = tk.get_action('package_show')(context, {'id': id})
-    delete_cookies(c.pkg_dict)
-    creator_mail = model.User.get(c.pkg_dict['creator_user_id']).email
-    admin_mail = model.User.get(c.user).email
+    pkg_dict = tk.get_action('package_show')(context, {'id': id})
+    delete_cookies(pkg_dict)
+    creator_mail = model.User.get(pkg_dict['creator_user_id']).email
+    admin_mail = model.User.get(g.user).email
     #note = n.reauthor(id, creator_mail, admin_mail, msg, context)
     note = n.notify('reauthor', id, creator_mail, msg, context)
 
     if note:
-        c.pkg_dict.update({'private': True,
+        pkg_dict.update({'private': True,
                             'dara_edawax_review': 'reauthor'})
-        tk.get_action('package_update')(context, c.pkg_dict)
+        tk.get_action('package_update')(context, pkg_dict)
         h.flash_success('Notification sent. Dataset can now be re-edited by author')
     else:
         h.flash_error('ERROR: Mail could not be sent. Please try again later or contact the site admin.')
-    redirect(id)
+    return redirect(id)
 
 
 def editor_notify(id):
@@ -258,30 +271,30 @@ def editor_notify(id):
     """
     context = _context()
     msg = tk.request.params.get('msg', '')
-    c.pkg_dict = tk.get_action('package_show')(context, {'id': id})
-    creator_mail = model.User.get(c.pkg_dict['creator_user_id']).email
+    pkg_dict = tk.get_action('package_show')(context, {'id': id})
+    creator_mail = model.User.get(pkg_dict['creator_user_id']).email
     note = n.notify('editor', id, creator_mail, msg, context)
 
     if note:
-        c.pkg_dict.update({'private': True, 'dara_edawax_review': 'back'})
-        tk.get_action('package_update')(context, c.pkg_dict)
+        pkg_dict.update({'private': True, 'dara_edawax_review': 'back'})
+        tk.get_action('package_update')(context, pkg_dict)
         h.flash_success('Notification sent. Journal Editor will be notified.')
     else:
         h.flash_error('ERROR: Mail could not be sent. Please try again later or contact the site admin.')
-    redirect(id)
+    return redirect(id)
 
 
 def author_notify(id):
     """ Send mail from the system to the author """
     context = _context()
     msg = tk.request.params.get('msg', '')
-    c.pkg_dict = tk.get_action('package_show')(context, {'id': id})
+    pkg_dict = tk.get_action('package_show')(context, {'id': id})
 
-    if c.pkg_dict['dara_edawax_review'] == 'reviewed':
+    if pkg_dict['dara_edawax_review'] == 'reviewed':
         status = 'published'
     else:
         status = 'retracted'
-    author_email = model.User.get(c.pkg_dict['creator_user_id']).email
+    author_email = model.User.get(pkg_dict['creator_user_id']).email
     note = n.notify('author', id, author_email, msg, context, status)
 
 
@@ -355,7 +368,7 @@ def download_all(id):
                 r = requests.get(url, stream=True, headers=headers)
             if r.status_code != 200:
                 h.flash_error('Failed to download files.')
-                redirect(id)
+                return redirect(id)
             else:
                 data[filename] = r
 
@@ -377,7 +390,7 @@ def download_all(id):
     # if there's nothing to download but someone gets to the download page
     # /download_all, return them to the landing page
     h.flash_error('Nothing to download.')
-    redirect(id)
+    return redirect(id)
 
 """
 END Workflow
@@ -403,7 +416,7 @@ def create_citation(type, id):
         create_bibtex_record(id)
     else:
         h.flash_error("Couldn't build {} citation.".format(type))
-        redirect(id)
+        return redirect(id)
 
 """
 END INFO Views
@@ -415,7 +428,7 @@ def context():
            'auth_user_obj': g.userobj, 'ignore_auth': True}
 
 def redirect(id):
-    tk.redirect_to(controller='package', action='read', id=id)
+    return h.redirect_to(u'dataset.read', id=id)
 
 def create_citation(type, id):
     if type == 'ris':
@@ -424,7 +437,7 @@ def create_citation(type, id):
         create_bibtex_record(id)
     else:
         h.flash_error("Couldn't build {} citation.".format(type))
-        redirect(id)
+        return redirect(id)
 
 def parse_ris_authors(authors):
     out = ''

@@ -91,3 +91,8 @@
         <!--</div> -->
     </header>
 {% endblock %}
+
+
+{% block header_account_notlogged %}
+    <li>{% link_for _('Log in'), named_route='user.login' %}</li>
+{% endblock %}

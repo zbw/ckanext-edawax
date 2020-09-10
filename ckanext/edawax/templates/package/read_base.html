@@ -25,7 +25,7 @@
 
   {% endif %}
 
-  {% asset 'confirm-js' %}
+  {% asset 'edawax/confirm-js' %}
     {% if h.show_review_button(pkg) %}
         {% set confirm = h.dump_json({'content': '
         <p>This stores your dataset and
@@ -123,8 +123,8 @@
 
 
 {% block content_primary_nav %}
-  {{ h.build_nav_icon('dataset_read', _('Dataset'), id=pkg.name, icon='sitemap') }}
-  {{ h.build_nav_icon('dataset_activity', _('Activity Stream'), id=pkg.name,icon='clock-o') }}
+  {{ h.build_nav_icon('dataset.read', _('Dataset'), id=pkg.name, icon='sitemap') }}
+  {{ h.build_nav_icon('dataset.activity', _('Activity Stream'), id=pkg.name,icon='clock-o') }}
 {% endblock %}
 
 {% block package_social %}

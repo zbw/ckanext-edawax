@@ -32,7 +32,13 @@ import ckan.views.dashboard as dash
 import six
 from six.moves.urllib.parse import unquote, urlparse
 
+import ckan.authz as authz
 
+# Update permissions
+# Member needs "manage_group" to be able to create a dataset
+authz.ROLE_PERMISSIONS['member'] = ['read', 'create_dataset', 'manage_group']
+authz.ROLE_PERMISSIONS['reviewer'] = ['read', 'update_dataset']
+authz._trans_role_reviewer = lambda: 'Reviewer'
 
 def edawax_facets(facets_dict):
     """
@@ -103,7 +109,6 @@ def journal_package_update(context, data_dict):
     """override ckan package_update. allow creator to update package if
     package is private and not in review. 'create_dataset' permission must be
     set in CKAN """
-
     def ir():
         if pkg_obj.state == 'draft':
             return False
@@ -420,7 +425,7 @@ class EdawaxPlugin(plugins.SingletonPlugin):
                               methods=[u'GET'])
         journals.add_url_rule(u'/member_new/<id>',
                               view_func=group.MembersGroupView.as_view(str(u'member_new')),
-                              methods=[u'GET'])
+                              methods=[u'GET', u'POST'])
         for action in actions:
             journals.add_url_rule(
                 u'/{0}/<id>'.format(action),
@@ -429,15 +434,20 @@ class EdawaxPlugin(plugins.SingletonPlugin):
 
         dataset = Blueprint(u'datasets', self.__module__, url_prefix=u"/dataset")
         dataset.add_url_rule(u'/<id>/review',
-                              view_func=views.review)
+                              view_func=views.review,
+                              methods=[u'GET', u'POST'])
         dataset.add_url_rule(u'/<id>/publish',
-                              view_func=views.publish)
+                              view_func=views.publish,
+                              methods=[u'GET', u'POST'])
         dataset.add_url_rule(u'/<id>/retract',
-                              view_func=views.retract)
+                              view_func=views.retract,
+                              methods=[u'GET', u'POST'])
         dataset.add_url_rule(u'/<id>/reauthor',
-                              view_func=views.reauthor)
+                              view_func=views.reauthor,
+                              methods=[u'GET', u'POST'])
         dataset.add_url_rule(u'/<id>/editor_notify',
-                              view_func=views.editor_notify)
+                              view_func=views.editor_notify,
+                              methods=[u'GET', u'POST'])
         dataset.add_url_rule(u'/<id>/download_all',
                               view_func=views.download_all)
 

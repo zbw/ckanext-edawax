@@ -13,9 +13,13 @@ import collections
 import ast
 import requests
 
+from flask import Response as resp
+
 import re
 import ckanext.edawax.robot_list as _list
 from urllib.parse import urlparse
+
+from ckan.authz import get_group_or_org_admin_ids
 
 from ckanext.dara.geography_coverage import geo
 
@@ -50,12 +54,7 @@ def format_resource_items_custom(items):
             out.append(( "9 Temporal Coverage (controlled)", "{} to {}".format(item[1], end) ))
         elif item[0] == u'dara_authors':
             if item[1] in ["[u'', u'', u'', u'', u'']", "['']"]:
-                print('#######################################################################################')
-                print('#######################################################################################')
-                print('#######################################################################################')
                 package = tk.get_action('package_show')({'use_cache': False}, {'id': request.url.split('/')[4]})
-                print(package.keys())
-                print(package['extras'])
                 items = [item for item in package['extras']]
 
                 authors = ast.literal_eval(package['extras_dara_authors'].replace("null", '""'))
@@ -170,22 +169,16 @@ u"url": "96 URL"}
 def delete_cookies(pkg):
     """ Clear Cookies - after resend """
     try:
-        cookie = 'reviewerOnePrev_{}'.format(pkg['name'])
-        response.delete_cookie(cookie, '/')
+        cookie = 'reviewerPrev_{}'.format(pkg['name'])
+        resp.delete_cookie(cookie, '/')
     except Exception as e:
-        log.debug('delete_cookies error: {} {} {}'.format(e, e.message, e.args))
-
-    try:
-        cookie = 'reviewerTwoPrev_{}'.format(pkg['name'])
-        response.delete_cookie(cookie, '/')
-    except Exception as e:
-        log.debug('delete_cookies error: {} {} {}'.format(e, e.message, e.args))
-
+        #log.debug('delete_cookies error: {} {} {}'.format(e, e.message, e.args))
+        log.debug('delete_cookies error: {}'.format(e))
 
 
 def check_reviewer_update(pkg):
     """Check if the reviewer is new or not"""
-    reviewer_old = request.cookies.get('reviewerOnePrev_{}'.format(pkg['name']), False)
+    reviewer_old = request.cookies.get('reviewerPrev_{}'.format(pkg['name']), False)
     if reviewer_old is False:
         return False
 
@@ -324,8 +317,18 @@ def is_admin(pkg=None):
             return True
 
     from sqlalchemy import and_
+    if hasattr(g, 'group'):
+        group_id = g.group.id
+    else:
+        try:
+            group_id = g.pkg.owner_org
+        except Exception:
+            return False
     admins = model.Session.query(model.Member).filter(and_(model.Member.capacity == 'admin',
-                            model.Member.group_id == g.group.id)).all()
+                            model.Member.group_id == group_id)).all()
+
+    # TODO: see if the below and replace the above
+    #admins = get_group_or_org_admin_ids(pkg_dict['owner_org'])
 
     try:
         user_id = g.userobj.id

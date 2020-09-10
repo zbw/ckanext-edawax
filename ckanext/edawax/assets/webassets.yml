@@ -57,6 +57,10 @@ confirm-js:
     - confirm-action.js
   output: edawax/%(version)s_confirm.js
   filters: rjsmin
+  extra:
+    preload:
+      - base/main
+      - base/ckan
 
 doi-js:
   contents:

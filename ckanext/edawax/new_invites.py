@@ -9,7 +9,7 @@ be made about which template to use of the email.
 import ckan, random
 import ckan.lib.mailer as mailer
 import ckan.logic.action.create as logic
-from ckan.lib.base import render_jinja2
+from ckan.lib.base import render
 
 import ckan.plugins.toolkit as tk
 #imports for expanded mailing
@@ -46,12 +46,18 @@ def _get_user_role(user_name, org_id):
 
 def get_invite_body(user, data=None):
     # if it's an api request, don't need url
-    if request.urlvars['controller'] == u'api':
-        url = None
+    if hasattr(request, 'urlvars'):
+        if request.urlvars['controller'] == u'api':
+            url = None
+        else:
+            id_ = request.urlvars['id']
+            url = u"{}{}".format(config.get('ckan.site_url'),
+                            tk.url_for("dataset.read",
+                            id=id_))
     else:
-        id_ = request.urlvars['id']
+        id_ = request.view_args['id']
         url = u"{}{}".format(config.get('ckan.site_url'),
-                        tk.url_for(controller='package', action="read",
+                        tk.url_for("dataset.read",
                         id=id_))
 
     extra_vars = {'reset_link': mailer.get_reset_link(user),
@@ -65,11 +71,10 @@ def get_invite_body(user, data=None):
 
     role = _get_user_role(user.name, data['group_id'])
     if role in ['editor', 'admin']:
-        return render_jinja2('emails/invite_editor.txt', extra_vars)
+        return render('emails/invite_editor.txt', extra_vars)
     elif role == 'reviewer':
-        return render_jinja2('emails/invite_reviewer.txt', extra_vars)
-    return render_jinja2('emails/invite_author.txt', extra_vars)
-    # Add reviewer when needed REVIEWER
+        return render('emails/invite_reviewer.txt', extra_vars)
+    return render('emails/invite_author.txt', extra_vars)
 
 
 def send_invite(user, data):
@@ -83,7 +88,7 @@ def send_invite(user, data):
         role = "Editor"
     else:
         role = "Reviewer"
-    sub = mailer.g.site_title
+    sub = config.get('ckan.site_title')
     subject = mailer._('{site_title} Invite: {role}').format(site_title=sub, role=role)
     mail_user(user, subject, body, {}, role)
 
@@ -129,7 +134,7 @@ def _mail_recipient(recipient_name, recipient_email,
             recipient_name = "Editor"
     else:
         recipient_name = recipient_name
-    body = mailer.add_msg_niceties(recipient_name, body, sender_name, sender_url)
+    #body = mailer.add_msg_niceties(recipient_name, body, sender_name, sender_url)
     msg_body = MIMEText(body.encode('utf-8'), 'plain', 'utf-8')
     msg = MIMEMultipart()
     for k, v in headers.items(): msg[k] = v
@@ -223,7 +228,6 @@ def mail_user(recipient, subject, body, headers={}, role=None):
     if (recipient.email is None) or not len(recipient.email):
         raise MailerException(_("No recipient email address available!"))
     name = recipient.display_name
-
 
     mail_recipient(name, recipient.email, subject,
             body, headers=headers, role=role)
