@@ -1,7 +1,7 @@
 import ast
 import logging
 from ckan import model
-from ckan.common import g, request
+from ckan.common import g, request, config
 import ckan.lib.helpers as h
 import ckan.plugins.toolkit as tk
 
@@ -14,6 +14,16 @@ from ckanext.edawax.update import update_maintainer_field, email_exists, invite_
 from ckanext.dara.helpers import check_journal_role
 
 from functools import wraps
+
+# for download all
+import os
+import io
+import time
+import zipfile
+import requests
+from ckanext.dara.helpers import _parse_authors
+import ckan.lib.uploader as uploader
+import flask
 
 log = logging.getLogger(__name__)
 
@@ -305,7 +315,7 @@ def create_citataion_text(id):
     context = _context()
     data = tk.get_action('package_show')(context, {'id': id})
 
-    citation = '{authors} ({year}): {dataset}. Version: {version}. {journal}. Dataset. {address}'
+    citation = u'{authors} ({year}): {dataset}. Version: {version}. {journal}. Dataset. {address}'
 
     journal_map = {
                     'GER': 'German Economic Review',
@@ -320,7 +330,7 @@ def create_citataion_text(id):
         authors = _parse_authors(data['dara_authors'])
 
     year = data.get('dara_PublicationDate', '')
-    dataset_name = data.get('title', '').encode('utf-8')
+    dataset_name = data.get('title', '')
     dataset_version = data.get('dara_currentVersion', '')
 
     temp_title = data['organization']['title']
@@ -345,11 +355,10 @@ def create_citataion_text(id):
 def download_all(id):
     data = {}
     context = _context()
-    c.pkg_dict = tk.get_action('package_show')(context, {'id': id})
+    pkg_dict = tk.get_action('package_show')(context, {'id': id})
     zip_sub_dir = 'resources'
-    zip_name = u"{}_resouces_{}.zip".format(c.pkg_dict['title'].replace(' ', '_').replace(',', '_'), time.time())
-
-    resources = c.pkg_dict['resources']
+    zip_name = u"{}_resouces_{}.zip".format(pkg_dict['title'].replace(' ', '_').replace(',', '_'), time.time())
+    resources = pkg_dict['resources']
     for resource in resources:
         rsc = tk.get_action('resource_show')(context, {'id': resource['id']})
         if rsc.get('url_type') == 'upload' and not is_robot(request.user_agent):
@@ -361,32 +370,24 @@ def download_all(id):
                 'From': 'journaldata@zbw.eu'
             }
             try:
-                ca_file = config.get('ckan.cert_path')
-                r = requests.get(url, stream=True, headers=headers,
-                        verify=ca_file)
-            except Exception:
-                r = requests.get(url, stream=True, headers=headers)
-            if r.status_code != 200:
-                h.flash_error('Failed to download files.')
-                return redirect(id)
-            else:
-                data[filename] = r
+                upload = uploader.get_resource_uploader(rsc)
+                filepath = upload.get_path(rsc[u'id'])
+                data[filename] = filepath
+            except Exception as e:
+                print(f'Error: {e}')
 
     data['citation.txt'] = create_citataion_text(id)
     if len(data) > 0:
-        s = StringIO.StringIO()
-        zf = zipfile.ZipFile(s, "w")
-        for item, content in data.items():
-            zip_path = os.path.join(zip_sub_dir, item)
-            try:
-                zf.writestr(zip_path, content.content)
-            except Exception as e:
-                # adding the citation file
-                zf.writestr(zip_path, content)
-        zf.close()
-        response.headers.update({"Content-Disposition": "attachment;filename={}".format(zip_name.encode('utf8'))})
-        response.content_type = "application/zip"
-        return s.getvalue()
+        memory_file = io.BytesIO()
+        with zipfile.ZipFile(memory_file, 'w') as zf:
+            for item, content in data.items():
+                zip_path = os.path.join(zip_sub_dir, item)
+                try:
+                    zf.write(content, zip_path)
+                except Exception:
+                    zf.writestr(zip_path, content)
+        memory_file.seek(0)
+        return flask.send_file(memory_file, attachment_filename=zip_name, as_attachment=True)
     # if there's nothing to download but someone gets to the download page
     # /download_all, return them to the landing page
     h.flash_error('Nothing to download.')
