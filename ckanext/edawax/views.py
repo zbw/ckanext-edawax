@@ -8,7 +8,7 @@ import ckan.plugins.toolkit as tk
 import ckanext.edawax.notifications as n
 
 from ckan.authz import get_group_or_org_admin_ids
-from ckanext.edawax.helpers import is_reviewer, in_review, delete_cookies, hide_from_reviewer, is_private, is_robot, check_reviewer_update
+from ckanext.edawax.helpers import is_reviewer, in_review, delete_cookies, hide_from_reviewer, is_private, is_robot, check_reviewer_update, _existing_user
 from ckanext.edawax.update import update_maintainer_field, email_exists, invite_reviewer, add_user_to_journal
 
 from ckanext.dara.helpers import check_journal_role
@@ -53,9 +53,10 @@ def evaluate_reviewer(reviewer, reviewer_list, data_dict):
 
     # must be an email address - check is handled in HTML with `pattern`
     # dont create a new user if the "reviewer" is already a reviewer
+    existing_user = _existing_user(data_dict)
     new_reviewer = check_reviewer_update(data_dict)
     if '@' in reviewer:
-        if new_reviewer:
+        if new_reviewer and not existing_user:
             # create a new user with "reviewer" role for the dataset
             new_user = invite_reviewer(reviewer, data_dict['organization']['id'])
             update_maintainer_field(new_user['name'], reviewer, data_dict)
@@ -135,7 +136,7 @@ def review(id):
     # Or it is coming back from being reworked by the author
     if flash_message is None \
         and (reviewer_emails == []) \
-            or data_dict['dara_edawax_review'] == 'reauthor':
+            or data_dict['dara_edawax_review'] in ['reauthor', 'false']:
         note = n.review(addresses, user_name, id, reviewer_emails)
     elif len(reviewer_emails) > 0:
         # There is a reviewer, notify them
@@ -231,18 +232,18 @@ def retract(id):
     set dataset private and back to review state
     """
     context = _context()
-    c.pkg_dict = tk.get_action('package_show')(context, {'id': id})
+    pkg_dict = tk.get_action('package_show')(context, {'id': id})
 
-    if c.pkg_dict.get('dara_DOI_Test', False) and not h.check_access('sysadmin'):
+    if pkg_dict.get('dara_DOI_Test', False) and not h.check_access('sysadmin'):
         h.flash_error("ERROR: DOI (Test) already assigned, dataset can't be retracted")
         return redirect(id)
 
-    if c.pkg_dict.get('dara_DOI', False):
+    if pkg_dict.get('dara_DOI', False):
         h.flash_error("ERROR: DOI already assigned, dataset can't be retracted")
         return redirect(id)
 
-    c.pkg_dict.update({'private': True, 'dara_edawax_review': 'false'})
-    tk.get_action('package_update')(context, c.pkg_dict)
+    pkg_dict.update({'private': True, 'dara_edawax_review': 'false'})
+    tk.get_action('package_update')(context, pkg_dict)
 
     # notify author about the retraction
     author_notify(id)

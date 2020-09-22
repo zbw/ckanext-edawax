@@ -175,6 +175,17 @@ def delete_cookies(pkg):
         #log.debug('delete_cookies error: {} {} {}'.format(e, e.message, e.args))
         log.debug('delete_cookies error: {}'.format(e))
 
+def _existing_user(pkg):
+    """ Check if given reviewer is an existing user """
+    user_emails = [obj.email for obj in model.User.all()]
+    if '/' in pkg['maintainer']:
+        reviewer_email, reviewer_name = pkg['maintainer'].split('/')
+    else:
+        reviewer_email = pkg['maintainer']
+
+    if reviewer_email in user_emails:
+        return True
+    return False
 
 def check_reviewer_update(pkg):
     """Check if the reviewer is new or not"""
@@ -248,11 +259,13 @@ def is_reviewer(pkg):
 
     try:
         user = g.userobj.name
+        email = g.userobj.email
     except AttributeError as e:
         user = None
+        email = None
         return False
     #email = model.User.get(user).email
-    return user in names
+    return user in names or email in emails
 
 def is_author(pkg):
     return get_user_id() == pkg['creator_user_id']

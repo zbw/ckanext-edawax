@@ -15,6 +15,9 @@ changes-css:
     - changes.css
   output: edawax/%(version)s_changes.css
   filters: cssrewrite
+  extra:
+    preload:
+      - edawax/custom-css
 
 custom-css:
   contents:

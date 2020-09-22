@@ -455,8 +455,12 @@ class EdawaxPlugin(plugins.SingletonPlugin):
         dashboard.add_url_rule(u'/journals',
                                  view_func=dash.organizations)
 
+        redirect = Blueprint(u'redirect', self.__module__)
+        import ckan.views.home as home
+        redirect.add_url_rule(u'/user/register',
+                                 view_func=home.index)
 
-        return [info, cite, journals, dataset, dashboard]
+        return [info, cite, journals, dataset, dashboard, redirect]
 
     def group_facets(self, facets_dict, organization_type, package_type):
         # for some reason CKAN does not accept a new OrderedDict here (does

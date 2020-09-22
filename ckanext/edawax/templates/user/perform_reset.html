@@ -1,9 +1,25 @@
 {% ckan_extends %}
 
 {% block primary_content %}
-  <article class="module reset-request">
+  <article class="module reset-request zbw-box box-full">
     {% block primary_content_inner %}
-    {{ super() }}
+      <div class="module-content">
+        <h1 class="page-heading">
+          {% block page_heading %}{{ _('Reset Your Password') }}{% endblock %}
+        </h1>
+        {% block form %}
+          <form action="" method="post">
+            {{ form.errors(error_summary) }}
+            {{ form.input("password1", id="field-password", label=_("Password"), type="password", value='', error='', attrs={'autocomplete': 'no', 'class': 'form-control control-medium'}, classes=["form-group"]) }}
+            {{ form.input("password2", id="field-confirm-password", label=_("Confirm"), type="password", value='', error='', attrs={'autocomplete': 'no', 'class': 'form-control control-medium'}, classes=["form-group"]) }}
+            <div class="form-actions">
+              {% block form_button %}
+              <button class="btn btn-primary" type="submit" name="save">{{ _("Update Password") }}</button>
+              {% endblock %}
+            </div>
+          </form>
+        {% endblock %}
+      </div>
     {% endblock %}
   </article>
 {% endblock %}

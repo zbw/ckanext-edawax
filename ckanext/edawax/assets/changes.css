@@ -3653,3 +3653,19 @@ input[type=checkbox]{
     color: transparent;
     text-shadow:0 0 5px rgba(0,0,0,0.5);
 }
+
+.breadcrumb > li.active {
+    color: white;
+    font-weight: bold;
+}
+
+input,
+textarea.form-control,
+.uneditable-input {
+    width: 100%;
+}
+
+input[type="button"],
+input[type="submit"] {
+    width: auto;
+}
