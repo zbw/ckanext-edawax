@@ -80,6 +80,7 @@ def review(id):
     to the JDA as a reviewer - need a new invitation that includes a link
     to the dataset for review.
     """
+    # TODO: Look into allowing collaborators as reviewers
     context = _context()
     pkg_dict = tk.get_action('package_show')(context, {'id': id})
 

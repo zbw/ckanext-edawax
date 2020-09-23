@@ -291,6 +291,48 @@ class EdawaxPlugin(plugins.SingletonPlugin):
     plugins.implements(plugins.IActions)
     plugins.implements(plugins.IMiddleware, inherit=True)
     plugins.implements(plugins.IBlueprint)
+    plugins.implements(plugins.IPermissionLabels)  # ensure "members" can't see private datasets
+
+
+    def get_dataset_labels(self, dataset_obj):
+        # NOTE: Re-index after making changes to permissions here
+        if dataset_obj.state == u'active' and not dataset_obj.private:
+            return [u'public']
+
+        if ckan.authz.check_config_permission('allow_dataset_collaborators'):
+            # Add a generic label for all this dataset collaborators
+            labels = [u'collaborator-%s' % dataset_obj.id]
+        else:
+            print('no collaborators')
+            labels = []
+
+        labels.append(u'creator-%s' % dataset_obj.creator_user_id)
+        # Add labels for admins:: admins-creator_name
+        admins = helpers.get_org_admin(dataset_obj.owner_org)
+        labels = ['admins-{}'.format(admin) for admin in admins] + labels
+
+        return labels
+
+    def get_user_dataset_labels(self, user_obj):
+        labels = [u'public']
+        if not user_obj:
+            return labels
+
+        labels.append(u'creator-%s' % user_obj.id)
+        labels.append(u'admins-%s' % user_obj.name)
+
+        orgs = ckan.logic.get_action(u'organization_list_for_user')(
+            {u'user': user_obj.id}, {u'permission': u'read'})
+        labels.extend(u'member-%s' % o[u'id'] for o in orgs)
+
+        if ckan.authz.check_config_permission('allow_dataset_collaborators'):
+            # Add a label for each dataset this user is a collaborator of
+            datasets = ckan.logic.get_action('package_collaborator_list_for_user')(
+                {'ignore_auth': True}, {'id': user_obj.id})
+
+            labels.extend('collaborator-%s' % d['package_id'] for d in datasets)
+
+        return labels
 
 
     def make_middleware(self, app, config):

@@ -19,7 +19,7 @@ html {
   -ms-text-size-adjust: 100%;
 }
 
-body {
+/*body {
   margin: 0;
   font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
   font-size: 14px;
@@ -30,7 +30,7 @@ body {
   background-repeat: no-repeat;
   background-attachment: fixed;
   background-size: 100% auto;
-}
+}*/
 
 a {
   text-decoration: none;
@@ -65,7 +65,6 @@ ol.unstyled {
   *zoom: 1;
   min-height: 30px;
   color: #ffffff;
-  background: #003647 url("../../../base/images/bg.png");
 }
 .account-masthead:before,
 .account-masthead:after {
@@ -219,3 +218,18 @@ li {
 /************* END Navigation *******************/
 
 
+@media (max-width: 979px) and (min-width: 768px){
+  .container, .navbar-static-top .container, .navbar-fixed-top .container, .navbar-fixed-bottom .container {
+      width: 724px;
+  }
+}
+
+.account-masthead .account ul li a {
+  display: block;
+  /* color: rgb(191, 215, 222); */
+  color: white;
+  font-size: 13px;
+  font-weight: 400;
+  /* padding: 5px 10px 5px 10px; */
+  line-height: 31px;
+}
