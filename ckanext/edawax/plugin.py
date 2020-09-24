@@ -310,6 +310,10 @@ class EdawaxPlugin(plugins.SingletonPlugin):
         # Add labels for admins:: admins-creator_name
         admins = helpers.get_org_admin(dataset_obj.owner_org)
         labels = [u'admins-{}'.format(admin) for admin in admins] + labels
+        # Add labels for reviewers:: reviewers-
+        if dataset_obj.maintainer not in [None, '']:
+            reviewer = dataset_obj.maintainer.split('/')[1]
+            labels.append(u'reviewer-{}'.format(reviewer))
 
         return labels
 
@@ -320,6 +324,7 @@ class EdawaxPlugin(plugins.SingletonPlugin):
 
         labels.append(u'creator-%s' % user_obj.id)
         labels.append(u'admins-%s' % user_obj.name)
+        labels.append(u'reviewer-%s' % user_obj.name)
 
         orgs = ckan.logic.get_action(u'organization_list_for_user')(
             {u'user': user_obj.id}, {u'permission': u'read'})
