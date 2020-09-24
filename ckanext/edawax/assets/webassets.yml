@@ -76,6 +76,10 @@ popup-js:
     - edawax_download_count_popup.js
   output: edawax/%(version)s_popup.js
   filters: rjsmin
+  extra:
+    preload:
+      - base/main
+      - base/ckan
 
 edawax-js:
   contents:

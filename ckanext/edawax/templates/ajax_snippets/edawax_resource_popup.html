@@ -32,7 +32,8 @@
                 {% endfor %}
             {% else %}
                 {% if h.check_access('resource_create',{'package_id':data}) %}
-                    {% set url = h.url_for(controller='package', action='new_resource', id=data) %}
+                    {#% set url = h.url_for(controller='package', action='new_resource', id=data) %#}
+                    {% set url = h.url_for('resource.new', id=data) %}
                     <p class="empty">This dataset has no data, <a href="{{ url }}">why not add some?</a></p>
                 {% else %}
                     <p class="empty">{{ _('This dataset has no data') }}</p>
@@ -41,7 +42,7 @@
         </dl>
     </div>
     <a class="btn go-to-dataset"
-       href="{{ h.url_for(controller='package', action='read', id=id) }}"
+       href="{{ h.url_for('dataset.read', id=id) }}"
        style="float: none !important;">
        <i class="fa fa-arrow-circle-right"></i>
        Go to dataset

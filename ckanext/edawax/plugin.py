@@ -295,6 +295,7 @@ class EdawaxPlugin(plugins.SingletonPlugin):
 
 
     def get_dataset_labels(self, dataset_obj):
+        # TODO: Check how this works with reviewers, make necessary changes.
         # NOTE: Re-index after making changes to permissions here
         if dataset_obj.state == u'active' and not dataset_obj.private:
             return [u'public']
@@ -303,13 +304,12 @@ class EdawaxPlugin(plugins.SingletonPlugin):
             # Add a generic label for all this dataset collaborators
             labels = [u'collaborator-%s' % dataset_obj.id]
         else:
-            print('no collaborators')
             labels = []
 
         labels.append(u'creator-%s' % dataset_obj.creator_user_id)
         # Add labels for admins:: admins-creator_name
         admins = helpers.get_org_admin(dataset_obj.owner_org)
-        labels = ['admins-{}'.format(admin) for admin in admins] + labels
+        labels = [u'admins-{}'.format(admin) for admin in admins] + labels
 
         return labels
 

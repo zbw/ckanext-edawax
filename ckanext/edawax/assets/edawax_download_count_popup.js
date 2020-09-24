@@ -13,6 +13,11 @@
  */
 
 ckan.module('edawax_download_count_popup', function($, _){
+    // Fix to prevent needed to click twice to get popover working
+    // https://stackoverflow.com/questions/32581987/need-click-twice-after-hide-a-shown-bootstrap-popover/34320956
+    $('body').on('hidden.bs.popover', function (e) {
+        $(e.target).data("bs.popover").inState.click = false;
+    });
     return {
         initialize: function(){
             $.proxyAll(this, /_on/);
@@ -40,17 +45,17 @@ ckan.module('edawax_download_count_popup', function($, _){
         },
 
         _onReceiveSnippet: function(html){
-            this.el.popover('destroy');
+            // Instead of destroying the loading message, rewrite it.
             var len = this.options.title.length;
-            this.el.popover({title: '<span class="text-info"><strong>'+ this.options.title + '</strong></span><a class="close" style="float:right;" onclick="$(&quot;#' + this.options.id + '_popup&quot;).popover(&quot;hide&quot;);">&times;</a>',
-                             html: true,
-                             content: html,
-                             placement: function(){
-                                if (len > 30){
-                                    return "left";
-                                }
-                                return "right";
-                             } });
+            this.el.data('bs.popover').options.html = true;
+            this.el.data('bs.popover').options.sanitize = false;
+            this.el.data('bs.popover').options.title = '<span class="text-info"><strong>'+ this.options.title + '</strong></span><a class="close" style="float:right;" onclick="$(&quot;#' + this.options.id + '_popup&quot;).popover(&quot;hide&quot;);">&times;</a>';
+            this.el.data('bs.popover').options.content = html;
+            if (len > 30){
+                this.el.data('bs.popover').options.placement = 'left';
+            } else {
+                this.el.data('bs.popover').options.placement = 'right';
+            }
             this.el.popover('show');
         },
 
