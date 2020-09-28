@@ -26,7 +26,6 @@ def sendmail(address, msg):
     except Exception as e:
         log.error("Mail to {} could not be sent".format(address))
         log.error("{}".format(e))
-        # raise Exception  # TODO raise more detailed exception
         return False
 
 

@@ -340,9 +340,6 @@ def is_admin(pkg=None):
     admins = model.Session.query(model.Member).filter(and_(model.Member.capacity == 'admin',
                             model.Member.group_id == group_id)).all()
 
-    # TODO: see if the below and replace the above
-    #admins = get_group_or_org_admin_ids(pkg_dict['owner_org'])
-
     try:
         user_id = g.userobj.id
         if user_id in [a.table_id for a in admins]:

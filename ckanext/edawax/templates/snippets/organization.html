@@ -11,7 +11,7 @@ Example:
 
 #}
 {% set pkg = h.dara_pkg() %}
-{% with truncate=truncate or 0, url=h.url_for(controller='organization', action='read', id=organization.name) %}
+{% with truncate=truncate or 0, url=h.url_for('organization.read', id=organization.name) %}
   <div class="module context-info">
     <section class="module-content">
 
@@ -27,7 +27,7 @@ Example:
           <p>
             {{ h.render_markdown(organization.description[:180]) }}
             {#{ h.markdown_extract(organization.description, 180) }#}
-            {% link_for _('read more'), controller='organization', action='about', id=organization.name %}
+            {% link_for _('read more'), named_route='organization.about', id=organization.name %}
           </p>
         {% else %}
           <p class="empty">{{ _('There is no description for this organization') }}</p>

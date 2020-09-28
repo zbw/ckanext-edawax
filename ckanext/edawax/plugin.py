@@ -295,7 +295,6 @@ class EdawaxPlugin(plugins.SingletonPlugin):
 
 
     def get_dataset_labels(self, dataset_obj):
-        # TODO: Check how this works with reviewers, make necessary changes.
         # NOTE: Re-index after making changes to permissions here
         if dataset_obj.state == u'active' and not dataset_obj.private:
             return [u'public']
