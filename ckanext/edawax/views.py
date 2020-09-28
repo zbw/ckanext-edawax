@@ -1,3 +1,4 @@
+import re
 import ast
 import logging
 from ckan import model
