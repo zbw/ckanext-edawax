@@ -282,7 +282,7 @@ def editor_notify(id):
     Send from reviewer back to editor
     """
     context = _context()
-    msg = tk.request.params.get('msg', '')
+    msg = request.form.get('msg', '')
     pkg_dict = tk.get_action('package_show')(context, {'id': id})
     creator_mail = model.User.get(pkg_dict['creator_user_id']).email
     note = n.notify('editor', id, creator_mail, msg, context)

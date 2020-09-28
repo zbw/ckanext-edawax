@@ -309,10 +309,14 @@ class EdawaxPlugin(plugins.SingletonPlugin):
         # Add labels for admins:: admins-creator_name
         admins = helpers.get_org_admin(dataset_obj.owner_org)
         labels = [u'admins-{}'.format(admin) for admin in admins] + labels
-        # Add labels for reviewers:: reviewers-
+        # Add labels for reviewers:: reviewers-reviewer_name
+        # Reviewer only has a name after the invitation has been sent
         if dataset_obj.maintainer not in [None, '']:
-            reviewer = dataset_obj.maintainer.split('/')[1]
-            labels.append(u'reviewer-{}'.format(reviewer))
+            try:
+                reviewer = dataset_obj.maintainer.split('/')[1]
+                labels.append(u'reviewer-{}'.format(reviewer))
+            except IndexError:
+                pass
 
         return labels
 

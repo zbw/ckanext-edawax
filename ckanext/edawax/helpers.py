@@ -388,8 +388,6 @@ def is_published(url):
             return False
         return True
     except Exception as e:
-        log.debug('is_published error: {} {} {}'.format(e.__class__.__name__,
-                                                        e.message, e.args))
         return False
 
 
