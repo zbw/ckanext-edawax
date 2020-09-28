@@ -3590,7 +3590,10 @@ div.modal-dialog{
 .modal-body,
 .modal-header{
     background-color: #f5f5f5;
-    border-radius: 8px;
+}
+
+.modal-header{
+    border-radius: 8px 8px 0 0;
 }
 
 .modal-footer {

@@ -259,7 +259,7 @@ def reauthor(id):
     Should also send email to author
     """
     context = _context()
-    msg = tk.request.params.get('msg', '')
+    msg = request.form.get('msg', '')
     pkg_dict = tk.get_action('package_show')(context, {'id': id})
     delete_cookies(pkg_dict)
     creator_mail = model.User.get(pkg_dict['creator_user_id']).email

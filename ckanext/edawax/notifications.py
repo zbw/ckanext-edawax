@@ -104,10 +104,7 @@ def compose_message(typ, body, subject, config, send_to, context=None):
     reviewer_email = tk.get_action('user_show')(context, {'id': g.user})['email']
 
     msg = MIMEText(body.encode('utf-8'), 'plain', 'utf-8')
-    print('------------------------------------')
-    print(subject)
     msg['Subject'] = Header(subject)
-    print(msg['Subject'])
     msg['From'] = config.get('smtp.mail_from')
     if typ in ['editor', 'reauthor']:
         msg['Cc'] = reviewer_email
