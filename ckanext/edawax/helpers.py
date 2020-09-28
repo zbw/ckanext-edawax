@@ -53,11 +53,12 @@ def format_resource_items_custom(items):
                     end = thing[1]
             out.append(( "9 Temporal Coverage (controlled)", "{} to {}".format(item[1], end) ))
         elif item[0] == u'dara_authors':
-            if item[1] in ["[u'', u'', u'', u'', u'']", "['']"]:
+            if item[1] in ["[u'', u'', u'', u'', u'']", "['']", ['', '', '', '', '']]:
                 package = tk.get_action('package_show')({'use_cache': False}, {'id': request.url.split('/')[4]})
-                items = [item for item in package['extras']]
-
-                authors = ast.literal_eval(package['extras_dara_authors'].replace("null", '""'))
+                try:
+                    authors = ast.literal_eval(package['dara_authors'].replace("null", '""'))
+                except Exception:
+                    authors = ast.literal_eval(package['extras_dara_authors'].replace("null", '""'))
                 a = parse_authors(authors)
                 out.append(("3 Authors", a))
             else:
