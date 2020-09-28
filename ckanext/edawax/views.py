@@ -299,7 +299,7 @@ def editor_notify(id):
 def author_notify(id):
     """ Send mail from the system to the author """
     context = _context()
-    msg = tk.request.params.get('msg', '')
+    msg = request.form.get('msg', '')
     pkg_dict = tk.get_action('package_show')(context, {'id': id})
 
     if pkg_dict['dara_edawax_review'] == 'reviewed':
