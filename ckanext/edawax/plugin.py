@@ -16,7 +16,7 @@ from ckan.logic.action.get import package_show, resource_show
 
 # from collections import OrderedDict
 import ckan.lib.helpers as h
-from ckan.common import c, request, config
+from ckan.common import c, request, config, g
 from toolz.functoolz import compose
 from functools import partial
 from ckanext.dara.helpers import check_journal_role
@@ -63,14 +63,14 @@ def get_facet_items_dict(facet, limit=None, exclude_active=False,
     (https://github.com/ckan/ckan/issues/3271)
     Also: refactored to be a bit more functional (SCNR)
     '''
-
     try:
-        f = c.search_facets.get(facet)['items']
-    except:
+        f = g.search_facets.get(facet)['items']
+    except Exception as e:
         return []
 
     def active(facet_item):
-        if not (facet, facet_item['name']) in tk.request.params.items():
+        #if not (facet, facet_item['name']) in tk.request.params.items():
+        if not (facet, facet_item['name']) in request.args.items():
             return dict(active=False, **facet_item)
         elif not exclude_active:
             return dict(active=True, **facet_item)
@@ -84,8 +84,8 @@ def get_facet_items_dict(facet, limit=None, exclude_active=False,
 
     # for some reason limit is not in scope here, so it must be a param
     def set_limit(facs, limit):
-        if c.search_facets_limits and limit is None:
-            limit = c.search_facets_limits.get(facet)
+        if g.search_facets_limits and limit is None:
+            limit = g.search_facets_limits.get(facet)
         # zero treated as infinite for hysterical raisins
         if limit is not None and limit > 0:
             return facs[:limit]
@@ -158,7 +158,6 @@ def journal_resource_delete(context, data_dict):
     don't allow resource delete if it has a DOI,
     but allow author's to delete resources they added.
     """
-    # resource = c.resource  # would this be reliable?
     resource = tk.get_action('resource_show')(context, data_dict)
     package = tk.get_action('package_show')(context, {'id': resource['package_id']})
     creator_id = package['creator_user_id']
@@ -356,7 +355,7 @@ class EdawaxPlugin(plugins.SingletonPlugin):
         tk.add_template_directory(config, 'jdainfo/md')
         tk.add_resource('assets', 'edawax')
         tk.add_resource('fanstatic', 'edawax_fs')
-        h.get_facet_items_dict = get_facet_items_dict
+        #h.get_facet_items_dict = get_facet_items_dict
 
     def get_actions(self):
         return {
@@ -424,7 +423,8 @@ class EdawaxPlugin(plugins.SingletonPlugin):
                 'show_change_reviewer': helpers.show_change_reviewer,
                 'find_reviewers_datasets': helpers.find_reviewers_datasets,
                 'is_author': helpers.is_author,
-                'update_citation': helpers.update_citation
+                'update_citation': helpers.update_citation,
+                'get_facets': get_facet_items_dict
                 }
 
     def get_blueprint(self):

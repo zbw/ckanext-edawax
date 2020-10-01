@@ -11,7 +11,7 @@ truncate_title - The length to truncate the title to (default: 80).
 
 Example:
 
-  {% snippet 'snippets/package_list.html', packages=c.datasets %}
+  {% snippet 'snippets/package_list.html', packages=datasets %}
 
 #}
 
@@ -39,11 +39,11 @@ Example:
 
 
 {% block package_list %}
-  {% if h.find_reviewers_datasets(c.userobj.name)|length > 0 %}
+  {% if h.find_reviewers_datasets(userobj.name)|length > 0 %}
     <div class="zbw-box box-full">
         <h2 class="zbw-font zbw-blue">Waiting for Review:</h2>
             <ul class="activity">
-        {% for item in h.find_reviewers_datasets(c.userobj.name) %}
+        {% for item in h.find_reviewers_datasets(userobj.name) %}
             <li class="item">
                 <i class="fa reviewer-icon fa-eye"></i>
                 <p class="reviewer_list"><a href="/dataset/{{ item['id'] }}">

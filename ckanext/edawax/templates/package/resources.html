@@ -2,7 +2,7 @@
 
 {% block page_primary_action %}
     {% if not h.has_doi(pkg) or h.has_hammer() %}
-        {% link_for _('Add new resource'), named_route='dataset_resource.new', id=c.pkg_dict.name, class_='btn btn-primary split', icon='plus' %}
+        {% link_for _('Add new resource'), named_route='dataset_resource.new', id=pkg_dict.name, class_='btn btn-primary split', icon='plus' %}
     {% endif %}
 {% endblock %}
 

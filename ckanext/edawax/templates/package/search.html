@@ -2,11 +2,11 @@
 
 {% block form %}
   {% set facets = {
-    'fields': c.fields_grouped,
-    'search': c.search_facets,
-    'titles': c.facet_titles,
-    'translated_fields': c.translated_fields,
-    'remove_field': c.remove_field }
+    'fields': fields_grouped,
+    'search': search_facets,
+    'titles': facet_titles,
+    'translated_fields': translated_fields,
+    'remove_field': remove_field }
   %}
   {% set org = h.get_request_param('organization') %}
   {% set sorting = [

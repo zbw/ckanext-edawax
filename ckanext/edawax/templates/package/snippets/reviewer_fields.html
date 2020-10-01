@@ -5,7 +5,7 @@
     still behave like that workflow, even if the "Reviewer" role is added when
     the dataset is already in "review"
 #}
-{% if h.in_review(c.pkg_dict) != 'true' %}
+{% if h.in_review(pkg_dict) != 'true' %}
     <div class="zbw-box box-full reviewer-box">
         <a name="dataset_reviewers"></a>
     <legend>Dataset Reviewer</legend>

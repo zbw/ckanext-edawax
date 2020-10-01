@@ -64,10 +64,10 @@
     {% if res.description %}
         {{ h.render_markdown(res.description) }}
     {% endif %}
-    {% if not res.description and c.package.notes %}
+    {% if not res.description and package.notes %}
       <h3>{{ _('From the dataset abstract') }}</h3>
-      <blockquote>{{ h.markdown_extract(c.package.get('notes')) }}</blockquote>
-      <p>{% trans dataset=c.package.title, url=h.url_for('dataset.read', id=c.package['name']) %}Source: <a href="{{ url }}">{{ dataset }}</a>{% endtrans %}
+      <blockquote>{{ h.markdown_extract(package.get('notes')) }}</blockquote>
+      <p>{% trans dataset=package.title, url=h.url_for('dataset.read', id=package['name']) %}Source: <a href="{{ url }}">{{ dataset }}</a>{% endtrans %}
     {% endif %}
   </div>
 
@@ -76,18 +76,18 @@
 
 {% block resource_view_content %}
   <div class="resource-view">
-    {% set resource_preview = h.resource_preview(c.resource, c.package) %}
+    {% set resource_preview = h.resource_preview(resource, package) %}
     {% set views_created = res.has_views or resource_preview %}
     {% if views_created %}
       {% if resource_preview and not current_resource_view %}
-        {{ h.resource_preview(c.resource, c.package) }}
+        {{ h.resource_preview(resource, package) }}
       {% else %}
         {% for resource_view in resource_views %}
           {% if resource_view == current_resource_view %}
             {% snippet 'package/snippets/resource_view_edawax.html',
                resource_view=resource_view,
-               resource=c.resource,
-               package=c.package
+               resource=resource,
+               package=package
              %}
           {% endif %}
         {% endfor %}
@@ -96,7 +96,7 @@
       {# Views not created #}
       <div class="module-content data-viewer-info">
         <p>{{ _("There are no views created for this resource yet.") }}</p>
-        {% if h.check_access('resource_view_create', {'resource_id': c.resource.id}) %}
+        {% if h.check_access('resource_view_create', {'resource_id': resource.id}) %}
           <p class="muted">
             <i class="fa fa-info-circle"></i>
             {{ _("Not seeing the views you were expecting?")}}
@@ -144,7 +144,7 @@
     </a>
   </li>
   {% if 'datastore' in g.plugins %}
-    <li>{% snippet 'package/snippets/data_api_button.html', resource=res, datastore_root_url=c.datastore_api %}</li>
+    <li>{% snippet 'package/snippets/data_api_button.html', resource=res, datastore_root_url=datastore_api %}</li>
   {% endif %}
 {% endblock %}
 

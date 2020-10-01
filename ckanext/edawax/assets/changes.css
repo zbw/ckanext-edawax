@@ -594,7 +594,7 @@ a.media-view-ii:hover {
 .search-form {
     background-color: white;
     border-radius: 8px;
-    height: 100px;
+    /*height: 100px;*/
     margin-bottom: 5px;
 }
 
@@ -1929,7 +1929,7 @@ p.empty {
     margin: 0;
     padding: 10px;
     min-height: 172px;
-    border-radius: 8px;
+    border-radius: 0 0 8px 8px ;
 }
 
 .module-content.page-header.box-top + .module-content {
@@ -2379,7 +2379,7 @@ ul, ol {
 .search-form {
     background-color: white;
     border-radius: 8px;
-    height: 100px;
+    /*height: 100px;*/
     margin-bottom: 5px;
     padding-bottom: 0;
 }
@@ -3556,14 +3556,8 @@ a.btn-success {
     filter: progid:DXImageTransform.Microsoft.gradient(enabled = false);
 }
 
-input,
-textarea.form-control,
-.uneditable-input {
-    width: 206px;
-}
 
 input,
-textarea.form-control,
 .uneditable-input {
     width: auto;
 }

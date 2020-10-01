@@ -464,7 +464,6 @@ def get_user_id():
         return {'model': model, 'session': model.Session,
                 'user': g.user or g.author, 'for_view': True,
                 'auth_user_obj': g.userobj}
-    #user = tk.c.user
     user = g.user
     if not user:
         return
@@ -575,7 +574,7 @@ def journal_volume_sorting(packages):
         pf = filter(lambda d: d.get(v, '') == vi[0] and d.get(i, '') == vi[1], packages)
         return VIP(vi[0], vi[1], pf)
 
-    sort = tk.request.params.get('sort', False)
+    sort = request.args.get('sort', False)
     if sort == u'{} desc, {} desc'.format(v, i):
         vi_list = map(lambda d: (d.get(v, ''), d.get(i, '')), packages)
         return map(t_construct, unique(vi_list))

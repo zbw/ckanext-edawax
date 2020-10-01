@@ -12,7 +12,7 @@ import ckan.plugins.toolkit as tk
 import ckan.lib.dictization.model_save as model_save
 import ckan.lib.navl.dictization_functions
 import ckan.lib.plugins as lib_plugins
-from ckan.common import _, request, c
+from ckan.common import _, request, c, g
 from ckan import model
 
 import ckanext.edawax.helpers as h
@@ -38,8 +38,8 @@ def email_exists(email):
 
 def update_maintainer_field(user_name, email, data_dict):
     context = {'model': model, 'session': model.Session,
-                'user': c.user or c.author, 'for_view': True,
-                'auth_user_obj': c.userobj, 'ignore_auth': True}
+                'user': g.user or g.author, 'for_view': True,
+                'auth_user_obj': g.userobj, 'ignore_auth': True}
     data_dict['maintainer'] = "{}/{}".format(email, user_name)
     updated_dict = tk.get_action('package_patch')(context, data_dict)
 

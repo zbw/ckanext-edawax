@@ -13,11 +13,11 @@
       <h1 class="heading">{{ user.display_name }}</h1>
       {% endblock %}
       {% block user_about %}
-      {% if c.about_formatted %}
-        {{ c.about_formatted }}
+      {% if about_formatted %}
+        {{ about_formatted }}
       {% else %}
         <p class="empty">
-          {% if c.is_myself %}
+          {% if is_myself %}
             {% trans %}You have not provided a biography.{% endtrans %}
           {% else %}
             {% trans %}This user has no biography.{% endtrans %}
@@ -38,7 +38,7 @@
         </dl>
       </div>
       {% endblock %}
-      {% if c.is_myself == false %}
+      {% if is_myself == false %}
         {% block user_follow %}
         <div class="follow_button">
           {{ h.follow_button('user', user.id) }}</li>

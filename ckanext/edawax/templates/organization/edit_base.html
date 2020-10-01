@@ -21,7 +21,7 @@
 {% endblock %}
 
 {% block content_primary_nav %}
-  {{ h.build_nav_icon('journals.edit', _('Edit'), id=c.group_dict.name, icon='pencil-square-o') }}
-  {{ h.build_nav_icon('journals.bulk_process', _('Datasets'), id=c.group_dict.name, icon='sitemap') }}
-  {{ h.build_nav_icon('journals.members', _('Members'), id=c.group_dict.name, icon='users') }}
+  {{ h.build_nav_icon('journals.edit', _('Edit'), id=group_dict.name, icon='pencil-square-o') }}
+  {{ h.build_nav_icon('journals.bulk_process', _('Datasets'), id=group_dict.name, icon='sitemap') }}
+  {{ h.build_nav_icon('journals.members', _('Members'), id=group_dict.name, icon='users') }}
 {% endblock %}

@@ -8,20 +8,15 @@
 {% endblock %}
 
 {% block search_title %}
-  {#% if not no_title %}
-    <h2 class="zbw-font zbw-blue">{% snippet 'snippets/search_result_text.html', query=query, count=count, type=type %}</h2>
-  {% endif %#}
 {% endblock %}
 
 {% block search_sortby %}
     {% if sorting %}
     {% if h.is_admin() %}
       <div style="display:none;">
-      {{ sorting.append(('Private', 'private desc, metadata_modified desc')) }}
-      {{ sorting.append(('Review', 'dara_edawax_review desc')) }}
+        {{ sorting.append(('Private', 'private desc, metadata_modified desc')) }}
+        {{ sorting.append(('Review', 'dara_edawax_review desc')) }}
       </div>
-      {#% set temp = sorting.append(('Private', 'private desc, metadata_modified desc')) %}
-      {% set temp = sorting.append(('Review', 'dara_edawax_review desc, private acs')) %#}
     {% endif %}
       <div class="form-select control-group control-order-by zbw-box box-top">
         {% if not no_title %}

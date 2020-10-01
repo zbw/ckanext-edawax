@@ -39,7 +39,8 @@ within_tertiary
 #}
 {% block facet_list %}
   {% set hide_empty = hide_empty or false %}
-  {% with items = items or h.get_facet_items_dict(name) %}
+  {#% with items = items or h.get_facet_items_dict(name) %#}
+  {% with items = h.get_facets(name) %}
     {% if items or not hide_empty %}
       {% if within_tertiary %}
         {% set nav_class = 'nav nav-pills nav-stacked' %}
@@ -58,9 +59,6 @@ within_tertiary
           {% block facet_list_items %}
 
         {% with items = items or h.get_facet_items_dict(name) %}
-
-        {#% with items = items or h.get_facet_items_dict(name, sort_key="name") %#}
-
             {% if items %}
               <nav>
                 <ul class="{{ nav_class or 'unstyled nav nav-simple nav-facet' }}">

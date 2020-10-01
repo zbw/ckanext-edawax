@@ -2,13 +2,13 @@
 
 {% block breadcrumb_content %}
   <li>{% link_for _('Journals'), named_route='journals.index' %}</li>
-  <li class="active">{% link_for c.group_dict.display_name|truncate(35), named_route='journals.read', id=c.group_dict.name %}</li>
+  <li class="active">{% link_for group_dict.display_name|truncate(35), named_route='journals.read', id=group_dict.name %}</li>
 {% endblock %}
 
 
 {% block content_action %}
-  {% if h.check_access('organization_update', {'id': c.group_dict.id}) %}
-    {% link_for _('Manage'), named_route='journals.edit', id=c.group_dict.name, class_='btn', icon='wrench' %}
+  {% if h.check_access('organization_update', {'id': group_dict.id}) %}
+    {% link_for _('Manage'), named_route='journals.edit', id=group_dict.name, class_='btn', icon='wrench' %}
   {% endif %}
 {% endblock %}
 
