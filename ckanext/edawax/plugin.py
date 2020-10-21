@@ -37,7 +37,7 @@ import ckan.authz as authz
 # Update permissions
 # Member needs "manage_group" to be able to create a dataset
 authz.ROLE_PERMISSIONS['member'] = ['read', 'create_dataset', 'manage_group']
-authz.ROLE_PERMISSIONS['reviewer'] = ['read', 'update_dataset']
+authz.ROLE_PERMISSIONS['reviewer'] = ['read']  #, 'update_dataset'
 authz._trans_role_reviewer = lambda: 'Reviewer'
 
 def edawax_facets(facets_dict):
@@ -161,7 +161,12 @@ def journal_resource_delete(context, data_dict):
     resource = tk.get_action('resource_show')(context, data_dict)
     package = tk.get_action('package_show')(context, {'id': resource['package_id']})
     creator_id = package['creator_user_id']
-    creator = tk.get_action('user_show')(context, {'id': creator_id})
+    try:
+        creator = tk.get_action('user_show')(context, {'id': creator_id})
+    except ckan.logic.NotFound:
+        # The creator has been deleted
+        return {'success': False, 'msg': "Can't find user: {}".format(creator_id)}
+
 
     if resource.get('dara_DOI', False) or _ctest(resource):
         return {'success': False, 'msg': "Resource can not be deleted because\
