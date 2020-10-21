@@ -146,7 +146,12 @@ def journal_package_delete(context, data_dict):
                 it has a DOI assigned"}
 
     creator_id = pkg_dict['creator_user_id']
-    creator = tk.get_action('user_show')(context, {'id': creator_id})
+    try:
+        creator = tk.get_action('user_show')(context, {'id': creator_id})
+    except ckan.logic.NotFound:
+        # The creator has been deleted
+        return {'success': False, 'msg': "Can't find user: {}".format(creator_id)}
+
     if context['user'] == creator['name'] and 'resource_delete' in request.url:
         return {'success': True}
 
