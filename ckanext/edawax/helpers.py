@@ -796,7 +796,7 @@ def build_citation_crossref(doi):
             }
             return citation.format(**fields)
         except KeyError as e:
-            log.debug('build_citation_crossref error: {} {} {}'.format(e, e.message, e.args))
+            log.debug('build_citation_crossref error: {}'.format(e))
 
     return ""
 

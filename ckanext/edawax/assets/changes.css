@@ -3661,3 +3661,7 @@ input[type="button"],
 input[type="submit"] {
     width: auto;
 }
+
+input#field-title {
+    width: 100%;
+}

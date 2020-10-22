@@ -38,6 +38,7 @@ import ckan.authz as authz
 # Member needs "manage_group" to be able to create a dataset
 authz.ROLE_PERMISSIONS['member'] = ['read', 'create_dataset', 'manage_group']
 authz.ROLE_PERMISSIONS['reviewer'] = ['read']  #, 'update_dataset'
+del authz.ROLE_PERMISSIONS['editor'] # remove editor
 authz._trans_role_reviewer = lambda: 'Reviewer'
 
 def edawax_facets(facets_dict):
@@ -187,7 +188,11 @@ def journal_resource_create(context, data_dict):
     """
     Don't allow new resources to be added if there is a DOI for the package
     """
-    pkg_dict = tk.get_action('package_show')(context, {'id': data_dict['package_id']})
+    try:
+        pkg_dict = tk.get_action('package_show')(context, {'id': data_dict['package_id']})
+    except KeyError:
+        rsc_dict = tk.get_action('resource_show')(context, {'id': data_dict['id']})
+        pkg_dict = tk.get_action('package_show')(context, {'id': rsc_dict['package_id']})
     if pkg_dict.get('dara_DOI', False) or _ctest(pkg_dict):
         return {'success': False, 'msg': "Package can not be created because\
                 it has a DOI assigned"}
