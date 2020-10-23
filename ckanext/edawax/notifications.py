@@ -14,24 +14,25 @@ log = logging.getLogger(__name__)
 
 
 def sendmail(address, msg):
-    log.info('Sending Notifcation to: {}'.format(address))
+    log.info(f'Sending Notifcation to: {address}')
     mail_from = config.get('smtp.mail_from')
     try:
         smtp_server = config.get('smtp.test_server', config.get('smtp.server'))
         smtp_connection = smtplib.SMTP(smtp_server)
         smtp_connection.sendmail(mail_from, [address], msg.as_string())
-        log.info("Sent notification to {0}".format(address))
+        log.info(f"Sent notification to {address}")
         smtp_connection.quit()
         return True
     except Exception as e:
-        log.error("Mail to {} could not be sent".format(address))
-        log.error("{}".format(e))
+        log.error(f"Mail to {address} could not be sent")
+        log.error(f"{e}")
         return False
 
 
 def package_url(dataset):
-    return u"{}{}".format(config.get('ckan.site_url'),
-                          tk.url_for('dataset.read', id=dataset))
+    site_url = config.get('ckan.site_url')
+    url = tk.url_for('dataset.read', id=dataset)
+    return u"{site_url}{url}"
 
 subjects = {
             "review_editor": u": Data Submission Notification",
@@ -95,7 +96,7 @@ msg_body = {
 
 def create_message(msg):
     if msg:
-        return u"Message: \n========\n{}\n".format(msg)
+        return f"Message: \n========\n{msg}\n"
     return u""
 
 
@@ -110,7 +111,7 @@ def compose_message(typ, body, subject, config, send_to, context=None):
         msg['Cc'] = reviewer_email
     msg['To'] = Header(send_to, 'utf-8')
     msg['Date'] = utils.formatdate(time())
-    msg['X-Mailer'] = "CKAN {} [Plugin edawax]".format(ckan_version)
+    msg['X-Mailer'] = f"CKAN {ckan_version} [Plugin edawax]"
 
     return msg
 
@@ -129,7 +130,9 @@ def notify(typ, dataset, author_mail, msg, context, status=None):
     if status:
         d['status'] = status
     body = body.format(**d)
-    subject = '{}{}'.format(config.get('ckan.site_title'), subjects[typ])
+    site_title = config.get('ckan.site_title')
+    sub = subjects[typ]
+    subject = f'{site_title}{sub}'
     message = compose_message(typ, body, subject, config, author_mail, context)
 
     return sendmail(author_mail, message)
@@ -143,7 +146,7 @@ def review(addresses, author, dataset, reviewers=None, msg=None):
         pkg = tk.get_action('package_show')(None, {'id': dataset})
         submission_id = pkg.get('dara_jda_submission_id', None)
         if submission_id:
-            return u"Article Submission ID: {}\n".format(submission_id)
+            return f"Article Submission ID: {submission_id}\n"
         return u""
 
     def message(who, address):
@@ -166,7 +169,9 @@ def review(addresses, author, dataset, reviewers=None, msg=None):
         if msg:
             d['message'] = create_message(msg)
         body = body.format(**d)
-        subject = '{}{}'.format(config.get('ckan.site_title'), subjects[who])
+        site_title = config.get('ckan.site_title')
+        sub = subjects[who]
+        subject = '{site_title}{sub}'
         return compose_message(who, body, subject, config, address)
 
     # send email to Admin

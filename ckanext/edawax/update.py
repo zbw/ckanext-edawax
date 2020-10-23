@@ -40,14 +40,14 @@ def update_maintainer_field(user_name, email, data_dict):
     context = {'model': model, 'session': model.Session,
                 'user': g.user or g.author, 'for_view': True,
                 'auth_user_obj': g.userobj, 'ignore_auth': True}
-    data_dict['maintainer'] = "{}/{}".format(email, user_name)
+    data_dict['maintainer'] = f"{email}/{user_name}"
     updated_dict = tk.get_action('package_patch')(context, data_dict)
 
     return updated_dict
 
 
 def invite_reviewer(email, org_id):
-    log.debug("Inviting: {}".format(email))
+    log.debug(f"Inviting: {email}")
     new_user = tk.get_action('user_invite')(None, {'email': email, 'group_id': org_id, 'role': 'reviewer'})
     return new_user
 

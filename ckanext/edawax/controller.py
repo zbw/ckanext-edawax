@@ -76,7 +76,7 @@ class WorkflowController(PackageController):
 
         else:
             h.flash_error("Reviewers must be given as email addresses.")
-            log.debug("Reviewers aren't an email address: '{}'".format(reviewer))
+            log.debug(f"Reviewers aren't an email address: '{reviewer}'")
             redirect(id)
         return reviewer_list
 
@@ -136,7 +136,7 @@ class WorkflowController(PackageController):
                         flash_message = ('ERROR: Mail could not be sent. Please try again later or contact the site admin.', 'error')
                         log.debug('Failed to send notifications')
         except Exception as e:
-            log.error("Error with reviewer notifications: {}-{}".format(e.message, e.args))
+            log.error(f"Error with reviewer notifications: {e.message}-{e.args}")
             log.error(reviewer_emails)
 
         # the author is sending the dataset to the editor, there are no reviewers
@@ -348,9 +348,9 @@ class WorkflowController(PackageController):
             journal_title = temp_title
 
         if data['dara_DOI'] != '':
-            address = 'https://doi.org/{}'.format(data['dara_DOI'])
+            address = f'https://doi.org/{data['dara_DOI']}'
         else:
-            address = '{}/dataset/{}'.format(config.get('ckan.site_url'), data['name'])
+            address = f'{config.get('ckan.site_url')}/dataset/{data['name']}'
 
         return citation.format(authors=authors,
                                year=year,
@@ -365,7 +365,9 @@ class WorkflowController(PackageController):
         context = self._context()
         c.pkg_dict = tk.get_action('package_show')(context, {'id': id})
         zip_sub_dir = 'resources'
-        zip_name = u"{}_resouces_{}.zip".format(c.pkg_dict['title'].replace(' ', '_').replace(',', '_'), time.time())
+        title = c.pkg_dict['title'].replace(' ', '_').replace(',', '_')
+        time = time.time()
+        zip_name = f"{title}_resouces_{time}.zip"
 
         resources = c.pkg_dict['resources']
         for resource in resources:

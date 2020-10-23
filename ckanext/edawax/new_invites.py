@@ -51,14 +51,14 @@ def get_invite_body(user, data=None):
             url = None
         else:
             id_ = request.urlvars['id']
-            url = u"{}{}".format(config.get('ckan.site_url'),
-                            tk.url_for("dataset.read",
-                            id=id_))
+            site_url = config.get('ckan.site_url')
+            url_ = tk.url_for("dataset.read", id=id_)
+            url = f"{site_url}{url_}"
     else:
         id_ = request.view_args['id']
-        url = u"{}{}".format(config.get('ckan.site_url'),
-                        tk.url_for("dataset.read",
-                        id=id_))
+        site_url = config.get('ckan.site_url')
+        url_ = tk.url_for("dataset.read", id=id_)
+        url = f"{site_url}{url_}"
 
     extra_vars = {'reset_link': mailer.get_reset_link(user),
        'site_title': config.get('ckan.site_title'),
@@ -89,7 +89,7 @@ def send_invite(user, data):
     else:
         role = "Reviewer"
     sub = config.get('ckan.site_title')
-    subject = mailer._('{site_title} Invite: {role}').format(site_title=sub, role=role)
+    subject = mailer._(f'{sub} Invite: {role}')
     mail_user(user, subject, body, {}, role)
 
 
@@ -157,13 +157,13 @@ def _mail_recipient(recipient_name, recipient_email,
         else:
             attachment_file_name = "Editors_Manual-EN-2020-07-31_V1.6.pdf"
         directory = os.path.dirname(__file__)
-        rel_path = 'public/{}'.format(attachment_file_name)
+        rel_path = f'public/{attachment_file_name}'
         with open(os.path.join(directory, rel_path), 'rb') as file:
             part = MIMEApplication(
                                     file.read(),
                                     name=attachment_file_name
                                   )
-        part['Content-Disposition'] = 'attachment; filename={}'.format(attachment_file_name)
+        part['Content-Disposition'] = f'attachment; filename={attachment_file_name}'
         msg.attach(part)
 
     # Send the email using Python's smtplib.
@@ -205,7 +205,7 @@ def _mail_recipient(recipient_name, recipient_email,
             smtp_connection.login(smtp_user, smtp_password)
 
         smtp_connection.sendmail(mail_from, [recipient_email], msg.as_string())
-        log.info("Sent email to {0}".format(recipient_email))
+        log.info(f"Sent email to {recipient_email}")
 
     except smtplib.SMTPException as e:
         msg = '%r' % e

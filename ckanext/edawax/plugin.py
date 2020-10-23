@@ -151,7 +151,7 @@ def journal_package_delete(context, data_dict):
         creator = tk.get_action('user_show')(context, {'id': creator_id})
     except ckan.logic.NotFound:
         # The creator has been deleted
-        return {'success': False, 'msg': "Can't find user: {}".format(creator_id)}
+        return {'success': False, 'msg': f"Can't find user: {creator_id}"}
 
     if context['user'] == creator['name'] and 'resource_delete' in request.url:
         return {'success': True}
@@ -171,7 +171,7 @@ def journal_resource_delete(context, data_dict):
         creator = tk.get_action('user_show')(context, {'id': creator_id})
     except ckan.logic.NotFound:
         # The creator has been deleted
-        return {'success': False, 'msg': "Can't find user: {}".format(creator_id)}
+        return {'success': False, 'msg': f"Can't find user: {creator_id}"}
 
 
     if resource.get('dara_DOI', False) or _ctest(resource):
@@ -322,13 +322,13 @@ class EdawaxPlugin(plugins.SingletonPlugin):
         labels.append(u'creator-%s' % dataset_obj.creator_user_id)
         # Add labels for admins:: admins-creator_name
         admins = helpers.get_org_admin(dataset_obj.owner_org)
-        labels = [u'admins-{}'.format(admin) for admin in admins] + labels
+        labels = [f'admins-{admin}' for admin in admins] + labels
         # Add labels for reviewers:: reviewers-reviewer_name
         # Reviewer only has a name after the invitation has been sent
         if dataset_obj.maintainer not in [None, '']:
             try:
                 reviewer = dataset_obj.maintainer.split('/')[1]
-                labels.append(u'reviewer-{}'.format(reviewer))
+                labels.append(f'reviewer-{reviewer}')
             except IndexError:
                 pass
 
@@ -455,8 +455,7 @@ class EdawaxPlugin(plugins.SingletonPlugin):
 
         cite = Blueprint(u'citation', self.__module__, url_prefix=u"")
         cite.add_url_rule(u'/citation/<type>/<id>',
-                            view_func=views.create_citation,
-                            methods=[u'GET', u'POST'])
+                            view_func=views.create_citation)
 
         actions = [
             u'member_delete', u'history', u'followers', u'follow',
@@ -493,7 +492,7 @@ class EdawaxPlugin(plugins.SingletonPlugin):
                               methods=[u'GET', u'POST'])
         for action in actions:
             journals.add_url_rule(
-                u'/{0}/<id>'.format(action),
+                f'/{action}/<id>',
                 methods=[u'GET', u'POST'],
                 view_func=getattr(group, action))
 

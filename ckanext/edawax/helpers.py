@@ -51,7 +51,7 @@ def format_resource_items_custom(items):
             for thing in items:
                 if thing[0] == u'dara_temporalCoverageFormal_end':
                     end = thing[1]
-            out.append(( "9 Temporal Coverage (controlled)", "{} to {}".format(item[1], end) ))
+            out.append(( "9 Temporal Coverage (controlled)", f"{item[1]} to {end}"))
         elif item[0] == u'dara_authors':
             if item[1] in ["[u'', u'', u'', u'', u'']", "['']", ['', '', '', '', '']]:
                 package = tk.get_action('package_show')({'use_cache': False}, {'id': request.url.split('/')[4]})
@@ -109,21 +109,20 @@ def parse_authors(authors):
     out = ''
     # information is coming from the dataset
     if type(authors[0]) == dict:   #len(authors) > 1:
-        #return u' and '.join([u"{}, {}".format(author['lastname'].decode('unicode_escape'), author['firstname'].decode('unicode_escape')) for author in authors])
-        return u' and '.join([u"{}, {}".format(author['lastname'], author['firstname']) for author in authors])
+        return u' and '.join([f"{author['lastname']}, {author['firstname']}" for author in authors])
     # Information is specific for the resource, and there's more than one
     # author
     if len(authors) > 5:
         temp_list = []
         for c in chunk(authors, 5):
             if c[0] != '':
-                temp_list.append(u"{}, {}".format(c[0], c[1]))
+                temp_list.append(f"{c[0]}, {c[1]}")
             else:
-                temp_list.append(u"{}".format(c[2]))
+                temp_list.append(f"{c[2]}")
         return ' and '.join(temp_list)
     if authors[0] != u'':
-        return u"{}, {}".format(authors[0], authors[1])
-    return u"{}".format(authors[2])
+        return f"{authors[0]}, {authors[1]}"
+    return f"{authors[2]}"
 
 # fields with number values in older records that need to be replaced by strings
 replacement_list = [
@@ -170,11 +169,10 @@ u"url": "96 URL"}
 def delete_cookies(pkg):
     """ Clear Cookies - after resend """
     try:
-        cookie = 'reviewerPrev_{}'.format(pkg['name'])
+        cookie = f"reviewerPrev_{pkg['name']}"
         resp.delete_cookie(cookie, '/')
     except Exception as e:
-        #log.debug('delete_cookies error: {} {} {}'.format(e, e.message, e.args))
-        log.debug('delete_cookies error: {}'.format(e))
+        log.debug(f'delete_cookies error: {e}')
 
 def _existing_user(pkg):
     """ Check if given reviewer is an existing user """
@@ -190,7 +188,7 @@ def _existing_user(pkg):
 
 def check_reviewer_update(pkg):
     """Check if the reviewer is new or not"""
-    reviewer_old = request.cookies.get('reviewerPrev_{}'.format(pkg['name']), False)
+    reviewer_old = request.cookies.get(f"reviewerPrev_{pkg['name']}", False)
     if reviewer_old is False:
         return False
 
@@ -206,7 +204,7 @@ def get_org_admin(org_id):
     try:
         org_data = tk.get_action('organization_show')(None, {'id': org_id})
     except Exception as e:
-        log.debug('get_org_admin error: {} {} {}'.format(e, e.message, e.args))
+        log.debug(f'get_org_admin error: {e} {e.message} {e.args}')
         return ''
     users = org_data['users']
     for user in users:
@@ -227,7 +225,7 @@ def has_reviewers(pkg):
         reviewers.append(reviewer)
         return reviewers[0] not in [None, '']
     except AttributeError as e:
-        log.debug('has_reviewers error: {} {} {}'.format(e, e.message, e.args))
+        log.debug(f'has_reviewers error: {e} {e.message} {e.args}')
         return False
 
 
@@ -241,7 +239,7 @@ def is_reviewer(pkg):
             reviewer = pkg['maintainer']
         except Exception as e:
             if pkg:
-                log.debug('is_reviewer error: {} {} {}'.format(e, e.message, e.args))
+                log.debug(f'is_reviewer error: {e} {e.message} {e.args}')
             return False
 
     emails = []
@@ -346,7 +344,7 @@ def is_admin(pkg=None):
         if user_id in [a.table_id for a in admins]:
             return True
     except AttributeError as e:
-        log.debug('is_admin error: {} {} {}'.format(e, e.message, e.args))
+        log.debug(f'is_admin error: {e} {e.message} {e.args}')
         pass
     return False
 
@@ -412,7 +410,7 @@ def truncate_title(name):
     if len(name) > 30:
         base = name[0:23]
         ending = name[-3:]
-        return u'{}...{}'.format(base, ending)
+        return f'{base}...{ending}'
     return name
 
 
@@ -454,7 +452,7 @@ def transform_to_map(data):
             final.append(data)
         return final
     except Exception:
-        log.debug('transform_to_map error: {} {} {}'.format(e, e.message, e.args))
+        log.debug('transform_to_map error: {e} {e.message} {e.args}')
 
     return data
 
@@ -575,7 +573,7 @@ def journal_volume_sorting(packages):
         return VIP(vi[0], vi[1], pf)
 
     sort = request.args.get('sort', False)
-    if sort == u'{} desc, {} desc'.format(v, i):
+    if sort == f'{v} desc, {i} desc':
         vi_list = map(lambda d: (d.get(v, ''), d.get(i, '')), packages)
         return map(t_construct, unique(vi_list))
 
@@ -704,7 +702,7 @@ def _recent_journal_views(engine, target, measure_from):
            GROUP BY p.id, p.name
            ORDER BY total_views DESC
     '''
-    return [_ViewCount(*t) for t in engine.execute(sql, name=target, url='/journals/{}'.format(target), measure_from=str(measure_from)).fetchall()]
+    return [_ViewCount(*t) for t in engine.execute(sql, name=target, url=f'/journals/{target}', measure_from=str(measure_from)).fetchall()]
 
 
 def _total_data_views(engine):
@@ -765,7 +763,7 @@ def query_crossref(doi):
             response = requests.get(base_url.format(doi=doi),
                                     headers=headers)
         except requests.exceptions.Timeout as e:
-            log.debug('query_crossref error: {}'.format(e))
+            log.debug(f'query_crossref error: {e}')
             return False
         if response.status_code == 200:
             return response.json()['message']
@@ -796,7 +794,7 @@ def build_citation_crossref(doi):
             }
             return citation.format(**fields)
         except KeyError as e:
-            log.debug('build_citation_crossref error: {}'.format(e))
+            log.debug(f'build_citation_crossref error: {e}')
 
     return ""
 
@@ -804,7 +802,7 @@ def build_citation_crossref(doi):
 def parse_author(author):
     # differentiate between people and institutions
     if 'given' in author.keys():
-        return u"{}, {}.".format(author['family'], author['given'][0])
+        return f"{author['family']}, {author['given'][0]}."
 
 
 def update_citation(data):
@@ -819,7 +817,7 @@ def update_citation(data):
         if correct_citation != '':
             tk.get_action('package_patch')(context, data)
     except Exception as e:
-        log.debug('update_citation error: {} {} {}'.format(e, e.message, e.args))
+        log.debug(f'update_citation error: {e} {e.message} {e.args}')
 
     return correct_citation
 

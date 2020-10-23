@@ -1,8 +1,9 @@
+import io
 import re
 import ast
 import logging
 from ckan import model
-from ckan.common import g, request, config
+from ckan.common import g, request, config, streaming_response
 import ckan.lib.helpers as h
 import ckan.plugins.toolkit as tk
 
@@ -69,7 +70,7 @@ def evaluate_reviewer(reviewer, reviewer_list, data_dict):
 
     else:
         h.flash_error("Reviewers must be given as email addresses.")
-        log.debug("Reviewers aren't an email address: '{}'".format(reviewer))
+        log.debug(f"Reviewers aren't an email address: '{reviewer}'")
         return redirect(id)
     return reviewer_list
 
@@ -131,7 +132,7 @@ def review(id):
                     log.debug('Failed to send notifications')
                     log.error(f'ERROR: {e}')
     except Exception as e:
-        log.error("Error with reviewer notifications: {}-{}".format(e.message, e.args))
+        log.error(f"Error with reviewer notifications: {e.message}-{e.args}")
         log.error(reviewer_emails)
 
     # the author is sending the dataset to the editor, there are no reviewers
@@ -343,9 +344,11 @@ def create_citataion_text(id):
         journal_title = temp_title
 
     if data['dara_DOI'] != '':
-        address = 'https://doi.org/{}'.format(data['dara_DOI'])
+        address = f"https://doi.org/{data['dara_DOI']}"
     else:
-        address = '{}/dataset/{}'.format(config.get('ckan.site_url'), data['name'])
+        site_url = config.get('ckan.site_url')
+        name = data['name']
+        address = f'{site_url}/dataset/{name}'
 
     return citation.format(authors=authors,
                             year=year,
@@ -360,7 +363,9 @@ def download_all(id):
     context = _context()
     pkg_dict = tk.get_action('package_show')(context, {'id': id})
     zip_sub_dir = 'resources'
-    zip_name = u"{}_resouces_{}.zip".format(pkg_dict['title'].replace(' ', '_').replace(',', '_'), time.time())
+    title = pkg_dict['title'].replace(' ', '_').replace(',', '_')
+    time_ = time.time()
+    zip_name = f"{title}_resouces_{time_}.zip"
     resources = pkg_dict['resources']
     for resource in resources:
         rsc = tk.get_action('resource_show')(context, {'id': resource['id']})
@@ -413,14 +418,6 @@ def md_page(id):
     plist = tk.request.path.rsplit('/', 1)
     return tk.render(TEMPLATE, extra_vars={'page': plist[-1]})
 
-def create_citation(type, id):
-    if type == 'ris':
-        create_ris_record(id)
-    elif type == 'bibtex':
-        create_bibtex_record(id)
-    else:
-        h.flash_error("Couldn't build {} citation.".format(type))
-        return redirect(id)
 
 """
 END INFO Views
@@ -436,11 +433,12 @@ def redirect(id):
 
 def create_citation(type, id):
     if type == 'ris':
-        create_ris_record(id)
+        return create_ris_record(id)
     elif type == 'bibtex':
-        create_bibtex_record(id)
+        return create_bibtex_record(id)
+        return r
     else:
-        h.flash_error("Couldn't build {} citation.".format(type))
+        h.flash_error(f"Couldn't build {type} citation.")
         return redirect(id)
 
 def parse_ris_authors(authors):
@@ -457,7 +455,7 @@ def parse_bibtex_authors(authors):
     temp_list = []
     authors = ast.literal_eval(authors.replace("null", "None"))
     for author in authors:
-        temp_list.append('{}, {}'.format(author['lastname'], author['firstname']))
+        temp_list.append(f"{author['lastname']}, {author['firstname']}")
     if len(temp_list) > 1:
         return " and ".join(temp_list)
     else:
@@ -467,12 +465,12 @@ def parse_bibtex_authors(authors):
 
 def parse_ris_doi(doi):
     if doi != '':
-        return 'DO  - doi:{}\n'.format(doi)
+        return f'DO  - doi:{doi}\n'
     return ''
 
 def create_ris_record(id):
     contents = "TY  - DATA\nT1  - {title}\n{authors}{doi}{abstract}{jels}ET  - {version}\nPY  - {date}\nPB  - ZBW - Leibniz Informationszentrum Wirtschaft\nUR  - {url}\nER  - \n"
-    pkg_dict = tk.get_action('package_show')(context, {'id': id})
+    pkg_dict = tk.get_action('package_show')(context(), {'id': id})
     title = pkg_dict['title'].encode('utf-8')
     try:
         authors = parse_ris_authors(pkg_dict['dara_authors'])
@@ -485,7 +483,9 @@ def create_ris_record(id):
         journal = pkg_dict['organization']['title']
     except TypeError as e:
         journal = ''
-    url = '{}/dataset/{}'.format(config.get('ckan.site_url'), pkg_dict['name'])
+    site_url = config.get('ckan.site_url')
+    title = pkg_dict['name']
+    url = f'{site_url}/dataset/{title}'
     version = pkg_dict['dara_currentVersion']
     if 'dara_DOI' in pkg_dict.keys():
         doi = parse_ris_doi(pkg_dict['dara_DOI'])
@@ -493,32 +493,32 @@ def create_ris_record(id):
         doi = ''
 
     if pkg_dict['notes'] != '':
-        abstract = 'AB  - {}\n'.format(pkg_dict['notes'].encode('utf-8').replace('\n', ' ').replace('\r', ' '))
+        value = pkg_dict['notes'].replace('\n', ' ').replace('\r', ' ')
+        abstract = f'AB  - {value}\n'
     else:
         abstract = ''
 
     if 'dara_jels' in pkg_dict.keys():
         jels = ''
         for jel in pkg_dict['dara_jels']:
-            jels += 'KW  - {}\n'.format(jel)
+            jels += f'KW  - {jel}\n'
     else:
         jels = ''
 
     contents = contents.format(title=title,authors=authors,doi=doi,date=date,journal=journal,url=url,version=version,abstract=abstract,jels=jels)
 
-    s = StringIO.StringIO()
-    s.write(contents)
+    file = io.BytesIO()
+    file.write(str.encode(contents))
+    file.seek(0)
 
-    response.headers.update({"Content-Disposition": "attachment;filename={}_citation.ris".format(pkg_dict['name'])})
-    response.content_type = "application/download"
-    res = Response(content_type = "application/download")
-    response.body = contents
+    return flask.send_file(file, mimetype="application/download",
+                           attachment_filename=f"{pkg_dict['name']}_citation.ris",
+                           as_attachment=True)
 
-    return res
 
 
 def create_bibtex_record(id):
-    pkg_dict = tk.get_action('package_show')(context, {'id': id})
+    pkg_dict = tk.get_action('package_show')(context(), {'id': id})
     title = pkg_dict['title'].encode('utf-8')
     try:
         authors = parse_bibtex_authors(pkg_dict['dara_authors'])
@@ -531,16 +531,18 @@ def create_bibtex_record(id):
         journal = pkg_dict['organization']['title'].encode('utf-8')
     except TypeError as e:
         journal = ''
-    url = '{}/dataset/{}'.format(config.get('ckan.site_url'), pkg_dict['name'])
+    site_url = config.get('ckan.site_url')
+    title = pkg_dict['name']
+    url = f'{site_url}/dataset/{title}'
     version = pkg_dict['dara_currentVersion']
     if 'dara_DOI' in pkg_dict.keys() and pkg_dict['dara_DOI'] != '':
         temp_doi = pkg_dict['dara_DOI']
-        identifier = '{}'.format(temp_doi.split('/')[1])
+        identifier = f"{temp_doi.split('/')[1]}"
     else:
-        identifier = '{}/{}'.format(pkg_dict['name'][:10], date)
+        identifier = f"{pkg_dict['name'][:10]}/{date}"
 
     if 'dara_DOI' in pkg_dict.keys() and pkg_dict['dara_DOI'] != '':
-        doi = ',\ndoi = "{}"'.format(pkg_dict['dara_DOI'])
+        doi = f",\ndoi = \"{pkg_dict['dara_DOI']}\""
     else:
         doi = ''
 
@@ -548,9 +550,9 @@ def create_bibtex_record(id):
         jels = ',\nkeywords = {'
         for x, jel in enumerate(pkg_dict['dara_jels']):
             if x < len(pkg_dict['dara_jels']) - 1:
-                jels += '{},'.format(jel)
+                jels += f'{jel},'
             else:
-                jels += '{}}}'.format(jel)
+                jels += f'{jel}}}'
     else:
         jels = ''
 
@@ -558,12 +560,10 @@ def create_bibtex_record(id):
 
     contents = contents.format(identifier=identifier, authors=authors, title=title,date=date,version=version,url=url,doi=doi,jels=jels)
 
-    s = StringIO.StringIO()
-    s.write(contents)
+    file = io.BytesIO()
+    file.write(str.encode(contents))
+    file.seek(0)
 
-    response.headers.update({"Content-Disposition": "attachment;filename={}_citation.bib".format(pkg_dict['name'])})
-    response.content_type = "text/plain"
-    res = Response(content_type = "application/download")
-    response.body = contents
-
-    return res
+    return flask.send_file(file, mimetype="text/plain",
+                            attachment_filename=f"{pkg_dict['name']}_citation.bib",
+                            as_attachment=True)
