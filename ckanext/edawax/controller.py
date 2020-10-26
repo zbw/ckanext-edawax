@@ -348,9 +348,9 @@ class WorkflowController(PackageController):
             journal_title = temp_title
 
         if data['dara_DOI'] != '':
-            address = f'https://doi.org/{data['dara_DOI']}'
+            address = f"https://doi.org/{data['dara_DOI']}"
         else:
-            address = f'{config.get('ckan.site_url')}/dataset/{data['name']}'
+            address = f"{config.get('ckan.site_url')}/dataset/{data['name']}"
 
         return citation.format(authors=authors,
                                year=year,

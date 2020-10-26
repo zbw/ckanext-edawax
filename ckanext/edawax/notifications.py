@@ -32,7 +32,7 @@ def sendmail(address, msg):
 def package_url(dataset):
     site_url = config.get('ckan.site_url')
     url = tk.url_for('dataset.read', id=dataset)
-    return u"{site_url}{url}"
+    return f"{site_url}{url}"
 
 subjects = {
             "review_editor": u": Data Submission Notification",
@@ -171,7 +171,7 @@ def review(addresses, author, dataset, reviewers=None, msg=None):
         body = body.format(**d)
         site_title = config.get('ckan.site_title')
         sub = subjects[who]
-        subject = '{site_title}{sub}'
+        subject = f'{site_title}{sub}'
         return compose_message(who, body, subject, config, address)
 
     # send email to Admin
