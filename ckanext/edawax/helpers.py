@@ -63,8 +63,11 @@ def format_resource_items_custom(items):
                 out.append(("3 Authors", a))
             else:
                 try:
-                    authors = item[1].decode('unicode_escape')
-                    authors = ast.literal_eval(authors)
+                    authors = item[1]
+                    if isinstance(authors, list):
+                        authors = authors
+                    else:
+                        authors = ast.literal_eval(authors)
                     out.append(("3 Authors", parse_authors(authors)))
                 except AttributeError as e:
                     authors = [""]
