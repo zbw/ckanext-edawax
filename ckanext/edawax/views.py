@@ -66,6 +66,8 @@ def evaluate_reviewer(reviewer, reviewer_list, data_dict):
             reviewer_list = []
         else:
             # Reviewer has already been invited, a notification will be sent
+            users = tk.get_action('user_list')(_context(), {'email': reviewer})
+            update_maintainer_field(users[0]['name'], reviewer, data_dict)
             reviewer_list.append(reviewer)
 
     else:
@@ -82,11 +84,11 @@ def review(id):
     to the JDA as a reviewer - need a new invitation that includes a link
     to the dataset for review.
     """
-    # TODO: Look into allowing collaborators as reviewers
+    # TODO: Look into allowing collaborators as reviewers?
     context = _context()
     pkg_dict = tk.get_action('package_show')(context, {'id': id})
 
-        # Ensure a 'draft' isn't sent for review
+    # Ensure a 'draft' isn't sent for review
     state = pkg_dict['state']
     if state == 'draft':
         data = {'id': pkg_dict['id'], u'state': u'active'}
