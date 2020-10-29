@@ -1929,7 +1929,7 @@ p.empty {
     margin: 0;
     padding: 10px;
     min-height: 172px;
-    border-radius: 0 0 8px 8px ;
+    /*border-radius: 0 0 8px 8px ;*/
 }
 
 .module-content.page-header.box-top + .module-content {
@@ -3355,7 +3355,7 @@ li.dataset-item:first-child {
 }
 
 /* Dataset list in journal */
-div.box-bottom + ul > li.dataset-item:first-child {
+div.box-bottom ~ ul > li.dataset-item:first-child {
     border-radius: 8px;
 }
 
@@ -3664,4 +3664,8 @@ input[type="submit"] {
 
 input#field-title {
     width: 100%;
+}
+
+#dataset-search-form + ul > li:first-child {
+    border-radius: 8px;
 }
