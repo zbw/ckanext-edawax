@@ -469,27 +469,23 @@ class EdawaxPlugin(plugins.SingletonPlugin):
         journals.add_url_rule(u'/new',
                               methods=[u'GET', u'POST'],
                               view_func=group.CreateGroupView.as_view(str(u'new')))
-        journals.add_url_rule(u'/activity/<id>',
-                              view_func=group.activity,
-                              methods=[u'GET'])
+        journals.add_url_rule(u'/activity/<id>/<int:offset>',
+                              view_func=group.activity)
         journals.add_url_rule(u'/about/<id>',
                               view_func=group.about,
                               methods=[u'GET'])
         journals.add_url_rule(u'/<id>',
-                              view_func=group.read,
-                              methods=[u'GET'])
+                              view_func=group.read)
         journals.add_url_rule(u'/edit/<id>',
-                              view_func=group.EditGroupView.as_view(str(u'edit')),
-                              methods=[u'GET'])
+                              view_func=group.EditGroupView.as_view(str(u'edit')))
         journals.add_url_rule(u'/bulk_process/<id>',
                               view_func=group.BulkProcessView.as_view(str(u'bulk_process')),
                               methods=[u'GET'])
         journals.add_url_rule(u'/members/<id>',
                               view_func=group.members,
-                              methods=[u'GET'])
-        journals.add_url_rule(u'/member_new/<id>',
-                              view_func=group.MembersGroupView.as_view(str(u'member_new')),
                               methods=[u'GET', u'POST'])
+        journals.add_url_rule(u'/member_new/<id>',
+                              view_func=group.MembersGroupView.as_view(str(u'member_new')))
         for action in actions:
             journals.add_url_rule(
                 f'/{action}/<id>',

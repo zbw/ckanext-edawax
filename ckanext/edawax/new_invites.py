@@ -18,9 +18,8 @@ import smtplib
 import logging
 from time import time
 from email import utils
-from ckan.common import _, g, request, config
+from ckan.common import _, g, request, config, asbool
 from email.header import Header
-import paste.deploy.converters
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 from email.mime.application import MIMEApplication
@@ -177,8 +176,7 @@ def _mail_recipient(recipient_name, recipient_email,
         smtp_password = None
     else:
         smtp_server = config.get('smtp.server', 'localhost')
-        smtp_starttls = paste.deploy.converters.asbool(
-                config.get('smtp.starttls'))
+        smtp_starttls = asbool(config.get('smtp.starttls'))
         smtp_user = config.get('smtp.user')
         smtp_password = config.get('smtp.password')
     smtp_connection.connect(smtp_server)
