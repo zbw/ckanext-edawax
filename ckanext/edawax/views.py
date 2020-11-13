@@ -66,7 +66,9 @@ def evaluate_reviewer(reviewer, reviewer_list, data_dict):
             reviewer_list = []
         else:
             # Reviewer has already been invited, a notification will be sent
-            users = tk.get_action('user_list')(_context(), {'email': reviewer})
+            context = _context()
+            context['ignore_auth'] = True
+            users = tk.get_action('user_list')(context, {'email': reviewer})
             update_maintainer_field(users[0]['name'], reviewer, data_dict)
             reviewer_list.append(reviewer)
 
