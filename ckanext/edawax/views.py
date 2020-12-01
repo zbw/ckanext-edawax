@@ -473,7 +473,6 @@ def parse_ris_doi(doi):
     return ''
 
 def create_ris_record(id):
-    contents = "TY  - DATA\nT1  - {title}\n{authors}{doi}{abstract}{jels}ET  - {version}\nPY  - {date}\nPB  - ZBW - Leibniz Informationszentrum Wirtschaft\nUR  - {url}\nER  - \n"
     pkg_dict = tk.get_action('package_show')(context(), {'id': id})
     title = pkg_dict['title'].encode('utf-8')
     try:
@@ -482,7 +481,10 @@ def create_ris_record(id):
         if 'dara_authors' not in pkg_dict.keys():
             authors = pkg_dict['author'] or ''
         authors = ''
-    date = pkg_dict['dara_PublicationDate']
+    try:
+        date = pkg_dict['dara_PublicationDate']
+    except KeyError:
+        data = '????'
     try:
         journal = pkg_dict['organization']['title']
     except TypeError as e:
@@ -509,7 +511,7 @@ def create_ris_record(id):
     else:
         jels = ''
 
-    contents = contents.format(title=title,authors=authors,doi=doi,date=date,journal=journal,url=url,version=version,abstract=abstract,jels=jels)
+    contents = f"TY  - DATA\nT1  - {title}\n{authors}{doi}{abstract}{jels}ET  - {version}\nPY  - {date}\nPB  - ZBW - Leibniz Informationszentrum Wirtschaft\nUR  - {url}\nER  - \n"
 
     file = io.BytesIO()
     file.write(str.encode(contents))
@@ -530,7 +532,10 @@ def create_bibtex_record(id):
         if 'dara_authors' not in pkg_dict.keys():
             authors = pkg_dict['author'] or ''
         authors = ''
-    date = pkg_dict['dara_PublicationDate']
+    try:
+        date = pkg_dict['dara_PublicationDate']
+    except KeyError:
+        date = '????'
     try:
         journal = pkg_dict['organization']['title'].encode('utf-8')
     except TypeError as e:
@@ -560,9 +565,7 @@ def create_bibtex_record(id):
     else:
         jels = ''
 
-    contents = '@data{{{identifier},\nauthor = {{{authors}}},\npublisher = {{ZBW - Leibniz Informationszentrum Wirtschaft}},\ntitle = {{{title}}},\nyear = {{{date}}},\nversion = {{{version}}},\nurl = {{{url}}}{jels}{doi} \n}}'
-
-    contents = contents.format(identifier=identifier, authors=authors, title=title,date=date,version=version,url=url,doi=doi,jels=jels)
+    contents = f'@data{{{identifier},\nauthor = {{{authors}}},\npublisher = {{ZBW - Leibniz Informationszentrum Wirtschaft}},\ntitle = {{{title}}},\nyear = {{{date}}},\nversion = {{{version}}},\nurl = {{{url}}}{jels}{doi} \n}}'
 
     file = io.BytesIO()
     file.write(str.encode(contents))
