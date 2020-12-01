@@ -481,10 +481,7 @@ def create_ris_record(id):
         if 'dara_authors' not in pkg_dict.keys():
             authors = pkg_dict['author'] or ''
         authors = ''
-    try:
-        date = pkg_dict['dara_PublicationDate']
-    except KeyError:
-        data = '????'
+    date = pkg_dict.get('dara_PublicationDate', '????')
     try:
         journal = pkg_dict['organization']['title']
     except TypeError as e:
@@ -492,7 +489,8 @@ def create_ris_record(id):
     site_url = config.get('ckan.site_url')
     title = pkg_dict['name']
     url = f'{site_url}/dataset/{title}'
-    version = pkg_dict['dara_currentVersion']
+    version = pkg_dict.get('dara_currentVersion', '1')
+
     if 'dara_DOI' in pkg_dict.keys():
         doi = parse_ris_doi(pkg_dict['dara_DOI'])
     else:
@@ -532,10 +530,7 @@ def create_bibtex_record(id):
         if 'dara_authors' not in pkg_dict.keys():
             authors = pkg_dict['author'] or ''
         authors = ''
-    try:
-        date = pkg_dict['dara_PublicationDate']
-    except KeyError:
-        date = '????'
+    date = pkg_dict.get('dara_PublicationDate', '????')
     try:
         journal = pkg_dict['organization']['title'].encode('utf-8')
     except TypeError as e:
@@ -543,7 +538,7 @@ def create_bibtex_record(id):
     site_url = config.get('ckan.site_url')
     title = pkg_dict['name']
     url = f'{site_url}/dataset/{title}'
-    version = pkg_dict['dara_currentVersion']
+    version = pkg_dict.get('dara_currentVersion', '1')
     if 'dara_DOI' in pkg_dict.keys() and pkg_dict['dara_DOI'] != '':
         temp_doi = pkg_dict['dara_DOI']
         identifier = f"{temp_doi.split('/')[1]}"
