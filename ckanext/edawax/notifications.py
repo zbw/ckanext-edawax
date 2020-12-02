@@ -177,7 +177,7 @@ def review(addresses, author, dataset, reviewers=None, msg=None):
     # send email to Admin
     t = []
     if pkg_status(dataset) in ['false', 'reauthor'] or reviewers == [None, None]:
-        t = map(lambda a: sendmail(a, message("review_editor", a)), addresses)
+        t = list(map(lambda a: sendmail(a, message("review_editor", a)), addresses))
     else:
         # To Reviewer
         if reviewers is not None:
