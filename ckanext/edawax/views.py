@@ -475,12 +475,15 @@ def parse_ris_doi(doi):
 def create_ris_record(id):
     pkg_dict = tk.get_action('package_show')(context(), {'id': id})
     title = pkg_dict['title'].encode('utf-8')
-    try:
-        authors = parse_ris_authors(pkg_dict['dara_authors'])
-    except KeyError:
-        if 'dara_authors' not in pkg_dict.keys():
-            authors = pkg_dict['author'] or ''
-        authors = ''
+    if is_reviewer(pkg_dict):
+        authors = "********"
+    else:
+        try:
+            authors = parse_ris_authors(pkg_dict['dara_authors'])
+        except KeyError:
+            if 'dara_authors' not in pkg_dict.keys():
+                authors = pkg_dict['author'] or ''
+            authors = ''
     date = pkg_dict.get('dara_PublicationDate', '????')
     try:
         journal = pkg_dict['organization']['title']
@@ -524,12 +527,15 @@ def create_ris_record(id):
 def create_bibtex_record(id):
     pkg_dict = tk.get_action('package_show')(context(), {'id': id})
     title = pkg_dict['title'].encode('utf-8')
-    try:
-        authors = parse_bibtex_authors(pkg_dict['dara_authors'])
-    except KeyError:
-        if 'dara_authors' not in pkg_dict.keys():
-            authors = pkg_dict['author'] or ''
-        authors = ''
+    if is_reviewer(pkg_dict):
+        authors = "********"
+    else:
+        try:
+            authors = parse_bibtex_authors(pkg_dict['dara_authors'])
+        except KeyError:
+            if 'dara_authors' not in pkg_dict.keys():
+                authors = pkg_dict['author'] or ''
+            authors = ''
     date = pkg_dict.get('dara_PublicationDate', '????')
     try:
         journal = pkg_dict['organization']['title'].encode('utf-8')
