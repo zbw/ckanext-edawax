@@ -476,7 +476,7 @@ def create_ris_record(id):
     pkg_dict = tk.get_action('package_show')(context(), {'id': id})
     title = pkg_dict['title'].encode('utf-8')
     if is_reviewer(pkg_dict):
-        authors = "AU  - ********"
+        authors = "AU  - ********\n"
     else:
         try:
             authors = parse_ris_authors(pkg_dict['dara_authors'])
