@@ -40,6 +40,7 @@ authz.ROLE_PERMISSIONS['member'] = ['read', 'create_dataset', 'manage_group']
 authz.ROLE_PERMISSIONS['reviewer'] = ['read']  #, 'update_dataset'
 del authz.ROLE_PERMISSIONS['editor'] # remove editor
 authz._trans_role_reviewer = lambda: 'Reviewer'
+authz._trans_role_member = lambda: 'Author'
 
 def edawax_facets(facets_dict):
     """
@@ -485,7 +486,7 @@ class EdawaxPlugin(plugins.SingletonPlugin):
                               view_func=group.members,
                               methods=[u'GET', u'POST'])
         journals.add_url_rule(u'/member_new/<id>',
-                              view_func=group.MembersGroupView.as_view(str(u'member_new')))
+                              view_func=views.MembersGroupView.as_view(str(u'member_new')))
         for action in actions:
             journals.add_url_rule(
                 f'/{action}/<id>',

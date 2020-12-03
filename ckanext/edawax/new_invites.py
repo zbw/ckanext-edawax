@@ -25,6 +25,7 @@ from email.mime.multipart import MIMEMultipart
 from email.mime.application import MIMEApplication
 
 import ckanext.edawax.helpers as h
+import ckan.lib.helpers as helpers
 
 log = logging.getLogger(__name__)
 
@@ -107,16 +108,19 @@ def user_invite(context, data_dict):
     data['name'] = name
     data['password'] = password
     data['state'] = ckan.model.State.PENDING
-    user_dict = logic._get_action('user_create')(context, data)
-    user = ckan.model.User.get(user_dict['id'])
-    member_dict = {'username': user.id,
-                   'id': data['group_id'],
-                   'role': data['role']}
-    org_info = logic._get_action('organization_show')(context, member_dict)
-    data['journal_title'] = org_info['display_name']
-    logic._get_action('group_member_create')(context, member_dict)
-    send_invite(user, data)
-    return logic.model_dictize.user_dictize(user, context)
+    try:
+        user_dict = logic._get_action('user_create')(context, data)
+        user = ckan.model.User.get(user_dict['id'])
+        member_dict = {'username': user.id,
+                    'id': data['group_id'],
+                    'role': data['role']}
+        org_info = logic._get_action('organization_show')(context, member_dict)
+        data['journal_title'] = org_info['display_name']
+        logic._get_action('group_member_create')(context, member_dict)
+        send_invite(user, data)
+        return logic.model_dictize.user_dictize(user, context)
+    except ckan.logic.ValidationError as e:
+        return {'name': False}
 
 
 # modifying CKAN's base mail function to allow sending attachments

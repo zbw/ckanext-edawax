@@ -17,6 +17,21 @@ from ckanext.dara.helpers import check_journal_role
 
 from functools import wraps
 
+# Create Memver
+from flask.views import MethodView
+import ckan.lib.base as base
+import ckan.logic as logic
+import ckan.lib.navl.dictization_functions as dict_fns
+
+NotFound = logic.NotFound
+NotAuthorized = logic.NotAuthorized
+ValidationError = logic.ValidationError
+check_access = logic.check_access
+get_action = logic.get_action
+tuplize_dict = logic.tuplize_dict
+clean_dict = logic.clean_dict
+parse_params = logic.parse_params
+
 # for download all
 import os
 import io
@@ -575,3 +590,120 @@ def create_bibtex_record(id):
     return flask.send_file(file, mimetype="text/plain",
                             attachment_filename=f"{pkg_dict['name']}_citation.bib",
                             as_attachment=True)
+
+
+"""
+    Copied from /views/groups.py because I need to make adjustments for
+    how errors are handled. When an email belongs to an existing user
+    there was a server error being thrown.
+"""
+def set_org(is_organization):
+    global is_org
+    is_org = is_organization
+
+def _check_access(action_name, *args, **kw):
+    u''' select the correct group/org check_access '''
+    return check_access(_replace_group_org(action_name), *args, **kw)
+
+def _action(action_name):
+    u''' select the correct group/org action '''
+    return get_action(_replace_group_org(action_name))
+
+def _replace_group_org(string):
+    u''' substitute organization for group if this is an org'''
+    if is_org:
+        return re.sub(u'^group', u'organization', string)
+    return string
+
+class MembersGroupView(MethodView):
+    u'''New members group view'''
+
+    def _prepare(self, id=None):
+        context = {
+            u'model': model,
+            u'session': model.Session,
+            u'user': g.user
+        }
+        try:
+            _check_access(u'group_member_create', context, {u'id': id})
+        except NotAuthorized:
+            base.abort(403,
+                       _(u'Unauthorized to create group %s members') % u'')
+
+        return context
+
+    def post(self, group_type, is_organization, id=None):
+        set_org(is_organization)
+        context = self._prepare(id)
+        data_dict = clean_dict(
+            dict_fns.unflatten(tuplize_dict(parse_params(request.form))))
+        data_dict['id'] = id
+
+        email = data_dict.get(u'email')
+
+        if email:
+            user_data_dict = {
+                u'email': email,
+                u'group_id': data_dict['id'],
+                u'role': data_dict['role']
+            }
+            del data_dict['email']
+            user_dict = _action(u'user_invite')(context, user_data_dict)
+            data_dict['username'] = user_dict['name']
+
+        if data_dict['username']:
+            try:
+                print('Trying')
+                print(group_type)
+                group_dict = _action(u'group_member_create')(context, data_dict)
+            except NotAuthorized:
+                base.abort(403, _(u'Unauthorized to add member to group %s') % u'')
+            except NotFound:
+                base.abort(404, _(u'Group not found'))
+            except ValidationError as e:
+                print('Validation Error')
+                h.flash_error(e.error_summary)
+                return h.redirect_to(u'journals.member_new', id=id)
+        else:
+            h.flash_error(f"The email address '{email}' belongs to a registered user.")
+            return h.redirect_to(u'journals.member_new', id=id)
+
+        # TODO: Remove
+        g.group_dict = group_dict
+
+        return h.redirect_to(u'{}.members'.format(group_type), id=id)
+
+    def get(self, group_type, is_organization, id=None):
+        extra_vars = {}
+        set_org(is_organization)
+        context = self._prepare(id)
+        user = request.params.get(u'user')
+        data_dict = {u'id': id}
+        data_dict['include_datasets'] = False
+        group_dict = _action(u'group_show')(context, data_dict)
+        roles = _action(u'member_roles_list')(context, {
+            u'group_type': group_type
+        })
+        if user:
+            user_dict = get_action(u'user_show')(context, {u'id': user})
+            user_role =\
+                authz.users_role_for_group_or_org(id, user) or u'member'
+            # TODO: Remove
+            g.user_dict = user_dict
+            extra_vars["user_dict"] = user_dict
+        else:
+            user_role = u'member'
+
+        # TODO: Remove
+        g.group_dict = group_dict
+        g.roles = roles
+        g.user_role = user_role
+
+        extra_vars = {
+            u"group_dict": group_dict,
+            u"roles": roles,
+            u"user_role": user_role,
+            u"group_type": group_type
+        }
+        return base.render(_replace_group_org(u'group/member_new.html'),
+                           extra_vars)
