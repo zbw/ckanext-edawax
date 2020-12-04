@@ -20,8 +20,9 @@ this.ckan.module('edawax-confirm', function (jQuery, _) {
         '</div>',
         '<div class="modal-body"></div>',
         '<div class="modal-footer">',
+        '<label id="check_label" style="float: left;"><input id="confirm_send_review" style="position: unset;" type="checkbox" onchange="document.getElementById(\'btn_confirm\').disabled = !this.checked;" />  I have read the conditions and agree.</label>',
         '<button class="btn btn-cancel"></button>',
-        '<button class="btn btn-primary"></button>',
+        '<button class="btn btn-primary" id="btn_confirm" disabled></button>',
         '</div>',
         '</div>'
       ].join('\n')

@@ -65,6 +65,12 @@ confirm-js:
       - base/main
       - base/ckan
 
+edawax-confirm-js:
+  contents:
+    - edawax-confirm.js
+  output: edawax/%(version)s_edawax_confirm.js
+  filters: rjsmin
+
 doi-js:
   contents:
     - doi_error.js
