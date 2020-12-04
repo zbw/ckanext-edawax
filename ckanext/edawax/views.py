@@ -653,15 +653,12 @@ class MembersGroupView(MethodView):
 
         if data_dict['username']:
             try:
-                print('Trying')
-                print(group_type)
                 group_dict = _action(u'group_member_create')(context, data_dict)
             except NotAuthorized:
                 base.abort(403, _(u'Unauthorized to add member to group %s') % u'')
             except NotFound:
                 base.abort(404, _(u'Group not found'))
             except ValidationError as e:
-                print('Validation Error')
                 h.flash_error(e.error_summary)
                 return h.redirect_to(u'journals.member_new', id=id)
         else:
