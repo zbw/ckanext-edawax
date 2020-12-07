@@ -432,6 +432,10 @@ ol.stages > li.complete > .highlight {
 ol.stages li.complete::before {
     color: #39a9de;
 }
+ol.stages li.complete::after {
+    border-top-color: #39a9de;
+    border-bottom-color: #39a9de;
+}
 ol.stages li.active::before {
     color: #007bb4;
 }
