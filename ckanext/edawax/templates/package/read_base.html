@@ -19,9 +19,24 @@
     {% else %}
       <a title="Update reviewer"
           class="btn btn-reviewer"
-          href="/dataset/{{pkg.id}}/review">
+          href="/dataset/{{pkg.id}}/review"
+          id="update_reviewer">
         <i class="fa fa-envelope"></i>Re-Send to Reviewer</a>
     {% endif %}
+
+  <script>
+      var update_button = document.getElementById('update_reviewer');
+
+      update_button.addEventListener('click', removeCookie);
+
+      function removeCookie(e){
+          var time = new Date();
+
+          var cookies = document.cookie.split('; ');
+          var target = cookies.find(row => row.startsWith('reviewerPrev_')).split('=')[0];
+          document.cookie = target + "=old";
+      }
+  </script>
 
   {% endif %}
 

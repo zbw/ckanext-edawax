@@ -14,6 +14,7 @@ import ast
 import requests
 
 from flask import Response as resp
+from flask import make_response
 
 import re
 import ckanext.edawax.robot_list as _list
@@ -170,12 +171,18 @@ u"url": "96 URL"}
 
 
 def delete_cookies(pkg):
-    """ Clear Cookies - after resend """
+    #Clear Cookies - after resend
     try:
         cookie = f"reviewerPrev_{pkg['name']}"
-        resp.delete_cookie(cookie, '/')
+        print('#######################################')
+        #request.cookies.get(f"reviewerPrev_{pkg['name']}", False)
+        print(dir(request.cookies))
+        r = make_response('Response')
+        r.delete_cookie(cookie)
+        return r
     except Exception as e:
         log.debug(f'delete_cookies error: {e}')
+
 
 def _existing_user(pkg):
     """ Check if given reviewer is an existing user """
@@ -191,12 +198,8 @@ def _existing_user(pkg):
 
 def check_reviewer_update(pkg):
     """Check if the reviewer is new or not"""
-    reviewer_old = request.cookies.get(f"reviewerPrev_{pkg['name']}", False)
-    if reviewer_old is False:
-        return False
-
-    reviewer_new = pkg['maintainer']
-    if (reviewer_new and (reviewer_new != '') and reviewer_old != reviewer_new):
+    reviewer_change = request.cookies.get(f"reviewerPrev_{pkg['name']}", False)
+    if reviewer_change == 'new':
         return True
 
     return False

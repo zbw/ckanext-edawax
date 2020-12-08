@@ -10,7 +10,7 @@ import ckan.plugins.toolkit as tk
 import ckanext.edawax.notifications as n
 
 from ckan.authz import get_group_or_org_admin_ids
-from ckanext.edawax.helpers import is_reviewer, in_review, delete_cookies, hide_from_reviewer, is_private, is_robot, check_reviewer_update, _existing_user
+from ckanext.edawax.helpers import is_reviewer, in_review, hide_from_reviewer, is_private, is_robot, check_reviewer_update, _existing_user #, delete_cookies
 from ckanext.edawax.update import update_maintainer_field, email_exists, invite_reviewer, add_user_to_journal
 
 from ckanext.dara.helpers import check_journal_role
@@ -113,7 +113,7 @@ def review(id):
         t = tk.get_action('package_patch')(context, data)
         pkg_dict['state'] = 'active'
 
-    delete_cookies(pkg_dict)
+    #delete_cookies(pkg_dict)
 
     try:
         tk.check_access('package_update', context, {'id': id})
@@ -282,7 +282,7 @@ def reauthor(id):
     context = _context()
     msg = request.form.get('msg', '')
     pkg_dict = tk.get_action('package_show')(context, {'id': id})
-    delete_cookies(pkg_dict)
+    #delete_cookies(pkg_dict)
     creator_mail = model.User.get(pkg_dict['creator_user_id']).email
     admin_mail = model.User.get(g.user).email
     #note = n.reauthor(id, creator_mail, admin_mail, msg, context)
@@ -309,7 +309,7 @@ def editor_notify(id):
     note = n.notify('editor', id, creator_mail, msg, context)
 
     if note:
-        pkg_dict.update({'private': True, 'dara_edawax_review': 'back'})
+        pkg_dict.update({'private': True, 'dara_edawax_review': 'reviewer'})
         tk.get_action('package_update')(context, pkg_dict)
         h.flash_success('Notification sent. Journal Editor will be notified.')
     else:

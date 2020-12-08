@@ -9,7 +9,6 @@
     <div class="zbw-box box-full reviewer-box">
         <a name="dataset_reviewers"></a>
     <legend>Dataset Reviewer</legend>
-    {#{ form.input('maintainer', label=_('Reviewer'), id='field-maintainer', placeholder=_('Reviewer 1'), value=data.maintainer, error=errors.maintainer, classes=['control-medium'], attrs={'data-infotext': """Use this field if you'd like to add a reviewer. Select the name from the dropdown list if they already have JDA accounts, otherwise provide their email address and they will be invited to the platform. """, 'data-module': 'autocomplete', 'data-module-source': '/api/2/util/user/autocomplete?q=?'}) }#}
 
     {{ form.input('maintainer', label=_('Reviewer'),
        id='field-maintainer', placeholder=_('Reviewer1@email.com'),
@@ -18,22 +17,12 @@
        'resource': data['name'],
        'pattern': ".+@.+"}) }}
 
-    {#{ form.input('maintainer_email', label=_('Reviewer'),
-       id='field-maintainer-email', placeholder=_('Reviewer2@email.com'),
-       value=data.maintainer_email.split('/')[0] if data.maintainer_email and data.maintainer_email != None else "", error=errors.maintainer_email,
-       classes=['control-medium'], attrs={'data-infotext': """Use this field if you'd like to add a reviewer. Enter the email address of the reviewer. This will create a new reviewer account.""",
-       'resource': data['name'],
-       'pattern': '.+@.+'}) }#}
-
     <script>
         var reviewer = document.getElementById('field-maintainer');
-        //var reviewer_2 = document.getElementById('field-maintainer-email');
 
         reviewer.addEventListener('change', updateCookie);
-        //reviewer_2.addEventListener('change', updateCookie_2);
 
         reviewer_old = reviewer.value;
-        //reviewer_2_old = reviewer_2.value;
 
         var time = new Date();
         var now = time.getTime();
@@ -42,7 +31,10 @@
 
         function updateCookie(e){
             console.log(reviewer_old);
-            document.cookie = "reviewerPrev_" + reviewer.getAttribute('resource') + "=" + reviewer_old + ";path=/;expires=" + time.toGMTString();
+            console.log(reviewer.value);
+            if (reviewer_old != reviewer.value) {
+                document.cookie = "reviewerPrev_" + reviewer.getAttribute('resource') + "= new" + ";path=/;expires=" + time.toGMTString();
+            }
         }
     </script>
 

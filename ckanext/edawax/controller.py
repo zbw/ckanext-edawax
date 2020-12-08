@@ -99,7 +99,7 @@ class WorkflowController(PackageController):
             t = tk.get_action('package_patch')(context, data)
             c.pkg_dict['state'] = 'active'
 
-        delete_cookies(c.pkg_dict)
+        #delete_cookies(c.pkg_dict)
 
         try:
             tk.check_access('package_update', context, {'id': id})
@@ -267,7 +267,7 @@ class WorkflowController(PackageController):
         context = self._context()
         msg = tk.request.params.get('msg', '')
         c.pkg_dict = tk.get_action('package_show')(context, {'id': id})
-        delete_cookies(c.pkg_dict)
+        #delete_cookies(c.pkg_dict)
         creator_mail = model.User.get(c.pkg_dict['creator_user_id']).email
         admin_mail = model.User.get(c.user).email
         #note = n.reauthor(id, creator_mail, admin_mail, msg, context)
