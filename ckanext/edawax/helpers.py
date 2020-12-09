@@ -632,14 +632,16 @@ def dataset_recent_views(pkg):
 
 def resource_downloads(resource):
     url = resource
-    sql = """
-            SELECT COALESCE(SUM(ts.count), 0) as total_views
-            FROM tracking_summary as ts
-            WHERE ts.url = %(url)s;
-          """
-    results = engine.execute(sql, url=url).fetchall()
+    if url != '':
+        sql = """
+                SELECT COALESCE(SUM(ts.count), 0) as total_views
+                FROM tracking_summary as ts
+                WHERE ts.url = %(url)s;
+            """
+        results = engine.execute(sql, url=url).fetchall()
 
-    return results[0][0]
+        return results[0][0]
+    return 0
 
 
 def find_reviewers_datasets(name):
