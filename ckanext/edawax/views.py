@@ -378,43 +378,45 @@ def create_citataion_text(id):
 
 
 def download_all(id):
-    data = {}
-    context = _context()
-    pkg_dict = tk.get_action('package_show')(context, {'id': id})
-    zip_sub_dir = 'resources'
-    title = pkg_dict['title'].replace(' ', '_').replace(',', '_')
-    time_ = time.time()
-    zip_name = f"{title}_resouces_{time_}.zip"
-    resources = pkg_dict['resources']
-    for resource in resources:
-        rsc = tk.get_action('resource_show')(context, {'id': resource['id']})
-        if rsc.get('url_type') == 'upload' and not is_robot(request.user_agent):
-            url = resource['url']
-            filename = os.path.basename(url)
-            # custom user agent header so that downloads from here count
-            headers = {
-                'User-Agent': 'Ckan-Download-All Agent 1.0',
-                'From': 'journaldata@zbw.eu'
-            }
-            try:
-                upload = uploader.get_resource_uploader(rsc)
-                filepath = upload.get_path(rsc[u'id'])
-                data[filename] = filepath
-            except Exception as e:
-                print(f'Error: {e}')
-
-    data['citation.txt'] = create_citataion_text(id)
-    if len(data) > 0:
-        memory_file = io.BytesIO()
-        with zipfile.ZipFile(memory_file, 'w') as zf:
-            for item, content in data.items():
-                zip_path = os.path.join(zip_sub_dir, item)
+    referrer = request.referrer
+    if referrer:
+        data = {}
+        context = _context()
+        pkg_dict = tk.get_action('package_show')(context, {'id': id})
+        zip_sub_dir = 'resources'
+        title = pkg_dict['title'].replace(' ', '_').replace(',', '_')
+        time_ = time.time()
+        zip_name = f"{title}_resouces_{time_}.zip"
+        resources = pkg_dict['resources']
+        for resource in resources:
+            rsc = tk.get_action('resource_show')(context, {'id': resource['id']})
+            if rsc.get('url_type') == 'upload' and not is_robot(request.user_agent):
+                url = resource['url']
+                filename = os.path.basename(url)
+                # custom user agent header so that downloads from here count
+                headers = {
+                    'User-Agent': 'Ckan-Download-All Agent 1.0',
+                    'From': 'journaldata@zbw.eu'
+                }
                 try:
-                    zf.write(content, zip_path)
-                except Exception:
-                    zf.writestr(zip_path, content)
-        memory_file.seek(0)
-        return flask.send_file(memory_file, attachment_filename=zip_name, as_attachment=True)
+                    upload = uploader.get_resource_uploader(rsc)
+                    filepath = upload.get_path(rsc[u'id'])
+                    data[filename] = filepath
+                except Exception as e:
+                    print(f'Error: {e}')
+
+        data['citation.txt'] = create_citataion_text(id)
+        if len(data) > 0:
+            memory_file = io.BytesIO()
+            with zipfile.ZipFile(memory_file, 'w') as zf:
+                for item, content in data.items():
+                    zip_path = os.path.join(zip_sub_dir, item)
+                    try:
+                        zf.write(content, zip_path)
+                    except Exception:
+                        zf.writestr(zip_path, content)
+            memory_file.seek(0)
+            return flask.send_file(memory_file, attachment_filename=zip_name, as_attachment=True)
     # if there's nothing to download but someone gets to the download page
     # /download_all, return them to the landing page
     h.flash_error('Nothing to download.')

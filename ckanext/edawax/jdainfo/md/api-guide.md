@@ -40,7 +40,7 @@ Listed parameters are optional unless otherwise stated.
         * id - ID or name of a organization **[REQUIRED]**
         * use_default_schema - The results use the default schema rather than the custom schema. Defatult `false`
         * include_tracking - Include tracking information in the results. Default: `false`
-* `resource_show` - metadata the metadata for a resource
+* `resource_show` - show the metadata for a resource
     * Parameter:
         * id - ID or name of a organization **[REQUIRED]**
         * include_tracking - Include tracking information in the results. Default: `false`

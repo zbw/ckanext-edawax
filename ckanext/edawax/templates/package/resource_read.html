@@ -130,7 +130,11 @@
         {% elif  res.resource_type == 'api' %}
           <i class="fa fa-key"></i> {{ _('API Endpoint') }}
         {% elif not res.has_views and not res.can_be_previewed %}
-          <i class="fa fa-external-link"></i> {{ _('Go to resource') }}
+          {% if '/download/' in res.url %}
+            <i class="fa fa-download"></i> {{ _('Download') }}
+          {% else %}
+            <i class="fa fa-external-link"></i> {{ _('Go to resource') }}
+          {% endif %}
         {% else %}
           <i class="fa fa-download"></i> {{ _('Download') }}
         {% endif %}
