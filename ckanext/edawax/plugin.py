@@ -28,6 +28,7 @@ import hashlib
 from flask import Blueprint
 import ckanext.edawax.views as views
 import ckan.views.dashboard as dash
+from ckan.views.home import index
 
 import six
 from six.moves.urllib.parse import unquote, urlparse
@@ -521,7 +522,11 @@ class EdawaxPlugin(plugins.SingletonPlugin):
         redirect.add_url_rule(u'/user/register',
                                  view_func=home.index)
 
-        return [info, cite, journals, dataset, dashboard, redirect]
+        # Add ability to make post request to landing page
+        landing = Blueprint(u'landing', self.__module__)
+        landing.add_url_rule(u'/', view_func=index, methods=[u'GET', u'POST'])
+
+        return [info, cite, journals, dataset, dashboard, redirect, landing]
 
     def group_facets(self, facets_dict, organization_type, package_type):
         # for some reason CKAN does not accept a new OrderedDict here (does
