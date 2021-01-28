@@ -165,6 +165,65 @@ li.dataset-item:last-of-type{
     margin: 0;
 }
 
+/* Target the new data dictionary section*/
+/* DataStore Tab */
+div.module-content > form[action*="resource_data"],
+div.module-content > form[action*="resource_data"] + table,
+div.module-content > form[action*="resource_data"] + table + h3{
+    background-color: white;
+    padding: 10px;
+    border-radius: 0px;
+    margin-top: 0px;
+    margin-bottom: 0px;
+    border: none;
+}
+
+div.module-content > form[action*="resource_data"] + table + h3 + ul{
+    background-color: white;
+    padding: 10px;
+    border-radius: 0 0 8px 8px;
+    margin-top: 0px;
+    margin-bottom: 0px;
+    border: none;
+}
+
+/* DataDictionary Tab */
+div.module-content > form[action*="dictionary"] {
+    position: relative;
+    top: -6px;
+    background-color: white;
+    border-radius: 0 0 8px 8px;
+    padding: 10px;
+    margin-top: 6px;
+}
+
+
+
+.module-resource + .primary.span9 .module-content{
+    background-color: white;
+    border-radius: 8px;
+    padding: 10px;
+    margin-top: 6px;
+}
+
+.module-resource + .primary.span9 .module-content > h2{
+    margin-top: 0px;
+}
+
+a[data-module="api-info"]{
+    display: none !important;
+}
+
+a[href*="/views"]{
+    display: none !important;
+}
+/* END data dictionary*/
+
+.resource-view{
+    margin-top:0px;
+}
+
+
 div.module-content:first-child,
 header.module-content:first-child{
     padding-top: 0;

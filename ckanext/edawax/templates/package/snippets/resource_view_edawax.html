@@ -11,8 +11,8 @@
     <i class="fa fa-code"></i>
     {{ _("Embed") }}
   </a>
-  <p class="desc">{{ resource_view['description'] }}</p>
-  <div class="m-top ckanext-datapreview">
+  {#<p class="desc">{{ resource_view['description'] }}</p>#}
+  <div class="m-top ckanext-datapreview" style="margin-top:0px; padding-top:0px;">
     {% if not to_preview and h.resource_view_is_filterable(resource_view) %}
       {% snippet 'package/snippets/resource_view_filters.html', resource=resource %}
     {% endif %}

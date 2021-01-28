@@ -174,7 +174,6 @@ def delete_cookies(pkg):
     #Clear Cookies - after resend
     try:
         cookie = f"reviewerPrev_{pkg['name']}"
-        print('#######################################')
         #request.cookies.get(f"reviewerPrev_{pkg['name']}", False)
         print(dir(request.cookies))
         r = make_response('Response')
