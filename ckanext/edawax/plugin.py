@@ -450,7 +450,7 @@ class EdawaxPlugin(plugins.SingletonPlugin):
         info = Blueprint(u'info', self.__module__, url_prefix=u"/info")
         info.add_url_rule(u'',
                           view_func=views.index,
-                          methods=[u'GET'])
+                          methods=[u'GET', 'POST'])
         info.add_url_rule(u'/<id>',
                           view_func=views.md_page,
                           methods=[u'GET'])
