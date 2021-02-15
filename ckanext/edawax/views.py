@@ -211,6 +211,10 @@ def update_review_status(pkg_dict, action=None):
     if current_state == 'reauthor':
         pkg_dict['dara_edawax_review'] = 'editor'
 
+    # fix for typo
+    if current_state == 'reviewer':
+        pkg_dict['dara_edawax_review'] = 'reviewers'
+
     return pkg_dict
 
 
@@ -309,7 +313,7 @@ def editor_notify(id):
     note = n.notify('editor', id, creator_mail, msg, context)
 
     if note:
-        pkg_dict.update({'private': True, 'dara_edawax_review': 'reviewer'})
+        pkg_dict.update({'private': True, 'dara_edawax_review': 'back'})
         tk.get_action('package_update')(context, pkg_dict)
         h.flash_success('Notification sent. Journal Editor will be notified.')
     else:
