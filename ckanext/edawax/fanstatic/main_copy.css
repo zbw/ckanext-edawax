@@ -6184,6 +6184,10 @@ label {
 label:after {
   content: ":";
 }
+label#check_label:after{
+  background-color: red;
+  content: "";
+}
 label.radio:after,
 label.checkbox:after {
   content: "";

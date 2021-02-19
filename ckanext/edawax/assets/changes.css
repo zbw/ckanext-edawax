@@ -43,6 +43,10 @@ body {
   -o-background-size: cover;
 }
 
+label#check_label:after{
+    content: "" !important;
+}
+
 .account-masthead{
     background: #007bb4;
 }
