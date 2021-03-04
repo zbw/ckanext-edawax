@@ -35,24 +35,24 @@
   {% if dara_authors %}
       <div class="muted ellipsis" style="margin-bottom:1.25em; padding-left: 10px;">Creators:
             {% if not h.hide_from_reviewer(pkg) %}
-            {% for author in dara_authors %}
-                <div property="schema:author" style="display:inline"
-                        typeof="schema:Person"
-                        resource="{{ author.url }}">
-                {% if author.url %}
-                    <a href="{{ author.url }}" property="schema:url">
-                        <span property="schema:name">
-                            {{ (author['firstname'], author['lastname']) | join(' ')}}
-                        </span>
-                    </a>
-                {% else %}
-                    <span property="schema:name">{{ (author['firstname'], author['lastname']) | join(' ')}}</span>
-                {% endif %}
-                {% if not author == dara_authors[-1] %}
-                ;
-                {% endif %}
-                </div>
-            {% endfor %}
+              {% for author in dara_authors %}
+                  <div property="schema:author" style="display:inline"
+                          typeof="schema:Person"
+                          resource="{{ author.url }}">
+                  {% if author.url %}
+                      <a href="{{ author.url }}" property="schema:url">
+                          <span property="schema:name">
+                              {{ (author['firstname'], author['lastname']) | join(' ')}}
+                          </span>
+                      </a>
+                  {% else %}
+                      <span property="schema:name">{{ (author['firstname'], author['lastname']) | join(' ')}}</span>
+                  {% endif %}
+                  {% if not author == dara_authors[-1] %}
+                  ;
+                  {% endif %}
+                  </div>
+              {% endfor %}
             {% else %}
               <span class="blurry">Witheld for Review</span>
             {% endif %}

@@ -770,8 +770,7 @@ def query_crossref(doi):
 
         try:
             response = requests.get(base_url.format(doi=doi),
-                                    headers=headers,
-                                    timeout=3.05)
+                                    headers=headers)
         except requests.exceptions.Timeout as e:
             log.debug(f'query_crossref error: {e}')
             return False
