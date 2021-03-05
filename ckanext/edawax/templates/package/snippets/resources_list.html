@@ -10,16 +10,17 @@
         {% endblock %}
 
         {% if h.show_download_all(pkg) %}
-        <div class="download_all_wrapper">
-            <a type="button" class="btn btn-success" id="download_all" href="/dataset/{{ pkg.id }}/download_all">
-                download all
-            </a>
-        </div>
+          <div class="download_all_wrapper">
+              <a type="button" class="btn btn-success" id="download_all" href="/dataset/{{ pkg.id }}/download_all">
+                  download all
+              </a>
+          </div>
+        {% endif %}
       </ul>
     {% else %}
       {% if resources|length == 0 %}
         {% if h.check_access('resource_create', {'package_id': pkg['id']}) %}
-        {% trans url=h.url_for('dataset_resource.new', id=pkg.name) %}
+            {% trans url=h.url_for('dataset_resource.new', id=pkg.name) %}
               <p class="empty">This dataset has no data, <a href="{{ url }}">why not add some?</a></p>
             {% endtrans %}
         {% else %}
@@ -28,6 +29,4 @@
       {% endif %}
     {% endif %}
 
-
-    {% endif %}
 {% endblock %}
