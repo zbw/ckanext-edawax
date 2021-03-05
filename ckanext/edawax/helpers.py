@@ -615,20 +615,20 @@ def journal_recent_views(org):
 
 
 def dataset_total_views(pkg):
-    result = _total_data_views(engine)
-    for r in result:
-        if r.name == pkg['name']:
-            return r.count
-    return 0
+    result = _total_data_views(engine, pkg['name'])
+    try:
+        return result[0].count
+    except Exception:
+        return 0
 
 
 def dataset_recent_views(pkg):
     measure_from = datetime.date.today() - datetime.timedelta(days=14)
-    result = _recent_data_views(engine, measure_from)
-    for r in result:
-        if r.name == pkg['name']:
-            return r.count
-    return 0
+    result = _recent_data_views(engine, measure_from, pkg['name'])
+    try:
+        return result[0].count
+    except Exception:
+        return 0
 
 
 def resource_downloads(resource):
@@ -714,20 +714,21 @@ def _recent_journal_views(engine, target, measure_from):
     return [_ViewCount(*t) for t in engine.execute(sql, name=target, url=f'/journals/{target}', measure_from=str(measure_from)).fetchall()]
 
 
-def _total_data_views(engine):
+def _total_data_views(engine, target):
     sql = '''
         SELECT p.id,
                p.name,
                COALESCE(SUM(s.count), 0) AS total_views
            FROM package AS p
            LEFT OUTER JOIN tracking_summary AS s ON s.package_id = p.id
+           WHERE p.name = %(name)s
            GROUP BY p.id, p.name
            ORDER BY total_views DESC
     '''
-    return [_ViewCount(*t) for t in engine.execute(sql).fetchall()]
+    return [_ViewCount(*t) for t in engine.execute(sql, name=target).fetchall()]
 
 
-def _recent_data_views(engine, measure_from):
+def _recent_data_views(engine, measure_from, target):
     sql = '''
         SELECT p.id,
                p.name,
@@ -735,10 +736,11 @@ def _recent_data_views(engine, measure_from):
            FROM package AS p
            LEFT OUTER JOIN tracking_summary AS s ON s.package_id = p.id
            WHERE s.tracking_date >= %(measure_from)s
+                AND p.name = %(name)s
            GROUP BY p.id, p.name
            ORDER BY total_views DESC
     '''
-    return [_ViewCount(*t) for t in engine.execute(sql, measure_from=str(measure_from)).fetchall()]
+    return [_ViewCount(*t) for t in engine.execute(sql, measure_from=str(measure_from), name=target).fetchall()]
 
 
 def show_download_all(pkg):
