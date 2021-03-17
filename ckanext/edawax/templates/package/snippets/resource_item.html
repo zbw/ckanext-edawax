@@ -10,7 +10,7 @@
 
 <li class="resource-item" data-id="{{ res.id }}" property="schema:hasPart"
     typeof="schema:CreativeWork" resource="{{ res_url }}">
-  {% if res.format.lower() in ["html","json","xml","txt","doc","odt","csv","xls","zip","api","pdf","rdf","wms","png","jpg","gif","wfs","gml","wmts","kml","geo"] %}
+  {% if res.format.lower() in ["html","json","xml","txt","doc","odt","csv","xls","zip","api","pdf","rdf","wms","png","jpg","gif","wfs","gml","wmts","kml","geo", "jpeg", "jpg"] %}
     {% set format = res.format.lower() %}
   {% else %}
     {% set format = 'data' %}
