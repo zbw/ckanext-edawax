@@ -309,7 +309,6 @@ class EdawaxPlugin(plugins.SingletonPlugin):
     plugins.implements(plugins.IBlueprint)
     plugins.implements(plugins.IPermissionLabels)  # ensure "members" can't see private datasets
 
-
     def get_dataset_labels(self, dataset_obj):
         # NOTE: Re-index after making changes to permissions here
         if dataset_obj.state == u'active' and not dataset_obj.private:

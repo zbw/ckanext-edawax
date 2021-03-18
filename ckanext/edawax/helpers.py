@@ -205,18 +205,19 @@ def check_reviewer_update(pkg):
 
 
 def get_org_admin(org_id):
-    admin = []
     try:
-        org_data = tk.get_action('organization_show')(None, {'id': org_id})
+        Entity = model.User
+        q = model.Session.query(Entity.name).\
+               join(model.Member, model.Member.table_id == Entity.id).\
+               filter(model.Member.group_id == org_id).\
+               filter(model.Member.state == 'active').\
+               filter(model.Member.table_name == 'user').\
+               filter(model.Member.capacity == 'admin')
     except Exception as e:
-        log.debug(f'get_org_admin error: {e} {e.message} {e.args}')
+        log.debug(f'get_org_admin error: {e}')
         return ''
-    users = org_data['users']
-    for user in users:
-        if user['capacity'] == 'admin':
-            admin.append(user['name'])
 
-    return admin
+    return [name[0] for name in q.all()]
 
 
 def hide_from_reviewer(pkg):
