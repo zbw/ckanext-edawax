@@ -3,6 +3,10 @@
     <div class="tag_section">
         <h3>Tags</h3>
         {% snippet 'snippets/tag_list.html', tags=tags, _class='tag-list well' %}
+        {#% if jels %}
+          <h3>JEL Codes</h3>
+          {% snippet 'snippets/jel_list.html', jels=jels, _class='tag-list well' %}
+        {% endif %#}
     </div>
   </section>
 {% endif %}

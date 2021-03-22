@@ -175,7 +175,6 @@ def delete_cookies(pkg):
     try:
         cookie = f"reviewerPrev_{pkg['name']}"
         #request.cookies.get(f"reviewerPrev_{pkg['name']}", False)
-        print(dir(request.cookies))
         r = make_response('Response')
         r.delete_cookie(cookie)
         return r
@@ -312,7 +311,7 @@ def is_landing_page():
 def is_edit_page():
     if ('/edit/' in request.url or 'views' in request.url) \
         and not ('user/edit' in request.url or 'journals/edit' in request.url \
-            or 'dataset/edit' in request.url):
+            or 'dataset/edit' in request.url or 'views_recent' in request.url):
         return True
 
     return False

@@ -1,0 +1,8 @@
+{% set _class = _class or 'jel-list' %}
+<ul class="{{ _class }}">
+{% for jel in jels %}
+    <li>
+        <a class="{% block tag_list_item_class %}tag{% endblock %}" href="{% url_for 'dataset.search', extras_dara_jels=jel %}">{{ jel }}</a>
+    </li>
+{% endfor %}
+</ul>
