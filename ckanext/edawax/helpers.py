@@ -829,7 +829,7 @@ def update_citation(data):
         if correct_citation != '':
             tk.get_action('package_patch')(context, data)
     except Exception as e:
-        log.debug(f'update_citation error: {e} {e.message} {e.args}')
+        log.debug(f'update_citation error: {e}')
 
     return correct_citation
 
