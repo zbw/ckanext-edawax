@@ -11,7 +11,7 @@
           <li class="load-less"><a href="{{ h.url_for(controller=controller, action=action, id=id, offset=(offset-30 if offset-30 > 0 else 0)) }}" class="btn btn-rounded">{{ _('Load less') }}</a></li>
         {% endif %}
         {% for activity in activities %}
-          {% if activity.data.actor == '<span class="actor">not logged in</span>' %}
+          {% if 'not logged in' in activity.data.actor %}
             {%- do activity.data.update({'actor': '<span class="actor"><img src="//gravatar.com/avatar/9e4f38b4386bb200defcdc52ecd89104?s=30&amp;d=identicon"\n class="gravatar" width="30" height="30" />The JDA</span>'}) -%}
           {% endif %}
           {% if loop.index <= has_more_length %}
