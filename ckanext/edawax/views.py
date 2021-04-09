@@ -10,7 +10,7 @@ import ckan.plugins.toolkit as tk
 import ckanext.edawax.notifications as n
 
 from ckan.authz import get_group_or_org_admin_ids
-from ckanext.edawax.helpers import is_reviewer, in_review, hide_from_reviewer, is_private, is_robot, check_reviewer_update, _existing_user #, delete_cookies
+from ckanext.edawax.helpers import is_reviewer, in_review, hide_from_reviewer, is_private, is_robot, track_download, check_reviewer_update, _existing_user #, delete_cookies
 from ckanext.edawax.update import update_maintainer_field, email_exists, invite_reviewer, add_user_to_journal
 
 from ckanext.dara.helpers import check_journal_role
@@ -397,15 +397,15 @@ def download_all(id):
             if rsc.get('url_type') == 'upload' and not is_robot(request.user_agent):
                 url = resource['url']
                 filename = os.path.basename(url)
-                # custom user agent header so that downloads from here count
-                headers = {
-                    'User-Agent': 'Ckan-Download-All Agent 1.0',
-                    'From': 'journaldata@zbw.eu'
-                }
                 try:
                     upload = uploader.get_resource_uploader(rsc)
                     filepath = upload.get_path(rsc[u'id'])
                     data[filename] = filepath
+                    added, msg = track_download(url, filename)
+                    if added:
+                        log.info(f'Tracked: {url}')
+                    else:
+                        log.error(f'Failed to track: {url}')
                 except Exception as e:
                     print(f'Error: {e}')
 

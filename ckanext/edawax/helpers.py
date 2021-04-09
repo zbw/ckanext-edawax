@@ -1,4 +1,9 @@
 # -*- coding: utf-8 -*-
+import os
+import six
+import hashlib
+import sqlalchemy as sa
+
 import ckan.plugins.toolkit as tk
 import ckan.model as model
 from ckan.common import c, g, streaming_response, _, request, config  ## streaming_response was response might need some work
@@ -392,6 +397,21 @@ def is_published(url):
         return True
     except Exception as e:
         return False
+
+
+def track_download(url, filename):
+    prefix = config.get('ckan.site_url', 'http://127.0.0.1:5000')
+    actor = 'Ckan-Download-All Agent 1.0'
+    key = hashlib.md5(six.ensure_binary(actor)).hexdigest()
+    engine = sa.create_engine(config.get('sqlalchemy.url'))
+    sql = '''INSERT INTO tracking_raw
+                (user_key, url, tracking_type)
+                VALUES (%s, %s, %s)'''
+    try:
+        engine.execute(sql, key, url, 'resource')
+        return True, None
+    except Exception as e:
+        return False, e
 
 
 def track_path(path):
