@@ -401,14 +401,14 @@ def is_published(url):
 
 def track_download(url, filename):
     prefix = config.get('ckan.site_url', 'http://127.0.0.1:5000')
-    actor = 'Ckan-Download-All Agent 1.0'
-    key = hashlib.md5(six.ensure_binary(actor)).hexdigest()
+    actor = 'Ckan-Download-All'
+    #key = hashlib.md5(six.ensure_binary(actor)).hexdigest()
     engine = sa.create_engine(config.get('sqlalchemy.url'))
     sql = '''INSERT INTO tracking_raw
                 (user_key, url, tracking_type)
                 VALUES (%s, %s, %s)'''
     try:
-        engine.execute(sql, key, url, 'resource')
+        engine.execute(sql, actor, url, 'resource')
         return True, None
     except Exception as e:
         return False, e

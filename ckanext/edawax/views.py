@@ -405,7 +405,7 @@ def download_all(id):
                     if added:
                         log.info(f'Tracked: {url}')
                     else:
-                        log.error(f'Failed to track: {url}')
+                        log.error(f'Failed to track: {url} - {msg}')
                 except Exception as e:
                     print(f'Error: {e}')
 
