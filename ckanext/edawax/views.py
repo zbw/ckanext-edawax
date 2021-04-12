@@ -398,7 +398,11 @@ def download_all(id):
         for resource in resources:
             rsc = tk.get_action('resource_show')(context, {'id': resource['id']})
             if rsc.get('url_type') == 'upload' and not is_robot(request.user_agent):
-                user_key = f'{request.user_agent}{request.remote_addr}'
+                agent = request.user_agent
+                remote_addr = request.remote_addr
+                languages = getattr(request, 'accept_languages', '')
+                encodings = getattr(request, 'accept_encodings', '')
+                user_key = f'{agent}{remote_addr}{languages}{encodings}'
                 key = hashlib.md5(six.ensure_binary(user_key)).hexdigest()
                 url = resource['url']
                 filename = os.path.basename(url)
