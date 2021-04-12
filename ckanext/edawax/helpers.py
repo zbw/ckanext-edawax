@@ -400,10 +400,9 @@ def is_published(url):
         return False
 
 
-def track_download(url, filename):
+def track_download(url, filename, key):
     prefix = config.get('ckan.site_url', 'http://127.0.0.1:5000')
     actor = f'Ckan-Download-All::'
-    key = hashlib.md5(six.ensure_binary(flask.request.remote_addr)).hexdigest()
     user_key = f'{actor}{key}'
     engine = sa.create_engine(config.get('sqlalchemy.url'))
     sql = '''INSERT INTO tracking_raw

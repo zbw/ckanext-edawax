@@ -1,6 +1,8 @@
 import io
 import re
 import ast
+import six
+import hashlib
 import logging
 from ckan import model
 from ckan.common import g, request, config, streaming_response
@@ -396,13 +398,14 @@ def download_all(id):
         for resource in resources:
             rsc = tk.get_action('resource_show')(context, {'id': resource['id']})
             if rsc.get('url_type') == 'upload' and not is_robot(request.user_agent):
+                key = hashlib.md5(six.ensure_binary(request.remote_addr)).hexdigest()
                 url = resource['url']
                 filename = os.path.basename(url)
                 try:
                     upload = uploader.get_resource_uploader(rsc)
                     filepath = upload.get_path(rsc[u'id'])
                     data[filename] = filepath
-                    added, msg = track_download(url, filename)
+                    added, msg = track_download(url, filename, key)
                     if added:
                         log.info(f'Tracked: {url}')
                     else:
