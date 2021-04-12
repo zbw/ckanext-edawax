@@ -794,7 +794,7 @@ def query_crossref(doi):
 
         try:
             response = requests.get(base_url.format(doi=doi),
-                                    headers=headers)
+                                    headers=headers, timeout=5)
         except requests.exceptions.Timeout as e:
             log.debug(f'query_crossref error: {e}')
             return False
@@ -839,20 +839,23 @@ def parse_author(author):
 
 
 def update_citation(data):
-    temp = data['dara_Publication_PID']
-    new_citation = build_citation_crossref(data['dara_Publication_PID'])
-    correct_citation = correct(new_citation)
-    context = {'model': model, 'session': model.Session,
-                'user': g.user or g.author, 'for_view': True,
-                'auth_user_obj': g.userobj, 'ignore_auth': True}
-    data = {'id': data['id'], 'dara_related_citation': correct_citation}
-    try:
-        if correct_citation != '':
-            tk.get_action('package_patch')(context, data)
-    except Exception as e:
-        log.debug(f'update_citation error: {e}')
+    if data['dara_Publication_PIDType'] in ['DOI', 'doi']:
+        temp = data['dara_Publication_PID']
+        new_citation = build_citation_crossref(data['dara_Publication_PID'])
+        correct_citation = correct(new_citation)
+        context = {'model': model, 'session': model.Session,
+                    'user': g.user or g.author, 'for_view': True,
+                    'auth_user_obj': g.userobj, 'ignore_auth': True}
+        data = {'id': data['id'], 'dara_related_citation': correct_citation}
+        try:
+            if correct_citation != '':
+                tk.get_action('package_patch')(context, data)
+        except Exception as e:
+            log.debug(f'update_citation error: {e}')
 
-    return correct_citation
+        return correct_citation
+    else:
+        return ''
 
 
 def correct(citation):
