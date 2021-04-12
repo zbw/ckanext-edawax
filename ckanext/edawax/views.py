@@ -406,11 +406,15 @@ def download_all(id):
                     upload = uploader.get_resource_uploader(rsc)
                     filepath = upload.get_path(rsc[u'id'])
                     data[filename] = filepath
-                    added, msg = track_download(url, filename, key)
+                    if helpers.is_published(url)
+                        added, msg = track_download(url, filename, key)
+                    else:
+                        added = False
+                        msg = 'Not published'
                     if added:
                         log.info(f'Tracked: {url}')
                     else:
-                        log.error(f'Failed to track: {url} - {msg}')
+                        log.error(f'Didn\'t: {url} - {msg}')
                 except Exception as e:
                     print(f'Error: {e}')
 
