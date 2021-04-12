@@ -12,7 +12,7 @@ import ckan.plugins.toolkit as tk
 import ckanext.edawax.notifications as n
 
 from ckan.authz import get_group_or_org_admin_ids
-from ckanext.edawax.helpers import is_reviewer, in_review, hide_from_reviewer, is_private, is_robot, track_download, check_reviewer_update, _existing_user #, delete_cookies
+from ckanext.edawax.helpers import is_reviewer, in_review, hide_from_reviewer, is_private, is_published, is_robot, track_download, check_reviewer_update, _existing_user #, delete_cookies
 from ckanext.edawax.update import update_maintainer_field, email_exists, invite_reviewer, add_user_to_journal
 
 from ckanext.dara.helpers import check_journal_role
@@ -406,7 +406,7 @@ def download_all(id):
                     upload = uploader.get_resource_uploader(rsc)
                     filepath = upload.get_path(rsc[u'id'])
                     data[filename] = filepath
-                    if helpers.is_published(url)
+                    if is_published(url):
                         added, msg = track_download(url, filename, key)
                     else:
                         added = False
@@ -414,7 +414,7 @@ def download_all(id):
                     if added:
                         log.info(f'Tracked: {url}')
                     else:
-                        log.error(f'Didn\'t: {url} - {msg}')
+                        log.error(f'Didn\'t track: {url} - {msg}')
                 except Exception as e:
                     print(f'Error: {e}')
 
