@@ -409,7 +409,7 @@ def track_download(url, filename, key):
                 (user_key, url, tracking_type)
                 VALUES (%s, %s, %s)'''
     try:
-        engine.execute(sql, actor, url, 'resource')
+        engine.execute(sql, user_key, url, 'resource')
         return True, None
     except Exception as e:
         return False, e
