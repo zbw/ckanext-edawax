@@ -18,6 +18,7 @@ import collections
 import ast
 import requests
 
+import flask
 from flask import Response as resp
 from flask import make_response
 
@@ -401,8 +402,9 @@ def is_published(url):
 
 def track_download(url, filename):
     prefix = config.get('ckan.site_url', 'http://127.0.0.1:5000')
-    actor = 'Ckan-Download-All'
-    #key = hashlib.md5(six.ensure_binary(actor)).hexdigest()
+    actor = f'Ckan-Download-All::'
+    key = hashlib.md5(six.ensure_binary(flask.request.remote_addr)).hexdigest()
+    user_key = f'{actor}{key}'
     engine = sa.create_engine(config.get('sqlalchemy.url'))
     sql = '''INSERT INTO tracking_raw
                 (user_key, url, tracking_type)

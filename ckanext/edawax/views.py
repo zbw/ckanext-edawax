@@ -17,6 +17,7 @@ from ckanext.dara.helpers import check_journal_role
 
 from functools import wraps
 
+import flask
 # Create Memver
 from flask.views import MethodView
 import ckan.lib.base as base
