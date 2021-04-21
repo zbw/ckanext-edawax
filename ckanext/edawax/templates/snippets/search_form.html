@@ -15,7 +15,8 @@
     {% if h.is_admin() %}
       <div style="display:none;">
         {{ sorting.append(('Private', 'private desc, dara_edawax_review asc, metadata_modified desc')) }}
-        {{ sorting.append(('Review', 'dara_edawax_review desc')) }}
+        {# sort so that in review for the editor is first, reviewer reviewer is at the end of private items #}
+        {{ sorting.append(('Review', 'private desc, dara_edawax_review asc')) }}
       </div>
     {% endif %}
       <div class="form-select control-group control-order-by zbw-box box-top">
