@@ -961,9 +961,9 @@ def make_schema_metadata(pkg):
         })
     base['distribution'] = r
 
-    if not test_server(pkg):
+    if not test_server_private(pkg):
         return json.dumps(base)
     return ''
 
-def test_server(pkg):
-    return '134.245' in config.get("ckan.site_url") and is_private(pkg)
+def test_server_private(pkg):
+    return '134.245' in config.get("ckan.site_url") and not is_private(pkg)
