@@ -443,7 +443,6 @@ class EdawaxPlugin(plugins.SingletonPlugin):
                 'get_facets': get_facet_items_dict,
                 'make_schema_metadata': helpers.make_schema_metadata,
                 'get_ckan_url': helpers.get_ckan_url,
-                'test_server': helpers.test_server,
                 }
 
     def get_blueprint(self):
