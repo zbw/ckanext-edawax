@@ -18,7 +18,7 @@
 {% endblock %}
 
 {%- block head_extras -%}
-  {# Don't run on test server so avoid test data being crawled#}
+  {# Only run for dataset pages #}
   {%- if pkg and '/resource/' not in request.url -%}
     <script type="application/ld+json">
       {{- h.make_schema_metadata(pkg)|safe -}}
