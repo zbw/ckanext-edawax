@@ -903,7 +903,10 @@ def guess_mimetype(rsc):
         try:
             type_ = mimetypes.types_map[file_ext]
         except KeyError:
-            type_ = mimetypes.types_map[file_ext.lower()]
+            try:
+                type_ = mimetypes.types_map[file_ext.lower()]
+            except KeyError:
+                return ''
         return type_
     elif rsc['url_type'] is None:
         return 'text/uri-list'
