@@ -11,7 +11,6 @@ from ckan.common import c, g, streaming_response, _, request, config  ## streami
 from ckanext.dara.helpers import check_journal_role
 from toolz.itertoolz import unique
 from collections import namedtuple
-import os
 from ckan.lib import helpers as h
 # from functools import wraps
 import datetime
@@ -895,6 +894,23 @@ def get_ckan_url():
     return config.get("ckan.site_url", "http://127.0.0.1:5000")
 
 
+def guess_mimetype(rsc):
+    """Some resources are missing the "mimetype"
+    """
+    file_name, file_ext = os.path.splitext(rsc['name'])
+    if rsc['mimetype'] is None and file_ext:
+        import mimetypes
+        try:
+            type_ = mimetypes.types_map[file_ext]
+        except KeyError:
+            type_ = mimetypes.types_map[file_ext.lower()]
+        return type_
+    elif rsc['url_type'] is None:
+        return 'text/uri-list'
+    else:
+        return rsc['mimetype']
+
+
 def make_schema_metadata(pkg):
     # There is a minimum of 50 characters for a descripion according to Google's
     # "Rich Results Test". This should make sure there is enough
@@ -952,7 +968,7 @@ def make_schema_metadata(pkg):
         r.append({
             "@type":"DataDownload",
             "name": resource['name'],
-            "encodingFormat": resource.get('mimetype', 'text/plain'),
+            "encodingFormat": guess_mimetype(resource),
             "contentSize": resource.get('size', 0),
             "description": resource['description'],
             "@id": resource['id'],
@@ -962,6 +978,8 @@ def make_schema_metadata(pkg):
     base['distribution'] = r
 
     if not test_server_private(pkg):
+        print('...................................................')
+        print(json.dumps(base))
         return json.dumps(base)
     return ''
 
