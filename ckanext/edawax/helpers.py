@@ -978,8 +978,6 @@ def make_schema_metadata(pkg):
     base['distribution'] = r
 
     if not test_server_private(pkg):
-        print('...................................................')
-        print(json.dumps(base))
         return json.dumps(base)
     return ''
 
