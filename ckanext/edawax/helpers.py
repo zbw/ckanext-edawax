@@ -7,7 +7,7 @@ import sqlalchemy as sa
 
 import ckan.plugins.toolkit as tk
 import ckan.model as model
-from ckan.common import c, g, streaming_response, _, request, config  ## streaming_response was response might need some work
+from ckan.common import c, g, streaming_response, _, request, config
 from ckanext.dara.helpers import check_journal_role
 from toolz.itertoolz import unique
 from collections import namedtuple
@@ -868,7 +868,7 @@ def correct(citation):
     return fixed
 
 # ---------------------------------------------------
-# Function for adding schema.org metadata to the page
+# Functions for adding schema.org metadata to the page
 # ----------------------------------------------------
 def build_citation_local(pkg):
     citation = '{authors} ({year}): {title}. Version {version}. {journal}. Dataset. {url}'
@@ -888,10 +888,6 @@ def build_citation_local(pkg):
     url = f'{config.get("ckan.site_url", "http://127.0.0.1:5000")}/dataset/{pkg["id"]}'
 
     return citation.format(authors=a, year=year, title=title, version=version, journal=journal, url=url)
-
-
-def get_ckan_url():
-    return config.get("ckan.site_url", "http://127.0.0.1:5000")
 
 
 def guess_mimetype(rsc):
