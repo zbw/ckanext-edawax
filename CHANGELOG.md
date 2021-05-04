@@ -1,10 +1,9 @@
-git log --since="2017-12-31" --reverse
 Changelog
 =========
 
 started with version 1.1.1
 
-v1.4.0
+v2.0.0
 ------
 [2021-03-03]
 -   Migrate from Pylons to Flask for CKAN 2.9
