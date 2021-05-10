@@ -440,7 +440,8 @@ class EdawaxPlugin(plugins.SingletonPlugin):
                 'find_reviewers_datasets': helpers.find_reviewers_datasets,
                 'is_author': helpers.is_author,
                 'update_citation': helpers.update_citation,
-                'get_facets': get_facet_items_dict
+                'get_facets': get_facet_items_dict,
+                'make_schema_metadata': helpers.make_schema_metadata,
                 }
 
     def get_blueprint(self):

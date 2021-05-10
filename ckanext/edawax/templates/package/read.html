@@ -167,7 +167,7 @@
 
 {% block package_tags %}
   {% snippet "package/snippets/tags.html", tags=pkg.tags %}
-  {#% snippet "package/snippets/jels.html", jels=pkg.dara_jels %#}
+  {% snippet "package/snippets/jels.html", jels=pkg.dara_jels %}
 {% endblock %}
 
 

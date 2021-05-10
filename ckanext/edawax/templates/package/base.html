@@ -16,3 +16,13 @@
     <li class="active"><a href="">{{ _('Create Dataset') }}</a></li>
   {% endif %}
 {% endblock %}
+
+{%- block head_extras -%}
+  {# Only run for dataset pages #}
+  {%- if pkg and '/resource/' not in request.url -%}
+    <script type="application/ld+json">
+      {{- h.make_schema_metadata(pkg)|safe -}}
+    </script>
+  {%- endif -%}
+  {{ super() }}
+{%- endblock -%}

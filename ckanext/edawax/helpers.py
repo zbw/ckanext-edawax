@@ -1,16 +1,16 @@
 # -*- coding: utf-8 -*-
 import os
 import six
+import json
 import hashlib
 import sqlalchemy as sa
 
 import ckan.plugins.toolkit as tk
 import ckan.model as model
-from ckan.common import c, g, streaming_response, _, request, config  ## streaming_response was response might need some work
+from ckan.common import c, g, streaming_response, _, request, config
 from ckanext.dara.helpers import check_journal_role
 from toolz.itertoolz import unique
 from collections import namedtuple
-import os
 from ckan.lib import helpers as h
 # from functools import wraps
 import datetime
@@ -866,3 +866,119 @@ def correct(citation):
         fixed = citation.replace(u'f??r', u'für')
 
     return fixed
+
+# ---------------------------------------------------
+# Functions for adding schema.org metadata to the page
+# ----------------------------------------------------
+def build_citation_local(pkg):
+    citation = '{authors} ({year}): {title}. Version {version}. {journal}. Dataset. {url}'
+
+    if not hide_from_reviewer(pkg):
+        for author in ast.literal_eval(pkg['dara_authors'].replace("null", '""')):
+            if author == pkg['dara_authors'][-1]:
+                a = ', '.join(author['lastname'], author['firstname'])
+            else:
+                a = f"{author['lastname']}, {author['firstname']}"
+    else:
+        a = "Witheld for Review"
+    year = pkg['dara_PublicationDate']
+    title = pkg['title']
+    version = pkg['dara_currentVersion']
+    journal = pkg['organization']['title']
+    url = f'{config.get("ckan.site_url", "http://127.0.0.1:5000")}/dataset/{pkg["id"]}'
+
+    return citation.format(authors=a, year=year, title=title, version=version, journal=journal, url=url)
+
+
+def guess_mimetype(rsc):
+    """Some resources are missing the "mimetype"
+    """
+    file_name, file_ext = os.path.splitext(rsc['name'])
+    if rsc['mimetype'] is None and file_ext:
+        import mimetypes
+        try:
+            type_ = mimetypes.types_map[file_ext]
+        except KeyError:
+            try:
+                type_ = mimetypes.types_map[file_ext.lower()]
+            except KeyError:
+                return file_ext
+        return type_
+    elif rsc['url_type'] is None:
+        return 'text/uri-list'
+    else:
+        return rsc['mimetype']
+
+
+def make_schema_metadata(pkg):
+    # There is a minimum of 50 characters for a descripion according to Google's
+    # "Rich Results Test". This should make sure there is enough
+    if pkg['notes'] == '':
+        description = f'Replication data stored in the Journal Data Archive for \"{pkg["title"]}\".'
+    elif len(pkg['notes']) < 50:
+        description = f'{pkg["notes"]} - stored in the Journal Data Archive.'
+    else:
+        description = pkg['notes']
+    base = {
+                '@context':'http://schema.org',
+                '@type':'Dataset',
+                '@id': pkg.get('dara_DOI') if pkg.get('dara_DOI') != '' else f'{config.get("ckan.site_url", "http://127.0.0.1:5000")}/dataset/{pkg["id"]}',
+                'identifier': pkg.get('dara_DOI') if pkg.get('dara_DOI') != '' else pkg['id'],
+                'name': pkg['title'],
+                'datePublished': pkg.get('metadata_created', ''),
+                'dateModified': pkg.get('metadata_modified', ''),
+                'version': pkg['dara_currentVersion'],
+                'description': description,
+                'keywords': [x['display_name'] for x in pkg.get('tags')],
+                'citation':{
+                        '@type':'CreativeWork',
+                        'text': build_citation_local(pkg),
+                        'name': pkg['title']
+                },
+                'license':{
+                    "@type":"CreativeWork",
+                    "url":"http://creativecommons.org/licenses/by/4.0",
+                    "text":"CC BY 4.0"
+                },
+                'includedInDataCatalog':{
+                    '@type':'DataCatalog',
+                    'name':'Journal Data Archive',
+                    'url':'https://journaldata.zbw.eu'
+                },
+                'publisher':{
+                    '@type':'Organization',
+                    'name':'ZBW - Leibniz Informationszentrum Wirtschaft'
+                },
+                'provider':{
+                    '@type':'Organization',
+                    'name':'ZBW - Leibniz Informationszentrum Wirtschaft'
+                },
+                'author': None,
+                'creator': None,
+                'distribution': None
+            }
+    a = []
+    for author in ast.literal_eval(pkg['dara_authors'].replace("null", '""')):
+        a.append({"@type":"Person","name": f"{author['firstname']} {author['lastname']}"})
+    base['author'] = a
+    base['creator'] = a
+    r = []
+    for resource in pkg['resources']:
+        r.append({
+            "@type":"DataDownload",
+            "name": resource['name'],
+            "encodingFormat": guess_mimetype(resource),
+            "contentSize": resource.get('size', 0),
+            "description": resource['description'],
+            "@id": resource['id'],
+            "identifier": f'{config.get("ckan.site_url", "http://127.0.0.1:5000")}/dataset/{pkg["id"]}/resource/{resource["id"]}',
+            "contentUrl": resource['url']
+        })
+    base['distribution'] = r
+
+    if not test_server_private(pkg):
+        return json.dumps(base)
+    return ''
+
+def test_server_private(pkg):
+    return '134.245' in config.get("ckan.site_url") and not is_private(pkg)
