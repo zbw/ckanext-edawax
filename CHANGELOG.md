@@ -3,6 +3,12 @@ Changelog
 
 started with version 1.1.1
 
+v2.1.0
+------
+[2021-05-11]
+-   Add schema.org metadata to dataset pages
+-   Add JEL codes to displayed metadata
+
 v2.0.0
 ------
 [2021-03-03]
