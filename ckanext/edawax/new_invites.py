@@ -46,19 +46,13 @@ def _get_user_role(user_name, org_id):
 
 def get_invite_body(user, data=None):
     # if it's an api request, don't need url
-    if hasattr(request, 'urlvars'):
-        if request.urlvars['controller'] == u'api':
-            url = None
-        else:
-            id_ = request.urlvars['id']
-            site_url = config.get('ckan.site_url')
-            url_ = tk.url_for("dataset.read", id=id_)
-            url = f"{site_url}{url_}"
-    else:
+    try:
+        id_ = request.values['group_id']
+    except KeyError:
         id_ = request.view_args['id']
-        site_url = config.get('ckan.site_url')
-        url_ = tk.url_for("dataset.read", id=id_)
-        url = f"{site_url}{url_}"
+    site_url = config.get('ckan.site_url')
+    url_ = tk.url_for("dataset.read", id=id_)
+    url = f"{site_url}{url_}"
 
     extra_vars = {'reset_link': mailer.get_reset_link(user),
        'site_title': config.get('ckan.site_title'),
