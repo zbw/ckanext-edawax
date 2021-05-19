@@ -45,10 +45,10 @@ def _get_user_role(user_name, org_id):
 
 
 def get_invite_body(user, data=None):
-    # if it's an api request, don't need url
     try:
-        id_ = request.values['group_id']
-    except KeyError:
+        id_ = data['group_id']
+    except Exception as e:
+        log.error('Error Creating invite -couldn\'t find group_id in data- {e}')
         id_ = request.view_args['id']
     site_url = config.get('ckan.site_url')
     url_ = tk.url_for("dataset.read", id=id_)
@@ -94,7 +94,6 @@ def user_invite(context, data_dict):
     """
     log.debug(f"--Starting Invitation Process--")
     log.debug(f"{data_dict}")
-    log.debug(f"{context}")
     logic._check_access('user_invite', context, data_dict)
     schema = context.get('schema', ckan.logic.schema.default_user_invite_schema())
     data, errors = logic._validate(data_dict, schema, context)
