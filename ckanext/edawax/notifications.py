@@ -109,7 +109,8 @@ def compose_message(typ, body, subject, config, send_to, context=None):
     msg['From'] = config.get('smtp.mail_from')
     if typ in ['editor', 'reauthor']:
         msg['Cc'] = reviewer_email
-    msg['To'] = Header(send_to, 'utf-8')
+    #msg['To'] = Header(send_to, 'utf-8')
+    msg['To'] = Header(send_to)
     msg['Date'] = utils.formatdate(time())
     msg['X-Mailer'] = f"CKAN {ckan_version} [Plugin edawax]"
 
