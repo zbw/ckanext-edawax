@@ -25,15 +25,13 @@
   {% if dara_authors %}
   {% for author in dara_authors %}
       {% if author.url %}
-          <div property="schema:author" style="display:inline"
-                                      typeof="schema:Person" resource="{{
-                                      author.url }}">
+          <div style="display:inline">
                   <a href="{{ author.url }}">
               {% if not h.hide_from_reviewer(pkg) %}
-                <span property="schema:name">
+                <span>
                 {{ (author['firstname'], author['lastname']) | join(' ')}}</span>
               {% else %}
-                <span property="schema:name" class="blurry">
+                <span class="blurry">
                   Witheld for Review
                 </span>
               {% endif %}
@@ -41,14 +39,13 @@
           </div>
 
       {% else %}
-          <div property="schema:author" style="display:inline"
-                                      typeof="schema:Person">
+          <div style="display:inline">
           {% if not h.hide_from_reviewer(pkg) %}
-            <span property="schema:name">
+            <span>
             {{ (author['firstname'], author['lastname']) | join(' ')}}</span>
             </div>
           {% else %}
-            <span property="schema:name" class="blurry">
+            <span class="blurry">
               Witheld for Review
             </span>
             </div>

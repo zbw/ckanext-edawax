@@ -12,41 +12,27 @@
 
 {% block resource_content %}
 
-<div prefix="schema: http://schema.org/" typeof="schema:CreativeWork" resource="{{ h.full_current_url() }}" class="zbw-box box-full bottom-gap">
-    <meta property="schema:isPartOf" typeof="schema:Dataset" resource="{{ pkg_url }}" />
-
+<div resource="{{ h.full_current_url() }}" class="zbw-box box-full bottom-gap">
   {% block resource_read_title %}
-    <h1 class="page-heading" property="schema:name">{{ h.resource_display_name(res) | truncate(50) }}</h1>
+    <h1 class="page-heading">{{ h.resource_display_name(res) | truncate(50) }}</h1>
   {% endblock %}
 
   {% block resource_read_url %}
-    <!--div class="muted ellipsis" property="schema:distribution" typeof="schema:DataDownload" resource="{{ res.url }}">
-        {% if res.url and h.is_url(res.url) %}
-            URL:
-              <a href="{{ res.url }}" title="{{ res.url }}" property="schema:url">
-                  {{ res.url }}
-              </a>
-        {% elif res.url %}
-            Resource URL: {{ res.url }}
-        {% endif %}
-    </div-->
   {% endblock %}
 
   {% if dara_authors %}
       <div class="muted ellipsis" style="margin-bottom:1.25em; padding-left: 10px;">Creators:
             {% if not h.hide_from_reviewer(pkg) %}
               {% for author in dara_authors %}
-                  <div property="schema:author" style="display:inline"
-                          typeof="schema:Person"
-                          resource="{{ author.url }}">
+                  <div style="display:inline" resource="{{ author.url }}">
                   {% if author.url %}
-                      <a href="{{ author.url }}" property="schema:url">
-                          <span property="schema:name">
+                      <a href="{{ author.url }}">
+                          <span>
                               {{ (author['firstname'], author['lastname']) | join(' ')}}
                           </span>
                       </a>
                   {% else %}
-                      <span property="schema:name">{{ (author['firstname'], author['lastname']) | join(' ')}}</span>
+                      <span>{{ (author['firstname'], author['lastname']) | join(' ')}}</span>
                   {% endif %}
                   {% if not author == dara_authors[-1] %}
                   ;
@@ -60,7 +46,7 @@
     {% endif %}
 
 
-  <div class="prose notes" property="rdfs:label schema:description">
+  <div class="prose notes" property="rdfs:label">
     {% if res.description %}
         {{ h.render_markdown(res.description) }}
     {% endif %}
