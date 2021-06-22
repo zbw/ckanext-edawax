@@ -962,7 +962,7 @@ def make_schema_metadata(pkg):
             }
     a = []
     if 'dara_authors' not in pkg.keys():
-        a.append({"@type":"Person","name": f""})
+        a.append({"@type":"Person","name": f"Name"})
     else:
         for author in ast.literal_eval(pkg['dara_authors'].replace("null", '""')):
             a.append({"@type":"Person","name": f"{author['firstname']} {author['lastname']}"})
