@@ -470,6 +470,11 @@ def redirect(id):
     return h.redirect_to(u'dataset.read', id=id)
 
 def create_citation(type, id):
+    check_access('package_show',
+                         {'model': model, 'session': model.Session,
+                          'user': g.user or g.author, 'for_view': True,
+                          'auth_user_obj': g.userobj},
+                          {'id': id})
     if type == 'ris':
         return create_ris_record(id)
     elif type == 'bibtex':
