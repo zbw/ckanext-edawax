@@ -444,7 +444,7 @@ form.add-member-form .controls {
 }
 
 #s2id_role{
-    width: 230px !important;
+    /*width: 230px !important;*/
 }
 
 .add-member-form .form-group{
