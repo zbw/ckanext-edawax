@@ -66,7 +66,7 @@ convert the JSON String
 Dataset.
 
 {% if DOI %}
-<a property="schema:sameAs" href="http://dx.doi.org/{{ DOI }}">http://dx.doi.org/{{ DOI }}</a>
+<a href="http://dx.doi.org/{{ DOI }}">http://dx.doi.org/{{ DOI }}</a>
 {% else %}
 {% set url = h.full_current_url() %}
 <a href="{{ url }}">{{ url }}</a>

@@ -10,8 +10,7 @@
 {% endif %}
 
 {# XXX there's no appropriate property for relation in schema.org #}
-<section class="related_publication"
- typeof="schema:ScholarlyArticle" resource="{{ url }}" property="dc:relation">
+<section class="related_publication">
 
 <h3>Related Publication</h3>
 {%- if url -%}                                                      {# DOI has been provided #}
@@ -19,7 +18,7 @@
         {%- if pid and pid not in pkg_dict['dara_related_citation'] -%}             {# if citation's doi match provided update the citation #}
             {%- set citation = h.update_citation(pkg_dict) -%}
             {% if citation == '' %}
-                <a href="{{ url }}" property="schema:url">
+                <a href="{{ url }}">
                     {{ prefix }} {{ pid }}
                 </a>
             {% else %}
@@ -31,7 +30,7 @@
     {%- else -%}                                                    {# no DOI, try to add one #}
         {%- set citation = h.update_citation(pkg_dict) -%}
         {{- citation|safe -}}
-        <a href="{{ url }}" property="schema:url">
+        <a href="{{ url }}">
             {{ prefix }} {{ pid }}
         </a>
     {%- endif -%}

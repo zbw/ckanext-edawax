@@ -8,8 +8,7 @@
     {% set res_doi = "http://dx.doi.org/" ~ res['dara_DOI'] %}
 {% endif %}
 
-<li class="resource-item" data-id="{{ res.id }}" property="schema:hasPart"
-    typeof="schema:CreativeWork" resource="{{ res_url }}">
+<li class="resource-item" data-id="{{ res.id }}" resource="{{ res_url }}">
   {% if res.format.lower() in ["html","json","xml","txt","doc","odt","csv","xls","zip","api","pdf","rdf","wms","png","jpg","gif","wfs","gml","wmts","kml","geo", "jpeg", "jpg"] %}
     {% set format = res.format.lower() %}
   {% else %}
@@ -17,7 +16,7 @@
   {% endif %}
   {% block resource_item_title %}
     <a class="heading" href="{{ res_url }}" title="{{ res.name or res.description }}">
-    <span property="schema:name">{{ h.resource_display_name(res) }}</span>
+    <span>{{ h.resource_display_name(res) }}</span>
         <span class="format-label" data-format="{{ format }}">{{ res.format }}</span>
     {{ h.popular('views', res.tracking_summary.total, min=10) }}
   </a>

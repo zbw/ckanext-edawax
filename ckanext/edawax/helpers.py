@@ -873,6 +873,9 @@ def correct(citation):
 def build_citation_local(pkg):
     citation = '{authors} ({year}): {title}. Version {version}. {journal}. Dataset. {url}'
 
+    if 'dara_authors' not in pkg.keys():
+        return ''
+
     if not hide_from_reviewer(pkg):
         for author in ast.literal_eval(pkg['dara_authors'].replace("null", '""')):
             if author == pkg['dara_authors'][-1]:
@@ -958,8 +961,11 @@ def make_schema_metadata(pkg):
                 'distribution': None
             }
     a = []
-    for author in ast.literal_eval(pkg['dara_authors'].replace("null", '""')):
-        a.append({"@type":"Person","name": f"{author['firstname']} {author['lastname']}"})
+    if 'dara_authors' not in pkg.keys():
+        a.append({"@type":"Person","name": f"Name"})
+    else:
+        for author in ast.literal_eval(pkg['dara_authors'].replace("null", '""')):
+            a.append({"@type":"Person","name": f"{author['firstname']} {author['lastname']}"})
     base['author'] = a
     base['creator'] = a
     r = []

@@ -11,6 +11,7 @@ import ckan.plugins.toolkit as tk
 
 import ckanext.edawax.notifications as n
 
+import ckan.authz as authz
 from ckan.authz import get_group_or_org_admin_ids
 from ckanext.edawax.helpers import is_reviewer, in_review, hide_from_reviewer, is_private, is_published, is_robot, track_download, check_reviewer_update, _existing_user #, delete_cookies
 from ckanext.edawax.update import update_maintainer_field, email_exists, invite_reviewer, add_user_to_journal
@@ -470,6 +471,11 @@ def redirect(id):
     return h.redirect_to(u'dataset.read', id=id)
 
 def create_citation(type, id):
+    check_access('package_show',
+                         {'model': model, 'session': model.Session,
+                          'user': g.user or g.author, 'for_view': True,
+                          'auth_user_obj': g.userobj},
+                          {'id': id})
     if type == 'ris':
         return create_ris_record(id)
     elif type == 'bibtex':
