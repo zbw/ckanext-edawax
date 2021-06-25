@@ -706,6 +706,7 @@ class MembersGroupView(MethodView):
         roles = _action(u'member_roles_list')(context, {
             u'group_type': group_type
         })
+        user_dict = {}
         if user:
             user_dict = get_action(u'user_show')(context, {u'id': user})
             user_role =\
@@ -715,6 +716,7 @@ class MembersGroupView(MethodView):
             extra_vars["user_dict"] = user_dict
         else:
             user_role = u'member'
+
 
         # TODO: Remove
         g.group_dict = group_dict
