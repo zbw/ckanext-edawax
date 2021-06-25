@@ -145,7 +145,7 @@ def _mail_recipient(recipient_name, recipient_email,
     msg['Subject'] = subject
     msg['From'] = _("%s <%s>") % (sender_name, mail_from)
     recipient = u"%s <%s>" % (recipient_name, recipient_email)
-    msg['To'] = Header(recipient, 'utf-8')
+    msg['To'] = Header(recipient)
     msg['Date'] = utils.formatdate(time())
     msg['X-Mailer'] = "CKAN %s" % ckan.__version__
 
