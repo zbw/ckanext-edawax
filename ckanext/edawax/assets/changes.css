@@ -443,10 +443,6 @@ form.add-member-form .controls {
     width: 100% !important;
 }
 
-#s2id_role{
-    /*width: 230px !important;*/
-}
-
 .add-member-form .form-group{
     margin-left: 0;
     margin-right: 0;
@@ -723,6 +719,7 @@ div.wrapper{
     background-image: none;
     border: none;
     -webkit-box-shadow: none;
+    box-shadow: none;
 }
 .span3 > .module.module-narrow.social {
     display: block;
@@ -1321,6 +1318,15 @@ h1.registration + form {
         margin-top: -13px !important;
     }
 
+    #edawax_nav_search > nav.navigation > ul > li{
+        width: unset;
+        margin-left: 0;
+    }
+
+    div#edawax_nav_search > nav.navigation > ul > li:nth-last-child(-n+2){
+        margin-left: 0;
+    }
+
     #organization-datasets-search-form-bulk{
         margin-bottom: 33px;
     }
@@ -1339,6 +1345,24 @@ h1.registration + form {
 }
 
 @media (max-width: 770px) {
+    /* The following 2 sets of rules don't work when combined*/
+    #edawax_nav_search > nav.navigation > ul > li > form > div > input::placeholder,
+    #edawax_nav_search > nav.navigation > ul > li > form > div > input::-webkit-input-placeholder{
+        text-align: center;
+        font-size: 16px;
+    }
+
+    #edawax_nav_search > nav.navigation > ul > li > form > div > input::-ms-input-placeholder {
+        text-align: center;
+        font-size: 16px;
+    }
+
+    div#edawax_nav_search > nav.navigation > ul > li > form > div > input {
+        text-align: center;
+    }
+    form.search-form h2 {
+        font-size: 16px;
+    }
     div#edawax_nav_search.spacing{
         margin-bottom: 0;
     }
@@ -1464,6 +1488,7 @@ h1.registration + form {
     }
     div#edawax_nav_search{
         margin: 0 5px;
+        height: auto;
     }
     div.module-content:last-child{
         padding-bottom: 0;
@@ -1485,10 +1510,10 @@ h1.registration + form {
 }
 
 @media (max-width: 620px) {
-    .resource-item .btn-group,
+    /*.resource-item .btn-group,
     p.description + div.dropdown{
         position: unset !important;
-    }
+    }*/
 
     .download_all_wrapper > a#download_all{
         float: none;
@@ -1715,11 +1740,6 @@ h1.registration + form {
         display: inline-block;
         width: 100%;
         line-height: 30px
-    }
-
-    /* stack navigation */
-    [role="main"]{
-        top: 110px;
     }
 
     div#edawax_nav_search{
@@ -2871,6 +2891,7 @@ button.btn-primary, a.btn-primary, a.split {
   @media (max-width: 480px) {
     .nav-collapse {
       -webkit-transform: translate3d(0, 0, 0);
+      transform: translate3d(0, 0, 0);
     }
     .page-header h1 small {
       display: block;
