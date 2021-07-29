@@ -44,7 +44,7 @@
           {% if 'dataset' not in request.url and h.check_access('package_create', {'owner_org': group}) %}
               <div class="page_primary_action add_data_button">
                 {% link_for _('Add Dataset'), named_route='dataset.new', group=group, class_='btn btn-primary split', icon='plus-square' %}
-                <a class="show-filters btn">{{ _('Filter Results') }}</a>
+                {#<a class="show-filters btn">{{ _('Filter Results') }}</a>#}
               </div>
           {% endif %}
         {% endblock %}

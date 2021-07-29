@@ -40,9 +40,12 @@
 
 {% block organization_facets %}
   <div class="filters">
-  {% for facet in facet_titles %}
-    {{ h.snippet('snippets/facet_list.html', title=facet_titles[facet], name=facet, extras={'id':group_dict.id}) }}
-  {% endfor %}
-  <a class="close no-text hide-filters"><i class="fa fa-times"></i><span class="text">close</span></a>
+    {% for facet in facet_titles %}
+      {{ h.snippet('snippets/facet_list.html', title=facet_titles[facet], name=facet, extras={'id':group_dict.id}) }}
+    {% endfor %}
+    <a class="close no-text hide-filters">
+      <i class="fa fa-times"></i>
+      <span class="text">close</span>
+    </a>
   </div>
 {% endblock %}

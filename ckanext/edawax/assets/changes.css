@@ -1345,6 +1345,19 @@ h1.registration + form {
 }
 
 @media (max-width: 770px) {
+    /* Move pop down to the left a bit */
+    .popover.popover-followee{
+        left: -85px !important;
+    }
+    .popover-followee .popover-header input{
+        width: 210px;
+    }
+
+    section.module.module-narrow{
+        float: left;
+        width: 100%;
+    }
+
     /* The following 2 sets of rules don't work when combined*/
     #edawax_nav_search > nav.navigation > ul > li > form > div > input::placeholder,
     #edawax_nav_search > nav.navigation > ul > li > form > div > input::-webkit-input-placeholder{
@@ -1451,7 +1464,7 @@ h1.registration + form {
     /*section.module.resources,*/
     .nums,
     .top-info {
-        width: calc((100% / 2) - 22px);
+        width: calc((100% / 2) - 5px);
     }
 
     .nums{
@@ -1634,7 +1647,7 @@ h1.registration + form {
 
 @media (max-width: 320px){
     div.form-select h2 {
-        font-size: 17px;
+        font-size: 16px;
     }
 }
 
