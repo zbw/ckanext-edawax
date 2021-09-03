@@ -1464,7 +1464,8 @@ h1.registration + form {
     /*section.module.resources,*/
     .nums,
     .top-info {
-        width: calc((100% / 2) - 2.5px);
+        /*width: calc((100% / 2) - 2.5px);*/
+        /* HERE */
     }
 
     .nums{
@@ -1483,16 +1484,22 @@ h1.registration + form {
     .module.social{
         width: calc((100% / 2) - 22px);
     }
+    /* HERE */
     .top-info{
-        float: right;
+        /*float: right;*/
     }
     .tag_section{
         margin-top: 5px;
         margin-bottom: 5px;
     }
-    .module.social,
-    .nums {
+    /* HERE */
+    /*.nums*/
+    .module.social {
         float: left;
+    }
+    /* HERE */
+    div.top-info > div.image > a > img {
+        display: none;
     }
     /** resource - resource list **/
     section.module.resources {
