@@ -1498,9 +1498,9 @@ h1.registration + form {
         float: left;
     }
     /* HERE */
-    div.top-info > div.image > a > img {
+    /*div.top-info > div.image > a > img {
         display: none;
-    }
+    }*/
     /** resource - resource list **/
     section.module.resources {
         float: left;
