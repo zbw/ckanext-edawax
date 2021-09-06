@@ -1511,6 +1511,8 @@ h1.registration + form {
     #field-order-by {
         -webkit-appearance: none;
         -moz-appearance: none;
+        height: unset;
+        line-height: unset;
     }
     div#edawax_nav_search{
         margin: 0 5px;
