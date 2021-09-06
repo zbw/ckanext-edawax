@@ -1506,6 +1506,12 @@ h1.registration + form {
         float: left;
         margin-top: 0;
     }
+
+    /* remove default style for re-order drop down */
+    #field-order-by {
+        -webkit-appearance: none;
+        -moz-appearance: none;
+    }
     div#edawax_nav_search{
         margin: 0 5px;
         height: auto;
