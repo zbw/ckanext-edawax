@@ -1370,8 +1370,20 @@ h1.registration + form {
         float: left;
         margin-left: 0;
     }
+
+    div#edawax_nav_search > nav.navigation > ul > li:nth-child(1) {
+        width: 100% !important;
+    }
+
     div#edawax_nav_search > nav.navigation > ul > li:nth-child(even) {
         float: right;
+    }
+
+    div#edawax_nav_search > nav.navigation > ul > li:nth-child(4) {
+        float: none;
+        display: inline-block;
+        margin-right: auto;
+        margin-left: calc(50% - ((50% - 2.5px) / 2));
     }
 
 
@@ -1481,6 +1493,7 @@ h1.registration + form {
         display: inline-block;
     }
     /* info page navigation */
+    div#edawax_nav_search > nav.navigation > ul > li,
     ul.nav-tabs > li.about-info {
         display: block;
     }
@@ -1743,10 +1756,10 @@ h1.registration + form {
 }
 
 @media (max-width: 460px) {
-    div#edawax_nav_search > nav.navigation > ul > li:nth-last-child(-n+2),
+    /*div#edawax_nav_search > nav.navigation > ul > li:nth-last-child(-n+2),
     div#edawax_nav_search > nav.navigation > ul > li{
-        margin-left: 0;  /*5px;*/
-    }
+        margin-left: 0;  /*5px;
+    }*/
 
     div#edawax_nav_search > nav.navigation > ul > li > form > div > input{
         text-align: center;
