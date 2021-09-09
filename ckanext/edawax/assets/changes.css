@@ -1355,15 +1355,23 @@ h1.registration + form {
     }
 }
 
-@media (max-width: 770px) {
-    /* Make nav items shorter */
+@media (max-width: 410px) {
     #edawax_nav_search > nav.navigation > ul > li {
-        width: calc(50% - 2.5px) !important;
+        width: 100% !important;
         float: left !important;
         margin-left: 0 !important;
     }
-    #edawax_nav_search > nav.navigation > ul > li:nth-child(even) {
-        float: right !important;
+}
+
+@media (max-width: 770px) {
+    /* Make nav items shorter */
+    div#edawax_nav_search > nav.navigation > ul > li {
+        width: calc(50% - 2.5px);
+        float: left;
+        margin-left: 0;
+    }
+    div#edawax_nav_search > nav.navigation > ul > li:nth-child(even) {
+        float: right;
     }
 
 
@@ -1737,7 +1745,7 @@ h1.registration + form {
 @media (max-width: 460px) {
     div#edawax_nav_search > nav.navigation > ul > li:nth-last-child(-n+2),
     div#edawax_nav_search > nav.navigation > ul > li{
-        margin-left: 5px;
+        margin-left: 0;  /*5px;*/
     }
 
     div#edawax_nav_search > nav.navigation > ul > li > form > div > input{
@@ -1800,8 +1808,8 @@ h1.registration + form {
     }
 
     div#edawax_nav_search > nav.navigation > ul > li:first-child{
-        float: none;
-        margin-left: 5px;
+        /*float: none;*/
+        margin-left: 0; /*5px;*/
     }
 
     #edawax_nav_search > nav.navigation > ul > li {
