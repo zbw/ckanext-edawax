@@ -1356,6 +1356,17 @@ h1.registration + form {
 }
 
 @media (max-width: 770px) {
+    /* Make nav items shorter */
+    #edawax_nav_search > nav.navigation > ul > li {
+        width: calc(50% - 2.5px) !important;
+        float: left !important;
+        margin-left: 0 !important;
+    }
+    #edawax_nav_search > nav.navigation > ul > li:nth-child(even) {
+        float: right !important;
+    }
+
+
     /* Move pop down to the left a bit */
     .popover.popover-followee{
         left: -85px !important;
