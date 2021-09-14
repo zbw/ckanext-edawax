@@ -1500,16 +1500,6 @@ h1.registration + form {
     .page-header .nav.nav-tabs {
         margin: 0;
     }
-    /** Journal info on resource page **/
-    .half_size,
-    /*.tag_section,*/
-    /*.related_publication.half_size,*/
-    /*section.module.resources,*/
-    .nums,
-    .top-info {
-        /*width: calc((100% / 2) - 2.5px);*/
-        /* HERE */
-    }
 
     .nums{
         padding-right: 10px;
@@ -1527,20 +1517,13 @@ h1.registration + form {
     .module.social{
         width: calc((100% / 2) - 22px);
     }
-    /* HERE */
-    .top-info{
-        /*float: right;*/
-    }
     .tag_section{
         margin-top: 5px;
         margin-bottom: 5px;
     }
-    /* HERE */
-    /*.nums*/
     .module.social {
         float: left;
     }
-    /* HERE */
     div.top-info > div.image > a > img {
         display: none;
     }
@@ -1584,13 +1567,7 @@ h1.registration + form {
 }
 
 @media (max-width: 620px) {
-    /*.resource-item .btn-group,
-    p.description + div.dropdown{
-        position: unset !important;
-    }*/
-
     .download_all_wrapper > a#download_all{
-        /*float: none;*/
         margin-left: 60px;
     }
     #admin-config-form .controls,
@@ -1756,11 +1733,6 @@ h1.registration + form {
 }
 
 @media (max-width: 460px) {
-    /*div#edawax_nav_search > nav.navigation > ul > li:nth-last-child(-n+2),
-    div#edawax_nav_search > nav.navigation > ul > li{
-        margin-left: 0;  /*5px;
-    }*/
-
     div#edawax_nav_search > nav.navigation > ul > li > form > div > input{
         text-align: center;
         color: white;
@@ -1821,8 +1793,7 @@ h1.registration + form {
     }
 
     div#edawax_nav_search > nav.navigation > ul > li:first-child{
-        /*float: none;*/
-        margin-left: 0; /*5px;*/
+        margin-left: 0;
     }
 
     #edawax_nav_search > nav.navigation > ul > li {
