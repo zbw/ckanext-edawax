@@ -674,7 +674,7 @@ def find_reviewers_datasets(name):
             SELECT package.id, package.title
             FROM package
             INNER JOIN "user" as u
-            ON package.maintainer ILIKE '%%' || u.name || '%%'
+            ON package.maintainer ILIKE '%%' || u.email || '%%'
             INNER JOIN member
             ON member.table_id = u.id
             INNER JOIN package_extra as pe
@@ -690,7 +690,6 @@ def find_reviewers_datasets(name):
 
     out = [{'id': result[0],
             'name': result[1].title()} for result in results]
-
     return out
 
 #===========================================================#

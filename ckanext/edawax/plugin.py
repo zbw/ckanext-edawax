@@ -333,6 +333,8 @@ class EdawaxPlugin(plugins.SingletonPlugin):
             except IndexError:
                 pass
 
+        labels.append(f'package-{dataset_obj.id}')
+
         return labels
 
     def get_user_dataset_labels(self, user_obj):
@@ -354,6 +356,11 @@ class EdawaxPlugin(plugins.SingletonPlugin):
                 {'ignore_auth': True}, {'id': user_obj.id})
 
             labels.extend('collaborator-%s' % d['package_id'] for d in datasets)
+
+        datasets = helpers.find_reviewers_datasets(user_obj.name)
+        if len(datasets) > 0:
+            for dataset in datasets:
+                labels.append(f"package-{dataset['id']}")
 
         return labels
 
