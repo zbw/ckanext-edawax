@@ -683,7 +683,7 @@ def find_reviewers_datasets(name):
             AND u.name = %(name)s
             AND package.private = 't'
             AND pe.key = 'dara_edawax_review'
-            AND pe.value = 'reviewers'
+            AND pe.value in ('reviewers', 'back')
             GROUP BY package.id;
           """
     results = engine.execute(sql, {'name':name}).fetchall()

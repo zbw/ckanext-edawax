@@ -359,8 +359,7 @@ class EdawaxPlugin(plugins.SingletonPlugin):
 
         datasets = helpers.find_reviewers_datasets(user_obj.name)
         if len(datasets) > 0:
-            for dataset in datasets:
-                labels.append(f"package-{dataset['id']}")
+            labels.extend(f"package-{d['id']}" for d in datasets)
 
         return labels
 
