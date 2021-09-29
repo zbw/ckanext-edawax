@@ -3,6 +3,15 @@ Changelog
 
 started with version 1.1.1
 
+v2.1.1
+------
+[2021-09-29]
+-   Update mobile view
+-   Allow users to change name when invited
+-   Fix Reviewers not working if name changed
+-   Remove schema properties from HTML
+-   Add JSON-LD to dataset pages
+
 v2.1.0
 ------
 [2021-05-11]
