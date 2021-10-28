@@ -487,8 +487,7 @@ class EdawaxPlugin(plugins.SingletonPlugin):
         journals.add_url_rule(u'/edit/<id>',
                               view_func=group.EditGroupView.as_view(str(u'edit')))
         journals.add_url_rule(u'/bulk_process/<id>',
-                              view_func=group.BulkProcessView.as_view(str(u'bulk_process')),
-                              methods=[u'GET'])
+                              view_func=group.BulkProcessView.as_view(str(u'bulk_process')))
         journals.add_url_rule(u'/members/<id>',
                               view_func=group.members,
                               methods=[u'GET', u'POST'])
