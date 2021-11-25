@@ -94,6 +94,7 @@ def user_invite(context, data_dict):
     """
     log.debug(f"--Starting Invitation Process--")
     log.debug(f"{data_dict}")
+    log.debug(f'{context}')
     logic._check_access('user_invite', context, data_dict)
     schema = context.get('schema', ckan.logic.schema.default_user_invite_schema())
     data, errors = logic._validate(data_dict, schema, context)

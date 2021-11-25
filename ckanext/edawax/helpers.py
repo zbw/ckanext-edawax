@@ -65,7 +65,10 @@ def format_resource_items_custom(items):
                 try:
                     authors = ast.literal_eval(package['dara_authors'].replace("null", '""'))
                 except Exception:
-                    authors = ast.literal_eval(package['extras_dara_authors'].replace("null", '""'))
+                    try:
+                        authors = ast.literal_eval(package['extras_dara_authors'].replace("null", '""'))
+                    except Exception:
+                        authors = False
                 a = parse_authors(authors)
                 out.append(("3 Authors", a))
             else:
@@ -116,7 +119,8 @@ def chunk(lst, n):
 
 
 def parse_authors(authors):
-    out = ''
+    if not authors:
+        return ''
     # information is coming from the dataset
     if type(authors[0]) == dict:   #len(authors) > 1:
         return u' and '.join([f"{author['lastname']}, {author['firstname']}" for author in authors])
