@@ -273,7 +273,7 @@ class NewTrackingMiddleware(TrackingMiddleware):
             try:
                 key = ''.join([
                     environ['HTTP_USER_AGENT'],
-                    environ['REMOTE_ADDR'],
+                    environ.get('HTTP_X_REAL_IP', '127.0.0.1'),
                     environ.get('HTTP_ACCEPT_LANGUAGE', ''),
                     environ.get('HTTP_ACCEPT_ENCODING', ''),
                 ])
@@ -366,7 +366,6 @@ class EdawaxPlugin(plugins.SingletonPlugin):
 
     def make_middleware(self, app, config):
         app = NewTrackingMiddleware(app, config)
-
         return app
 
     def update_config(self, config):
