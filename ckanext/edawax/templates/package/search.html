@@ -21,6 +21,19 @@
     (_('Popular'), 'views_recent desc') if g.tracking_enabled else (false, false) ]
   %}
   {% snippet 'snippets/search_form.html', form_id='dataset-search-form', type='dataset', query=q, sorting=sorting, sorting_selected=sort_by_selected, count=page.item_count, facets=facets, show_empty=request.params, error=query_error, fields=fields %}
+
+  {# Message for no results or error moved from "search_form" #}
+  {% if request.params and page.item_count == 0 and not query_error %}
+    <div class="zbw-box box-top">
+      <p>Please try another search</p>
+    </div>
+  {% endif %}
+
+  {% if query_error %}
+    <div class="zbw-box box-top">
+      <p id="search-error"><strong>There was an error while searching.</strong> Please try again.</p>
+    </div>
+  {% endif %}
 {% endblock %}
 
 {% block page_primary_action %}{% endblock %}

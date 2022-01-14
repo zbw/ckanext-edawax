@@ -98,6 +98,10 @@ label#check_label:after{
     border-radius: 0 0 8px 8px;
 }
 
+/* hide this because it is being moved, but cant find a way to remove it from ckan-core*/
+p.extra {
+    display: none;
+}
 /********* START ZBW BOX**************/
 .search-form .control-order-by.zbw-box{
     float: none;

@@ -25,7 +25,7 @@
         {% endif %}
 
         <div class="search-order" style="display: inline;">
-          <label for="field-order-by">{{ _('Order by') }}</label>
+          {#<label for="field-order-by">{{ _('Order by') }}</label><br>#}
           <select id="field-order-by" name="sort">
             {% for label, value in sorting %}
               {% if label and value %}
