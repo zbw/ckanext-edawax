@@ -280,9 +280,6 @@ class NewTrackingMiddleware(TrackingMiddleware):
             except KeyError as e:
                 return self.app(environ, start_response)
             key = hashlib.md5(six.ensure_binary(key)).hexdigest()
-            print('checking')
-            print(environ['HTTP_USER_AGENT'])
-            print(key)
             if helpers.is_robot(environ['HTTP_USER_AGENT'], key):
                 return self.app(environ, start_response)
             # store key/data here
