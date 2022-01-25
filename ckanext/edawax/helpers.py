@@ -427,12 +427,17 @@ def track_path(path):
     return False
 
 
-def is_robot(user_agent):
+def is_robot(user_agent, user_key):
+    # check against user agent
     robots = _list.robots
     for robot in robots:
         pattern = re.compile(robot['pattern'], re.IGNORECASE)
         if pattern.search(str(user_agent)):
             return True
+    # check against user key
+    if user_key in _list.robo_users:
+        return True
+
     return False
 
 
