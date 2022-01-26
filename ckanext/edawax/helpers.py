@@ -427,7 +427,7 @@ def track_path(path):
     return False
 
 
-def is_robot(user_agent, user_key):
+def is_robot(user_agent, user_key = None):
     # check against user agent
     robots = _list.robots
     for robot in robots:
@@ -435,7 +435,7 @@ def is_robot(user_agent, user_key):
         if pattern.search(str(user_agent)):
             return True
     # check against user key
-    if user_key in _list.robo_users:
+    if user_key and user_key in _list.robo_users:
         return True
 
     return False
