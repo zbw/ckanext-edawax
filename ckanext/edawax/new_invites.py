@@ -71,6 +71,30 @@ def get_invite_body(user, data=None):
     return render('emails/invite_author.txt', extra_vars)
 
 
+def create_notification_body(user, data=None):
+    try:
+        id_ = data['group_id']
+    except Exception as e:
+        log.error('Error Creating invite -couldn\'t find group_id in data- {e}')
+        id_ = request.view_args['id']
+    site_url = config.get('ckan.site_url')
+    url_ = tk.url_for("dataset.read", id=id_)
+    url = f"{site_url}/user/reset"
+    extra_vars = {'site_title': config.get('ckan.site_title'),
+       'user_name': user.name,
+       'site_url': config.get('ckan.site_url'),
+       'journal_title': data['journal_title'],
+       'reset_link': url}
+    return render('emails/notify_author.txt', extra_vars)
+
+
+def notify_author(user, data):
+    body = create_notification_body(user, data=data)
+    sub = config.get('ckan.site_title')
+    subject = mailer._(f'{sub}: Request for New Contribution')
+    mail_user(user, subject, body)
+
+
 def send_invite(user, data):
     mailer.create_reset_key(user)
     body = get_invite_body(user, data=data)
@@ -84,7 +108,7 @@ def send_invite(user, data):
         role = "Reviewer"
     sub = config.get('ckan.site_title')
     subject = mailer._(f'{sub} Invite: {role}')
-    mail_user(user, subject, body, {}, role)
+    mail_user(user, subject, body)
 
 
 def user_invite(context, data_dict):
@@ -100,6 +124,15 @@ def user_invite(context, data_dict):
     data, errors = logic._validate(data_dict, schema, context)
     log.error(f'Errors: {errors}')
     if errors:
+        if 'belongs to a registered user' in errors['email'][0]:
+            user = ckan.model.User.by_email(data['email'])[0]
+            member_dict = {'username': user.id,
+                    'id': data['group_id']}
+            org_info = logic._get_action('organization_show')(context, member_dict)
+            data['journal_title'] = org_info['display_name']
+            notify_author(user, data)
+            return
+
         raise logic.ValidationError(errors)
     name = logic._get_random_username_from_email(data['email'])
     password = str(random.SystemRandom().random())

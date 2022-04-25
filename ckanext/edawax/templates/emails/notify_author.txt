@@ -1,0 +1,12 @@
+the editorial office of the {{ journal_title }} invites you to deposit the replication files of your paper in ZBW's Journal Data Archive.
+You have a preexisting account in the system
+
+Your account name is: {{ user_name }}
+
+To start the deposit of your replication files, please log in with the user name shown above and your password.
+If you have forgotten your password, it can be reset by visiting: {{ reset_link }}
+
+For any problems or questions, please feel free to get in touch with us.
+
+Kind regards,
+ZBW Journal Data Archive
