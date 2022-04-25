@@ -117,8 +117,6 @@ def user_invite(context, data_dict):
     to send_invite
     """
     log.debug(f"--Starting Invitation Process--")
-    log.debug(f"{data_dict}")
-    log.debug(f'{context}')
     logic._check_access('user_invite', context, data_dict)
     schema = context.get('schema', ckan.logic.schema.default_user_invite_schema())
     data, errors = logic._validate(data_dict, schema, context)
@@ -131,7 +129,7 @@ def user_invite(context, data_dict):
             org_info = logic._get_action('organization_show')(context, member_dict)
             data['journal_title'] = org_info['display_name']
             notify_author(user, data)
-            return
+            return {'name': user.name}
 
         raise logic.ValidationError(errors)
     name = logic._get_random_username_from_email(data['email'])
