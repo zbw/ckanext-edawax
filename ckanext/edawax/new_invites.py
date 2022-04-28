@@ -78,13 +78,15 @@ def create_notification_body(user, data=None):
         log.error('Error Creating invite -couldn\'t find group_id in data- {e}')
         id_ = request.view_args['id']
     site_url = config.get('ckan.site_url')
-    url_ = tk.url_for("dataset.read", id=id_)
     url = f"{site_url}/user/reset"
+    journal_url = f"{site_url}/journals/{id_}"
+    print(data)
     extra_vars = {'site_title': config.get('ckan.site_title'),
        'user_name': user.name,
        'site_url': config.get('ckan.site_url'),
        'journal_title': data['journal_title'],
-       'reset_link': url}
+       'reset_link': url,
+       'journal_url': journal_url}
     return render('emails/notify_author.txt', extra_vars)
 
 
@@ -122,14 +124,15 @@ def user_invite(context, data_dict):
     data, errors = logic._validate(data_dict, schema, context)
     log.error(f'Errors: {errors}')
     if errors:
-        if 'belongs to a registered user' in errors['email'][0]:
+        if 'email' in errors.keys() \
+            and 'belongs to a registered user' in errors['email'][0]:
             user = ckan.model.User.by_email(data['email'])[0]
             member_dict = {'username': user.id,
                     'id': data['group_id']}
             org_info = logic._get_action('organization_show')(context, member_dict)
             data['journal_title'] = org_info['display_name']
             notify_author(user, data)
-            return {'name': user.name}
+            return logic.model_dictize.user_dictize(user, context)
 
         raise logic.ValidationError(errors)
     name = logic._get_random_username_from_email(data['email'])
