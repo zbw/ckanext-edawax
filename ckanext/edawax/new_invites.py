@@ -71,7 +71,7 @@ def get_invite_body(user, data=None):
     return render('emails/invite_author.txt', extra_vars)
 
 
-def create_notification_body(user, data=None):
+def create_notification_body(user, data=None, journal_change=False):
     try:
         id_ = data['group_id']
     except Exception as e:
@@ -80,18 +80,20 @@ def create_notification_body(user, data=None):
     site_url = config.get('ckan.site_url')
     url = f"{site_url}/user/reset"
     journal_url = f"{site_url}/journals/{id_}"
-    print(data)
     extra_vars = {'site_title': config.get('ckan.site_title'),
        'user_name': user.name,
        'site_url': config.get('ckan.site_url'),
        'journal_title': data['journal_title'],
        'reset_link': url,
        'journal_url': journal_url}
-    return render('emails/notify_author.txt', extra_vars)
+    if not journal_change:
+        return render('emails/notify_author.txt', extra_vars)
+    return render('emails/notify_author_new_jrnl.txt', extra_vars)
 
 
-def notify_author(user, data):
-    body = create_notification_body(user, data=data)
+def notify_author(user, data, journal_change=False):
+    log.debug(f"Notifying existing user")
+    body = create_notification_body(user, data, journal_change)
     sub = config.get('ckan.site_title')
     subject = mailer._(f'{sub}: Request for New Contribution')
     mail_user(user, subject, body)
@@ -124,14 +126,25 @@ def user_invite(context, data_dict):
     data, errors = logic._validate(data_dict, schema, context)
     log.error(f'Errors: {errors}')
     if errors:
+        # if the email belongs to a registered user, notify that user
         if 'email' in errors.keys() \
             and 'belongs to a registered user' in errors['email'][0]:
             user = ckan.model.User.by_email(data['email'])[0]
             member_dict = {'username': user.id,
-                    'id': data['group_id']}
+                            'id': data['group_id']}
             org_info = logic._get_action('organization_show')(context, member_dict)
+            users = [user['name'] for user in org_info['users']]
             data['journal_title'] = org_info['display_name']
-            notify_author(user, data)
+            # if the existing account belongs to the current journal
+            if user.name in users:
+                notify_author(user, data)
+            else:
+                # otherwise, add the user to the new journal
+                logic._get_action('organization_member_create')(context,
+                    {'id': data['group_id'],
+                     'username': user.name,
+                     'role': 'member'})
+                notify_author(user, data, True)
             return logic.model_dictize.user_dictize(user, context)
 
         raise logic.ValidationError(errors)

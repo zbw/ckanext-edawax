@@ -693,7 +693,9 @@ class MembersGroupView(MethodView):
         # TODO: Remove
         g.group_dict = group_dict
 
+        h.flash_success(f"'{email}' has been notified.")
         return h.redirect_to(u'{}.members'.format(group_type), id=id)
+
 
     def get(self, group_type, is_organization, id=None):
         extra_vars = {}
