@@ -1,11 +1,5 @@
 ### Principles for the inclusion of journals in the ZBW Journal Data Archive (JDA)
 
----
-
-If you and your academic journal are interested in using the ZBW Journal Data Archive, please [get in touch](/info/contact) with us.
-
----
-
 **Preamble:**  
 In its statutes, the ZBW - Leibniz Information Centre for Economics defines the collection and indexing of economic literature as the purpose of the foundation. It offers comprehensive services that allow for the efficient, effective, and sustainable use of economic literature. Additionally, the ZBW has committed itself to the promotion of open scientific practices in its guidelines on openness. Through various means, the ZBW strives to promote a culture of open access to scientific results, methods, data, and findings both within and outside its own organisation. 
 
@@ -20,6 +14,10 @@ Because the ZBW is particularly concerned with promoting open science practices,
 The ZBW does not offer a universal hosting service for publication-related research data from journals published by commercial publishers. However, individual journals may submit a request to use the JDA (in consultation with their publishers). These journals should have a demonstrated relevance and reputation for economics research and the journal should fit the collection profile of the ZBW. 
 
 Acceptance or rejection will be decided on a case-by-case basis. A contract with the ZBW must be concluded prior to use. There is no general entitlement to use the service.
+
+---
+
+If you and your academic journal are interested in using the ZBW Journal Data Archive, please [get in touch](/info/contact) with us.
 
 ---
 
