@@ -1,4 +1,4 @@
-# Contact
+### Contact
 
 **ZBW Journal Data Archive**
 [@] journaldata[at]zbw[dot]eu   
