@@ -3,6 +3,11 @@ Changelog
 
 started with version 1.1.1
 
+v2.1.2
+------
+[2022-07-15]
+-   Update info pages
+
 v2.1.1
 ------
 [2021-09-29]
