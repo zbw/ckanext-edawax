@@ -3,6 +3,14 @@ Changelog
 
 started with version 1.1.1
 
+
+v2.2.0
+------
+[2022-06-03]
+-   Fix admins not recieving messages from reviewer
+-   Add missing style for search results with 0 hits
+-   Add exception for resources missing `dara_authors` field (only affected very old records)
+
 v2.1.2
 ------
 [2022-07-15]

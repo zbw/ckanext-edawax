@@ -117,7 +117,7 @@ def compose_message(typ, body, subject, config, send_to, context=None):
     return msg
 
 
-def notify(typ, dataset, author_mail, msg, context, status=None):
+def notify(typ, dataset, mail, msg, context, status=None):
     context['ignore_auth'] = True
     body = "".join(msg_body[typ])
     pkg = tk.get_action('package_show')(context, {'id': dataset})
@@ -138,9 +138,9 @@ def notify(typ, dataset, author_mail, msg, context, status=None):
     site_title = config.get('ckan.site_title')
     sub = subjects[typ]
     subject = f'{site_title}{sub}'
-    message = compose_message(typ, body, subject, config, author_mail, context)
+    message = compose_message(typ, body, subject, config, mail, context)
 
-    return sendmail(author_mail, message)
+    return sendmail(mail, message)
 
 
 def review(addresses, author, dataset, reviewers=None, msg=None):

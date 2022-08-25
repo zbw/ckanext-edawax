@@ -313,15 +313,20 @@ def editor_notify(id):
     context = _context()
     msg = request.form.get('msg', '')
     pkg_dict = tk.get_action('package_show')(context, {'id': id})
-    creator_mail = model.User.get(pkg_dict['creator_user_id']).email
-    note = n.notify('editor', id, creator_mail, msg, context)
+    admins = get_group_or_org_admin_ids(pkg_dict['owner_org'])
+    addresses = list(map(lambda admin_id: model.User.get(admin_id).email, admins))
 
-    if note:
+    #note = n.notify('editor', id, admin_mail, msg, context)
+    note = []
+    for mail in addresses:
+        note.append(n.notify('editor', id, mail, msg, context))
+
+    if all(note):
         pkg_dict.update({'private': True, 'dara_edawax_review': 'back'})
         tk.get_action('package_update')(context, pkg_dict)
         h.flash_success('Notification sent. Journal Editor will be notified.')
     else:
-        h.flash_error('ERROR: Mail could not be sent. Please try again later or contact the site admin.')
+        h.flash_error('ERROR: Mail could not be sent to all editors. Please contact the site admin.')
     return redirect(id)
 
 
