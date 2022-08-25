@@ -6,6 +6,7 @@ started with version 1.1.1
 
 v2.2.1
 ------
+[2022-08-25]
 -   Address case where existing email is used to invite a user.
         Previous caused an error. Now a new message is sent to the user.
 
