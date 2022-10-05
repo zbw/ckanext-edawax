@@ -177,7 +177,7 @@ def review(id):
         pkg_dict = update_review_status(pkg_dict)
         tk.get_action('package_update')(context, pkg_dict)
         if flash_message is None:
-            flash_message = ('Notification sent to Editor.', 'success')
+            flash_message = ('Notification sent to Journal.', 'success')
     else:
         flash_message = ('Error: Mail could not be sent. Please try again later or contact the site admin.', 'error')
 

@@ -27,7 +27,7 @@ Clone this repository into your CKAN src folder and install it the usual way `pi
     -   Journaleditor adds Author
     -   Author get's email with URL
     -   Author uploads dataset, Dataset is private
-    -   Author sets clicks 'Send to review', Editor get's email, Dataset state is 'review'
+    -   Author sets clicks 'Send to Journal', Editor get's email, Dataset state is 'review'
     -   Journaleditor adds some metadata and publishes Dataset.
     -   Journaleditor can assign Reviewers
 -   Reviewers have access to private datasets they are assigned to, author information is suppressed
