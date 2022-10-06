@@ -532,19 +532,12 @@ class EdawaxPlugin(plugins.SingletonPlugin):
 
         return [info, cite, journals, dataset, dashboard, redirect, landing]
 
-    def group_facets(self, facets_dict, organization_type, package_type):
-        # for some reason CKAN does not accept a new OrderedDict here (does
-        # not happen with datasets facets!). So we have to modify the original
-        # facets_dict
-        KEY_VOLUME = 'dara_Publication_Volume'
-        KEY_ISSUES = 'dara_Publication_Issue'
 
+    def dataset_facets(self, facets_dict, package_type):
+        KEY_PUB_YEAR = 'dara_PublicationDate'
         edawax_facets(facets_dict)
-        del facets_dict['organization']
-        facets_dict.update({KEY_VOLUME: 'Volumes'})
 
-        if tk.request.params.get(KEY_VOLUME, False):
-            facets_dict.update({KEY_ISSUES: 'Issues'})
+        facets_dict.update({KEY_PUB_YEAR: 'Publication Year'})
 
         # move formats at the end
         del facets_dict['res_format']
@@ -552,18 +545,24 @@ class EdawaxPlugin(plugins.SingletonPlugin):
 
         return facets_dict
 
-    def dataset_facets(self, facets_dict, package_type):
+
+    def organization_facets(self, facets_dict,  organization_type, package_type):
         KEY_VOLUME = 'dara_Publication_Volume'
         KEY_ISSUES = 'dara_Publication_Issue'
+        KEY_PUB_YEAR = 'dara_PublicationDate'
         edawax_facets(facets_dict)
 
-        if tk.request.params.get('organization', False):
-            facets_dict.update({KEY_VOLUME: 'Volumes'})
-            if tk.request.params.get(KEY_VOLUME, False):
-                facets_dict.update({KEY_ISSUES: 'Issues'})
+        facets_dict.update({KEY_PUB_YEAR: 'Publication Year'})
 
-            # move formats at the end
-            del facets_dict['res_format']
-            facets_dict.update({'res_format': 'Formats'})
+        facets_dict.update({KEY_VOLUME: 'Volumes'})
+        if tk.request.params.get(KEY_VOLUME, False):
+            facets_dict.update({KEY_ISSUES: 'Issues'})
+
+         # move formats at the end
+        del facets_dict['res_format']
+        facets_dict.update({'res_format': 'Formats'})
+
+        # remove organization from facet list
+        del facets_dict['organization']
 
         return facets_dict
