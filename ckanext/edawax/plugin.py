@@ -102,7 +102,6 @@ def get_facet_items_dict(facet, limit=None, exclude_active=False,
     filter_empty_name = partial(filter, lambda i: len(i['name'].strip()) > 0)
     isdict = partial(filter, lambda i: isinstance(i, dict))
     if facet == 'dara_PublicationDate':
-        print('date')
         facets = compose(sort_facet_date, isdict, partial(map, active), filter_empty_name)(f)
     else:
         facets = compose(sort_facet, isdict, partial(map, active), filter_empty_name)(f)
