@@ -543,10 +543,18 @@ class EdawaxPlugin(plugins.SingletonPlugin):
 
 
     def dataset_facets(self, facets_dict, package_type):
+        KEY_JOURNAL = 'organization'
+        KEY_VOLUME = 'dara_Publication_Volume'
+        KEY_ISSUES = 'dara_Publication_Issue'
         KEY_PUB_YEAR = 'dara_PublicationDate'
         edawax_facets(facets_dict)
 
         facets_dict.update({KEY_PUB_YEAR: 'Publication Year'})
+
+        if tk.request.params.get(KEY_JOURNAL, False):
+            facets_dict.update({KEY_VOLUME: 'Volumes'})
+            if tk.request.params.get(KEY_VOLUME, False):
+                facets_dict.update({KEY_ISSUES: 'Issues'})
 
         # move formats at the end
         del facets_dict['res_format']
