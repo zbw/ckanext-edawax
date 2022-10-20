@@ -202,11 +202,11 @@ def _mail_recipient(recipient_name, recipient_email,
     # attach the file
     if role is not None and role in [u'member', 'Author', 'Editor', 'Reviewer']:
         if role in [u'member', 'Author']:
-            attachment_file_name = "QuickManual_V1.5.pdf"
+            attachment_file_name = "QuickManual_V1.6.pdf"
         elif role in ['Reviewer']:
             attachment_file_name = "Manual_for_reviewers_V1-1.5.2.pdf"
         else:
-            attachment_file_name = "Editors_Manual-EN-2020-07-31_V1.6.pdf"
+            attachment_file_name = "Editors_Manual-EN-2021-11-01_V1.6.1.pdf"
         directory = os.path.dirname(__file__)
         rel_path = f'public/{attachment_file_name}'
         with open(os.path.join(directory, rel_path), 'rb') as file:
