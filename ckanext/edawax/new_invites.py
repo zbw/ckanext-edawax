@@ -112,7 +112,7 @@ def send_invite(user, data):
         role = "Reviewer"
     sub = config.get('ckan.site_title')
     subject = mailer._(f'{sub} Invite: {role}')
-    mail_user(user, subject, body)
+    mail_user(user, subject, body, {}, role)
 
 
 def user_invite(context, data_dict):
