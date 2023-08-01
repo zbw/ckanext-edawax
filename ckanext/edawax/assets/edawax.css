@@ -240,3 +240,15 @@ a[target="_blank"]:after {
   /*margin-left:10px;*/
 }
 
+/* Second search bar */
+.search-form .search-input-group.jda {
+  margin-bottom: 0;
+  width: 95%;
+  display: flex;
+}
+
+.search-container {
+  padding: 10px;
+  margin-left: 15px;
+
+}

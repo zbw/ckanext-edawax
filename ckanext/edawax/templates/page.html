@@ -57,10 +57,10 @@
                 <ul class="nav nav-pills">
                     <li>
                         {% block header_site_search %}
-                                <form class="section site-search simple-input" action="{% url_for 'dataset.search' %}" method="get">
+                                <form class="section site-search simple-input" action="{% url_for 'dataset.search' %}" method="get" id="jda-search-box">
                                   <div class="field">
                                     <label for="field-sitewide-search">{% block header_site_search_label %}{{ _('Search Datasets') }}{% endblock %}</label>
-                                    <input id="field-sitewide-search" type="text" name="q" placeholder="{{ _('search') }}" />
+                                    <input id="field-sitewide-search" type="text" name="q" placeholder="{{ _('search') }}" class="form-control" />
                                     <button class="btn-search" type="submit"><i class="fa fa-search"></i></button>
                                   </div>
                                 </form>
