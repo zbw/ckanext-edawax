@@ -21,4 +21,4 @@ This software is based on [CKAN](http://www.ckan.org), a leading open-source sof
 The service is free of charge for academic journals <span style="color:red">(please note our [selection policy](/info/selection))</span>. Working with the tool is easy and time-saving for editorial offices.
 
 In case of questions, please contact the product manager, Mr. Sven Vlaeminck
-(s[dot]vlaeminck[at]zbw[dot]eu).
+(s[dot]vlaeminck[at]zbw-online[dot]eu).
