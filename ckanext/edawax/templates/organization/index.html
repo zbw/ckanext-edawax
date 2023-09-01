@@ -3,35 +3,39 @@
 {% block subtitle %}{{ _('Journals') }}{% endblock %}
 
 {% block breadcrumb_content %}
-  <li class="active">{% link_for _('Journals'), controller='organization', action='index' %}</li>
+  <li class="active">{% link_for _('Journals'), 'journals.index' %}</li>
 {% endblock %}
 
 {% block page_header %}{% endblock %}
 
-{% block page_primary_action %}
-  {% if h.check_access('organization_create') %}
-    {% link_for _('Add Journal'), controller='organization', action='new', class_='btn btn-primary', icon='plus-sign-alt' %}
-  {% endif %}
-{% endblock %}
 
 {% block primary_content_inner %}
-  {# <h1 class="hide-heading">{% block page_heading %}{{ _('Journals') }}{% endblock %}</h1> #}
-  <h1>Journals</h1>
+  {# <h1 class="hide-heading zbw-font zbw-blue">{% block page_heading %}{{ _('Journals') }}{% endblock %}</h1> #}
+
+  <div class="zbw-box box-full">
+    <h1 class="zbw-font zbw-blue" style="display: inline;">{{ _('journals') }}</h1>
+
+    {% block page_primary_action %}
+      {% if h.check_access('organization_create') %}
+        {% link_for _('Add Journal'), named_route='journals.new', class_='btn btn-primary split right', icon='plus-square' %}
+      {% endif %}
+    {% endblock %}
+  </div>
 
   {% block organizations_search_form %}
-    {# {% snippet 'snippets/search_form.html', form_id='organization-search-form', type='organization', query=c.q, sorting_selected=c.sort_by_selected, count=c.page.item_count, placeholder=_('Search journals...'), show_empty=request.params, no_bottom_border=true if c.page.items %} #}
+    {# {% snippet 'snippets/search_form.html', form_id='organization-search-form', type='organization', query=q, sorting_selected=sort_by_selected, count=page.item_count, placeholder=_('Search journals...'), show_empty=request.params, no_bottom_border=true if page.items %} #}
   {% endblock %}
 
   {% block organizations_list %}
-    {% if c.page.items or request.params %}
-      {% if c.page.items %}
-        {% snippet "organization/snippets/organization_list.html", organizations=c.page.items %}
+    {% if page.items or request.params %}
+      {% if page.items %}
+        {% snippet "organization/snippets/organization_list.html", organizations=page.items %}
       {% endif %}
     {% else %}
       <p class="empty">
         {{ _('There are currently no journals for this site') }}.
         {% if h.check_access('organization_create') %}
-          {% link_for _('How about creating one?'), controller='organization', action='new' %}</a>.
+        {% link_for _('How about creating one?'), named_route='journals.new' %}</a>.
         {% endif %}
       </p>
     {% endif %}

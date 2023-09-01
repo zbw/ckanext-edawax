@@ -8,7 +8,7 @@
 
 {% block primary_content %}
 {% set markdown_file = page~'.md' %}
-  <article class="module">
+  <article class="module about">
     <div class="module-content">
          {{ h.render_infopage(markdown_file) }}
     </div>
@@ -16,34 +16,40 @@
 {% endblock %}
 
 {% block secondary_content %}
-{% resource 'edawax/edawax.js' %}
-{# could be used for infopages navigation #}
-<div class="module module-narrow module-shallow">
-    <h2 class="module-heading">
-      <i class="icon-info-sign"></i>
-      Info
-    </h2>
+{% asset 'edawax/edawax-js' %}
+{% set man_eng = h.get_manual_file()[0] %}
+{% set man_deu = h.get_manual_file()[1] %}
+<div class="module module-narrow module-shallow info-panel">
     <div class="module-content">
         <ul class="nav nav-tabs nav-stacked infonav">
-            <li><a href="/info">About</a></li>
-            <li><a href="/info/contact">Contact</a></li>
-            <li class="nav-header">Legal</li>
-            <li><a href="/info/imprint">Imprint</a></li>
-            <li><a href="/info/data">Data Protection</a></li>
-            <li><a href="/Deposit-License_ZBW_JDA_EN-2016-07-21-final-1.pdf">
-                Deposit License (PDF)</a></li>
-            <li class="nav-header">Support</li>
-            <li><a href="/manual_EN.pdf">User Manual (PDF, en)</a>
+            <li class="about-info"><a href="/info">About</a></li>
+            <li class="about-info"><a href="/info/contact">Contact</a></li>
+
+            <!--li class="nav-header">Legal</li-->
+
+            <li class="about-info"><a href="/info/imprint">Imprint</a></li>
+            <li class="about-info"><a href="/info/data">Data Protection</a></li>
+            <!--li class="about-info"><a href="/JDA-Deposit-License-2020_EN.pdf">
+                Deposit License (PDF, en)</a></li>
+            <li class="about-info"><a href="/JDA-Deposit-License-2020_DE.pdf">
+                Deposit License (PDF, de)</a></li-->
+
+            <!--li class="nav-header">Support</li-->
+
+            <!--li class="about-info"><a href="/{{ h.get_manual_file()[0] }}">User Manual (PDF, en)</a>
             </li>
-            <li><a href="/manual_DE.pdf">User Manual
-                    (PDF, de)</a></li>
-            <li class="nav-header">Misc</li>
-            <li><a href="/leaflet.pdf">Info Leaflet</a></li>
-            <li><a href="/publisher_info.pdf">Info for Publishers</a></li>
+            <li class="about-info"><a href="/{{ h.get_manual_file()[1] }}">User Manual (PDF, de)</a></li-->
+
+            <!--li class="nav-header">Misc</li-->
+
+            <li class="about-info"><a href="/info/selection">Selection Criteria &<br>Info for Publishers</a></li>
+            <li class="about-info"><a href="/info/deposit">Deposit License &<br>User Manual</a></li>
+            <!--li class="about-info"><a href="/publisher_info_1.4.pdf">Info for Publishers</a></li-->
+            <li class="about-info"><a href="/info/api-guide">API Overview</a></li>
+            <li class="about-info"><a href="/JDA_Schema.pdf">JDA Schema</a></li>
 
         </ul>
     </div>
  </div>
-
 
 {% endblock %}

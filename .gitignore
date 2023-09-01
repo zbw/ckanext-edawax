@@ -2,3 +2,6 @@
 *.egg-info/*
 dist/*
 .*.swp
+.gitignore
+/ckanext/edawax/theme/edawax.css
+google*.html

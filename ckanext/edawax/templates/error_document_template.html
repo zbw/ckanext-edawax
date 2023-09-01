@@ -1,0 +1,30 @@
+{% ckan_extends %}
+
+{% block subtitle %}{{ gettext('Error %(error_code)s', error_code=code) }}{% endblock %}
+
+{% block primary %}
+  {% asset 'edawax/custom-css' %}
+  {% asset 'edawax/edawax-css' %}
+  {% asset 'edawax/changes-css' %}
+  {% asset 'edawax/font-css' %}
+  {% asset 'edawax/edawax-js' %}
+  {% asset 'edawax/doi-js' %}
+  <article class="module">
+    <div class="module-content zbw-box box-full" style="padding: 10px;">
+      {% if name %}
+        <h1>{{ code }} {{ name }}</h1>
+      {% endif %}
+      {{ content}}
+    </div>
+  </article>
+{% endblock %}
+
+{% block breadcrumb %}
+{% endblock %}
+
+{% block flash %}
+  {# eat the flash messages caused by the 404 #}
+  {% set flash_messages = h.flash.pop_messages() %}
+{% endblock %}
+
+{% block secondary %}{% endblock %}

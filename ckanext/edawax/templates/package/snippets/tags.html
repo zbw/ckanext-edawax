@@ -1,0 +1,8 @@
+{% if tags %}
+<section>
+  <div class="tag_section">
+      <h3>Tags</h3>
+      {% snippet 'snippets/tag_list.html', tags=tags, _class='tag-list well' %}
+  </div>
+</section>
+{% endif %}

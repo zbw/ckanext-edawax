@@ -1,0 +1,23 @@
+{#% ckan_extends %#}
+
+{#
+Display a grid of organization items.
+
+organizations - A list of organizations.
+
+Example:
+
+    {% snippet "organization/snippets/organization_list.html" %}
+
+#}
+{% block organization_list %}
+<ul class="media-grid-ii" data-module="media-grid-ii">
+    <!--li class="grid-sizer"></li>
+    <li class="gutter-sizer"></li-->
+  {% block organization_list_inner %}
+  {% for organization in organizations %}
+    {% snippet "organization/snippets/organization_item.html", organization=organization, position=loop.index %}
+  {% endfor %}
+   {% endblock %}
+</ul>
+{% endblock %}

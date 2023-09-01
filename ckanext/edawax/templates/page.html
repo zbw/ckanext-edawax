@@ -1,0 +1,180 @@
+{% ckan_extends %}
+
+{%- block page -%}
+
+  {% block skip %}
+    <div class="hide"><a href="#content">{{ _('Skip to content') }}</a></div>
+  {% endblock %}
+
+  {#
+  Override the header on a page by page basis by extending this block. If
+  making sitewide header changes it is preferable to override the header.html
+  file.
+  #}
+  {%- block header %}
+    {% include "header.html" %}
+  {% endblock -%}
+
+  {# The content block allows you to replace the content of the page if needed #}
+  {%- block content %}
+    {% block maintag %}<div role="main">{% endblock %}
+      <div id="content" class="container">
+        {% block main_content %}
+          {% block flash %}
+            <div class="flash-messages">
+              {% block flash_inner %}
+                {% for message in h.flash.pop_messages() | list %}
+                  <div class="alert fade in {{ message.category }}">
+                    {{ h.literal(message) }}
+                  </div>
+                {% endfor %}
+              {% endblock %}
+            </div>
+          {% endblock %}
+
+          {% block toolbar %}
+              <div class="toolbar zbw-box">
+                  {% block breadcrumb %}
+                  {% if self.breadcrumb_content() | trim %}
+                      <ol class="breadcrumb">
+                      {% snippet 'snippets/home_breadcrumb_item.html' %}
+                      {% block breadcrumb_content %}{% endblock %}
+                      </ol>
+                  {% endif %}
+                  {% endblock %}
+              </div>
+          {% endblock %}
+
+          {# Move naviation inside the page, rather than the header#}
+          {% if h.normal_height() %}
+              <div id="edawax_nav_search">
+          {% else %}
+              <div id="edawax_nav_search" class="spacing">
+          {% endif %}
+          {% block header_site_navigation %}
+                <nav class="section navigation">
+
+                <ul class="nav nav-pills">
+                    <li>
+                        {% block header_site_search %}
+                                <form class="section site-search simple-input" action="{% url_for 'dataset.search' %}" method="get" id="jda-search-box">
+                                  <div class="field">
+                                    <label for="field-sitewide-search">{% block header_site_search_label %}{{ _('Search Datasets') }}{% endblock %}</label>
+                                    <input id="field-sitewide-search" type="text" name="q" placeholder="{{ _('search') }}" class="form-control" />
+                                    <button class="btn-search" type="submit"><i class="fa fa-search"></i></button>
+                                  </div>
+                                </form>
+                        {% endblock %}
+                    </li>
+                    {% block header_site_navigation_tabs %}
+                    {{ h.build_nav_main(
+                      ('dataset.search', _('datasets')),
+                      ('journals.index', _('journals')),
+                      ('info.index', _('info')),
+                    ) }}
+                    {% endblock %}
+                </ul>
+                </nav>
+         {% endblock %}
+         </div>
+
+          <div class="row wrapper{% block wrapper_class %}{% endblock %}{% if self.secondary()|trim == '' %} no-nav{% endif %}">
+
+            {#
+            The pre_primary block can be used to add content to before the
+            rendering of the main content columns of the page.
+            #}
+            {% block pre_primary %}
+            {% endblock %}
+
+            {% block primary %}
+              {% if h.is_edit_page() %}
+                <div class="primary span12">
+              {% else %}
+                <div class="primary span9">
+              {% endif %}
+                {#
+                The primary_content block can be used to add content to the page.
+                This is the main block that is likely to be used within a template.
+
+                Example:
+
+                  {% block primary_content %}
+                    <h1>My page content</h1>
+                    <p>Some content for the page</p>
+                  {% endblock %}
+                #}
+                {% block primary_content %}
+                  <article class="module">
+                    {% block page_header %}
+                      <header class="module-content page-header box-top">
+                        {% if self.content_action() | trim %}
+                          <div class="content_action">
+                            {% block content_action %}{% endblock %}
+                          </div>
+                        {% endif %}
+                        <ul class="nav nav-tabs">
+                          {% block content_primary_nav %}{% endblock %}
+                        </ul>
+                      </header>
+                    {% endblock %}
+
+                    {% if request.endpoint in ['admin.config', 'journals.activity', 'admin.index', 'xloader.resource_data'] %}
+                      <div class="module-content zbw-box box-bottom">
+                    {% else %}
+                      <div class="module-content">
+                    {% endif %}
+                      {% if self.page_primary_action() | trim and 'dataset/resources' in request.url %}
+                        <div class="page_primary_action zbw-box box-bottom">
+                          {% block page_primary_action %}{% endblock %}
+                        </div>
+                      {% endif %}
+                      {% block primary_content_inner %}
+                      {% endblock %}
+                    </div>
+                  </article>
+                {% endblock %}
+              </div>
+            {% endblock %}
+
+            {% block secondary %}
+              <aside class="secondary span3">
+                {#
+                The secondary_content block can be used to add content to the
+                sidebar of the page. This is the main block that is likely to be
+                used within a template.
+
+                Example:
+
+                  {% block secondary_content %}
+                    <h2>A sidebar item</h2>
+                    <p>Some content for the item</p>
+                  {% endblock %}
+                #}
+                {% block secondary_content %}{% endblock %}
+              </aside>
+            {% endblock %}
+          </div>
+        {% endblock %}
+      </div>
+    </div>
+  {% endblock -%}
+
+  {#
+  Override the footer on a page by page basis by extending this block. If
+  making sitewide header changes it is preferable to override the footer.html-u
+  file.
+  #}
+  {%- block footer %}
+    {% include "footer.html" %}
+  {% endblock -%}
+{%- endblock -%}
+
+{%- block scripts %}
+    {% asset 'base/main' %}
+    {% asset 'base/ckan' %}
+    {% if g.tracking_enabled %}
+      {% asset 'base/tracking' %}
+    {% endif %}
+  {{ super() }}
+{% endblock -%}

@@ -39,7 +39,8 @@ within_tertiary
 #}
 {% block facet_list %}
   {% set hide_empty = hide_empty or false %}
-  {% with items = items or h.get_facet_items_dict(name) %}
+  {#% with items = items or h.get_facet_items_dict(name) %#}
+  {% with items = h.get_facets(name) %}
     {% if items or not hide_empty %}
       {% if within_tertiary %}
         {% set nav_class = 'nav nav-pills nav-stacked' %}
@@ -50,17 +51,15 @@ within_tertiary
         <section class="{{ wrapper_class or 'module module-narrow module-shallow' }}">
           {% block facet_list_heading %}
             <h2 class="module-heading">
-              <i class="icon-medium icon-filter"></i>
+              <i class="fa fa-filter"></i>
               {% set title = title or h.get_facet_title(name) %}
               {{ title }}
             </h2>
           {% endblock %}
           {% block facet_list_items %}
 
-        {#     {% with items = items or h.get_facet_items_dict(name) %} #}
-
-        {% with items = items or h.get_facet_items_dict(name, sort_key="name") %}
-
+        {#% with items = items or h.get_facet_items_dict(name) %#}
+        {% with items = items or h.get_facets(name) %}
             {% if items %}
               <nav>
                 <ul class="{{ nav_class or 'unstyled nav nav-simple nav-facet' }}">
@@ -80,7 +79,7 @@ within_tertiary
 
               <p class="module-footer">
                 {% if h.get_param_int('_%s_limit' % name) %}
-                  {% if h.has_more_facets(name) %}
+                  {% if h.has_more_facets(name, search_facets or c.search_facets) %}
                     <a href="{{ h.remove_url_param('_%s_limit' % name, replace=0, extras=extras, alternative_url=alternative_url) }}" class="read-more">{{ _('Show More {facet_type}').format(facet_type=title) }}</a>
                   {% endif %}
                 {% else %}

@@ -7,30 +7,38 @@ truncate - A max length for the organization description. If not provided the de
 
 Example:
 
-    {% snippet 'snippets/organization, organization=c.group_dict %}
+    {% snippet 'snippets/organization, organization=group_dict %}
 
 #}
-
-{% with truncate=truncate or 0, url=h.url_for(controller='organization', action='read', id=organization.name) %}
+{% set pkg = h.dara_pkg() %}
+{% with truncate=truncate or 0, url=h.url_for('journals.read', id=organization.name) %}
   <div class="module context-info">
     <section class="module-content">
-      <div class="image">
 
-        <a href="{{ url }}">
-          <img src="{{ organization.image_display_url or h.url_for_static('/base/images/placeholder-organization.png') }}" width="200" alt="{{ organization.name }}" />
-        </a>
+      <div class="top-info">
+        <div class="image">
+
+          <a href="{{ url }}">
+            <img class="journal_img" src="{{ organization.image_display_url or h.url_for_static('/base/images/placeholder-organization.png') }}" width="100%" alt="{{ organization.name }}" />
+          </a>
+        </div>
+        <h1 class="heading zbw-blue">{{ organization.title or organization.name }}</h1>
+        {% if organization.description %}
+          <p>
+            {{ h.render_markdown(organization.description[:180]) }}
+            {#{ h.markdown_extract(organization.description, 180) }#}
+            {% link_for _('read more'), named_route='journals.about', id=organization.name %}
+          </p>
+        {% else %}
+          <p class="empty">{{ _('There is no description for this journal.') }}</p>
+        {% endif %}
       </div>
-      <h1 class="heading">{{ organization.title or organization.name }}</h1>
-      {% if organization.description %}
-        <p>
-          {{ h.markdown_extract(organization.description, 180) }}
-          {% link_for _('read more'), controller='organization', action='about', id=organization.name %}
-        </p>
-      {% else %}
-        <p class="empty">{{ _('There is no description for this organization') }}</p>
-      {% endif %}
-      {% if show_nums %}
+
+      {#% if show_nums %#}
+
+        {# Journal Level #}
         <div class="nums">
+          {% if pkg is none %}
           <dl>
             <dt>{{ _('Datasets') }}</dt>
             <dd>{{ h.SI_number_span(organization.package_count) }}</dd>
@@ -39,16 +47,40 @@ Example:
             <dt>{{ _('Followers') }}</dt>
             <dd>{{ h.SI_number_span(organization.num_followers) }}</dd>
           </dl>
+          {% endif %}
+          <dl>
+              <dt>{{ _('Total Views') }}</dt>
+              <dd>
+                {% if pkg %}
+                  {{ h.SI_number_span(h.dataset_total_views(pkg)) }}
+                {% else %}
+                  {{ h.SI_number_span(h.journal_total_views(organization)) }}
+                {% endif %}
+              </dd>
+          </dl>
+          <dl>
+              <dt>{{ _('Recent Views') }}</dt>
+              <dd>
+              {% if pkg %}
+                {{ h.SI_number_span(h.dataset_recent_views(pkg)) }}
+              {% else %}
+                {{ h.SI_number_span(h.journal_recent_views(organization)) }}
+              {% endif %}
+              </dd>
+          </dl>
+
           {#
           <dl>
             <dt>{{ _('Members') }}</dt>
-            <dd>{{ h.SI_number_span(organization.members|length) }}</dd>
+            <dd>
+                {{ h.SI_number_span(organization.members|length) }}
+            </dd>
         </dl>
         #}
           <dl>
                       </dl>
         </div>
-      {% endif %}
+      {#% endif %#}
     </section>
   </div>
 {% endwith %}

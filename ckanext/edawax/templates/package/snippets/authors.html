@@ -1,25 +1,55 @@
-
+{% set pkg = h.dara_pkg() %}
+{% set DOI = pkg['dara_DOI'] %}
+{% set DOI_Test = pkg['dara_DOI_Test'] %}
+{% set use_testserver = h.dara_use_testserver() %}
+{% set submission_id = pkg['dara_jda_submission_id'] %}
+{% if pkg %}
+{% set is_admin = h.check_journal_role(pkg, 'admin') or h.check_access('sysadmin') %}
+{% else %}
+{% set is_admin = False %}
+{% endif %}
 
 <div class="authors_title">
+  {% if DOI %}
+      {% snippet 'package/snippets/doi.html', DOI=DOI, test='false' %}
+  {% endif %}
+
+  {% if DOI_Test and not DOI and use_testserver %}
+      {% snippet 'package/snippets/doi.html', DOI=DOI_Test, test='true' %}
+  {% endif %}
+
+  {% if submission_id and is_admin %}
+    <p style="color:grey; text-decoration: underline; margin-top: 0;">Article Submission ID: {{ submission_id }} </p>
+  {% endif %}
 
   {% if dara_authors %}
   {% for author in dara_authors %}
       {% if author.url %}
-          <div property="schema:author" style="display:inline"
-                                      typeof="schema:Person" resource="{{
-                                      author.url }}">
+          <div style="display:inline">
                   <a href="{{ author.url }}">
-              <span property="schema:name">
-                  {{ (author['firstname'], author['lastname']) | join(' ')}}
-              </span>
+              {% if not h.hide_from_reviewer(pkg) %}
+                <span>
+                {{ (author['firstname'], author['lastname']) | join(' ')}}</span>
+              {% else %}
+                <span class="blurry">
+                  Witheld for Review
+                </span>
+              {% endif %}
               </a>
           </div>
 
       {% else %}
-          <div property="schema:author" style="display:inline"
-                                      typeof="schema:Person">
-          <span property="schema:name">{{ (author['firstname'], author['lastname']) | join(' ')}}</span>
-          </div>
+          <div style="display:inline">
+          {% if not h.hide_from_reviewer(pkg) %}
+            <span>
+            {{ (author['firstname'], author['lastname']) | join(' ')}}</span>
+            </div>
+          {% else %}
+            <span class="blurry">
+              Witheld for Review
+            </span>
+            </div>
+          {% endif %}
 
       {% endif %}
       {% if not author == dara_authors[-1] %}

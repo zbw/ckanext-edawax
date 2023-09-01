@@ -1,14 +1,55 @@
 <div role="main" class="hero">
   <div class="container">
+
+    {% block toolbar %}
+        <div class="toolbar zbw-box">
+            {% block breadcrumb %}
+            {% if self.breadcrumb_content() | trim %}
+                <ol class="breadcrumb">
+                {% snippet 'snippets/home_breadcrumb_item.html' %}
+                {% block breadcrumb_content %}{% endblock %}
+                </ol>
+            {% endif %}
+            {% endblock %}
+        </div>
+    {% endblock %}
+
+    {% if h.normal_height() %}
+        <div id="edawax_nav_search">
+    {% else %}
+        <div id="edawax_nav_search" class="spacing">
+    {% endif %}
+    {% block header_site_navigation %}
+          <nav class="section navigation">
+
+          <ul class="nav nav-pills">
+              <li>
+                  {% block header_site_search %}
+                          <form class="section site-search simple-input" action="{% url_for 'dataset.search' %}" method="get">
+                            <div class="field">
+                              <label for="field-sitewide-search">{% block header_site_search_label %}{{ _('Search Datasets') }}{% endblock %}</label>
+                              <input id="field-sitewide-search" type="text" name="q" placeholder="{{ _('search') }}" class="form-control" />
+                              <button class="btn-search" type="submit"><i class="fa fa-search"></i></button>
+                            </div>
+                          </form>
+                  {% endblock %}
+              </li>
+              {% block header_site_navigation_tabs %}
+              {{ h.build_nav_main(
+                ('dataset.search', _('datasets')),
+                ('journals.index', _('journals')),
+                ('info.index', _('info')),
+              ) }}
+              {% endblock %}
+          </ul>
+          </nav>
+    {% endblock %}
+    </div>
+
     <div class="row row1">
-      <div class="span6 col1">
+      <div class="span12 col1">
         {% block promoted %}
           {% snippet 'home/snippets/promoted.html' %}
-        {% endblock %}
-      </div>
-      <div class="span6 col2">
-        {% block search %}
-          {% snippet 'home/snippets/search.html' %}
         {% endblock %}
       </div>
     </div>

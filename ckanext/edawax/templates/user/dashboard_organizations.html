@@ -1,8 +1,18 @@
 {% ckan_extends %}
 
+{% block page_primary_action %}
+  {% if h.check_access('organization_create') %}
+    {% link_for _('Add Journal'), named_route='journals.new', class_="btn btn-primary split", icon="plus-square" %}
+  {% else %}
+    <div class="page_primary_action zbw-box box-bottom">
+    </div>
+  {% endif %}
+{% endblock %}
+
+
 {% block primary_content_inner %}
-  <h2 class="hide-heading">{{ _('My Organizations') }}</h2>
-  {% set organizations = h.organizations_available('create_dataset') %}
+  <h2 class="hide-heading">{{ _('My Journalss') }}</h2>
+  {% set organizations = h.organizations_available('create_dataset', include_dataset_count=True) %}
   {% if organizations %}
     <div class="wide">
       {% snippet "organization/snippets/organization_list.html", organizations=organizations %}

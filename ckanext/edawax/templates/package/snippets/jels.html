@@ -1,0 +1,8 @@
+{% if jels %}
+<section>
+  <div class="tag_section">
+      <h3>JEL Codes</h3>
+      {% snippet 'snippets/jel_list.html', jels=jels, _class='tag-list well' %}
+  </div>
+</section>
+{% endif %}

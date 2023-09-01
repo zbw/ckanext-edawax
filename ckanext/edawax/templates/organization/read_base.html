@@ -1,8 +1,19 @@
 {% ckan_extends %}
 
-
 {% block breadcrumb_content %}
-  <li>{% link_for _('Journals'), controller='organization', action='index' %}</li>
-  <li class="active">{% link_for c.group_dict.display_name|truncate(35), controller='organization', action='read', id=c.group_dict.name %}</li>
+  <li>{% link_for _('Journals'), named_route='journals.index' %}</li>
+  <li class="active">{% link_for group_dict.display_name|truncate(35), named_route='journals.read', id=group_dict.name %}</li>
 {% endblock %}
 
+
+{% block content_action %}
+  {% if h.check_access('organization_update', {'id': group_dict.id}) %}
+    {% link_for _('Manage'), named_route='journals.edit', id=group_dict.name, class_='btn', icon='wrench' %}
+  {% endif %}
+{% endblock %}
+
+{% block content_primary_nav %}
+  {{ h.build_nav_icon('journals.read', _('Datasets'), id=group_dict.name, icon='sitemap') }}
+  {{ h.build_nav_icon('journals.activity', _('Activity Stream'), id=group_dict.name, offset=0, icon='clock-o') }}
+  {{ h.build_nav_icon('journals.about', _('About'), id=group_dict.name, icon='info-circle') }}
+{% endblock %}

@@ -1,4 +1,5 @@
-{% resource 'edawax_fs/edawax-confirm.js' %}
+{% asset 'edawax/edawax-confirm-js' %}
+
 {% set confirm = h.dump_json({'content': '
 <p>This stores your dataset and
 sends an email to the journal editors,
@@ -6,10 +7,13 @@ notifying them that your dataset is ready to be reviewed.
 You will not be able to edit the dataset afterwards.
 </p>
 <p><strong>By clicking \'OK\' you also confirm that you have read and
-    accept the <br />
-    <a href="/Deposit-License_ZBW_JDA_EN-2016-07-21-final-1.pdf"
-        target="_blank">deposit
-        licensing conditions</a>.</strong></p>',
+            accept the <br />
+            <a href="/JDA-Deposit-License-2020_EN.pdf" target="_blank">deposit
+                licensing conditions (EN)</a>
+              <br>
+            <a href="/JDA-Deposit-License-2020_DE.pdf"
+                target="_blank">deposit
+                licensing conditions (DE)</a>.</strong></p>',
 'confirm': 'OK',
 'heading': 'Please Confirm Submission',
 }) %}

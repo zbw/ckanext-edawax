@@ -1,7 +1,7 @@
-# Imprint
+### Imprint
 
-### Name and address
-ZBW – German National Library of Economics | Leibniz Information Centre for Economics  
+**Name and address**  
+ZBW – Leibniz Information Centre for Economics  
 Düsternbrooker Weg 120  
 24105 Kiel
 
@@ -19,7 +19,7 @@ Telephone: +49 40 42834-219 (Team Information Hamburg)
 Telefax: +49 40 42834-450  
 E-mail: info[at]zbw[dot]eu
 
-### Authorised Representative
+**Authorised Representative**  
 Prof. Dr. Klaus Tochtermann (Director)  
 Telephone: +49 431 8814-333 or +49 40 42834-350  
 E-mail: zbw[at]zbw[dot]eu
@@ -29,16 +29,16 @@ Telephone: +49 431 8814-333
 Telefax: +49 431 8814-530 or +49 40 42834-351  
 E-mail: zbw[at]zbw[dot]eu
 
-The Leibniz Institution ZBW – German National Library of Economics / Leibniz
-Information Centre for Economics is a foundation under public law.
+ZBW – Leibniz Information Centre for Economics is a  
+foundation under public law.
 
-### Supervising Authority
+**Supervising Authority**  
 Schleswig-Holstein Ministry of Science, Economy and Transport
 
-### Value Added Tax Identification Number
+**Value Added Tax Identification Number**  
 DE 811268087
 
-### Responsible Editor
+**Responsible Editor**  
 Sven Vlaeminck  
 Telephone: +49 40 42 834-415  
 E-mail: s.vlaeminck[at]zbw[dot]eu

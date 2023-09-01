@@ -1,23 +1,20 @@
 {% set intro = g.site_intro_text %}
 
-<div class="module-content box">
+<div class="module-content box intro">
   <header>
     {% if intro %}
       {{ h.render_markdown(intro) }}
     {% else %}
-      <h1 class="page-heading">{{ _("Welcome to CKAN") }}</h1>
+      <h2>{{ _("welcome to ckan") }}</h2>
       <p>
-        {% trans %}This is a nice introductory paragraph about CKAN or the site
-        in general. We don't have any copy to go here yet but soon we will
+        {% trans %}
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean magna nulla, molestie sed posuere ac, mattis sed eros. Nullam sem sapien, congue quis turpis sit amet, eleifend vulputate tortor. Integer commodo, nunc et scelerisque tristique, lorem arcu facilisis tellus, vitae rutrum diam orci id turpis. Praesent venenatis orci in vestibulum tristique. Integer tempus non risus quis tristique. Suspendisse luctus lectus lacinia tortor rutrum venenatis. Pellentesque ultricies, neque et pharetra sollicitudin, tortor turpis porttitor odio, nec tristique tellus metus vel metus. Fusce commodo odio leo. Nam consectetur suscipit velit, sed mattis leo varius sit amet. Proin hendrerit elit at ligula volutpat pellentesque. Etiam ut velit nisi. Etiam a aliquam massa, molestie lacinia mi.
+        {% endtrans %}
+        <br><br>
+        {% trans %}
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean magna nulla, molestie sed posuere ac, mattis sed eros. Nullam sem sapien, congue quis turpis sit amet, eleifend vulputate tortor. Integer commodo, nunc et scelerisque tristique, lorem arcu facilisis tellus, vitae rutrum diam orci id turpis. Praesent venenatis orci in vestibulum tristique. Integer tempus non risus quis tristique. Suspendisse luctus lectus lacinia tortor rutrum venenatis.
         {% endtrans %}
       </p>
     {% endif %}
   </header>
-  <section class="featured media-overlay">
-      {#<h2 class="media-heading">{{ _("This is a featured section") }}</h2>#}
-    <a class="media-image" href="#">
-
-      <img src="{% url_for_static '/base/images/open_data300.jpg' %}" width="420" height="220" />
-    </a>
-  </section>
 </div>

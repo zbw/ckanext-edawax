@@ -1,0 +1,26 @@
+the editorial office of the {{ journal_title }} invites you to serve as an additional editor to manage data submissions within the ZBW Journal Data Archive.
+For this purpose, the {{ journal_title }} has created an account for you.
+
+Your account name is: {{ user_name }}
+
+To accept this invitation, please set your password by clicking the link below:
+{{ reset_link }}
+
+In the future, you will be notified when there is a new data submission to {{ journal_title }}'s data archive.
+You can review them, assign a DOI to them, and publish the data.
+
+For all of these actions, please log in with the user name shown above and your password. Once logged in click "my journals" to see which journals you are an editor for. From there you can click on a journal to see all submissions.
+All data submissions in the state "Review" are ready for your review.
+
+For further advice, please consult the documentation of our service (attached) or contact us for a short introduction via Skype or other web conference tools.
+
+The documentation is also available here:
+{{ site_url }}/Editors_Manual-EN-2020-07-31_V1.6.pdf
+{{ site_url }}/Editors_Manual-DE-2020-03-31_V1.6.pdf
+
+Please feel free to get in touch with us for any questions or comments.
+
+Kind regards,
+ZBW Journal Data Archive
+
+* For questions please send an email to journaldata.zbw@gmail.com or contact the product manager s.vlaeminck@zbw-online.eu

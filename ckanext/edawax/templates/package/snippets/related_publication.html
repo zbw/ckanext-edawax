@@ -10,20 +10,32 @@
 {% endif %}
 
 {# XXX there's no appropriate property for relation in schema.org #}
-<section class="related_publication" style="margin-bottom:2em;"
- typeof="schema:ScholarlyArticle" resource="{{ url }}" property="dc:relation">
+<section class="related_publication">
 
 <h3>Related Publication</h3>
-
-
-{% if url %}
-    <a href="{{ url }}" property="schema:url">
-        {{ prefix ~ pid }}
-    </a>
-
-{% else %}
-{{ pid }}
-
+{%- if url -%}                                                      {# DOI has been provided #}
+    {%- if pkg_dict['dara_related_citation'] != "" -%}                              {# there is an existing citation #}
+        {%- if pid and pid not in pkg_dict['dara_related_citation'] -%}             {# if citation's doi match provided update the citation #}
+            {%- set citation = h.update_citation(pkg_dict) -%}
+            {% if citation == '' %}
+                <a href="{{ url }}">
+                    {{ prefix }} {{ pid }}
+                </a>
+            {% else %}
+                {{- citation|safe -}}
+            {% endif %}
+        {%- else -%}                                                {# citation matches given DOI #}
+            {{- pkg_dict['dara_related_citation']|safe -}}
+        {%- endif -%}
+    {%- else -%}                                                    {# no DOI, try to add one #}
+        {%- set citation = h.update_citation(pkg_dict) -%}
+        {{- citation|safe -}}
+        <a href="{{ url }}">
+            {{ prefix }} {{ pid }}
+        </a>
+    {%- endif -%}
+{% else %} {# provided Identifier is not a DOI or Handler #}
+    {{ pid_type }}: {{ pid }}
 {% endif %}
 
 </section>

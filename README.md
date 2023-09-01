@@ -8,7 +8,7 @@ the [ZBW](http://zbw.eu) (German National Library of Economics).
 
 
 ## Requirements
-tested with CKAN 2.4
+tested with CKAN 2.9 and Python3
 
 **Note**:
 for several reasons the workflow implementation does not work with the original CKAN.
@@ -27,8 +27,12 @@ Clone this repository into your CKAN src folder and install it the usual way `pi
     -   Journaleditor adds Author
     -   Author get's email with URL
     -   Author uploads dataset, Dataset is private
-    -   Author sets clicks 'Send to review', Editor get's email, Dataset state is 'review'
+    -   Author sets clicks 'Send to Journal', Editor get's email, Dataset state is 'review'
     -   Journaleditor adds some metadata and publishes Dataset.
+    -   Journaleditor can assign Reviewers
+-   Reviewers have access to private datasets they are assigned to, author information is suppressed
+
+-   Modify how tracking is handled to track only datasets and resource downloads, as well as trying to filter out bots
 
 ## License
 This extension is open and licensed under the GNU General Public License (GPL)

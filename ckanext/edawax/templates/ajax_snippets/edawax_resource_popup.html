@@ -1,0 +1,49 @@
+{#
+    Template for the resource data popup
+
+    id - id of dataset
+    num_resources - dataset's resource count
+#}
+
+<div class="context-info">
+    <div class="nums">
+        <dl>
+            {% set data = h.transform_to_map(resources) %}
+            {% if data[0] is mapping %}
+                <dt>{{ _('Resources (Downloads)') }}</dt>
+                {% for item in data %}
+                    <dd>
+                        <span>
+                            <a href="/dataset/{{ item['package_id'] }}/resource/{{ item['resource_id'] }}">
+                                {% if item['name'] == '' %}
+                                    {{ h.truncate_title(item['url']) }}
+                                {% else %}
+                                    {{ h.truncate_title(item['name']) }}
+                                {% endif %}
+                            </a>
+                            {% if item['format'] != '' %}
+                                ({{ h.resource_downloads(item['url']) }})
+                            {% else %}
+                                <a href="{{ item['url'] }}" target="_blank">
+                                </a>
+                            {% endif %}
+                        </span>
+                    </dd>
+                {% endfor %}
+            {% else %}
+                {% if h.check_access('resource_create',{'package_id':data}) %}
+                    {% set url = h.url_for('resource.new', id=data) %}
+                    <p class="empty">This dataset has no data, <a href="{{ url }}">why not add some?</a></p>
+                {% else %}
+                    <p class="empty">{{ _('This dataset has no data') }}</p>
+                {% endif %}
+            {% endif %}
+        </dl>
+    </div>
+    <a class="btn go-to-dataset"
+       href="{{ h.url_for('dataset.read', id=id) }}"
+       style="float: none !important;">
+       <i class="fa fa-arrow-circle-right"></i>
+       Go to dataset
+    </a>
+</div>

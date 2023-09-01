@@ -1,0 +1,42 @@
+{# this is added as a snippet to "dara_level1.html" #}
+
+{#
+    Keep things consistent: Datasets that started with the old workflow should
+    still behave like that workflow, even if the "Reviewer" role is added when
+    the dataset is already in "review"
+#}
+{% if h.in_review(pkg_dict) != 'true' %}
+    <div class="zbw-box box-full reviewer-box">
+        <a name="dataset_reviewers"></a>
+    <legend>Dataset Reviewer</legend>
+
+    {{ form.input('maintainer', label=_('Reviewer'),
+       id='field-maintainer', placeholder=_('Reviewer1@email.com'),
+       value=data.maintainer.split('/')[0] if data.maintainer and data.maintainer != None else "", error=errors.maintainer,
+       classes=['control-medium'], attrs={'data-infotext': """Use this field if you'd like to add a reviewer. Enter the email address of the reviewer. This will create a new reviewer account.""",
+       'resource': data['name'],
+       'pattern': ".+@.+"}) }}
+
+    <script>
+        var reviewer = document.getElementById('field-maintainer');
+
+        reviewer.addEventListener('change', updateCookie);
+
+        reviewer_old = reviewer.value;
+
+        var time = new Date();
+        var now = time.getTime();
+        var expire = now +  (3600 * 1000);
+        time.setTime(expire);
+
+        function updateCookie(e){
+            console.log(reviewer_old);
+            console.log(reviewer.value);
+            if (reviewer_old != reviewer.value) {
+                document.cookie = "reviewerPrev_" + reviewer.getAttribute('resource') + "= new" + ";path=/;expires=" + time.toGMTString();
+            }
+        }
+    </script>
+
+    </div>
+{% endif %}

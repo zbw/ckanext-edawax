@@ -5,14 +5,24 @@
     {% set dataset = pkg.title or pkg.name %}
     {% if pkg.organization %}
       {% set organization = pkg.organization.title or pkg.organization.name %}
-      <li>{% link_for _('Journals'), controller='organization', action='index' %}</li>
-      <li>{% link_for organization|truncate(30), controller='organization', action='read', id=pkg.organization.name %}
+      <li>{% link_for _('Journals'), named_route='journals.index' %}</li>
+      <li>{% link_for organization|truncate(30), named_route='journals.read', id=pkg.organization.name %}
     {% else %}
-      <li>{% link_for _('Datasets'), controller='package', action='search' %}</li>
+      <li>{% link_for _('Datasets'), named_route='dataset.search' %}</li>
     {% endif %}
-    <li{{ self.breadcrumb_content_selected() }}>{% link_for dataset|truncate(30), controller='package', action='read', id=pkg.name %}</li>
+    <li{{ self.breadcrumb_content_selected() }}>{% link_for dataset|truncate(30), named_route='dataset.read', id=pkg.id if is_activity_archive else pkg.name %}</li>
   {% else %}
-    <li>{% link_for _('Datasets'), controller='package', action='search' %}</li>
+    <li>{% link_for _('Datasets'), named_route='dataset.search' %}</li>
     <li class="active"><a href="">{{ _('Create Dataset') }}</a></li>
   {% endif %}
 {% endblock %}
+
+{%- block head_extras -%}
+  {# Only run for dataset pages #}
+  {%- if pkg and '/resource/' not in request.url -%}
+    <script type="application/ld+json">
+      {{- h.make_schema_metadata(pkg)|safe -}}
+    </script>
+  {%- endif -%}
+  {{ super() }}
+{%- endblock -%}

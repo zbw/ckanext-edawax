@@ -1,0 +1,12 @@
+{% ckan_extends %}
+
+{#% block content_primary_nav %}
+  {{ h.build_nav_icon('dataset.edit', _('Edit metadata'), id=pkg.name, icon='pencil-square-o') }}
+  {{ h.build_nav_icon('dataset.resources', _('Resources'), id=pkg.name, icon='bars') }}
+
+  { This used to be in the dara extension, but wasn't working }
+  {% if h.check_journal_role(pkg, 'admin') or h.check_access('sysadmin') %}
+      {{ h.build_nav_icon('dara.doi', 'DOI Registration', id=pkg.name, icon='exchange') }}
+  {% endif %}
+
+{% endblock %#}

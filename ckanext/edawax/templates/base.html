@@ -1,8 +1,18 @@
 {% ckan_extends %}
 
-{% block links %}
-<link
-href='http://fonts.googleapis.com/css?family=Roboto:400,500,300,300italic,400italic,500italic,700,700italic'
-rel='stylesheet' type='text/css' />
-{{ super() }}
-{% endblock %}
+{#% block links %}
+    <link
+
+    rel='stylesheet' type='text/css' />
+
+    {{ super() }}
+{% endblock %#}
+
+{# href='https://fonts.googleapis.com/css?family=Roboto:400,500,300,300italic,400italic,500italic,700,700italic' #}
+
+{#% block styles %#}
+    {#% asset 'edawax/main_copy.css' %#}
+    {#% asset 'edawax/main-css' %#}
+    {#% asset 'edawax/diff-css' %#}
+    <!--link rel="stylesheet" type="text/css" href="http://jda.cand.de/style.css" /-->
+{#% endblock %#}

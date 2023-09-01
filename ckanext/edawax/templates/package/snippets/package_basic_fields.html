@@ -1,0 +1,15 @@
+{% ckan_extends %}
+{#% extends 'package/snippets/package_basic_fields.html' %#}
+
+{% block basic_fields %}
+{{ super() }}
+
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+
+{% snippet "package/snippets/reviewer_fields.html", form=form,
+    dara_type='dataset', errors=errors, data=data %}
+
+{% endblock %}
+
+
+

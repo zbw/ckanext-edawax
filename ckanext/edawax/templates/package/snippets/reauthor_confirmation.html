@@ -1,5 +1,5 @@
 <!-- Modal -->
-<div class="modal fade" id="reauthor_confirm" tabindex="-1" role="dialog" aria-labelledby="reauthorConfirmLabel">
+<div class="modal fade" id="reauthor_confirm" tabindex="-1" role="dialog" aria-labelledby="reauthorConfirmLabel" style="display:none">
   <div class="modal-dialog" role="document">
 
     <form method="POST" action="/dataset/{{ pkg.id }}/reauthor">
@@ -11,14 +11,14 @@
 
       <div class="modal-body">
 
-          <p>This gives back write permission to the author and sends her/him a
+          <p>This gives back write permission to the author and sends them a
               notification. You might also add an explanation in
               to message below.</p>
 
 
             <div class="form-group">
                 <label for="msg">Message</label>
-                <textarea class="form-control" id="msg" name="msg" rows="6" style="min-width: 400px; margin-left:50px;"></textarea>
+                <textarea class="form-control" id="msg" name="msg" rows="6" style="min-width: 400px; margin-left:50px; width: auto;"></textarea>
             </div>
       </div>
       <div class="modal-footer">

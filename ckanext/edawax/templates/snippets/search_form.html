@@ -1,0 +1,103 @@
+{% ckan_extends %}
+
+{% import 'macros/form.html' as form %}
+{% set sorting = sorting if sorting else [(_('Name Ascending'), 'name asc'), (_('Name Descending'), 'name desc')] %}
+{% set form_id = form_id if form_id else false %}
+
+
+{% block search_input %}
+<div class="search-container">
+  <div class="input-group search-input-group jda">
+    <input aria-label="{% block header_site_search_label %}{{ placeholder }}{% endblock %}" id="field-giant-search" type="text" class="form-control input-lg" name="q" value="{{ query }}" autocomplete="off" placeholder="{{ placeholder }}">
+    {% block search_input_button %}
+    <span class="input-group-btn">
+      <button class="btn btn-default btn-lg" type="submit" value="search" aria-label="{{_('Submit')}}">
+        <i class="fa fa-search"></i>
+      </button>
+    </span>
+    {% endblock %}
+  </div>
+</div>
+{% endblock %}
+
+{% block search_title %}
+{% endblock %}
+
+{% block search_sortby %}
+    {% if sorting %}
+      {% if h.is_admin() %}
+        <div style="display:none;">
+          {{ sorting.append(('Private', 'private desc, dara_edawax_review asc, metadata_modified desc')) }}
+          {# sort so that in review for the editor is first, reviewer reviewer is at the end of private items #}
+          {{ sorting.append(('Review', 'private desc, dara_edawax_review asc')) }}
+        </div>
+      {% endif %}
+      <div class="form-select control-group control-order-by zbw-box box-top">
+        {% if not no_title %}
+          <h2 class="zbw-font zbw-blue" style="display: inline-block; width: 75%;">{% snippet 'snippets/search_result_text.html', query=query, count=count, type=type %}</h2>
+        {% endif %}
+
+        
+        
+          <div class="search-order" style="display: inline;">
+            {#<label for="field-order-by">{{ _('Order by') }}</label>#}
+            <select id="field-order-by" name="sort" class="form-control">
+              {% for label, value in sorting %}
+                {% if label and value %}
+                  <option value="{{ value }}"{% if sorting_selected == value %} selected="selected"{% endif %}>{{ label }}</option>
+                {% endif %}
+              {% endfor %}
+            </select>
+          </div>
+        </div>
+
+        {% block page_primary_action %}
+          {#% if h.check_access('package_create', {'owner_org': group_dict.id}) and 'dataset' not in request.url %#}
+          {% if 'dataset' not in request.url %}
+            {% set group = g.group_dict.id or None %}
+          {% endif %}
+
+          {% if 'dataset' not in request.url and h.check_access('package_create', {'owner_org': group}) %}
+              <div class="page_primary_action add_data_button">
+                {% link_for _('Add Dataset'), named_route='dataset.new', group=group, class_='btn btn-primary split', icon='plus-square' %}
+                {#<a class="show-filters btn">{{ _('Filter Results') }}</a>#}
+              </div>
+          {% endif %}
+        {% endblock %}
+
+        {% block search_sortby_button %}
+        <button class="btn js-hide" type="submit">{{ _('Go') }}</button>
+        {% endblock %}
+      
+    {% endif %}
+{% endblock %}
+
+
+{% block search_facets %}
+  {% if facets %}
+    <p class="filter-list">
+      {% for field in facets.fields %}
+        {% set search_facets_items = facets.search.get(field)['items'] %}
+
+        {% if field == 'tags' %}
+          <span class="facet">Tags:</span>
+        {% elif field == 'extras_dara_jels' %}
+          <span class="facet">JEL:</span>
+        {% else %}
+          <span class="facet">{{ facets.titles.get(field) }}:</span>
+        {% endif %}
+        {% for value in facets.fields[field] %}
+          <span class="filtered pill">
+            {%- if facets.translated_fields and facets.translated_fields.has_key((field,value)) -%}
+              {{ facets.translated_fields[(field,value)] }}
+            {%- else -%}
+              {{ h.list_dict_filter(search_facets_items, 'name', 'display_name', value) }}
+            {%- endif %}
+            <a href="{{ facets.remove_field(field, value) }}" class="remove" title="{{ _('Remove') }}"><i class="fa fa-times"></i></a>
+          </span>
+        {% endfor %}
+      {% endfor %}
+    </p>
+    {#<a class="show-filters btn">{{ _('Filter Results') }}</a>#}
+  {% endif %}
+{% endblock %}

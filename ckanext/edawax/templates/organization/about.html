@@ -1,0 +1,19 @@
+{% ckan_extends %}
+
+{% block subtitle %}{{ _('About') }} - {{ super() }}{% endblock %}
+
+{% block primary_content_inner %}
+
+<div class="zbw-box box-bottom">
+  <h1>{% block page_heading %}{{ group_dict.display_name }}{% endblock %}</h1>
+  {% block organization_description %}
+    {% if group_dict.description %}
+      {{ h.render_markdown(group_dict.description) }}
+    {% endif %}
+  {% endblock %}
+
+  {% block organization_extras %}
+    {% snippet 'snippets/additional_info.html', extras = h.sorted_extras(group_dict.extras) %}
+  {% endblock %}
+</div>
+{% endblock %}

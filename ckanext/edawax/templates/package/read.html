@@ -8,9 +8,9 @@
 {% set dara_authors = h.dara_authors('dataset', data) %}
 {% set is_admin = h.check_journal_role(pkg, 'admin') or h.check_access('sysadmin') %}
 {% set use_testserver = h.dara_use_testserver() %}
-{% resource 'dara/dara.css' %}
-{% resource 'edawax/edawax.js' %}
-{% resource 'dara/dara.js' %}
+{% asset 'dara/dara-css' %}
+{% asset 'dara/dara-js' %}
+{% asset 'edawax/edawax-js' %}
 
 
 {% set pkg_url = h.full_current_url() %}
@@ -38,76 +38,75 @@
 {#   {{ pkg }}  #}
 
 
-<div prefix="schema: http://schema.org/" typeof="schema:Dataset" resource="{{ pkg_url }}">
-    <meta property="schema:includedInDataCatalog" resource="{{ h.ckan_site_url() }}"
-        typeof="schema:DataCatalog" />
+<div>
+
 
   {% block package_description %}
 
-{% if h.in_review(pkg) == 'true' %}
-      <span class="dataset-private label pull-right label-review">
-        <i class="icon-lock"></i>
-        {{ 'Review' }}
-      </span>
-      <br />
- {% endif %}
 
-{% if h.in_review(pkg) == 'reauthor' %}
-    <span class="dataset-private label pull-right label-reauthor"
-        title="Dataset has been resend to author"
-        >
-      <i class="icon-lock"></i>
-      {{ 'Re-Author' }}
-    </span>
-    <br />
-{% endif %}
-
-
+{#
 {% if DOI %}
+    <div class="doi_wrapper zbw-box" style="margin-bottom: 0;">
     {% snippet 'package/snippets/doi.html', DOI=DOI, test='false' %}
 {% endif %}
 
 {% if DOI_Test and not DOI and use_testserver %}
+    <div class="doi_wrapper zbw-box" style="margin-bottom: 0;">
     {% snippet 'package/snippets/doi.html', DOI=DOI_Test, test='true' %}
 {% endif %}
 
+  {% if submission_id and is_admin %}
+    <div class="zbw-box" style="margin-bottom: 0; padding-top:5px !important;">
+     <p style="color:grey; text-decoration: underline;">Article Submission ID: {{ submission_id }} </p>
+    </div>
+  {% else %}
+    <div class="zbw-box" style="display: none;"></div>
+  {% endif %}
 
- {% if submission_id and is_admin %}
-   <p style="color:grey; text-decoration: underline">Article Submission ID: {{ submission_id }} </p>
- {% endif %}
-
- {% snippet 'package/snippets/authors.html', dara_authors=dara_authors %}
-
-{#
-  <div class="authors_title">
-
-    {% if dara_authors %}
-    {% for author in dara_authors %}
-        {% if author.url %}
-            <div property="schema:author" style="display:inline"
-                                        typeof="schema:Person" resource="{{
-                                        author.url }}">
-                    <a href="{{ author.url }}">
-                <span property="schema:name">
-                    {{ (author['firstname'], author['lastname']) | join(' ')}}
-                </span>
-                </a>
-            </div>
-
-        {% else %}
-            <div property="schema:author" style="display:inline"
-                                        typeof="schema:Person">
-            <span property="schema:name">{{ (author['firstname'], author['lastname']) | join(' ')}}</span>
-            </div>
-
-        {% endif %}
-        {% if not author == dara_authors[-1] %}
-        ;
-        {% endif %}
-    {% endfor %}
-    {% endif %}
+{% if DOI %}
   </div>
+{% elif DOI_Test and not DOI and use_testserver %}
+  </div>
+{% endif %}
 #}
+
+ {% snippet 'package/snippets/authors.html', dara_authors=dara_authors, pkg=pkg %}
+  {% if h.in_review(pkg) in ['true', 'editor', 'reviewers'] %}
+    {% if h.is_reviewer(pkg) %}
+        <span class="dataset-private label pull-right label-reviewer">
+          <i class="fa fa-eye"></i>
+          {{ 'My Review' }}
+        </span>
+    {% else %}
+          {% if pkg['dara_edawax_review'] != 'editor' %}
+            <span class="dataset-private label pull-right label-reviewer">
+              <i class="fa fa-lock"></i>
+            {{ 'Review' }}
+          {% elif h.is_reviewer(pkg) or h.is_author(pkg) %}
+            <span class="dataset-private label pull-right label-reviewer">
+              <i class="fa fa-lock"></i>
+            {{ 'In Review' }}
+          {% else %}
+          <span class="dataset-private label pull-right label-reviewer">
+            <i class="fa fa-lock"></i>
+            {% if h.has_reviewers(pkg) %}
+              {{ 'Not Sent to Reviewer' }}
+            {% else %}
+              {{ 'No Reviewer' }}
+            {% endif %}
+          {% endif %}
+        </span>
+    {% endif %}
+  {% endif %}
+
+  {% if h.in_review(pkg) == 'reauthor' %}
+      <span class="dataset-private label pull-right label-reauthor"
+          title="Dataset has been resend to author">
+        <i class="fa fa-lock"></i>
+        {{ 'Re-Author' }}
+      </span>
+
+  {% endif %}
 
   {{ super() }}
 
@@ -115,7 +114,7 @@
 
 
   {% block package_resources %}
-    {{ super () }}
+    {{ super() }}
   {% endblock %}
 
   {% snippet "package/snippets/citation.html", pkg_dict=pkg, data=data %}
@@ -127,10 +126,35 @@
 
 
 {% block package_tags %}
-    {{ super() }}
-  {% endblock %}
+  {% snippet "package/snippets/tags.html", tags=pkg.tags %}
+  {% snippet "package/snippets/jels.html", jels=pkg.dara_jels %}
+{% endblock %}
 
 
+{#
+  Searching on this field doesn't work. The values are saved as a list, but
+  when searched for values are treated as one string so that if a dataset has
+  more than 1 JEL code, it isn't possible to return the dataset by searching
+  on only 1 of its JEL codes.
+
+  Need to make it into a tag vocabulary?
+#}
+{#% if pkg.dara_jels|length > 0 %}
+  <section>
+    <div class="zbw-box box-full">
+      <h3>JEL Codes</h3>
+      <ul class="tag-list">
+        {% for jel in pkg.dara_jels %}
+          <li>
+            <a class="tag" href="/dataset?dara_jels={{ jel }}">
+              {{ jel }}
+            </a>
+          </li>
+        {% endfor %}
+      </ul>
+    </div>
+  </section>
+{% endif %#}
 
 
   {% block package_additional_info %}
@@ -143,3 +167,16 @@
 
 </div>
 {% endblock %}
+
+
+{% block page_heading %}
+  {{ pkg.title|lower or pkg.name|lower }}
+  {% if pkg.state.startswith('draft') %}
+    [{{ _('Draft') }}]
+  {% endif %}
+  {% if pkg.state == 'deleted' %}
+    [{{ _('Deleted') }}]
+  {% endif %}
+{% endblock %}
+
+

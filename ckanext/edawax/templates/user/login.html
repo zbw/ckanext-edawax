@@ -1,0 +1,26 @@
+{% ckan_extends %}
+
+
+{% block primary_content %}
+  <section class="module">
+    <div class="module-content">
+    <div class="zbw-box box-full">
+      <h1 class="page-heading">{% block page_heading %}{{ _('Login') }}{% endblock %}</h1>
+      {% block form %}
+        {% snippet "user/snippets/login_form.html", action=g.login_handler, error_summary=error_summary %}
+      {% endblock %}
+    </div>
+    </div>
+  </section>
+{% endblock %}
+
+{% block help_register_inner %}
+    <h2 class="module-heading">{{ _('Need an Account?') }}</h2>
+    <div class="module-content">
+      <p>Please get in touch with the editor of the journal in which published your research article. The editor can register an account for you, if the journal uses the JDA as their data archive.</p>
+  </div>
+{% endblock %}
+
+{% block help_forgotten_button %}
+  <a class="btn" href="{{ h.url_for('user.request_reset') }}">{{ _('Forgot your password?') }}</a>
+{% endblock %}

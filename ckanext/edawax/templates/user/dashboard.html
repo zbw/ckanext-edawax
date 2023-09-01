@@ -1,13 +1,35 @@
 {% ckan_extends %}
 
 
-{% block page_header %}
+{% block primary %}
+  <article class="module">
+    {% block page_header %}
       <header class="module-content page-header hug">
         <ul class="nav nav-tabs">
-          {{ h.build_nav_icon('user_dashboard', _('News feed')) }}
-          {{ h.build_nav_icon('user_dashboard_datasets', _('My Datasets')) }}
-          {{ h.build_nav_icon('user_dashboard_organizations', _('My Journals')) }}
-   {#       {{ h.build_nav_icon('user_dashboard_groups', _('My Groups')) }} #}
+          {{ h.build_nav_icon('dashboard.index', _('News feed')) }}
+          {{ h.build_nav_icon('dashboard.datasets', _('My Datasets')) }}
+          {{ h.build_nav_icon('dashboards.organizations', _('My Journals')) }}
         </ul>
       </header>
+    {% endblock %}
+    <div class="module-content">
+      {% if self.page_primary_action() | trim %}
+        <div class="page_primary_action zbw-box box-bottom">
+          {% block page_primary_action %}{% endblock %}
+        </div>
+      {% endif %}
+      {% block primary_content_inner %}
+        <div data-module="dashboard" class="zbw-box box-bottom">
+          {% snippet 'user/snippets/followee_dropdown.html', context=dashboard_activity_stream_context, followees=followee_list %}
+          <h2 class="page-heading">
+            {% block page_heading %}
+              {{ _('News feed') }}
+            {% endblock %}
+            <small>{{ _("Activity from items that I'm following") }}</small>
+          </h2>
+          {% snippet 'snippets/activity_stream.html', activity_stream=dashboard_activity_stream %}
+        </div>
+    {% endblock %}
+    </div>
+  </article>
 {% endblock %}

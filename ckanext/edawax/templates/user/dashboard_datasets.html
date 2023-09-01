@@ -1,0 +1,34 @@
+{% ckan_extends %}
+
+
+{% block page_primary_action %}
+
+{% endblock %}
+
+
+{% block primary_content_inner %}
+  <h2 class="hide-heading">{{ _('My Datasets') }}</h2>
+  {% if user_dict.datasets %}
+    {% snippet 'snippets/package_list.html', packages=user_dict.datasets %}
+  {% else %}
+    {% set packages = h.find_reviewers_datasets(user_dict.name) %}
+    {% if packages|length > 0 %}
+        <div class="zbw-box box-bottom">
+            <h2 class="zbw-font zbw-blue">Waiting for Review:</h2>
+                <ul class="activity">
+            {% for package in packages %}
+                <li class="item">
+                    <i class="fa reviewer-icon fa-eye"></i>
+                    <p class="reviewer_list"><a href="/dataset/{{ package['id'] }}">
+                        {{ package['name'] }}
+                    </a></p>
+                </li>
+            {% endfor %}
+                </ul>
+        </div>
+    {% endif %}
+    <p class="empty">
+        You haven't created any datasets yet. Please {% link_for _('visit one of you journals'), named_route='dashboards.organizations' %} to add a dataset to it.
+    </p>
+  {% endif %}
+{% endblock %}
